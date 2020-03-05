@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metamate
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: metamate
+  template:
+    metadata:
+      labels:
+        name: metamate
+    spec:
+      containers:
+      - name: metamate
+        image: metamatex/metamate:latest
+        imagePullPolicy: Always
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: metamate
+  labels:
+    name: metamate
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      protocol: TCP
+      name: http
+  selector:
+    name: metamate
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: metamate
+spec:
+  backend:
+    serviceName: metamate
+    servicePort: http

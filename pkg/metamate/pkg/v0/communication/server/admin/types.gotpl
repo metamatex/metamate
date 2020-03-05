@@ -1,0 +1,46 @@
+export default sdk
+
+namespace sdk {
+    {{ range $i, $type := .Types }}
+    export interface {{ $type.Name }} {
+    {{- range $i, $fn := $type.Edges.Fields.Holds.Slice.Sort }}
+    {{- if $fn.IsBool }}
+        {{ $fn.Name }}?: boolean;
+    {{- end }}
+    {{- if $fn.IsFloat64 }}
+        {{ $fn.Name }}?: number;
+    {{- end }}
+    {{- if $fn.IsString }}
+        {{ $fn.Name }}?: string;
+    {{- end }}
+    {{- if $fn.IsInt32 }}
+        {{ $fn.Name }}?: number;
+    {{- end }}
+    {{- if $fn.IsType }}
+        {{ $fn.Name }}?: {{ camel $fn.Edges.Type.Holds.Name }};
+    {{- end }}
+    {{- if $fn.IsEnum }}
+        {{ $fn.Name }}?: string;
+    {{- end }}
+    {{- if $fn.IsStringList }}
+        {{ $fn.Name }}?: string[];
+    {{- end }}
+    {{- if $fn.IsInt32List }}
+        {{ $fn.Name }}?: number[];
+    {{- end }}
+    {{- if $fn.IsFloat64List }}
+        {{ $fn.Name }}?: number[];
+    {{- end }}
+    {{- if $fn.IsBoolList }}
+        {{ $fn.Name }}?: boolean[];
+    {{- end }}
+    {{- if $fn.IsTypeList }}
+        {{ $fn.Name }}?: {{ camel $fn.Edges.Type.Holds.Name }}[];
+    {{- end }}
+    {{- if $fn.IsEnumList }}
+        {{ $fn.Name }}?: string[];
+    {{- end }}
+    {{- end }}
+    }
+    {{ end }}
+}
