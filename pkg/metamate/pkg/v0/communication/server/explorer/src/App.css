@@ -1,0 +1,334 @@
+/*
+  bg ligt #282c34
+  bg dark #21252b
+  bg light text #454c5c
+  bg light left border #333841
+  bg light right border #4f575f
+  red #ef596f
+  blue #61afef
+  cursor #528bff
+  cm-punctuation
+*/
+
+/*
+red #ff035b
+blue #0066ff
+*/
+
+
+@font-face {
+  font-family: 'Menlo Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Menlo Regular'), url('https://www.cufonfonts.com/cdn/webfont/menlo/Menlo-Regular.woff?token=sFV3VnkwLddm5kMi2gohg6Jj2Cl7Qqsv') format('woff');
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Menlo Regular",sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+  width: 100%;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+}
+
+a, button, input, select, textarea{
+  outline: none;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+  monospace;
+}
+
+#root {
+  height: 100%;
+}
+
+.graphiql-container {
+  height: 100%;
+  width: 100%;
+}
+
+#root .execute-button{
+  mask: url("data:image/svg+xml,%3Csvg%20viewBox%3D%2264%2064%20896%20896%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20%20aria-hidden%3D%22true%22%3E%3Cpath%20d%3D%22M512%2064C264.6%2064%2064%20264.6%2064%20512s200.6%20448%20448%20448%20448-200.6%20448-448S759.4%2064%20512%2064zm0%20820c-205.4%200-372-166.6-372-372s166.6-372%20372-372%20372%20166.6%20372%20372-166.6%20372-372%20372z%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M719.4%20499.1l-296.1-215A15.9%2015.9%200%200%200%20398%20297v430c0%2013.1%2014.8%2020.5%2025.3%2012.9l296.1-215a15.9%2015.9%200%200%200%200-25.8zm-257.6%20134V390.9L628.5%20512%20461.8%20633.1z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
+  background: rgba(0, 102, 255, 1);
+  margin-top: 4px;
+  width: 25px;
+  height: 25px;
+}
+
+#root .docExplorerHide{
+  color: rgba(0, 102, 255, 1);
+  font-weight: bold;
+  padding: 0;
+  margin: 10px;
+}
+
+.execute-button svg {
+  display: none;
+}
+
+#root .CodeMirror pre {
+  font-family: "Menlo Regular", sans-serif;
+}
+
+#root .graphiql-container .history-contents {
+  font-family: "Menlo Regular", sans-serif;
+}
+
+#root .cm-def {
+  color: #ff0025;
+}
+
+#root .cm-property {
+  color: #008cff;
+}
+
+#root .cm-keyword {
+  color: #ff7d00;
+}
+
+#root .cm-punctuation {
+  color: #bbb;
+}
+
+#root .CodeMirror-cursor {
+  border-left: 2px solid #528bff;
+}
+
+#root .graphiql-container .history-contents input {
+  font-weight: bold;
+  caret-color: #528bff;
+}
+
+#root .graphiql-container .history-contents > li:hover {
+  background: rgba(0, 102, 255, 1);
+  color: #bbb;
+}
+
+#root .graphiql-container .history-contents > li button {
+  font-weight: bold;
+}
+
+#root .logo {
+  height: 40px;
+}
+
+#root .doc-explorer-title {
+  color: #bbb;
+}
+
+#root .graphiql-container .resultWrap {
+  border: none;
+}
+
+#root .graphiql-container, #root .graphiql-container input {
+  color: #bbb;
+}
+
+#root .graphiql-container .search-box {
+  border-bottom: none;
+}
+
+#root .doc-explorer-back {
+  color: rgba(0, 102, 255, 1);
+  font-weight: bold;
+}
+
+[id^='query-'] {
+  border-bottom: none !important;
+}
+
+#root .doc-category-title {
+  border-bottom: none;
+}
+
+#root .doc-explorer .keyword  {
+  color: #ff0025;
+  font-weight: bold;
+}
+
+#root .doc-explorer .type-name  {
+  color: #ff7d00;
+  font-weight: bold;
+}
+
+#root .doc-explorer .field-name  {
+  color: #008cff;
+  font-weight: bold;
+}
+
+#root .doc-explorer .arg-name  {
+  color: #ed06ff;
+  font-weight: bold;
+}
+
+#root .graphiql-container .doc-category-item {
+  color: #bbb;
+  font-weight: bold;
+}
+
+#root .cm-string {
+  color: #35ff00;
+}
+
+#root .cm-builtin {
+  color: #ff7d00;
+}
+
+#root .cm-number {
+  color: #ed06ff;
+}
+
+#root .cm-attribute  {
+  color: #ed06ff;
+}
+
+#root .dark input {
+  color: #bbb;
+  background: #282c34;
+}
+
+#root .graphiql-explorer-root button {
+  padding-left: 10px !important;
+  margin-left: 5% !important;
+  margin-bottom: 10px !important;
+  width: 90% !important;
+  font-size: 1em !important;
+}
+
+#root .dark .graphiql-explorer-root button {
+  background-color: #282c34 !important;
+}
+
+#root button.toolbar-button {
+  color: rgba(0, 102, 255, 1);
+  border: none;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  font-weight: bold;
+}
+
+#root .dark button.toolbar-button {
+  background: #282c34;
+}
+
+#root .CodeMirror-scroll {
+  font-weight: bold;
+  border: none;
+}
+
+#root .dark .CodeMirror-scroll {
+  background: #282c34;
+}
+
+#root .docExplorerShow {
+  color: rgba(0, 102, 255, 1);
+  border: none;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  font-weight: bold;
+}
+
+#root .dark .docExplorerShow {
+  background: #21252b;
+}
+
+#root .dark .historyPaneWrap {
+  background: #21252b;
+  color: #bbb;
+}
+
+#root .topBar {
+  border-bottom: none;
+  background: #ddd;
+}
+
+#root .dark .topBar {
+  background: #21252b;
+}
+
+#root .graphiql-container .history-contents > li {
+  color: rgba(0, 102, 255, 1);
+}
+
+#root .dark .history-contents > li {
+  border-bottom: 1px solid #333841;
+}
+
+#root .dark .CodeMirror-linenumber {
+  color: #454c5c;
+}
+
+#root .dark .CodeMirror-selected {
+  background: #404859;
+}
+
+#root .graphiql-container .history-contents {
+  border-top: none;
+  font-weight: bold;
+}
+
+#root .dark .history-contents {
+  background: #21252b;
+  color: #bbb;
+}
+
+#root .dark .CodeMirror-gutters {
+  background: #282c34;
+  border-left: 1px solid #333841;
+  border-right: 1px solid #333841;
+}
+
+#root .dark .CodeMirror-gutter.CodeMirror-foldgutter {
+  border-left: 1px solid #333841;
+  border-right: 1px solid #333841;
+}
+
+#root .dark .graphiql-explorer-node svg path {
+  fill: #4f575f;
+}
+
+#root .dark .doc-explorer {
+  background: #21252b;
+}
+
+#root .dark .doc-explorer {
+  background: #21252b;
+}
+
+#root .graphiql-container .doc-explorer-contents {
+  border-top: none;
+}
+
+#root .dark .doc-explorer-contents {
+  background: #21252b;
+}
+
+#root .dark .variable-editor-title {
+  background: #21252b;
+  border-color: #333841;
+}
+
+#root .dark div::-webkit-scrollbar-thumb {
+  background: #282c34;
+  border-left: 1px solid #333841;
+  border-right: 1px solid #333841;
+}
+
+#root .dark div::-webkit-scrollbar-track  {
+  background: #21252b;
+  border: 1px solid #333841;
+}
+
+#root .dark div::-webkit-scrollbar  {
+  border: 1px solid #333841;
+}
+

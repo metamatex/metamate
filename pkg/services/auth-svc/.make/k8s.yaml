@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-svc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: auth-svc
+  template:
+    metadata:
+      labels:
+        name: auth-svc
+    spec:
+      containers:
+      - name: metamate
+        image: localhost:5000/metamatex/auth-svc:latest
+        imagePullPolicy: Always
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-svc
+  annotations:
+    metamate.io/v0.service.transport: httpjson
+    metamate.io/v0.service.port: "80"
+spec:
+  selector:
+    name: auth-svc
+  ports:
+  - protocol: TCP
+    port: 80

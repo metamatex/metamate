@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sqlx-svc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: sqlx-svc
+  template:
+    metadata:
+      labels:
+        name: sqlx-svc
+    spec:
+      containers:
+      - name: metamate
+        image: localhost:5000/metamatex/sqlx-svc:latest
+        imagePullPolicy: Always
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sqlx-svc
+  annotations:
+    metamate.io/v0.service.transport: httpjson
+    metamate.io/v0.service.port: "80"
+spec:
+  selector:
+    name: sqlx-svc
+  ports:
+  - protocol: TCP
+    port: 80

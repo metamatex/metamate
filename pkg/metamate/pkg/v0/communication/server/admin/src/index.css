@@ -1,0 +1,225 @@
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body, html, #root {
+    height: 100%;
+    width: 100%;
+}
+
+#root a {
+    color: #0652DD;
+    font-weight: bold;
+}
+
+#root .ant-btn-primary {
+    color: #fff;
+    background-color: #0652DD;
+    border-color: #0652DD;
+    height: 40px;
+}
+
+#root .ant-input {
+    color: #000;
+    border: 2px solid #0652DD;
+    height: 40px;
+}
+
+#root .ant-btn {
+    font-weight: bold;
+}
+
+#root .ant-menu-submenu-arrow {
+    display: none;
+}
+
+#root .ant-menu-submenu-title {
+    color: #0652DD !important;
+}
+
+#root .ant-menu-submenu-title:hover {
+    color: #0652DD !important;
+}
+
+#root .ant-menu-horizontal > .ant-menu-submenu {
+    border-bottom: none;
+}
+
+#root .ant-menu-horizontal > .ant-menu-submenu:hover {
+    border-bottom: none;
+}
+
+#root .ant-menu-vertical {
+    border-right: none;
+}
+
+#root .ant-menu-horizontal {
+    border-bottom: none;
+}
+
+#root .ant-layout {
+    background: none;
+}
+
+#root .trigger {
+    font-size: 18px;
+    line-height: 64px;
+    padding: 0 24px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+#root .ant-menu {
+    font-size: 18px;
+}
+
+#root .ant-menu-item-selected {
+    background-color: #fff;
+    color: #0652DD;
+}
+
+#root .ant-menu-inline {
+    border-right: 1px solid #fff;
+}
+
+#root .ant-menu-item::after {
+    border-right: 1px solid #fff;
+}
+
+#root .ant-table-thead > tr > th {
+    background: #fff;
+}
+
+/* --- */
+
+#root h2 {
+    font-weight: bold;
+    font-size: 25px;
+    color: #0652DD;
+}
+
+.app2 {
+    height: 100%;
+}
+
+.app2__content {
+    padding: 30px;
+}
+
+
+.types__table__reload {
+    float: right;
+    margin-top: 15px;
+    margin-left: 15px;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+.panel {
+    background: #fff;
+    border-radius: 10px;
+}
+
+.panel__inner {
+    padding: 30px;
+}
+
+.welcome {
+    height: 100%;
+    width: 100%;
+    top: 30%;
+    z-index: 2;
+    position: absolute;
+}
+
+.welcome__left {
+    border-radius: 10px 0px 0px 10px;
+}
+
+.welcome__right {
+    border-radius: 0px 10px 10px 0px;
+    background: rgba(6, 82, 221, 0.5);
+    border-left: 5px solid rgba(6, 82, 221, 0.5);;
+}
+
+.welcome__right img {
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.welcome__right p {
+    color: #fff;
+    font-weight: bold;
+    border-left: 3px solid #fff;
+    padding-left: 10px;
+    margin-top: 20px;
+}
+
+.welcome__right h3 {
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+}
+
+.login__forgot {
+    float: right;
+}
+
+.login__sections {
+    margin-bottom: 15px;
+}
+
+.login__section {
+    /*float: left;*/
+    /*margin: 10px;*/
+    margin-right: 10px;
+    color: #aaa !important;
+}
+
+.login__section--active {
+    color: #0652DD !important;
+}
+
+.welcome__host {
+    font-weight: bold;
+    color: #000;
+    float: right;
+    margin-top: 14px;
+}
+
+#bg-image {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+#bg-image-wrapped {
+    position: absolute;
+    box-sizing: border-box;
+    background-image: url("https://images.unsplash.com/photo-1515266591878-f93e32bc5937?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60");
+
+    filter: blur(20px);
+    -webkit-filter: blur(20px);
+
+    /* Full height */
+    background-origin: content-box;
+    height: 105%;
+    width: 105%;
+    left: -15px;
+    right: -15px;
+    top: -15px;
+    bottom: -15px;
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
