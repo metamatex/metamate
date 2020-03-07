@@ -63,4 +63,3 @@ var genCmd = &cobra.Command{
 func addGen(parentCmd *cobra.Command) {
 	parentCmd.AddCommand(genCmd)
 }
-

@@ -1,0 +1,50 @@
+v0:
+  gen:
+    sdks:
+      - names: [go_httpjson_server]
+        data:
+          name: auth
+          package: github.com/metamatex/metamatemono
+        endpoints:
+          names:
+            or: [VerifyToken, AuthenticateClientAccount, PipeClientAccounts]
+      - names: [go_httpjson_server]
+        data:
+          name: mastodon
+          package: github.com/metamatex/metamatemono
+        endpoints:
+          names:
+            or: [GetFeeds, GetPeople, PutPeople, GetStatuses, PostStatuses, PutStatuses, DeleteStatuses]
+      - names: [go_httpjson_client]
+        data:
+          package: github.com/metamatex/metamatemono
+        endpoints:
+          names:
+            or:
+              - PostWhatevers
+              - PipeWhatevers
+              - GetWhatevers
+              - PutWhatevers
+              - DeleteWhatevers
+              - PostBlueWhatevers
+              - GetBlueWhatevers
+              - PutBlueWhatevers
+              - DeleteBlueWhatevers
+              - GetServices
+              - GetPeople
+              - PostPeople
+              - AuthenticateClientAccount
+              - VerifyToken
+              - PostClientAccounts
+              - GetClientAccounts
+              - PostServiceAccounts
+              - PutServiceAccounts
+              - GetServiceAccounts
+              - LookupService
+              - GetFeeds
+              - PipeClientAccounts
+              - PutPeople
+              - DeleteStatuses
+              - GetStatuses
+              - PostStatuses
+              - PutStatuses

@@ -1,5 +1,0 @@
-#- template: .make/gotpl/get.gotpl
-#  out: cmd/get
-#  flag: exposed
-#  iterate: true
-#  iterateSuffix: .go
