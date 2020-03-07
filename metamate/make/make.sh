@@ -3,10 +3,8 @@
 set -eo pipefail
 
 function build {
-    export GO111MODULE=on
-
     time go build -i -o dist/metamate cmd/metamate/main.go
-    ls -lah main
+    ls -lah dist/metamate
 }
 
 function chore {

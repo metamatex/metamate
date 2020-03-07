@@ -1,8 +1,8 @@
-package cmd
+package main
 
 import (
 	"fmt"
-	"github.com/metamatex/metamatemono/metactl/cmd/v0"
+	"github.com/metamatex/metamatemono/metactl/cmd/metactl/v0"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -14,7 +14,7 @@ var rootCmd = &cobra.Command{
 	Long:  "",
 }
 
-func init()  {
+func init() {
 	v0.AddV0(rootCmd, true)
 	v0.AddV0(rootCmd, false)
 }
