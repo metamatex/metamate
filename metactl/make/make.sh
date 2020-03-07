@@ -5,10 +5,10 @@ set -eo pipefail
 function build {
     export GO111MODULE=on
 
-    time go build -i -o main cmd/metactl/main.go
+    time go build -i -o dist/metactl cmd/metactl/main.go
     ls -lah main
 
-    cp main /usr/local/bin/metactl
+    cp dist/metactl /usr/local/bin/metactl
 }
 
 function chore {
