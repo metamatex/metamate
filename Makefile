@@ -1,4 +1,4 @@
-SOURCE_MAKE=. ./make/make.sh
+SOURCE_MAKE=". ./make/make.sh"
 
 build:
 	@${SOURCE_MAKE} && build
