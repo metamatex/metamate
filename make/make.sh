@@ -1,9 +1,8 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-set -e pipefail
+set -eo pipefail
 
 function build {
-    echo hi
     (cd metactl && make build)
     (cd metamate && make build)
 }
