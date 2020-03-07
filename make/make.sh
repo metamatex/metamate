@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eo pipefail
+set -e pipefail
 
 function build {
     (cd metactl && make build)
