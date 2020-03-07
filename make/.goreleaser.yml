@@ -43,7 +43,6 @@ changelog:
     - Merge branch
 brews:
 - name: metactl
-  ids: [metactl]
   github:
     owner: metamatex
     name: homebrew-taps
