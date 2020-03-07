@@ -12,3 +12,7 @@ function chore {
     go vet ./...
     golint ./...
 }
+
+function release {
+    goreleaser release --rm-dist -f make/.goreleaser.yml
+}
