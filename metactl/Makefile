@@ -1,4 +1,5 @@
 SOURCE_MAKE=. ./make/make.sh
+SHELL := /bin/bash
 
 build:
 	@${SOURCE_MAKE} && build
