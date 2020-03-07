@@ -1,4 +1,0 @@
-878b27d52bd00f8c01f14dfc9dab82794756c76c33a374b264920794c4320f28  metamatemono_0.0.4_Linux_x86_64.tar.gz
-4c8fdc22bf88e9e4208b747dcc9e211da269ac01cdb20276e4d1b6316d53a9ae  metamatemono_0.0.4_Darwin_x86_64.tar.gz
-22dbe4bb754f79c937d4e5434ed6609cb4685e1a27fecd5b6f04bbfba5da4e0b  metamatemono_0.0.4_Linux_i386.tar.gz
-74be7e5c9147846b505d6421af8951444a45a4b8e42662ac2f55d6238d6feadc  metamatemono_0.0.4_Darwin_i386.tar.gz
