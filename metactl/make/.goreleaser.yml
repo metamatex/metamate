@@ -2,8 +2,6 @@ project_name: metactl
 before:
   hooks:
     - go mod download
-    - go generate ./...
-    - go mod tidy
 builds:
 - main: ./cmd/metactl/main.go
   env:
@@ -25,3 +23,5 @@ changelog:
     exclude:
     - '^docs:'
     - '^test:'
+    - Merge pull request
+    - Merge branch
