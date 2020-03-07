@@ -48,3 +48,5 @@ brews:
     name: ppwfx
     email: ph.woerdehoff@gmail.com
   homepage: "https://metamate.io"
+  install: |
+    bin.install "metactl"
