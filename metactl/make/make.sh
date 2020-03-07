@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eo pipefail
+set -e pipefail
 
 function build {
     export GO111MODULE=on
