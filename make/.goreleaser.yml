@@ -1,4 +1,4 @@
-project_name: metamatemono
+project_name: metamate
 builds:
 - main: ./metactl/cmd/metactl/main.go
   binary: metactl
