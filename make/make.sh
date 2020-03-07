@@ -11,3 +11,7 @@ function chore {
     (cd metactl && make chore)
     (cd metamate && make chore)
 }
+
+function release {
+    goreleaser --rm-dist -f make/.goreleaser.yml
+}
