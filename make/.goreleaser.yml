@@ -1,7 +1,4 @@
 project_name: metamatemono
-#before:
-#  hooks:
-#    - go mod download
 builds:
 - main: ./metactl/cmd/metactl/main.go
   binary: metactl
@@ -32,3 +29,13 @@ changelog:
     - '^test:'
     - Merge pull request
     - Merge branch
+brews:
+- name: metactl
+  ids: metactl
+  github:
+    owner: metamatex
+    name: homebrew-taps
+  commit_author:
+    name: ppwfx
+    email: ph.woerdehoff@gmail.com
+  homepage: "https://metamate.io/"
