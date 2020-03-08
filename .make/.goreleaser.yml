@@ -50,3 +50,20 @@ brews:
   homepage: "https://metamate.io"
   install: |
     bin.install "metactl"
+dockers:
+- image_templates:
+  - 'metamatex/metamate:{{ .Tag }}'
+  - 'metamatex/metamate:v{{ .Major }}.{{ .Minor }}.{{ .Patch }}'
+  - 'metamatex/metamate:latest'
+  dockerfile: .make/Dockerfile
+  binaries:
+  - metamate
+  build_flag_templates:
+  - "--pull"
+  - "--label=org.opencontainers.image.created={{.Date}}"
+  - "--label=org.opencontainers.image.name={{.ProjectName}}"
+  - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+  - "--label=org.opencontainers.image.version={{.Version}}"
+  - "--label=org.opencontainers.image.source={{.GitURL}}"
+  - "--label=repository=http://github.com/metamatex/metamatemono"
+  - "--label=homepage=http://metamate.io"
