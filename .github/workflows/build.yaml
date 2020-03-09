@@ -9,3 +9,5 @@ jobs:
         with:
           go-version: '1.13'
       - run: echo ${{ secrets.DOCKER_USERNAME }}
+      - run: echo $GITHUB_REPOSITORY
+    
