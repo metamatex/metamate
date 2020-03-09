@@ -2,7 +2,6 @@ package v0
 
 import (
 	"github.com/metamatex/metamatemono/metactl/pkg/v0/business/get"
-	"github.com/metamatex/metamatemono/metactl/pkg/v0/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -22,10 +21,7 @@ var getCmd = &cobra.Command{
 			d.MessageReport.AddError(err)
 		}
 
-		err = utils.PrintReport(c.NoColor, c.OutputFormat, c.ReturnData(), *d.MessageReport, o)
-		if err != nil {
-			return
-		}
+		handleReport(*d.MessageReport, o, c.VerbosityLevel)
 
 		return
 	},

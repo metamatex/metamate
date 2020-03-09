@@ -9,3 +9,6 @@ chore:
 
 release:
 	@${SOURCE_MAKE} && release
+
+generate:
+	@${SOURCE_MAKE} && generate
