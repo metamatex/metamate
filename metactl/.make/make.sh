@@ -16,5 +16,5 @@ function chore {
 }
 
 function release {
-    goreleaser release --rm-dist -f make/.goreleaser.yml
+    goreleaser --rm-dist -f .make/.goreleaser.yml
 }
