@@ -5,7 +5,7 @@ set -eo pipefail
 function build {
     (cd metactl && make build)
     ./metactl/dist/metactl gen
-    (cd gen && go mod init)
+    (cd gen && go mod init github.com/metamatemono/gen)
     (cd metactl && make build)
     (cd metamate && make build)
 }
