@@ -5,11 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | sh
-      - run: ls -lah $GITHUB_WORKSPACE
-      - run: mkdir -p $GITHUB_WORKSPACE/bin
-      - run: mv ./bin/goreleaser $GITHUB_WORKSPACE/bin/goreleaser
-      - run: chmod +x $GITHUB_WORKSPACE/bin/goreleaser
-      - run: goreleaser
+      - run: export PATH=$GITHUB_WORKSPACE/bin:$PATH
+      - run: echo $PATH
+      - run: PATH=$GITHUB_WORKSPACE/bin:$PATH goreleaser
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v1
         with:
