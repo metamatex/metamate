@@ -41,5 +41,6 @@ function release {
         --tag metamatex/metamate:$TAG \
         .
 
+
     docker push metamatex/metamate
 }
