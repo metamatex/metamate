@@ -23,4 +23,5 @@ function release {
 function generate {
     ./metactl/dist/metactl gen
     (cd gen && go mod init github.com/metamatemono/gen)
+
 }
