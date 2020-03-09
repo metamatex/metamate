@@ -1,9 +1,0 @@
-v0:
-  gen:
-    sdks:
-      - names: [go_httpjson_server]
-        data:
-          package: github.com/metamatex/mastodon-svc
-        endpoints:
-          names:
-            or: [GetFeeds, GetPeople, PutPeople, GetStatuses, PostStatuses, PutStatuses, DeleteStatuses]

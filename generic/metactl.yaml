@@ -1,9 +1,0 @@
-v0:
-  gen:
-    sdks:
-      - name: go_types
-        data:
-          package: github.com/metamatex/generic
-        endpoints:
-          names:
-            or: [PostWhatevers, GetWhatevers]

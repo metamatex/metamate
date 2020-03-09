@@ -16,4 +16,4 @@ jobs:
       - run: echo "::add-path::$GITHUB_WORKSPACE/bin"
       - run: make release
         env:
-          GITHUB_TOKEN: ${{ secrets.GORELEASE_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
