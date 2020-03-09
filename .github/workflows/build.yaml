@@ -6,7 +6,8 @@ jobs:
     steps:
       - run: curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | sh
       - run: export PATH=/bin:$PATH
-      - run: goreleaser
+      - run: echo $PATH
+      - run: PATH=/bin:$PATH goreleaser
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v1
         with:
