@@ -19,7 +19,12 @@ builds:
   binary: metamate
   id: metamate
   env:
-    - CGO_ENABLED=0
+  - CGO_ENABLED=0
+  goos:
+  - linux
+  goarch:
+  - amd64
+  - 386
 archives:
 - replacements:
     darwin: Darwin
@@ -55,7 +60,7 @@ dockers:
   - 'metamatex/metamate:{{ .Tag }}'
   - 'metamatex/metamate:v{{ .Major }}.{{ .Minor }}.{{ .Patch }}'
   - 'metamatex/metamate:latest'
-  dockerfile: .make/Dockerfile
+  dockerfile: metamate/.make/Dockerfile
   binaries:
   - metamate
   build_flag_templates:

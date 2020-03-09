@@ -4,6 +4,9 @@ set -eo pipefail
 
 function build {
     (cd metactl && make build)
+    ./metactl/dist/metactl gen
+    (cd gen && go mod init)
+    (cd metactl && make build)
     (cd metamate && make build)
 }
 
@@ -13,5 +16,6 @@ function chore {
 }
 
 function release {
+    build
     goreleaser --rm-dist -f .make/.goreleaser.yml
 }
