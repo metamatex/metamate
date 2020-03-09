@@ -44,7 +44,7 @@ v0:
               - GetFeeds
               - PipeClientAccounts
               - PutPeople
-              - DeleteStatuses;ooo
+              - DeleteStatuses
               - GetStatuses
               - PostStatuses
               - PutStatuses
