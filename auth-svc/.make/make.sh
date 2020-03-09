@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eo pipefail
+set -eox pipefail
 
 function build {
     time GO111MODULE=on GOARCH=amd64 GOOS=linux go build -o main

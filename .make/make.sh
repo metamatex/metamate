@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eo pipefail
+set -eox pipefail
 
 function build {
     (cd metactl && make build)
@@ -23,5 +23,4 @@ function release {
 function generate {
     ./metactl/dist/metactl gen
     (cd gen && go mod init github.com/metamatemono/gen)
-
 }
