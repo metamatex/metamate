@@ -14,6 +14,10 @@ function chore {
 }
 
 function release {
+    TAG=$(git describe --exact-match --tags $(git log -n1 --pretty='%h'))
+    REV=$(git rev-parse HEAD)
+    DATE=$(date "+%Y-%m-%d")
+
     docker run -i --rm \
         -v $(pwd)/..:/go/src/github.com/metamatex/metamatemmono \
         -w /go/src/github.com/metamatex/metamatemmono/metamate \
@@ -23,10 +27,6 @@ function release {
         golang \
         go build -o dist/metamate cmd/metamate/main.go
 
-    TAG=$(git describe --exact-match --tags $(git log -n1 --pretty='%h'))
-    REV=$(git rev-parse HEAD)
-    DATE=$(date "+%Y-%m-%d")
-    echo $TAG
     docker build \
         --pull \
         --file .make/Dockerfile \
