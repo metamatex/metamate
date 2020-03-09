@@ -4,9 +4,12 @@ import (
 	"fmt"
 	"github.com/metamatex/metamatemono/metactl/pkg/v0/boot"
 	"github.com/metamatex/metamatemono/metactl/pkg/v0/types"
+	"github.com/metamatex/metamatemono/metactl/pkg/v0/utils"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"log"
+	"os"
 )
 
 var d = boot.GetDependencies(0)
@@ -74,6 +77,30 @@ func initConfig() {
 	}()
 	if err != nil {
 		d.MessageReport.AddError(err)
+	}
+}
+
+func handleReport(r types.MessageReport, o types.Output, verbosityLevel int) {
+	printR := types.MessageReport{
+		Debug:   r.Debug,
+		Info:    r.Info,
+		Warning: r.Warning,
+		Error:   r.Error,
+	}
+
+	switch verbosityLevel {
+	case 0:
+		printR.Debug = []string{}
+	default:
+	}
+
+	err := utils.PrintReport(c.NoColor, c.OutputFormat, c.ReturnData(), printR, o)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if len(r.Error) != 0 {
+		os.Exit(1)
 	}
 }
 

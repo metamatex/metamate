@@ -2,6 +2,7 @@ package v0
 
 import (
 	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamatemono/metactl/pkg/v0/types"
 	"github.com/spf13/cobra"
 )
 
@@ -16,6 +17,8 @@ var asgTypeCmd = &cobra.Command{
 		}
 
 		tn.Print()
+
+		handleReport(*d.MessageReport, types.Output{}, c.VerbosityLevel)
 
 		return
 	},

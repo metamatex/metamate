@@ -6,7 +6,6 @@ import (
 	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
 	"github.com/metamatex/metamatemono/metactl/pkg/v0/business/sdk"
 	"github.com/metamatex/metamatemono/metactl/pkg/v0/types"
-	"github.com/metamatex/metamatemono/metactl/pkg/v0/utils"
 	"github.com/spf13/cobra"
 	"strings"
 )
@@ -67,10 +66,7 @@ var sdkGenCmd = &cobra.Command{
 			d.MessageReport.AddError(errs)
 		}
 
-		err = utils.PrintReport(c.NoColor, c.OutputFormat, c.ReturnData(), *d.MessageReport, types.Output{})
-		if err != nil {
-			return
-		}
+		handleReport(*d.MessageReport, types.Output{}, c.VerbosityLevel)
 
 		return
 	},

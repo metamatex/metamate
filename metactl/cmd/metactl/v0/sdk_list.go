@@ -3,7 +3,6 @@ package v0
 import (
 	"github.com/metamatex/metamatemono/metactl/pkg/v0/business/sdk"
 	"github.com/metamatex/metamatemono/metactl/pkg/v0/types"
-	"github.com/metamatex/metamatemono/metactl/pkg/v0/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -18,10 +17,7 @@ var sdkListCmd = &cobra.Command{
 		o.Data = sdks
 		o.Text = sdk.Format(sdks)
 
-		err = utils.PrintReport(c.NoColor, c.OutputFormat, c.ReturnData(), *d.MessageReport, o)
-		if err != nil {
-			return
-		}
+		handleReport(*d.MessageReport, o, c.VerbosityLevel)
 
 		return
 	},
