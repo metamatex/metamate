@@ -1,5 +1,5 @@
 FROM bitnami/minideb:latest
 
-COPY metamate metamate
+COPY dist/metamate metamate
 
 CMD ./metamate

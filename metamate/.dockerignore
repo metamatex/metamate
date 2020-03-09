@@ -1,0 +1,3 @@
+*
+!dist/metamate
+!pkg/communication/protocols/graphiql-explorer/explorer/build
