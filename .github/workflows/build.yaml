@@ -4,6 +4,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - run: curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | sh
+      - run: ./bin/goreleaser
+      - run: goreleaser
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v1
         with:
