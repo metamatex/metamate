@@ -6,6 +6,7 @@ jobs:
     steps:
       - run: curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | sh
       - run: echo $PATH
+      - run: snapcraft --help
       - run: mv ./bin/goreleaser /usr/local/bin/goreleaser
       - run: goreleaser
       - uses: actions/checkout@v2
