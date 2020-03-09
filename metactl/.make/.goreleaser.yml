@@ -40,6 +40,6 @@ brews:
       owner: metamatex
       name: homebrew-taps
     commit_author:
-      name: ppwfx
-      email: ph.woerdehoff@gmail.com
+      name: metamatexbot
+      email: metamate+metamatexbot@metamate.com
     homepage: "https://metamate.io"
