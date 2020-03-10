@@ -13,8 +13,6 @@ import (
 	//"log"
 )
 
-var versiona = "0.0.1"
-
 var updateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "",
@@ -28,9 +26,14 @@ var updateCmd = &cobra.Command{
 				return
 			}
 
-			v := semver.MustParse(versiona)
+			vString := version.Version
+			if vString == "dev-0.0.0" {
+				vString = "0.0.0"
+			}
+
+			v := semver.MustParse(vString)
 			if !found || latest.Version.LTE(v) {
-				d.MessageReport.AddInfo(fmt.Sprintf("current version %v is the latest", versiona))
+				d.MessageReport.AddInfo(fmt.Sprintf("current version %v is the latest", version.Version))
 
 				return
 			}
@@ -40,7 +43,7 @@ var updateCmd = &cobra.Command{
 				prefix = "ask"
 			}
 
-			fmt.Printf("%v do you want to update to v%v? (y/n): ", prefix, latest.Version)
+			fmt.Printf("%v do you want to update to v%v ? (y/n): ", prefix, latest.Version)
 			input, err := bufio.NewReader(os.Stdin).ReadString('\n')
 			if err != nil || (input != "y\n" && input != "n\n") {
 				err = errors.New("invalid input")
