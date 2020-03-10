@@ -18,7 +18,7 @@ var asgTypeCmd = &cobra.Command{
 
 		tn.Print()
 
-		handleReport(*d.MessageReport, types.Output{}, c.VerbosityLevel)
+		handleReport(*d.MessageReport, types.Output{}, gArgs.VerbosityLevel)
 
 		return
 	},

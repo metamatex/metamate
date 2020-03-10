@@ -66,7 +66,7 @@ var sdkGenCmd = &cobra.Command{
 			d.MessageReport.AddError(errs)
 		}
 
-		handleReport(*d.MessageReport, types.Output{}, c.VerbosityLevel)
+		handleReport(*d.MessageReport, types.Output{}, gArgs.VerbosityLevel)
 
 		return
 	},

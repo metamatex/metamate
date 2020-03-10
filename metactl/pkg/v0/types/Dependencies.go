@@ -16,6 +16,6 @@ type Dependencies struct {
 	MessageReport  *MessageReport
 	RootNode       *graph.RootNode
 	Factory        generic.Factory
-	GlobalArgs     Config
+	GlobalArgs     GlobalArgs
 	//Index          bleve.Index
 }

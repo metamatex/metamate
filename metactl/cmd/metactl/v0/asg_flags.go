@@ -10,9 +10,9 @@ var asgFlagsCmd = &cobra.Command{
 	Short: "print available flags",
 	Long:  "",
 	RunE: func(cmd *cobra.Command, args []string) (err error) {
-		o := asg.Flags(c.ReturnData())
+		o := asg.Flags(gArgs.ReturnData())
 
-		handleReport(*d.MessageReport, o, c.VerbosityLevel)
+		handleReport(*d.MessageReport, o, gArgs.VerbosityLevel)
 
 		return
 	},

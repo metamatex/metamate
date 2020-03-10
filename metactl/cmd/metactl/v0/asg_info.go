@@ -20,7 +20,7 @@ var asgInfoCmd = &cobra.Command{
 		o := types.Output{}
 		o.Data = r
 
-		handleReport(*d.MessageReport, o, c.VerbosityLevel)
+		handleReport(*d.MessageReport, o, gArgs.VerbosityLevel)
 
 		return
 	},

@@ -17,7 +17,7 @@ var sdkListCmd = &cobra.Command{
 		o.Data = sdks
 		o.Text = sdk.Format(sdks)
 
-		handleReport(*d.MessageReport, o, c.VerbosityLevel)
+		handleReport(*d.MessageReport, o, gArgs.VerbosityLevel)
 
 		return
 	},

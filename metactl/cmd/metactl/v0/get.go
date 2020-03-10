@@ -13,15 +13,15 @@ var getCmd = &cobra.Command{
 		o, err := get.Get(
 			d.RootNode,
 			d.Factory,
-			c.Addr,
-			c.Token,
+			gArgs.Addr,
+			gArgs.Token,
 			args[0],
 		)
 		if err != nil {
 			d.MessageReport.AddError(err)
 		}
 
-		handleReport(*d.MessageReport, o, c.VerbosityLevel)
+		handleReport(*d.MessageReport, o, gArgs.VerbosityLevel)
 
 		return
 	},

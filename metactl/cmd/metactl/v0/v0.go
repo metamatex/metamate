@@ -13,12 +13,8 @@ import (
 )
 
 var d = boot.GetDependencies(0)
-var c = types.Config{}
-var projectConfig *types.ProjectConfig
-
-func init() {
-	cobra.OnInitialize(initConfig)
-}
+var gArgs = types.GlobalArgs{}
+var version = types.Version{}
 
 var v0Cmd = &cobra.Command{
 	Use:   "v0",
@@ -26,7 +22,7 @@ var v0Cmd = &cobra.Command{
 	Long:  "",
 }
 
-func AddV0(cmd *cobra.Command, prefix bool) {
+func AddV0(cmd *cobra.Command, prefix bool, v types.Version) {
 	parentCmd := cmd
 	if prefix {
 		parentCmd.AddCommand(v0Cmd)
@@ -34,50 +30,48 @@ func AddV0(cmd *cobra.Command, prefix bool) {
 		parentCmd = v0Cmd
 	}
 
+	version = v
+
 	addGen(parentCmd)
 	addInit(parentCmd)
 	addAsg(parentCmd)
 	addSdk(parentCmd)
 	addGet(parentCmd)
+	addVersion(parentCmd)
 
-	parentCmd.PersistentFlags().StringVar(&c.GlobalConfigPath, "c", "$HOME/.metactl/c", "c file")
-	parentCmd.PersistentFlags().StringVar(&c.Addr, "addr", "", "")
-	parentCmd.PersistentFlags().StringVar(&c.Token, "token", "", "")
-	parentCmd.PersistentFlags().CountVarP(&c.VerbosityLevel, "verbose", "v", "")
-	parentCmd.PersistentFlags().BoolVar(&c.NoColor, "no-color", false, "")
-	parentCmd.PersistentFlags().StringVarP(&c.OutputFormat, "output", "o", "default", "Output format. One of: default|json|yaml")
+	parentCmd.PersistentFlags().StringVarP(&gArgs.GlobalConfigPath, "config", "c", "$HOME/.metactl/config", "config file")
+	parentCmd.PersistentFlags().StringVar(&gArgs.Addr, "addr", "", "")
+	parentCmd.PersistentFlags().StringVar(&gArgs.Token, "token", "", "")
+	parentCmd.PersistentFlags().CountVarP(&gArgs.VerbosityLevel, "verbose", "v", "")
+	parentCmd.PersistentFlags().BoolVar(&gArgs.NoColor, "no-color", false, "")
+	parentCmd.PersistentFlags().StringVarP(&gArgs.OutputFormat, "output", "o", "default", "Output format. One of: default|json|yaml")
 }
 
-func initConfig() {
-	err := func() (err error) {
-		v := viper.New()
+func readProjectConfig(args types.GlobalArgs) (c types.ProjectConfig, err error) {
+	v := viper.New()
 
-		if c.ProjectConfigPath != "" {
-			v.SetConfigFile(c.ProjectConfigPath)
-		} else {
-			v.AddConfigPath(".")
-			v.SetConfigName("metactl")
-		}
-
-		v.AutomaticEnv()
-
-		err = v.ReadInConfig()
-		if err != nil {
-			return
-		}
-
-		d.MessageReport.AddDebug(fmt.Sprintf("using c file: %v", v.ConfigFileUsed()))
-
-		err = v.Unmarshal(&projectConfig)
-		if err != nil {
-			return
-		}
-
-		return
-	}()
-	if err != nil {
-		d.MessageReport.AddError(err)
+	if args.ProjectConfigPath != "" {
+		v.SetConfigFile(args.ProjectConfigPath)
+	} else {
+		v.AddConfigPath(".")
+		v.SetConfigName("metactl")
 	}
+
+	v.AutomaticEnv()
+
+	err = v.ReadInConfig()
+	if err != nil {
+		return
+	}
+
+	d.MessageReport.AddDebug(fmt.Sprintf("using %v", v.ConfigFileUsed()))
+
+	err = v.Unmarshal(&c)
+	if err != nil {
+		return
+	}
+
+	return
 }
 
 func handleReport(r types.MessageReport, o types.Output, verbosityLevel int) {
@@ -94,7 +88,7 @@ func handleReport(r types.MessageReport, o types.Output, verbosityLevel int) {
 	default:
 	}
 
-	err := utils.PrintReport(c.NoColor, c.OutputFormat, c.ReturnData(), printR, o)
+	err := utils.PrintReport(gArgs.NoColor, gArgs.OutputFormat, gArgs.ReturnData(), printR, o)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -104,11 +98,25 @@ func handleReport(r types.MessageReport, o types.Output, verbosityLevel int) {
 	}
 }
 
-func requireProjectConfig() (err error) {
-	if projectConfig == nil {
-		err = errors.New("no metactl.yaml found, to create it, run `metactl init`")
+func getProjectConfigPath(gArgs types.GlobalArgs) string {
+	if gArgs.ProjectConfigPath != "" {
+		return gArgs.ProjectConfigPath
+	}
 
-		return
+	return ".metactl"
+}
+
+func requireProjectConfig(gArgs types.GlobalArgs) (c types.ProjectConfig, err error) {
+	_, err = os.Stat(getProjectConfigPath(gArgs))
+	if err != nil {
+		err = errors.New("metactl.yaml not found, run `metactl init` to create it")
+
+	    return
+	}
+
+	c, err = readProjectConfig(gArgs)
+	if err != nil {
+	    return
 	}
 
 	return

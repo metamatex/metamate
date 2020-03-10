@@ -9,7 +9,7 @@ import (
 
 var initCmd = &cobra.Command{
 	Use:   "init",
-	Short: "create project c",
+	Short: "create project gArgs",
 	Long:  "",
 	RunE: func(cmd *cobra.Command, args []string) (err error) {
 		err = init0.Init(d.FileSystem, d.MessageReport)
@@ -17,7 +17,7 @@ var initCmd = &cobra.Command{
 			d.MessageReport.AddError(err)
 		}
 
-		handleReport(*d.MessageReport, types.Output{}, c.VerbosityLevel)
+		handleReport(*d.MessageReport, types.Output{}, gArgs.VerbosityLevel)
 
 		return
 	},

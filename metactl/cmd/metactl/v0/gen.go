@@ -13,20 +13,20 @@ var genCmd = &cobra.Command{
 	Long:  "",
 	RunE: func(cmd *cobra.Command, args []string) (err error) {
 		errs := func() (errs []error) {
-			err := requireProjectConfig()
+			c, err := requireProjectConfig(gArgs)
 			if err != nil {
 				errs = append(errs, err)
 
 				return
 			}
 
-			errs = gen.Gen(d.MessageReport, d.FileSystem, d.Version, d.RootNode, projectConfig.V0.Gen.Tasks)
+			errs = gen.Gen(d.MessageReport, d.FileSystem, d.Version, d.RootNode, c.V0.Gen.Tasks)
 			if len(errs) != 0 {
 				return
 			}
 
 			var sdkNames []string
-			for _, sdk0 := range projectConfig.V0.Gen.Sdks {
+			for _, sdk0 := range c.V0.Gen.Sdks {
 				sdkNames = append(sdkNames, sdk0.Names...)
 			}
 
@@ -35,7 +35,7 @@ var genCmd = &cobra.Command{
 				return
 			}
 
-			for _, sdk0 := range projectConfig.V0.Gen.Sdks {
+			for _, sdk0 := range c.V0.Gen.Sdks {
 				for _, name := range sdk0.Names {
 					errs = sdk.Gen(d.MessageReport, d.FileSystem, d.Version, d.RootNode, name, sdk0.Data, sdk0.Endpoints, nil)
 					if len(errs) != 0 {
@@ -50,7 +50,7 @@ var genCmd = &cobra.Command{
 			d.MessageReport.AddError(errs)
 		}
 
-		handleReport(*d.MessageReport, types.Output{}, c.VerbosityLevel)
+		handleReport(*d.MessageReport, types.Output{}, gArgs.VerbosityLevel)
 
 		return
 	},

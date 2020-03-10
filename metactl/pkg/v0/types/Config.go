@@ -8,7 +8,7 @@ const (
 	FORMAT_DEFAULT = FORMAT_YAML
 )
 
-type Config struct {
+type GlobalArgs struct {
 	Output            string
 	VerbosityLevel    int
 	OutputFormat      string
@@ -19,8 +19,8 @@ type Config struct {
 	NoColor           bool
 }
 
-func (c Config) ReturnData() (b bool) {
-	switch strings.ToLower(c.OutputFormat) {
+func (a GlobalArgs) ReturnData() (b bool) {
+	switch strings.ToLower(a.OutputFormat) {
 	case FORMAT_YAML:
 		b = true
 	case FORMAT_JSON:
