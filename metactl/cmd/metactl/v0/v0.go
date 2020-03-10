@@ -38,6 +38,7 @@ func AddV0(cmd *cobra.Command, prefix bool, v types.Version) {
 	addSdk(parentCmd)
 	addGet(parentCmd)
 	addVersion(parentCmd)
+	addUpdate(parentCmd)
 
 	parentCmd.PersistentFlags().StringVarP(&gArgs.GlobalConfigPath, "config", "c", "$HOME/.metactl/config", "config file")
 	parentCmd.PersistentFlags().StringVar(&gArgs.Addr, "addr", "", "")
