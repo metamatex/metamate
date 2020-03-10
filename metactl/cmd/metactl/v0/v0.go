@@ -1,11 +1,11 @@
 package v0
 
 import (
+	"errors"
 	"fmt"
 	"github.com/metamatex/metamatemono/metactl/pkg/v0/boot"
 	"github.com/metamatex/metamatemono/metactl/pkg/v0/types"
 	"github.com/metamatex/metamatemono/metactl/pkg/v0/utils"
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"log"
@@ -75,6 +75,26 @@ func readProjectConfig(args types.GlobalArgs) (c types.ProjectConfig, err error)
 	return
 }
 
+func hasProjectConfig(args types.GlobalArgs) (err error) {
+	v := viper.New()
+
+	if args.ProjectConfigPath != "" {
+		v.SetConfigFile(args.ProjectConfigPath)
+	} else {
+		v.AddConfigPath(".")
+		v.SetConfigName("metactl")
+	}
+
+	v.AutomaticEnv()
+
+	err = v.ReadInConfig()
+	if err != nil {
+		return
+	}
+
+	return
+}
+
 func handleReport(r types.MessageReport, o types.Output, verbosityLevel int) {
 	printR := types.MessageReport{
 		Debug:   r.Debug,
@@ -99,25 +119,21 @@ func handleReport(r types.MessageReport, o types.Output, verbosityLevel int) {
 	}
 }
 
-func getProjectConfigPath(gArgs types.GlobalArgs) string {
-	if gArgs.ProjectConfigPath != "" {
-		return gArgs.ProjectConfigPath
-	}
-
-	return ".metactl"
-}
-
 func requireProjectConfig(gArgs types.GlobalArgs) (c types.ProjectConfig, err error) {
-	_, err = os.Stat(getProjectConfigPath(gArgs))
+	err = hasProjectConfig(gArgs)
 	if err != nil {
-		err = errors.New("metactl.yaml not found, run `metactl init` to create it")
+		switch err.(type) {
+		case viper.ConfigFileNotFoundError:
+			err = errors.New("metactl.yaml not found, run `metactl init` to create it")
+		default:
+		}
 
-	    return
+		return
 	}
 
 	c, err = readProjectConfig(gArgs)
 	if err != nil {
-	    return
+		return
 	}
 
 	return

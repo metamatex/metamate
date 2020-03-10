@@ -22,7 +22,6 @@ var updateCmd = &cobra.Command{
 		    return
 		}
 
-
 		spew.Dump(b)
 		spew.Dump(r)
 
