@@ -128,6 +128,7 @@ func requireProjectConfig(gArgs types.GlobalArgs) (c types.ProjectConfig, err er
 		default:
 		}
 
+
 		return
 	}
 
