@@ -9,6 +9,7 @@ const (
 	Input           = "input"
 	Output          = "output"
 	Service         = "service"
+	SdkVersion         = "sdkVersion"
 	Wraps           = "wraps"
 	Services        = "services"
 	Errors          = "errors"

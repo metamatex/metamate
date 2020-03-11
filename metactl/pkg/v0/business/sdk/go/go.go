@@ -95,6 +95,7 @@ func GetSdks() []types.Sdk {
 		tasks[TaskEnums],
 		tasks[TaskUtils],
 		tasks[TaskUtilsPtr],
+		tasks[TaskVersion],
 	}
 
 	taskSets[TaskSetHttpJsonClient] = []types.RenderTask{

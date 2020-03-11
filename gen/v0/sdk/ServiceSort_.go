@@ -11,5 +11,6 @@ type ServiceSort struct {
     Meta *TypeMetaSort `json:"meta,omitempty",yaml:"meta,omitempty"`
     Name *string `json:"name,omitempty",yaml:"name,omitempty"`
     Port *string `json:"port,omitempty",yaml:"port,omitempty"`
+    SdkVersion *string `json:"sdkVersion,omitempty",yaml:"sdkVersion,omitempty"`
     Url *UrlSort `json:"url,omitempty",yaml:"url,omitempty"`
 }

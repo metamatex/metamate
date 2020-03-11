@@ -9,7 +9,7 @@ import (
 
 type Dependencies struct {
 	VerbosityLevel int
-	Version        string
+	Version        Version
 	FileSystem     afero.Fs
 	ProjectConfig  *ProjectConfig
 	GlobalConfig   GlobalConfig

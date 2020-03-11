@@ -16,6 +16,7 @@ type ServiceFilter struct {
     Not []ServiceFilter `json:"not,omitempty",yaml:"not,omitempty"`
     Or []ServiceFilter `json:"or,omitempty",yaml:"or,omitempty"`
     Port *Int32Filter `json:"port,omitempty",yaml:"port,omitempty"`
+    SdkVersion *StringFilter `json:"sdkVersion,omitempty",yaml:"sdkVersion,omitempty"`
     Set *bool `json:"set,omitempty",yaml:"set,omitempty"`
     Transport *EnumFilter `json:"transport,omitempty",yaml:"transport,omitempty"`
     Url *UrlFilter `json:"url,omitempty",yaml:"url,omitempty"`

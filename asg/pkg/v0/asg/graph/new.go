@@ -386,6 +386,7 @@ func addEntities(root *RootNode) () {
 	root.AddTypeNode(typenames.Service, FieldNodeSlice{
 		BoolField(fieldnames.IsVirtual),
 		StringField(fieldnames.Name),
+		StringField(fieldnames.SdkVersion),
 		TypeField(fieldnames.Url, typenames.Url),
 		EnumField(fieldnames.Transport, typenames.ServiceTransport),
 		Int32Field(fieldnames.Port),

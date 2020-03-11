@@ -5,7 +5,7 @@ import (
 )
 
 type RenderContext struct {
-	Version    *string
+	Version    *Version
 	Data       map[string]interface{}
 	BasicTypes graph.BasicTypeNodeMap
 	Endpoints  graph.EndpointNodeMap
@@ -16,7 +16,7 @@ type RenderContext struct {
 }
 
 type IterateRenderContext struct {
-	Version   *string
+	Version   *Version
 	Data      map[string]interface{}
 	BasicType *graph.BasicTypeNode
 	Endpoint  *graph.EndpointNode

@@ -5,9 +5,10 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"github.com/metamatex/metamate/gen/v0/sdk"
 	"net/http"
 	"reflect"
-	"github.com/metamatex/metamate/gen/v0/sdk"
+	
 )
 
 type HttpJsonClient struct {
@@ -36,9 +37,9 @@ func (c HttpJsonClient) send(req interface{}, rsp interface{}) (err error) {
 		return
 	}
 
-	httpReq.Header.Set(CONTENT_TYPE_HEADER, CONTENT_TYPE_JSON)
-	httpReq.Header.Set(METAMATE_TYPE_HEADER, reflect.TypeOf(req).Name())
-	httpReq.Header.Set(AUTHORIZATION_HEADER, "Bearer " + c.opts.Token)
+	httpReq.Header.Set(ContentTypeHeader, ContentTypeJson)
+	httpReq.Header.Set(MetamateTypeHeader, reflect.TypeOf(req).Name())
+	httpReq.Header.Set(AuthorizationHeader, "Bearer " + c.opts.Token)
 
 	res, err := c.opts.HttpClient.Do(httpReq)
 	if err != nil {

@@ -14,7 +14,7 @@ import (
 	"github.com/metamatex/metamate/metactl/pkg/v0/types"
 )
 
-func Gen(report *types.MessageReport, fs afero.Fs, version string, rn *graph.RootNode, tasks []types.RenderTask) (errs []error) {
+func Gen(report *types.MessageReport, fs afero.Fs, version types.Version, rn *graph.RootNode, tasks []types.RenderTask) (errs []error) {
 	wg := sync.WaitGroup{}
 
 	err := resetDirectories(fs, tasks)
@@ -191,7 +191,7 @@ func validateTaskBase(fs afero.Fs, t types.RenderTask) (err error) {
 	return
 }
 
-func IterateFalse(report *types.MessageReport, fs afero.Fs, task types.RenderTask, version string, rn *graph.RootNode) (err error) {
+func IterateFalse(report *types.MessageReport, fs afero.Fs, task types.RenderTask, version types.Version, rn *graph.RootNode) (err error) {
 	err = validateTaskIterateFalse(task)
 	if err != nil {
 		return
@@ -212,7 +212,7 @@ func IterateFalse(report *types.MessageReport, fs afero.Fs, task types.RenderTas
 	return
 }
 
-func Iterate(report *types.MessageReport, fs afero.Fs, task types.RenderTask, version string, rn *graph.RootNode) (errs []error) {
+func Iterate(report *types.MessageReport, fs afero.Fs, task types.RenderTask, version types.Version, rn *graph.RootNode) (errs []error) {
 	err := validateTaskIterate(task)
 	if err != nil {
 		errs = append(errs, err)
@@ -267,7 +267,7 @@ func Iterate(report *types.MessageReport, fs afero.Fs, task types.RenderTask, ve
 	return
 }
 
-func getIterateRenderContexts(version string, rn *graph.RootNode, task types.RenderTask) (renderContexts []types.IterateRenderContext) {
+func getIterateRenderContexts(version types.Version, rn *graph.RootNode, task types.RenderTask) (renderContexts []types.IterateRenderContext) {
 	if task.Filter != nil {
 		if task.Filter.BasicTypes != nil {
 			nm := rn.BasicTypes.Filter(*task.Filter.BasicTypes)
@@ -435,7 +435,7 @@ func getIterateRenderContexts(version string, rn *graph.RootNode, task types.Ren
 	return
 }
 
-func getRenderContext(rn *graph.RootNode, version string, task types.RenderTask) (renderCtx types.RenderContext) {
+func getRenderContext(rn *graph.RootNode, version types.Version, task types.RenderTask) (renderCtx types.RenderContext) {
 	renderCtx.Version = &version
 	renderCtx.Data = task.Data
 

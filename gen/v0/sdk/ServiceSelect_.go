@@ -14,6 +14,7 @@ type ServiceSelect struct {
     Name *bool `json:"name,omitempty",yaml:"name,omitempty"`
     Port *bool `json:"port,omitempty",yaml:"port,omitempty"`
     Relations *ServiceRelationsSelect `json:"relations,omitempty",yaml:"relations,omitempty"`
+    SdkVersion *bool `json:"sdkVersion,omitempty",yaml:"sdkVersion,omitempty"`
     Transport *bool `json:"transport,omitempty",yaml:"transport,omitempty"`
     Url *UrlSelect `json:"url,omitempty",yaml:"url,omitempty"`
 }
