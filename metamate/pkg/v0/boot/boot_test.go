@@ -7,6 +7,7 @@ import (
 	"github.com/metamatex/metamate/generic/pkg/v0/transport/httpjson"
 	"github.com/metamatex/metamate/metamate/pkg/v0/boot"
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/line"
+	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 	"github.com/metamatex/metamate/spec/pkg/v0/spec"
 	"log"
 	"net/http"
@@ -25,7 +26,7 @@ const (
 func TestBoot(t *testing.T) {
 	c := boot.NewBaseConfig()
 
-	d, err := boot.NewDependencies(c)
+	d, err := boot.NewDependencies(c, types.Version{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -59,7 +60,7 @@ func TestBoot(t *testing.T) {
 
 	//spec.TestPipe(t, ctx, d.Factory, f)
 
-	//spec.TestDiscovery(t, ctx, d.Factory, f)
+	spec.TestDiscovery(t, ctx, d.Factory, f)
 
 	//spec.TestEmptyPost(t, ctx, d.Factory, f)
 	//
@@ -75,7 +76,7 @@ func TestBoot(t *testing.T) {
 	//
 	//spec.TestFilterStringIs(t, ctx, d.Factory, f, SqlxA, suffix)
 
-	spec.TestGetModeRelation(t, ctx, d.Factory, f, SqlxA, suffix)
+	// spec.TestGetModeRelation(t, ctx, d.Factory, f, SqlxA, suffix)
 
 	//spec.TestGetModeIdWithNameId(t, ctx, d.Factory, f, suffix, SqlxA)
 	//

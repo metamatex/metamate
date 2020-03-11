@@ -17,7 +17,7 @@ const (
 	CliRsp = "client response"
 )
 
-func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Service, authSvcFilter sdk.ServiceFilter, defaultClientAccount sdk.ClientAccount, reqHs map[bool]map[string]types.RequestHandler, mockReqHandler types.RequestHandler, linkStore types.LinkStore, svqReqLog func(ctx types.ReqCtx)) *line.Line {
+func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Service, authSvcFilter sdk.ServiceFilter, defaultClientAccount sdk.ClientAccount, reqHs map[bool]map[string]types.RequestHandler, linkStore types.LinkStore, svqReqLog func(ctx types.ReqCtx)) *line.Line {
 	resolveLine := line.Do()
 
 	cliReqErrL := getErrLine(f, types.GCliRsp)
@@ -183,7 +183,7 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 													).
 													If(
 														funcs.IsType(types.GSvcRsp, sdk.GetServicesResponseName, true),
-														FetchSvcDataFromSvcs(f, reqHs, mockReqHandler, svqReqLog),
+														FetchSvcDataFromSvcs(f, reqHs, svqReqLog),
 													),
 												funcs.CollectSvcRsps,
 											),
@@ -442,7 +442,7 @@ func PipeContext(f generic.Factory, resolveLine *line.Line) func(l *line.Line) *
 	}
 }
 
-func FetchSvcDataFromSvcs(f generic.Factory, hs map[bool]map[string]types.RequestHandler, mockHandler types.RequestHandler, log func(ctx types.ReqCtx)) (l *line.Line) {
+func FetchSvcDataFromSvcs(f generic.Factory, hs map[bool]map[string]types.RequestHandler, log func(ctx types.ReqCtx)) (l *line.Line) {
 	return line.Parallel(
 		-1,
 		funcs.Map(types.GSvcRsp, types.GEntity),
@@ -460,6 +460,11 @@ func FetchSvcDataFromSvcs(f generic.Factory, hs map[bool]map[string]types.Reques
 					name, ok := ctx.GSvcRsp.String(fieldnames.Output, fieldnames.Service, fieldnames.Name)
 					if ok {
 						ctx.GEntity.MustSetString([]string{fieldnames.Name}, name)
+					}
+
+					sdkVersion, ok := ctx.GSvcRsp.String(fieldnames.Output, fieldnames.Service, fieldnames.SdkVersion)
+					if ok {
+						ctx.GEntity.MustSetString([]string{fieldnames.SdkVersion}, sdkVersion)
 					}
 
 					return ctx

@@ -310,7 +310,7 @@ func BootVirtualCluster(rn *graph.RootNode, f generic.Factory) (c *virtual.Clust
 	return
 }
 
-func NewDependencies(c types.Config) (d types.Dependencies, err error) {
+func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err error) {
 	d.RootNode, err = asg.New()
 	if err != nil {
 		return
@@ -350,7 +350,7 @@ func NewDependencies(c types.Config) (d types.Dependencies, err error) {
 		log.Print(*ctx.Svc.Url.Value + " : " + ctx.GSvcReq.Type().Name())
 	}
 
-	d.ResolveLine = pipeline.NewResolveLine(d.RootNode, d.Factory, c.DiscoverySvc, c.AuthSvcFilter, c.DefaultClientAccount, reqHs, d.MockHandler, d.LinkStore, d.SvcReqLog)
+	d.ResolveLine = pipeline.NewResolveLine(d.RootNode, d.Factory, c.DiscoverySvc, c.AuthSvcFilter, c.DefaultClientAccount, reqHs, d.LinkStore, d.SvcReqLog)
 
 	d.ServeFunc = func(ctx context.Context, gCliReq generic.Generic) generic.Generic {
 		gCliReq = gCliReq.Copy()
@@ -420,7 +420,7 @@ func NewDependencies(c types.Config) (d types.Dependencies, err error) {
 	}
 
 	d.Routes = append(d.Routes, types.Route{Methods: []string{http.MethodGet}, Path: "/static*", Handler: index.GetStaticHandler()})
-	d.Routes = append(d.Routes, types.Route{Methods: []string{http.MethodGet}, Path: "/", HandlerFunc: index.GetIndexHandlerFunc(c.Host.HttpPort, d.Routes)})
+	d.Routes = append(d.Routes, types.Route{Methods: []string{http.MethodGet}, Path: "/", HandlerFunc: index.GetIndexHandlerFunc(c.Host.HttpPort, d.Routes, v)})
 
 	router := chi.NewRouter()
 

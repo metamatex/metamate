@@ -10,7 +10,6 @@ type Dependencies struct {
 	RootNode           *graph.RootNode
 	Factory            generic.Factory
 	ReqHandler         map[string]RequestHandler
-	MockHandler        RequestHandler
 	LinkStore          LinkStore
 	ResolveLine        Transformer
 	SvcReqLog          func(ctx ReqCtx)
