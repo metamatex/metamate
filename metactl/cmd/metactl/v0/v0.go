@@ -12,7 +12,7 @@ import (
 	"os"
 )
 
-var d = boot.GetDependencies(0)
+var d types.Dependencies
 var gArgs = types.GlobalArgs{}
 var version = types.Version{}
 
@@ -23,6 +23,8 @@ var v0Cmd = &cobra.Command{
 }
 
 func AddV0(cmd *cobra.Command, prefix bool, v types.Version) {
+	d = boot.GetDependencies(0, v)
+
 	parentCmd := cmd
 	if prefix {
 		parentCmd.AddCommand(v0Cmd)

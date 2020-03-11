@@ -29,9 +29,10 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"{{ $package }}/gen/v0/sdk"
 	"net/http"
 	"reflect"
-	"{{ $package }}/gen/v0/sdk"
+	
 )
 
 type HttpJsonClient struct {
@@ -60,9 +61,9 @@ func (c HttpJsonClient) send(req interface{}, rsp interface{}) (err error) {
 		return
 	}
 
-	httpReq.Header.Set(CONTENT_TYPE_HEADER, CONTENT_TYPE_JSON)
-	httpReq.Header.Set(METAMATE_TYPE_HEADER, reflect.TypeOf(req).Name())
-	httpReq.Header.Set(AUTHORIZATION_HEADER, "Bearer " + c.opts.Token)
+	httpReq.Header.Set(ContentTypeHeader, ContentTypeJson)
+	httpReq.Header.Set(MetamateTypeHeader, reflect.TypeOf(req).Name())
+	httpReq.Header.Set(AuthorizationHeader, "Bearer " + c.opts.Token)
 
 	res, err := c.opts.HttpClient.Do(httpReq)
 	if err != nil {
@@ -89,11 +90,12 @@ var goTypedHttpJsonServiceTpl = `package {{ index .Data "name" }}
 {{ $package := index .Data "package" }}
 import (
 	"encoding/json"
-	"net/http"
-	"reflect"
 	"{{ $package }}/gen/v0/sdk"
 	"{{ $package }}/gen/v0/sdk/utils/ptr"
 	"{{ $package }}/gen/v0/sdk/transport"
+	"net/http"
+	"reflect"
+	
 )
 
 type HttpJsonServer struct {
@@ -109,8 +111,8 @@ func NewHttpJsonServer(opts HttpJsonServerOpts) (http.Handler) {
 }
 
 func (s HttpJsonServer) send(w http.ResponseWriter, rsp interface{}) (err error) {
-	w.Header().Set(transport.CONTENT_TYPE_HEADER, transport.CONTENT_TYPE_JSON)
-	w.Header().Set(transport.METAMATE_TYPE_HEADER, reflect.TypeOf(rsp).Name())
+	w.Header().Set(transport.ContentTypeHeader, transport.ContentTypeJson)
+	w.Header().Set(transport.MetamateTypeHeader, reflect.TypeOf(rsp).Name())
 
 	err = json.NewEncoder(w).Encode(rsp)
 	if err != nil {
@@ -129,6 +131,7 @@ func (s HttpJsonServer) getService() (sdk.Service) {
 
 	return sdk.Service{
 		Name: ptr.String(s.opts.Service.Name()),
+		SdkVersion: ptr.String(sdk.Version),
 		Endpoints: &sdk.Endpoints{
 			LookupService: &sdk.LookupServiceEndpoint{},
 {{- range $ei, $endpoint := .Endpoints.Slice.Sort }}
@@ -141,7 +144,7 @@ func (s HttpJsonServer) getService() (sdk.Service) {
 }
 
 func (s HttpJsonServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	switch r.Header.Get(transport.METAMATE_TYPE_HEADER) {
+	switch r.Header.Get(transport.MetamateTypeHeader) {
 	case sdk.LookupServiceRequestName:
 			var req sdk.LookupServiceRequest
 			err := json.NewDecoder(r.Body).Decode(&req)

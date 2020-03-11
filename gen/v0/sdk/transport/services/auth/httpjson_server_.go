@@ -3,11 +3,12 @@ package auth
 
 import (
 	"encoding/json"
-	"net/http"
-	"reflect"
 	"github.com/metamatex/metamate/gen/v0/sdk"
 	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
 	"github.com/metamatex/metamate/gen/v0/sdk/transport"
+	"net/http"
+	"reflect"
+	
 )
 
 type HttpJsonServer struct {
@@ -23,8 +24,8 @@ func NewHttpJsonServer(opts HttpJsonServerOpts) (http.Handler) {
 }
 
 func (s HttpJsonServer) send(w http.ResponseWriter, rsp interface{}) (err error) {
-	w.Header().Set(transport.CONTENT_TYPE_HEADER, transport.CONTENT_TYPE_JSON)
-	w.Header().Set(transport.METAMATE_TYPE_HEADER, reflect.TypeOf(rsp).Name())
+	w.Header().Set(transport.ContentTypeHeader, transport.ContentTypeJson)
+	w.Header().Set(transport.MetamateTypeHeader, reflect.TypeOf(rsp).Name())
 
 	err = json.NewEncoder(w).Encode(rsp)
 	if err != nil {
@@ -41,6 +42,7 @@ func (s HttpJsonServer) getService() (sdk.Service) {
 
 	return sdk.Service{
 		Name: ptr.String(s.opts.Service.Name()),
+		SdkVersion: ptr.String(sdk.Version),
 		Endpoints: &sdk.Endpoints{
 			LookupService: &sdk.LookupServiceEndpoint{},
 			AuthenticateClientAccount: &authenticateClientAccountEndpoint,
@@ -51,7 +53,7 @@ func (s HttpJsonServer) getService() (sdk.Service) {
 }
 
 func (s HttpJsonServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	switch r.Header.Get(transport.METAMATE_TYPE_HEADER) {
+	switch r.Header.Get(transport.MetamateTypeHeader) {
 	case sdk.LookupServiceRequestName:
 			var req sdk.LookupServiceRequest
 			err := json.NewDecoder(r.Body).Decode(&req)

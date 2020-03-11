@@ -12,16 +12,15 @@ func GetTestDependencies() (d types.Dependencies) {
 	d = getDefaultDependencies()
 
 	d.FileSystem = afero.NewMemMapFs()
-	d.Version = "0.0.0"
 
 	return d
 }
 
-func GetDependencies(verbosity int) (d types.Dependencies) {
+func GetDependencies(verbosity int, version types.Version) (d types.Dependencies) {
 	d = getDefaultDependencies()
 
 	d.FileSystem = afero.NewOsFs()
-	d.Version = "0.0.0"
+	d.Version = version
 
 	root := graph.NewRoot()
 	root.Wire()

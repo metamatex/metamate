@@ -50,7 +50,7 @@ func Reset(names []string) (errs []error) {
 	return
 }
 
-func Gen(report *types.MessageReport, fs afero.Fs, version string, rn *graph.RootNode, name string, data map[string]interface{}, endpointFilter *graph.Filter, typeFilter *graph.Filter) (errs []error) {
+func Gen(report *types.MessageReport, fs afero.Fs, version types.Version, rn *graph.RootNode, name string, data map[string]interface{}, endpointFilter *graph.Filter, typeFilter *graph.Filter) (errs []error) {
 	sdk, err := getSdk(name)
 	if err != nil {
 		errs = append(errs, err)
