@@ -2,9 +2,9 @@ package httpjson
 
 import (
 	"context"
-	"github.com/metamatex/metamatemono/generic/pkg/v0/generic"
-	"github.com/metamatex/metamatemono/generic/pkg/v0/transport/httpjson"
-	"github.com/metamatex/metamatemono/metamate/pkg/v0/types"
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
+	"github.com/metamatex/metamate/generic/pkg/v0/transport/httpjson"
+	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 	"net/http"
 )
 

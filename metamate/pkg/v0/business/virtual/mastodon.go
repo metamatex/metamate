@@ -4,12 +4,12 @@ package virtual
 
 import (
 	"errors"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
-	"github.com/metamatex/metamatemono/gen/v0/sdk"
-	"github.com/metamatex/metamatemono/gen/v0/sdk/transport/services/mastodon"
-	"github.com/metamatex/metamatemono/generic/pkg/v0/generic"
-	"github.com/metamatex/metamatemono/mastodon-svc/pkg"
-	"github.com/metamatex/metamatemono/metamate/pkg/v0/types"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/sdk/transport/services/mastodon"
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
+	"github.com/metamatex/metamate/mastodon-svc/pkg"
+	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 	"net/http"
 )
 

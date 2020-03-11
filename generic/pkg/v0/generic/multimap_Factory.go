@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/fieldflags"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/fieldflags"
 	"github.com/wolfeidau/unflatten"
 )
 

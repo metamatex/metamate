@@ -3,9 +3,9 @@ package main
 import (
 	"crypto/rand"
 	"crypto/rsa"
-	"github.com/metamatex/metamatemono/auth-svc/pkg"
-	"github.com/metamatex/metamatemono/gen/v0/sdk/transport"
-	"github.com/metamatex/metamatemono/gen/v0/sdk/transport/services/auth"
+	"github.com/metamatex/metamate/auth-svc/pkg"
+	"github.com/metamatex/metamate/gen/v0/sdk/transport"
+	"github.com/metamatex/metamate/gen/v0/sdk/transport/services/auth"
 	"net/http"
 )
 
@@ -26,7 +26,7 @@ func run() (err error) {
 
 	svc, err := pkg.NewService(pkg.ServiceOpts{
 		Client:     c,
-		Salt:       "hi",
+		Salt:       "salt",
 		PrivateKey: privateKey,
 	})
 	if err != nil {
@@ -34,8 +34,6 @@ func run() (err error) {
 	}
 
 	s := auth.NewHttpJsonServer(auth.HttpJsonServerOpts{Service: svc})
-
-	println("bra")
 
 	err = http.ListenAndServe(":80", s)
 	if err != nil {

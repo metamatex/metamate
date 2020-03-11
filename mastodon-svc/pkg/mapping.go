@@ -2,8 +2,8 @@ package pkg
 
 import (
 	"github.com/mattn/go-mastodon"
-	"github.com/metamatex/metamatemono/gen/v0/sdk"
-	"github.com/metamatex/metamatemono/gen/v0/sdk/utils/ptr"
+	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
 )
 
 func MapStatusesFromMastodonStatuses(statuses []*mastodon.Status) (statuses0 []sdk.Status) {

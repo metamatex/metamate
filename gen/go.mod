@@ -1,3 +1,3 @@
-module github.com/metamatemono/gen
+module github.com/metamate/gen
 
 go 1.13

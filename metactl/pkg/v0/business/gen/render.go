@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/metamatex/metamatemono/metactl/pkg/v0/types"
+	"github.com/metamatex/metamate/metactl/pkg/v0/types"
 	"os"
 	"path/filepath"
 	"strings"

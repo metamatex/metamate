@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/basictypeflags"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/basictypeflags"
 )
 
 const (

@@ -2,7 +2,7 @@ package funcs
 
 import (
 	"fmt"
-	"github.com/metamatex/metamatemono/metamate/pkg/v0/types"
+	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 )
 
 func By(subject string) func(ctx types.ReqCtx) string {

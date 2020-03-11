@@ -3,12 +3,12 @@ package communication
 import (
 	"context"
 	"github.com/jmoiron/sqlx"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/endpointnames"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/fieldnames"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
-	"github.com/metamatex/metamatemono/generic/pkg/v0/generic"
-	"github.com/metamatex/metamatemono/gen/v0/sdk"
-	"github.com/metamatex/metamatemono/gen/v0/sdk/utils/ptr"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/endpointnames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
+	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
 )
 
 func GetServer(supportedIdKinds map[string]bool, db sqlx.Ext, rn *graph.RootNode, f generic.Factory, gGetServiceRsp generic.Generic) (func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic)) {

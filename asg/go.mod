@@ -1,4 +1,4 @@
-module github.com/metamatex/metamatemono/asg
+module github.com/metamatex/metamate/asg
 
 go 1.13
 

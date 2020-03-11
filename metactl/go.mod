@@ -1,12 +1,12 @@
-module github.com/metamatex/metamatemono/metactl
+module github.com/metamatex/metamate/metactl
 
 go 1.13
 
-replace github.com/metamatex/metamatemono/asg => ../asg
+replace github.com/metamatex/metamate/asg => ../asg
 
-replace github.com/metamatex/metamatemono/gen => ../gen
+replace github.com/metamatex/metamate/gen => ../gen
 
-replace github.com/metamatex/metamatemono/generic => ../generic
+replace github.com/metamatex/metamate/generic => ../generic
 
 require (
 	github.com/Masterminds/goutils v1.1.0 // indirect
@@ -19,9 +19,9 @@ require (
 	github.com/iancoleman/strcase v0.0.0-20191112232945-16388991a334
 	github.com/imdario/mergo v0.3.8 // indirect
 	github.com/jinzhu/inflection v1.0.0
-	github.com/metamatex/metamatemono/asg v0.0.0-00010101000000-000000000000
-	github.com/metamatex/metamatemono/gen v0.0.0-00010101000000-000000000000
-	github.com/metamatex/metamatemono/generic v0.0.0-00010101000000-000000000000
+	github.com/metamatex/metamate/asg v0.0.0-00010101000000-000000000000
+	github.com/metamatex/metamate/gen v0.0.0-00010101000000-000000000000
+	github.com/metamatex/metamate/generic v0.0.0-00010101000000-000000000000
 	github.com/mitchellh/copystructure v1.0.0 // indirect
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/pkg/errors v0.9.1

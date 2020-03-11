@@ -1,7 +1,7 @@
 package generic
 
 import (
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/fieldnames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
 )
 
 func (g *MultiMapGeneric) Select(gSelect Generic)  {

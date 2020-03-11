@@ -1,15 +1,15 @@
 package generic
 
 import (
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/typenames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/typenames"
 	"testing"
 
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/fieldnames"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/metamatex/metamatemono/gen/v0/sdk"
-	"github.com/metamatex/metamatemono/gen/v0/sdk/utils/ptr"
+	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
 )
 
 var w = sdk.Whatever{

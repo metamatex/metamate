@@ -1,10 +1,10 @@
 package v0
 
 import (
-	"github.com/metamatex/metamatemono/metactl/pkg/v0/types"
+	"github.com/metamatex/metamate/metactl/pkg/v0/types"
 	"github.com/spf13/cobra"
 
-	init0 "github.com/metamatex/metamatemono/metactl/pkg/v0/business/init"
+	init0 "github.com/metamatex/metamate/metactl/pkg/v0/business/init"
 )
 
 var initCmd = &cobra.Command{

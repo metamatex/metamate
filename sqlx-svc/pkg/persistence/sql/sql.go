@@ -1,6 +1,6 @@
 package sql
 
-import "github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
+import "github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 
 func FlattenTypeNode(tn *graph.TypeNode, ignoreNames []string, ignoreFlags []string) (flat map[string]*graph.FieldNode) {
 	ignoreNamesMap := map[string]bool{}

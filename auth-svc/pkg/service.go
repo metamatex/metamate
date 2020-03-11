@@ -7,9 +7,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/metamatex/metamatemono/gen/v0/sdk"
-	"github.com/metamatex/metamatemono/gen/v0/sdk/transport"
-	"github.com/metamatex/metamatemono/gen/v0/sdk/utils/ptr"
+	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/sdk/transport"
+	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
 	"github.com/square/go-jose"
 )
 

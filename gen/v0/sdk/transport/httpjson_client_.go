@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"reflect"
-	"github.com/metamatex/metamatemono/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/sdk"
 )
 
 type HttpJsonClient struct {

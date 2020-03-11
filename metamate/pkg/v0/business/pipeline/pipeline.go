@@ -1,13 +1,13 @@
 package pipeline
 
 import (
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/fieldnames"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
-	"github.com/metamatex/metamatemono/gen/v0/sdk"
-	"github.com/metamatex/metamatemono/generic/pkg/v0/generic"
-	"github.com/metamatex/metamatemono/metamate/pkg/v0/business/funcs"
-	"github.com/metamatex/metamatemono/metamate/pkg/v0/business/line"
-	"github.com/metamatex/metamatemono/metamate/pkg/v0/types"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
+	"github.com/metamatex/metamate/metamate/pkg/v0/business/funcs"
+	"github.com/metamatex/metamate/metamate/pkg/v0/business/line"
+	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 )
 
 const (

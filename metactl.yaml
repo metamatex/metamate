@@ -4,20 +4,27 @@ v0:
       - names: [go_httpjson_service]
         data:
           name: auth
-          package: github.com/metamatex/metamatemono
+          package: github.com/metamatex/metamate
         endpoints:
           names:
             or: [VerifyToken, AuthenticateClientAccount, PipeClientAccounts]
       - names: [go_httpjson_service]
         data:
           name: mastodon
-          package: github.com/metamatex/metamatemono
+          package: github.com/metamatex/metamate
         endpoints:
           names:
             or: [GetFeeds, GetPeople, PutPeople, GetStatuses, PostStatuses, PutStatuses, DeleteStatuses]
+      - names: [go_httpjson_service]
+        data:
+          name: kubernetes
+          package: github.com/metamatex/metamate
+        endpoints:
+          names:
+            or: [GetServices]
       - names: [go_httpjson_client]
         data:
-          package: github.com/metamatex/metamatemono
+          package: github.com/metamatex/metamate
         endpoints:
           names:
             or:

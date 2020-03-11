@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/fieldnames"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
-	"github.com/metamatex/metamatemono/generic/pkg/v0/generic"
-	"github.com/metamatex/metamatemono/gen/v0/sdk"
-	"github.com/metamatex/metamatemono/gen/v0/sdk/utils/ptr"
-	"github.com/metamatex/metamatemono/sqlx-svc/pkg/persistence/sql"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
+	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
+	"github.com/metamatex/metamate/sqlx-svc/pkg/persistence/sql"
 )
 
 func Insert(db sqlx.Ext, g generic.Generic) (id string, err error) {

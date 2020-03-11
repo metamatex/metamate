@@ -1,7 +1,7 @@
 package types
 
 import (
-	sdk "github.com/metamatex/metamatemono/gen/v0/sdk"
+	sdk "github.com/metamatex/metamate/gen/v0/sdk"
 )
 
 type LinkStore interface {

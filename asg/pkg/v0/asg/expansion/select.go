@@ -1,11 +1,11 @@
 package expansion
 
 import (
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/fieldnames"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/typenames"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/fieldflags"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/typeflags"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/typenames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/fieldflags"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/typeflags"
 )
 
 func generateSelectRecursive(root *graph.RootNode, tn *graph.TypeNode) {

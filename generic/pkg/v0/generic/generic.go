@@ -1,6 +1,6 @@
 package generic
 
-import "github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
+import "github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 
 type Generic interface {
 	MustDelete(...string)

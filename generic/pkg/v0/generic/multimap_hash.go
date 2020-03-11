@@ -2,7 +2,7 @@ package generic
 
 import (
 	"fmt"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/fieldnames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
 	"github.com/mitchellh/hashstructure"
 )
 

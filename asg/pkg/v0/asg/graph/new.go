@@ -1,17 +1,17 @@
 package graph
 
 import (
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/endpointnames"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/enumnames"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/fieldnames"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/fieldflags"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/typeflags"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/words/cardinality"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/words/preposition"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/words/verbs/infinitive"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/words/verbs/past"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/words/verbs/present"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/typenames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/endpointnames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/enumnames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/fieldflags"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/typeflags"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/words/cardinality"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/words/preposition"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/words/verbs/infinitive"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/words/verbs/past"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/words/verbs/present"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/typenames"
 )
 
 const (

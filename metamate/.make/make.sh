@@ -34,8 +34,8 @@ function release {
         --label=org.opencontainers.image.name=metamate \
         --label=org.opencontainers.image.revision=$REV \
         --label=org.opencontainers.image.version=$TAG \
-        --label=org.opencontainers.image.source=https://github.com/metamatex/metamatemono \
-        --label=repository=http://github.com/metamatex/metamatemono \
+        --label=org.opencontainers.image.source=https://github.com/metamatex/metamate \
+        --label=repository=http://github.com/metamatex/metamate \
         --label=homepage=http://metamate.io \
         --tag metamatex/metamate:latest \
         --tag metamatex/metamate:$TAG \

@@ -2,8 +2,8 @@ package pkg
 
 import (
 	"context"
-	"github.com/metamatex/metamatemono/gen/v0/sdk"
-	"github.com/metamatex/metamatemono/gen/v0/sdk/utils/ptr"
+	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
 )
 
 const (

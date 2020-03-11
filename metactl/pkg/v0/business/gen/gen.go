@@ -3,15 +3,15 @@ package gen
 import (
 	"errors"
 	"fmt"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/utils"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/utils"
 	"github.com/spf13/afero"
 	"os"
 	"strings"
 	"sync"
 
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 
-	"github.com/metamatex/metamatemono/metactl/pkg/v0/types"
+	"github.com/metamatex/metamate/metactl/pkg/v0/types"
 )
 
 func Gen(report *types.MessageReport, fs afero.Fs, version string, rn *graph.RootNode, tasks []types.RenderTask) (errs []error) {

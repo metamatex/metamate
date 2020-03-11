@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/graphql-go/graphql"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/fieldnames"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/endpointflags"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/typeflags"
-	"github.com/metamatex/metamatemono/generic/pkg/v0/generic"
-	"github.com/metamatex/metamatemono/metamate/pkg/v0/types"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/endpointflags"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/typeflags"
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
+	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 )
 
 type SchemaContext struct {

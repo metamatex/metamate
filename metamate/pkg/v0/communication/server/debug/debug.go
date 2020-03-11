@@ -1,7 +1,7 @@
 package debug
 
 import (
-	"github.com/metamatex/metamatemono/metamate/pkg/v0/types"
+	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 	"net/http"
 	"net/http/pprof"
 )

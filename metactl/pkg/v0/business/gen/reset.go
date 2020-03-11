@@ -5,9 +5,9 @@ import (
 
 	"github.com/spf13/afero"
 
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 
-	"github.com/metamatex/metamatemono/metactl/pkg/v0/types"
+	"github.com/metamatex/metamate/metactl/pkg/v0/types"
 )
 
 func resetDirectories(fs afero.Fs, tasks []types.RenderTask) (err error) {

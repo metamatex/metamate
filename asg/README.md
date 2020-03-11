@@ -27,7 +27,7 @@ The [expansion](pkg/expansion) layer processes the schema and adds types like [S
 
 `metamatex/schema` simply provides programmatic access of the schema to other applications.
 
-[metamatex/metactl](https://github.com/metamatex/metamatemono/metactl) uses it to populate user supplied templates, allowing to e.g. generate `.proto2` definitions, `graphql` schemas, docs, sdks and much more.
+[metamatex/metactl](https://github.com/metamatex/metamate/metactl) uses it to populate user supplied templates, allowing to e.g. generate `.proto2` definitions, `graphql` schemas, docs, sdks and much more.
 
 [metamatex/metamate](https://github.com/metamatex/metamate) uses it to power it's generic type system.
 

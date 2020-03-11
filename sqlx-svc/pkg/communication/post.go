@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/metamatex/metamatemono/generic/pkg/v0/generic"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/fieldnames"
-	"github.com/metamatex/metamatemono/sqlx-svc/pkg/persistence"
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
+	"github.com/metamatex/metamate/sqlx-svc/pkg/persistence"
 )
 
 func handlePost(ctx context.Context, db sqlx.Ext, f generic.Factory, gRequest generic.Generic) (gResponse generic.Generic, errs []error) {

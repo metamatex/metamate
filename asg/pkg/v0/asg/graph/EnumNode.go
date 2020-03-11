@@ -3,7 +3,7 @@ package graph
 import (
 	"reflect"
 
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/enumflags"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/enumflags"
 )
 
 const (

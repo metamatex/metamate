@@ -3,8 +3,8 @@ package types
 import (
 	"context"
 	"github.com/jmoiron/sqlx"
-	"github.com/metamatex/metamatemono/generic/pkg/v0/generic"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 )
 
 type Dependencies struct {

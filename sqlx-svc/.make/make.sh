@@ -8,7 +8,7 @@ function build {
     time docker run -i --rm \
         -v $(pwd)/..:/go/src/github.com/metamatex \
         -v $(pwd)/.make/cache:/go/pkg/mod \
-        -w /go/src/github.com/metamatex/metamatemono/sqlx-svc -e "GOOS=linux" -e "GOARCH=amd64" -e "CGO_ENABLED=1" golang go build -o main
+        -w /go/src/github.com/metamatex/metamate/sqlx-svc -e "GOOS=linux" -e "GOARCH=amd64" -e "CGO_ENABLED=1" golang go build -o main
 
     ls -lah main
 }
@@ -30,7 +30,7 @@ function deploy {
 }
 
 function release {
-    docker run -i --rm -v $(pwd):/go/src/github.com/metamatex/metamatemono/sqlx-svc -w /go/src/github.com/metamatex/metamatemono/sqlx-svc -e "GOOS=linux" -e "GOARCH=amd64" -e "CGO_ENABLED=1" golang go build -o main
+    docker run -i --rm -v $(pwd):/go/src/github.com/metamatex/metamate/sqlx-svc -w /go/src/github.com/metamatex/metamate/sqlx-svc -e "GOOS=linux" -e "GOARCH=amd64" -e "CGO_ENABLED=1" golang go build -o main
     ls -lah main
 
     docker build --file .make/production.Dockerfile --tag metamatex/sqlx-svc:latest .

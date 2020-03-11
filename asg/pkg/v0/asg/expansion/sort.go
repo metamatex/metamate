@@ -2,13 +2,13 @@ package expansion
 
 import (
 	"fmt"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/enumnames"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/typenames"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/enumnames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/typenames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"log"
 
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/fieldflags"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/typeflags"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/fieldflags"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/typeflags"
 )
 
 func generateSorts(root *graph.RootNode) {

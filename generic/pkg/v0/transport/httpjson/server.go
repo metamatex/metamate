@@ -3,10 +3,10 @@ package httpjson
 import (
 	"context"
 	"encoding/json"
-	"github.com/metamatex/metamatemono/generic/pkg/v0/generic"
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"net/http"
 
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 )
 
 type Server struct {

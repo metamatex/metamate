@@ -1,9 +1,9 @@
 package v0
 
 import (
-	"github.com/metamatex/metamatemono/metactl/pkg/v0/business/gen"
-	"github.com/metamatex/metamatemono/metactl/pkg/v0/business/sdk"
-	"github.com/metamatex/metamatemono/metactl/pkg/v0/types"
+	"github.com/metamatex/metamate/metactl/pkg/v0/business/gen"
+	"github.com/metamatex/metamate/metactl/pkg/v0/business/sdk"
+	"github.com/metamatex/metamate/metactl/pkg/v0/types"
 	"github.com/spf13/cobra"
 )
 

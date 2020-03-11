@@ -2,10 +2,10 @@ package virtual_test
 
 import (
 	"context"
-	"github.com/metamatex/metamatemono/gen/v0/sdk"
-	"github.com/metamatex/metamatemono/gen/v0/sdk/transport"
-	"github.com/metamatex/metamatemono/metamate/pkg/v0/boot"
-	"github.com/metamatex/metamatemono/metamate/pkg/v0/business/virtual"
+	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/sdk/transport"
+	"github.com/metamatex/metamate/metamate/pkg/v0/boot"
+	"github.com/metamatex/metamate/metamate/pkg/v0/business/virtual"
 	"github.com/prometheus/common/log"
 	"net/http"
 	"testing"

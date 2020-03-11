@@ -1,13 +1,13 @@
 package generic
 
 import (
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/typenames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/typenames"
 	"testing"
 
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/metamatex/metamatemono/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/sdk"
 )
 
 func TestFactory(t *testing.T, rn *graph.RootNode, f Factory) {

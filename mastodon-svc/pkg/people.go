@@ -3,8 +3,8 @@ package pkg
 import (
 	"context"
 	"github.com/mattn/go-mastodon"
-	"github.com/metamatex/metamatemono/gen/v0/sdk"
-	"github.com/metamatex/metamatemono/gen/v0/sdk/utils/ptr"
+	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
 )
 
 func getPersonId(ctx context.Context, c *mastodon.Client, req sdk.GetPeopleRequest) (rsp sdk.GetPeopleResponse) {

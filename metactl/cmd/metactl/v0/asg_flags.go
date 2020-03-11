@@ -1,7 +1,7 @@
 package v0
 
 import (
-	"github.com/metamatex/metamatemono/metactl/pkg/v0/business/asg"
+	"github.com/metamatex/metamate/metactl/pkg/v0/business/asg"
 	"github.com/spf13/cobra"
 )
 

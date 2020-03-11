@@ -3,7 +3,7 @@ package pkg
 import (
 	"context"
 	"github.com/mattn/go-mastodon"
-	"github.com/metamatex/metamatemono/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/sdk"
 	"log"
 )
 

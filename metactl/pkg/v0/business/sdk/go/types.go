@@ -1,9 +1,9 @@
 package _go
 
 import (
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
-	"github.com/metamatex/metamatemono/metactl/pkg/v0/types"
-	"github.com/metamatex/metamatemono/metactl/pkg/v0/utils/ptr"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamate/metactl/pkg/v0/types"
+	"github.com/metamatex/metamate/metactl/pkg/v0/utils/ptr"
 )
 
 const (

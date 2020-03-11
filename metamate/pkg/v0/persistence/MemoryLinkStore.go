@@ -1,8 +1,8 @@
 package persistence
 
 import (
-	sdk "github.com/metamatex/metamatemono/gen/v0/sdk"
-	"github.com/metamatex/metamatemono/metamate/pkg/v0/types"
+	sdk "github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 )
 
 type MemoryLinkStore struct {

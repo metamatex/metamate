@@ -1,7 +1,7 @@
 package pkg
 
 import (
-	"github.com/metamatex/metamatemono/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/sdk"
 )
 
 var FromISO6391 = map[string]string{

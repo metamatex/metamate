@@ -1,10 +1,10 @@
 package boot
 
 import (
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/expansion"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
-	"github.com/metamatex/metamatemono/generic/pkg/v0/generic"
-	"github.com/metamatex/metamatemono/metactl/pkg/v0/types"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/expansion"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
+	"github.com/metamatex/metamate/metactl/pkg/v0/types"
 	"github.com/spf13/afero"
 )
 

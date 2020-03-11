@@ -2,7 +2,7 @@ package config
 
 import (
 	"encoding/json"
-	"github.com/metamatex/metamatemono/metamate/pkg/v0/types"
+	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 	"gopkg.in/yaml.v2"
 	"net/http"
 )

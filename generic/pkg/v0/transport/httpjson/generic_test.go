@@ -2,16 +2,16 @@ package httpjson
 
 import (
 	"context"
-	"github.com/metamatex/metamatemono/generic/pkg/v0/generic"
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"net/http"
 	"testing"
 
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/expansion"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/expansion"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/metamatex/metamatemono/gen/v0/sdk"
-	"github.com/metamatex/metamatemono/gen/v0/sdk/utils/ptr"
+	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
 )
 
 var root *graph.RootNode

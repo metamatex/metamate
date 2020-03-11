@@ -2,7 +2,7 @@ package line
 
 import (
 	"fmt"
-	"github.com/metamatex/metamatemono/metamate/pkg/v0/types"
+	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 	"strings"
 	"sync"
 )

@@ -3,17 +3,17 @@ package boot
 import (
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/endpointnames"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/fieldnames"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/typeflags"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/typenames"
-	"github.com/metamatex/metamatemono/generic/pkg/v0/generic"
-	"github.com/metamatex/metamatemono/sqlx-svc/pkg/communication"
-	"github.com/metamatex/metamatemono/sqlx-svc/pkg/persistence"
-	"github.com/metamatex/metamatemono/sqlx-svc/pkg/types"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/endpointnames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/typeflags"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/typenames"
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
+	"github.com/metamatex/metamate/sqlx-svc/pkg/communication"
+	"github.com/metamatex/metamate/sqlx-svc/pkg/persistence"
+	"github.com/metamatex/metamate/sqlx-svc/pkg/types"
 
-	"github.com/metamatex/metamatemono/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/sdk"
 )
 
 func NewDependencies(rn *graph.RootNode, f generic.Factory, c types.Config) (d types.Dependencies, err error) {

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/jmoiron/sqlx"
-	"github.com/metamatex/metamatemono/generic/pkg/v0/generic"
-	"github.com/metamatex/metamatemono/gen/v0/sdk"
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
+	"github.com/metamatex/metamate/gen/v0/sdk"
 )
 
 func ResolveAlternativeId(supportedIdKinds map[string]bool, typeName string, alternativeId sdk.Id) (q string, values []interface{}, err error) {

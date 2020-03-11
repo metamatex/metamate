@@ -3,7 +3,7 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/metamatex/metamatemono/metactl/pkg/v0/types"
+	"github.com/metamatex/metamate/metactl/pkg/v0/types"
 	"github.com/olekukonko/tablewriter"
 	"gopkg.in/yaml.v2"
 	"reflect"

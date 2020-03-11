@@ -2,12 +2,12 @@ package expansion
 
 import (
 	"fmt"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/endpointnames"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/fieldnames"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/fieldflags"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/typeflags"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/typenames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/endpointnames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/fieldflags"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/typeflags"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/typenames"
 )
 
 func generatePostEndpointType(root *graph.RootNode, tn *graph.TypeNode) {

@@ -2,7 +2,7 @@ package v0
 
 import (
 	"fmt"
-	"github.com/metamatex/metamatemono/metactl/pkg/v0/types"
+	"github.com/metamatex/metamate/metactl/pkg/v0/types"
 	"github.com/spf13/cobra"
 )
 

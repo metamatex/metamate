@@ -1,14 +1,14 @@
 package asg
 
 import (
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/basictypeflags"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/endpointflags"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/enumflags"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/fieldflags"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/relationflags"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/typeflags"
-	"github.com/metamatex/metamatemono/metactl/pkg/v0/types"
-	"github.com/metamatex/metamatemono/metactl/pkg/v0/utils"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/basictypeflags"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/endpointflags"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/enumflags"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/fieldflags"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/relationflags"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/typeflags"
+	"github.com/metamatex/metamate/metactl/pkg/v0/types"
+	"github.com/metamatex/metamate/metactl/pkg/v0/utils"
 	"sort"
 )
 

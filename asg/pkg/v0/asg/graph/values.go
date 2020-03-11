@@ -2,12 +2,12 @@ package graph
 
 import (
 	"fmt"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/typenames"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/typenames"
 	"strings"
 	"errors"
 
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/fieldflags"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/typeflags"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/fieldflags"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/typeflags"
 )
 
 func (rn *RootNode) AddScalar(name string, unit string) (*TypeNode) {

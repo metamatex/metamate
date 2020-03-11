@@ -3,9 +3,9 @@ package v0
 import (
 	"errors"
 	"fmt"
-	"github.com/metamatex/metamatemono/metactl/pkg/v0/boot"
-	"github.com/metamatex/metamatemono/metactl/pkg/v0/types"
-	"github.com/metamatex/metamatemono/metactl/pkg/v0/utils"
+	"github.com/metamatex/metamate/metactl/pkg/v0/boot"
+	"github.com/metamatex/metamate/metactl/pkg/v0/types"
+	"github.com/metamatex/metamate/metactl/pkg/v0/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"log"

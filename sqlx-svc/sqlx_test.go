@@ -2,10 +2,10 @@ package main
 
 import (
 	"context"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg"
-	"github.com/metamatex/metamatemono/generic/pkg/v0/generic"
-	"github.com/metamatex/metamatemono/spec/pkg/v0/spec"
-	"github.com/metamatex/metamatemono/sqlx-svc/pkg/boot"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg"
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
+	"github.com/metamatex/metamate/spec/pkg/v0/spec"
+	"github.com/metamatex/metamate/sqlx-svc/pkg/boot"
 	"testing"
 	"time"
 )

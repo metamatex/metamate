@@ -4,7 +4,7 @@ package transport
 import (
     "context"
 
-    "github.com/metamatex/metamatemono/gen/v0/sdk"
+    "github.com/metamatex/metamate/gen/v0/sdk"
 )
 
 type Client interface {

@@ -1,6 +1,6 @@
 package types
 
-import "github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
+import "github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 
 type RenderTask struct {
 	Name         *string                 `yaml:"name"`

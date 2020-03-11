@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/metamatex/metamatemono/metactl/cmd/metactl/v0"
-	"github.com/metamatex/metamatemono/metactl/pkg/v0/types"
+	"github.com/metamatex/metamate/metactl/cmd/metactl/v0"
+	"github.com/metamatex/metamate/metactl/pkg/v0/types"
 	"os"
 
 	"github.com/spf13/cobra"

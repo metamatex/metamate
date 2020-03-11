@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/metamatex/metamatemono/metamate/pkg/v0/boot"
+	"github.com/metamatex/metamate/metamate/pkg/v0/boot"
 	"net/http"
 	"os"
 	"os/signal"

@@ -3,7 +3,7 @@ package line
 import (
 	"errors"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/metamatex/metamatemono/metamate/pkg/v0/types"
+	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 	"testing"
 )
 

@@ -1,10 +1,10 @@
 package generic
 
 import (
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
-	"github.com/metamatex/metamatemono/gen/v0/sdk"
-	"github.com/metamatex/metamatemono/gen/v0/sdk/utils/ptr"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

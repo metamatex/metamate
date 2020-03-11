@@ -2,7 +2,7 @@ package typenames
 
 import (
 	"github.com/iancoleman/strcase"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/utils"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/utils"
 )
 
 const (

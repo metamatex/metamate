@@ -1,8 +1,8 @@
 package funcs
 
 import (
-	"github.com/metamatex/metamatemono/generic/pkg/v0/generic"
-	"github.com/metamatex/metamatemono/metamate/pkg/v0/types"
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
+	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 )
 
 func CollectSvcRsps(ctx types.ReqCtx, ctxs []types.ReqCtx) types.ReqCtx {

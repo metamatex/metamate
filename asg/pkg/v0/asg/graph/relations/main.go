@@ -2,7 +2,7 @@ package relations
 
 import (
 	"fmt"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph/words/cardinality"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/words/cardinality"
 )
 
 type EdgeResolver struct {

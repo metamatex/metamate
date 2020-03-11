@@ -3,7 +3,7 @@ package httpjson
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/metamatex/metamatemono/generic/pkg/v0/generic"
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"net/http"
 )
 

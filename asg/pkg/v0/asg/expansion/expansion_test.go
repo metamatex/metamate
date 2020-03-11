@@ -2,7 +2,7 @@ package expansion
 
 import (
 	"github.com/davecgh/go-spew/spew"
-	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"testing"
 )
 
