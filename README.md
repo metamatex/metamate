@@ -12,6 +12,8 @@ This monorepo hosts metamate, metactl, asg and a couple embedded services.
 
 `generic` generic representation of types, powers everything that needs to handle a lot of different entities
 
+`kubernetes-svc` discovery service for services running on kubernetes
+
 `mastodon-svc` gateway service for mastodon
 
 `metactl` MetaMate's cli
