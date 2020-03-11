@@ -3,10 +3,17 @@ package main
 import (
 	"fmt"
 	"github.com/metamatex/metamate/metamate/pkg/v0/boot"
+	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+)
+
+var (
+	version = "dev-0.0.0"
+	commit  = "dev"
+	date    = "dev"
 )
 
 func main() {
@@ -25,10 +32,12 @@ func main() {
 func run() (err error) {
 	c := boot.NewProdConfig()
 
-	d, err := boot.NewDependencies(c)
+	d, err := boot.NewDependencies(c, types.Version{Version: version, Commit: commit, Date: date})
 	if err != nil {
 		return
 	}
+
+	fmt.Printf("version: %v\nvcommit: %v\ndate: %v\n\n", version, commit, date)
 
 	for _, r := range d.Routes {
 		for _, m := range r.Methods {

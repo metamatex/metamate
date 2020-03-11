@@ -16,10 +16,13 @@ var tpl = template.Must(template.New("index.html").Parse(`
 	<link rel="icon" href="/static/favicon.ico" />
 </head>
 <body>
+<p>version: {{ .Version.Version }}</p>
+<p>commit: {{ .Version.Commit }}</p>
+<p>date: {{ .Version.Date }}</p>
 <ul>
-{{ range $i, $url := . }}
+{{ range $i, $link := .Links }}
 	<li>
-		<a href="{{ $url.Href }}">{{ $url.Label }}</a>
+		<a href="{{ $link.Href }}">{{ $link.Label }}</a>
 	</li>
 {{ end }}
 </ul>
@@ -32,7 +35,12 @@ type link struct {
 	Label string
 }
 
-func GetIndexHandlerFunc(port int, rs []types.Route) http.HandlerFunc {
+type templateData struct {
+	Links []link
+	Version types.Version
+}
+
+func GetIndexHandlerFunc(port int, rs []types.Route, v types.Version) http.HandlerFunc {
 	return func(writer http.ResponseWriter, req *http.Request) {
 		var ls []link
 
@@ -47,7 +55,7 @@ func GetIndexHandlerFunc(port int, rs []types.Route) http.HandlerFunc {
 			}
 		}
 
-		err := tpl.Execute(writer, ls)
+		err := tpl.Execute(writer, templateData{Version: v, Links:ls})
 		if err != nil {
 			panic(err)
 		}

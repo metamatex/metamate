@@ -2,7 +2,6 @@ package graphql
 
 import (
 	"fmt"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/graphql-go/graphql"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
@@ -79,12 +78,6 @@ func GetSchema(f generic.Factory, serveFunc types.ServeFunc, rn *graph.RootNode)
 	rn.Enums.Each(func(en *graph.EnumNode) {
 		*sCtx.enums[en.Name()] = *TypeToEnum(en)
 	})
-
-	spew.Dump(len(sCtx.enums))
-
-	spew.Dump(len(sCtx.objects))
-
-	spew.Dump(len(sCtx.inputObjects))
 
 	schema, err = graphql.NewSchema(graphql.SchemaConfig{Query: getQueryObject(f, serveFunc, sCtx, rn), Mutation: getMutationObject(f, serveFunc, sCtx, rn)})
 	if err != nil {
