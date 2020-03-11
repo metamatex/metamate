@@ -180,12 +180,14 @@ func printText(noColor bool, messageReport types.MessageReport, o types.Output) 
 	info := "\u001b[34minfo\u001b[0m"
 	warning := "\u001b[33mwarning\u001b[0m"
 	error0 := "\u001b[31merror\u001b[0m"
+	hint := "\u001b[35mhint\u001b[0m"
 
 	if noColor {
 		debug = "debug:"
 		info = "info:"
 		warning = "warning:"
 		error0 = "error:"
+		hint = "hint:"
 	}
 
 	for _, s := range messageReport.Debug {
@@ -204,6 +206,10 @@ func printText(noColor bool, messageReport types.MessageReport, o types.Output) 
 
 	for _, s := range messageReport.Error {
 		fmt.Printf("%v %v\n", error0, s)
+	}
+
+	for _, s := range messageReport.Hint {
+		fmt.Printf("%v %v\n", hint, s)
 	}
 }
 

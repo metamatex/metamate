@@ -6,8 +6,8 @@ import (
 )
 
 const (
-	TaskTypedHttpJsonClient = "TaskTypedHttpJsonClient"
-	TaskTypedHttpJsonServer = "TaskTypedHttpJsonServer"
+	TaskTypedHttpJsonClient  = "TaskTypedHttpJsonClient"
+	TaskTypedHttpJsonService = "TaskTypedHttpJsonService"
 )
 
 func init() {
@@ -16,9 +16,9 @@ func init() {
 		Out:          ptr.String("transport/httpjson_client_.go"),
 	}
 
-	tasks[TaskTypedHttpJsonServer] = types.RenderTask{
-		Name:         ptr.String(TaskTypedHttpJsonServer),
-		TemplateData: &goTypedHttpJsonServerTpl,
+	tasks[TaskTypedHttpJsonService] = types.RenderTask{
+		Name:         ptr.String(TaskTypedHttpJsonService),
+		TemplateData: &goTypedHttpJsonServiceTpl,
 		Out:          ptr.String("transport/services/{{ index .Data \"name\" }}/httpjson_server_.go"),
 	}
 }
@@ -85,7 +85,7 @@ func (c HttpJsonClient) {{ $endpoint.Name }}(ctx context.Context, req sdk.{{ $en
 }
 {{- end }}`
 
-var goTypedHttpJsonServerTpl = `package {{ index .Data "name" }}
+var goTypedHttpJsonServiceTpl = `package {{ index .Data "name" }}
 {{ $package := index .Data "package" }}
 import (
 	"encoding/json"

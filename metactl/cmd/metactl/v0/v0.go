@@ -32,20 +32,16 @@ func AddV0(cmd *cobra.Command, prefix bool, v types.Version) {
 
 	version = v
 
-	addGen(parentCmd)
 	addInit(parentCmd)
+	addGen(parentCmd)
 	addAsg(parentCmd)
-	addSdk(parentCmd)
-	addGet(parentCmd)
 	addVersion(parentCmd)
 	addUpdate(parentCmd)
 
 	parentCmd.PersistentFlags().StringVarP(&gArgs.GlobalConfigPath, "config", "c", "$HOME/.metactl/config", "config file")
-	parentCmd.PersistentFlags().StringVar(&gArgs.Addr, "addr", "", "")
-	parentCmd.PersistentFlags().StringVar(&gArgs.Token, "token", "", "")
 	parentCmd.PersistentFlags().CountVarP(&gArgs.VerbosityLevel, "verbose", "v", "")
 	parentCmd.PersistentFlags().BoolVar(&gArgs.NoColor, "no-color", false, "")
-	parentCmd.PersistentFlags().StringVarP(&gArgs.OutputFormat, "output", "o", "default", "Output format. One of: default|json|yaml")
+	parentCmd.PersistentFlags().StringVarP(&gArgs.OutputFormat, "output", "o", "default", "one of default|json|yaml")
 }
 
 func readProjectConfig(args types.GlobalArgs) (c types.ProjectConfig, err error) {
@@ -107,6 +103,10 @@ func handleReport(r types.MessageReport, o types.Output, verbosityLevel int) {
 	case 0:
 		printR.Debug = []string{}
 	default:
+	}
+
+	if len(r.Error) != 0 {
+		printR.AddHint("get help on https://metamate.io/community")
 	}
 
 	err := utils.PrintReport(gArgs.NoColor, gArgs.OutputFormat, gArgs.ReturnData(), printR, o)

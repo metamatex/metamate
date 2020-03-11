@@ -18,7 +18,7 @@ type Gen struct {
 }
 
 type ProjectSdk struct {
-	Names     []string               `json:"name,omitempty" yaml:"name,omitempty"`
+	Names     []string               `json:"names,omitempty" yaml:"names,omitempty"`
 	Data      map[string]interface{} `json:"data,omitempty" yaml:"data,omitempty"`
 	Endpoints *graph.Filter          `json:"endpoints,omitempty" yaml:"endpoints,omitempty"`
 }

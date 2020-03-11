@@ -13,7 +13,7 @@ import (
 
 const (
 	TaskSetTypes           = "types"
-	TaskSetHttpJsonServer  = "httpjsonServer"
+	TaskSetHttpJsonService = "httpjsonServer"
 	TaskSetHttpJsonClient  = "httpjsonClient"
 	TaskSetHttpJson        = "httpjson"
 	DependecyRelationNames = "dependencyRelationNames"
@@ -21,9 +21,9 @@ const (
 )
 
 const (
-	SdkTypes          = "go_types"
-	SdkHttpJsonServer = "go_httpjson_server"
-	SdkHttpJsonClient = "go_httpjson_client"
+	SdkTypes           = "go_types"
+	SdkHttpJsonService = "go_httpjson_service"
+	SdkHttpJsonClient  = "go_httpjson_client"
 )
 
 const (
@@ -57,7 +57,7 @@ func prepareTasks(data map[string]interface{}, tasks []types.RenderTask) {
 	}
 }
 
-func initServerSdk(sdk *types.Sdk, data map[string]interface{}) (err error) {
+func initServiceSdk(sdk *types.Sdk, data map[string]interface{}) (err error) {
 	_, ok := data[DataPackage]
 	if !ok {
 		err = errors.New("data.package is missing")
@@ -102,9 +102,9 @@ func GetSdks() []types.Sdk {
 		tasks[TaskTypedHttpJsonClient],
 	}
 
-	taskSets[TaskSetHttpJsonServer] = []types.RenderTask{
+	taskSets[TaskSetHttpJsonService] = []types.RenderTask{
 		tasks[TaskServiceInterface],
-		tasks[TaskTypedHttpJsonServer],
+		tasks[TaskTypedHttpJsonService],
 	}
 
 	taskSets[TaskSetHttpJson] = []types.RenderTask{
@@ -159,10 +159,10 @@ func GetSdks() []types.Sdk {
 			Dependencies: append(taskSets[DependecyRelationNames], taskSets[DependecyLookupService]...),
 		},
 		{
-			Name:         SdkHttpJsonServer,
+			Name:         SdkHttpJsonService,
 			Description:  "go server sdk that transports via httpjson",
-			Tasks:        utils.ConcatTaskSets(taskSets[TaskSetTypes], taskSets[TaskSetHttpJson], taskSets[TaskSetHttpJsonServer]),
-			Init:         initServerSdk,
+			Tasks:        utils.ConcatTaskSets(taskSets[TaskSetTypes], taskSets[TaskSetHttpJson], taskSets[TaskSetHttpJsonService]),
+			Init:         initServiceSdk,
 			Reset:        resetSdk,
 			Dependencies: append(taskSets[DependecyRelationNames], taskSets[DependecyLookupService]...),
 		},

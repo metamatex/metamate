@@ -28,7 +28,6 @@ func init() {
 		Date: date,
 	}
 
-	v0.AddV0(rootCmd, true, v)
 	v0.AddV0(rootCmd, false, v)
 }
 

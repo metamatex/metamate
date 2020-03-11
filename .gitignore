@@ -3,3 +3,4 @@
 dist
 bin
 **/node_modules
+**/metactl.yaml

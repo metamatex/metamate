@@ -8,7 +8,7 @@ import (
 
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "",
+	Short: "print version info",
 	Long:  "",
 	RunE: func(cmd *cobra.Command, args []string) (err error) {
 		var t string

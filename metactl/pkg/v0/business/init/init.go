@@ -1,62 +1,61 @@
 package init
 
 import (
+	"github.com/metamatex/metamatemono/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamatemono/metactl/pkg/v0/business/sdk"
+	_go "github.com/metamatex/metamatemono/metactl/pkg/v0/business/sdk/go"
 	"github.com/metamatex/metamatemono/metactl/pkg/v0/types"
 	"github.com/pkg/errors"
 	"github.com/spf13/afero"
+	"gopkg.in/yaml.v2"
+	"html/template"
 )
 
-var metactlyaml = `v0:
-  gen:
-	sdks:
-	  - name: go_httpjson_typed
-		args:
-		  package: github.com/metamatex/metamate
-          endpoints: [Whatever, Person]
-    tasks:
-      - template: path/to/template
-        # when iterating, an out template needs to be provided
-        out: "path/to/render/to{{ .Fields.Name }}_.go"
-        # create one file per node
-        iterate: true
-        # specify what nodes to provide to the template
-        # when iterating, only one kind of nodes can be used
-        filter:
-          basicTypes:
-            flags:
-              or: []
-              and: []
-              nor: []
-            names:
-              or: []
-              nor: []
-          endpoints:
-          enums:
-          fields:
-          interfaces:
-          relations:
-          types:
-      - template: path/to/template
-        # when not iterating, no template needs to be provided
-        out: "path/to/render/to_.go"
-        iterate: false
-        # when not iterating, all kind of nodes can be provided
-        filter: 
-          basicTypes:
-            flags:
-              or: []
-              and: []
-              nor: []
-            names:
-              or: []
-              nor: []
-          endpoints:
-          enums:
-          fields:
-          interfaces:
-          relations:
-          types:
+type templateData struct {
+	Sdks []types.Sdk
+	Config string
+}
+
+var metactlyaml = `# this file is used by metactl to generate client and service sdks
+#
+# available sdks:
+#
+{{- range $i, $sdk := .Sdks }}
+# {{ $sdk.Name }}: {{ $sdk.Description }} 
+{{- end }}
+
+{{ .Config }} 
 `
+
+var initialConfig = types.V0Project{
+	Gen: types.Gen{
+		Sdks: []types.ProjectSdk{
+			{
+				Names: []string{_go.SdkHttpJsonService},
+				Data: map[string]interface{}{
+					"name": "socialservice",
+					"package": "github.com/somebody/socialservice",
+				},
+				Endpoints: &graph.Filter{
+					Names: &graph.NamesSubset{
+						Or: []string{"GetFeeds", "GetPeople", "PutPeople", "GetStatuses", "PostStatuses", "PutStatuses", "DeleteStatuses"},
+					},
+				},
+			},
+			{
+				Names: []string{_go.SdkHttpJsonClient},
+				Data: map[string]interface{}{
+					"package": "github.com/somebody/socialclient",
+				},
+				Endpoints: &graph.Filter{
+					Names: &graph.NamesSubset{
+						Or: []string{"GetFeeds", "GetPeople", "PutPeople", "GetStatuses", "PostStatuses", "PutStatuses", "DeleteStatuses"},
+					},
+				},
+			},
+		},
+	},
+}
 
 func Init(fs afero.Fs, report *types.MessageReport) (err error) {
 	_, err = fs.Stat("metactl.yaml")
@@ -71,7 +70,12 @@ func Init(fs afero.Fs, report *types.MessageReport) (err error) {
 		return
 	}
 
-	_, err = f.WriteString(metactlyaml)
+	b, err := yaml.Marshal(initialConfig)
+	if err != nil {
+		return
+	}
+
+	err = template.Must(template.New("").Parse(metactlyaml)).Execute(f, templateData{Config:string(b), Sdks: sdk.GetSdks()})
 	if err != nil {
 		return
 	}

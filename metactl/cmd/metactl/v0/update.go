@@ -15,7 +15,7 @@ import (
 
 var updateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "",
+	Short: "update metactl",
 	Long:  "",
 	RunE: func(cmd *cobra.Command, args []string) (err error) {
 		err = func() (err error) {

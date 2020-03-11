@@ -4,13 +4,22 @@ import (
 	"fmt"
 	"github.com/metamatex/metamatemono/metamate/pkg/v0/boot"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 func main() {
-	err := run()
-	if err != nil {
-		panic(err)
-	}
+	go func() {
+		err := run()
+		if err != nil {
+			panic(err)
+		}
+	}()
+
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	<-sigs
 }
 
 func run() (err error) {

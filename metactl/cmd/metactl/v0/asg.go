@@ -6,7 +6,7 @@ import (
 
 var asgCmd = &cobra.Command{
 	Use:   "asg",
-	Short: "interact with the abstract schema graph",
+	Short: "inspect the abstract schema graph",
 	Long:  "",
 }
 

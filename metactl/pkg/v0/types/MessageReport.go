@@ -10,6 +10,7 @@ type MessageReport struct {
 	Info    []string `yaml:",omitempty" json:"info,omitempty"`
 	Warning []string `yaml:",omitempty" json:"warning,omitempty"`
 	Error   []string `yaml:",omitempty" json:"error,omitempty"`
+	Hint   []string `yaml:",omitempty" json:"hint,omitempty"`
 }
 
 func (r *MessageReport) AddDebug(any interface{}) {
@@ -69,5 +70,20 @@ func (r *MessageReport) AddWarning(any interface{}) {
 		}
 	default:
 		panic(fmt.Sprintf("must provide string, error or []error to MessageReport.AddWarning(), got %v", reflect.TypeOf(sth).Name()))
+	}
+}
+
+func (r *MessageReport) AddHint(any interface{}) {
+	switch sth := any.(type) {
+	case string:
+		r.Hint = append(r.Hint, sth)
+	case error:
+		r.Hint = append(r.Hint, sth.Error())
+	case []error:
+		for _, err := range sth {
+			r.Hint = append(r.Hint, err.Error())
+		}
+	default:
+		panic(fmt.Sprintf("must provide string, error or []error to MessageReport.AddHint(), got %v", reflect.TypeOf(sth).Name()))
 	}
 }

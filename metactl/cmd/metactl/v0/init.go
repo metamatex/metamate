@@ -9,7 +9,7 @@ import (
 
 var initCmd = &cobra.Command{
 	Use:   "init",
-	Short: "create project gArgs",
+	Short: "initialize metactl.yaml",
 	Long:  "",
 	RunE: func(cmd *cobra.Command, args []string) (err error) {
 		err = init0.Init(d.FileSystem, d.MessageReport)

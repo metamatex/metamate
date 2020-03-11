@@ -9,7 +9,7 @@ import (
 
 var genCmd = &cobra.Command{
 	Use:   "gen",
-	Short: "use the schema's nodes to render files from templates",
+	Short: "generate sdks using the asg",
 	Long:  "",
 	RunE: func(cmd *cobra.Command, args []string) (err error) {
 		errs := func() (errs []error) {
