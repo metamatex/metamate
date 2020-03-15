@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: metamate
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: default
+  name: read-services
+rules:
+  - apiGroups: [""]
+    resources: ["services",]
+    verbs: ["get", "watch", "list"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: metamate-read-services
+  namespace: default
+subjects:
+  - kind: ServiceAccount
+    name: metamate
+roleRef:
+  kind: Role
+  name: read-services
+  apiGroup: rbac.authorization.k8s.io
+---

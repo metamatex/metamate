@@ -213,7 +213,7 @@ var _escData = map[string]*_escFile{
 		name:    "android-chrome-192x192.png",
 		local:   "static/android-chrome-192x192.png",
 		size:    31448,
-		modtime: 1577378804,
+		modtime: 1583849755,
 		compressed: `
 H4sIAAAAAAAC/5y6VVMc3td12zR0A427e3CXoMEhSHAI7u5OCO7uBHd3l+DuENzd3d3h1O996v8FzsW+
 3zVWrTHXxQxTkJNAguBDAAAAkpSkmBIAAOj+78GBAQCA0po1LABACpASE1b5rXvWAR9rouZG9ZTpdHGz
@@ -745,7 +745,7 @@ AAAAKMmpyzZKW4T9LwAA///gdIKa2HoAAA==
 		name:    "android-chrome-512x512.png",
 		local:   "static/android-chrome-512x512.png",
 		size:    175295,
-		modtime: 1577378804,
+		modtime: 1583849755,
 		compressed: `
 H4sIAAAAAAAC/+z71VdcT9M+Du8Z3CVIsDC4S3BncA0Q3CW4E9wZHEKCBQkEGQjuwSHIYMGCW4Cgwd1d
 3vX53M9zf99/4Hf2HOyD7qrdvXb1Wl3XteuqWA01BRxMckwAAHCUFGU1AQAM/POgowIAcOE7fQcAEEBJ
@@ -3639,7 +3639,7 @@ JOIpC/zJ/7FTcsT/BP8T/E/wP8H/q+BBGPf1tY0oc743AAAAvNTQV69VtYn6/wIAAP//W6bkQL+sAgA=
 		name:    "apple-touch-icon.png",
 		local:   "static/apple-touch-icon.png",
 		size:    28210,
-		modtime: 1577378804,
+		modtime: 1583849755,
 		compressed: `
 H4sIAAAAAAAC/5Sa01sljve2szHZNdlusm3bNnd2TfZk2zVZk23tbGtnW+/1ea/r+wf8Dtb5sw6eda+D
 O0pZUQoZAR8BDAwMWUZaXBUMDKz5v4GDAQMDE5iGYQMD+wkmIy6i7mV40Q3/z0JLh+qjtuXJbaZdbVpD
@@ -4118,7 +4118,7 @@ AP//h7hNtjJuAAA=
 		name:    "favicon-16x16.png",
 		local:   "static/favicon-16x16.png",
 		size:    694,
-		modtime: 1577378804,
+		modtime: 1583849755,
 		compressed: `
 H4sIAAAAAAAC/wC2Akn9iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACfUlEQVQ4T6WT
 XUiTURjH/+d99+5999Xa5tQ3VypigYKbTq2r7MYkSfuGuokggiAxRIK6qJsuKpDdSNBFtxUYYV8XCRZd
@@ -4140,7 +4140,7 @@ AAA=
 		name:    "favicon-32x32.png",
 		local:   "static/favicon-32x32.png",
 		size:    1757,
-		modtime: 1577378804,
+		modtime: 1583849755,
 		compressed: `
 H4sIAAAAAAAC/wDdBiL5iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAGpElEQVRYR+2X
 W2wcVxnH/2eu652973pzsUtxbDeuaeL1DRNU2gKCFxS7NTECqRUp4YGklUgeQkOiVoFUUbMgBQkJpD5w
@@ -4179,7 +4179,7 @@ EWCV8eqSuAbC8eyvJtXjPvf8a4lEwrwtgD2he9dXP28U2VecY3BVn2KWE5C3tqo5ayJZgMWB463zY5d+
 		name:    "favicon.ico",
 		local:   "static/favicon.ico",
 		size:    15406,
-		modtime: 1577378804,
+		modtime: 1583849755,
 		compressed: `
 H4sIAAAAAAAC/+x7CXRc1Xn/GAhbDoQlBIgD2FiSZW3z9tln3qzSaJY3u6TRPrIWS7Jky9ptjHdLXiRZ
 tjHwxyT/shxCEkg4JqQtNOEkTdoC2SBx0pO0ISxNm6YhSbNQ8Px67n0zoxkhHUTi5ITG95zfue/d+33v
@@ -4269,7 +4269,7 @@ dZv0bA95t3Larv8L/8O4EC6EC+FCuBD+ssP/BgAA//9ejJKqLjwAAA==
 		name:    "logo.png",
 		local:   "static/logo.png",
 		size:    238289,
-		modtime: 1577382372,
+		modtime: 1583849755,
 		compressed: `
 H4sIAAAAAAAC/+y6dVeb8RYsXGihSHGKFnd3txIgCe4UT4FixYoGp6W4u7tDcYJDKO4WKO7u7vquc857
 v8P9485az3yAPWvPM/NbO1RNBYSFQYbx5s0bLHmwrMabN8gT//nQUN+8edP8BZTx5g31G3lZaS33jKNl
