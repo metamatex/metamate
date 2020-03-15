@@ -13,7 +13,7 @@ the `boot` package starts a MetaMate instance and
 
 the `business` package contains all the internal logic and the virtual cluster
 
-MetaMate is using a request pipeline to dispatch incoming requests. Every request creates a `RequestCtx` that propagates through the pipeline
+MetaMate uses a request pipeline to dispatch incoming requests. Every request creates a `RequestCtx` that propagates through the pipeline
 
 - `funcs` defines functions (and function constructors) that take care of very detailed business logic, they all work on `RequestCtx` what allows to convienently stich them together
 - `line` provides a tailored pipeline framework
@@ -27,7 +27,7 @@ the `communication` package handles all in- and outgoing communication
 
 #### pkg/v0/communication/clients
 
-the `clients` package contains all clients a MetaMate uses to communicate with services
+the `clients` package contains clients a MetaMate uses to communicate with services
 
 - `httpjson` communicates json-serialized data over http
 
@@ -35,7 +35,7 @@ the `clients` package contains all clients a MetaMate uses to communicate with s
 
 the `servers` package contains all the endpoints a MetaMate exposes
 
-visit [metamate.one](http://metamate.one/) to get a live overview of all the exposed endpoints
+visit [metamate.one](http://metamate.one/) to explorer all endpoints
 
 - `admin` exposes MetaMate's administration interface
 - `config` exposes the loaded configuration
