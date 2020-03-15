@@ -38,7 +38,6 @@ type ConfigEndpointConfig struct {
 
 type PrometheusEndpointConfig struct {
 	On   bool   `yaml:"on"`
-	Path string `yaml:"path"`
 }
 
 type DebugEndpointConfig struct {
@@ -52,13 +51,11 @@ type HostConfig struct {
 
 type GraphiqlExplorerEndpointConfig struct {
 	On           bool   `yaml:"on"`
-	Path         string `yaml:"path"`
 	DefaultQuery string `yaml:"defaultQuery"`
 }
 
 type GraphqlEndpointConfig struct {
 	On             bool     `yaml:"on"`
-	Path           string   `yaml:"path"`
 	PlaygroundPath string   `yaml:"playgroundPath"`
 	AllowedOrigins []string `yaml:"allowedOrigins"`
 }
@@ -69,5 +66,4 @@ type AdminEndpointConfig struct {
 
 type HttpJsonEndpoint struct {
 	On   bool   `yaml:"on"`
-	Path string `yaml:"path"`
 }

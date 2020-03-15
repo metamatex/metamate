@@ -13,12 +13,12 @@ import (
 	"github.com/metamatex/metamate/generic/pkg/v0/transport/httpjson"
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/pipeline"
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/virtual"
-	httpjsonHandler "github.com/metamatex/metamate/metamate/pkg/v0/communication/handler/httpjson"
-	"github.com/metamatex/metamate/metamate/pkg/v0/communication/server/admin"
-	"github.com/metamatex/metamate/metamate/pkg/v0/communication/server/config"
-	"github.com/metamatex/metamate/metamate/pkg/v0/communication/server/explorer"
-	"github.com/metamatex/metamate/metamate/pkg/v0/communication/server/graphql"
-	"github.com/metamatex/metamate/metamate/pkg/v0/communication/server/index"
+	httpjsonHandler "github.com/metamatex/metamate/metamate/pkg/v0/communication/clients/httpjson"
+	"github.com/metamatex/metamate/metamate/pkg/v0/communication/servers/admin"
+	"github.com/metamatex/metamate/metamate/pkg/v0/communication/servers/config"
+	"github.com/metamatex/metamate/metamate/pkg/v0/communication/servers/explorer"
+	"github.com/metamatex/metamate/metamate/pkg/v0/communication/servers/graphql"
+	"github.com/metamatex/metamate/metamate/pkg/v0/communication/servers/index"
 	"github.com/metamatex/metamate/metamate/pkg/v0/persistence"
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -26,7 +26,6 @@ import (
 	"log"
 	"net/http"
 	"net/http/pprof"
-	"strings"
 )
 
 func NewBaseConfig() types.Config {
@@ -73,20 +72,17 @@ func NewBaseConfig() types.Config {
 				On: true,
 			},
 			Prometheus: types.PrometheusEndpointConfig{
-				On:   true,
-				Path: "/metrics",
+				On: true,
 			},
 			Debug: types.DebugEndpointConfig{
 				On: true,
 			},
 			Graphql: types.GraphqlEndpointConfig{
 				On:             true,
-				Path:           "/graphql",
 				AllowedOrigins: []string{},
 			},
 			GraphiqlExplorer: types.GraphiqlExplorerEndpointConfig{
-				On:   true,
-				Path: "/explorer",
+				On: true,
 				DefaultQuery: `# hi. this is metamate's interactive graphql interface
 # press the play button to run some of the following queries
 # no worries, you can't break anything
@@ -200,8 +196,7 @@ query getWhatevers {
 }`,
 			},
 			HttpJson: types.HttpJsonEndpoint{
-				On:   true,
-				Path: "/httpjson",
+				On: true,
 			},
 		},
 		Virtual: types.VirtualConfig{
@@ -280,17 +275,8 @@ func NewProdConfig() (c types.Config) {
 	return
 }
 
-func sanitizeConfig(c types.Config) types.Config {
-	if !strings.HasSuffix(c.Endpoints.Graphql.Path, "/") {
-		c.Endpoints.Graphql.Path = c.Endpoints.Graphql.Path + "/"
-	}
-
-	if !strings.HasSuffix(c.Endpoints.GraphiqlExplorer.Path, "/") {
-		c.Endpoints.GraphiqlExplorer.Path = c.Endpoints.GraphiqlExplorer.Path + "/"
-	}
-
-	return c
-}
+const GraphiqlExplorerPath = "/explorer"
+const GraphqlPath = "/graphql"
 
 func BootVirtualCluster(rn *graph.RootNode, f generic.Factory) (c *virtual.Cluster, err error) {
 	c = virtual.NewCluster(rn, f, func(err error) {
@@ -317,8 +303,6 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 	}
 
 	d.Factory = generic.NewFactory(d.RootNode)
-
-	c = sanitizeConfig(c)
 
 	d.LinkStore = persistence.NewMemoryLinkStore()
 
@@ -384,28 +368,29 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 	}
 
 	if c.Endpoints.Prometheus.On {
-		d.Routes = append(d.Routes, types.Route{Methods: []string{http.MethodGet}, Path: c.Endpoints.Prometheus.Path, Handler: promhttp.Handler()})
+		d.Routes = append(d.Routes, types.Route{Methods: []string{http.MethodGet}, Path: "/metrics", Handler: promhttp.Handler()})
 	}
 
 	if c.Endpoints.Debug.On {
 		d.Routes = append(d.Routes,
-			types.Route{Methods: []string{http.MethodGet}, Path: "/debug/pprof/*", HandlerFunc: pprof.Index},
-			types.Route{Methods: []string{http.MethodGet}, Path: "/debug/pprof/cmdline", HandlerFunc: pprof.Cmdline},
-			types.Route{Methods: []string{http.MethodGet}, Path: "/debug/pprof/profile", HandlerFunc: pprof.Profile},
-			types.Route{Methods: []string{http.MethodGet}, Path: "/debug/pprof/symbol", HandlerFunc: pprof.Symbol},
-			types.Route{Methods: []string{http.MethodGet}, Path: "/debug/pprof/trace", HandlerFunc: pprof.Trace},
+			types.Route{Methods: []string{http.MethodGet}, Path: "/0/debug/pprof/*", HandlerFunc: pprof.Index},
+			types.Route{Methods: []string{http.MethodGet}, Path: "/0/debug/pprof/cmdline", HandlerFunc: pprof.Cmdline},
+			types.Route{Methods: []string{http.MethodGet}, Path: "/0/debug/pprof/profile", HandlerFunc: pprof.Profile},
+			types.Route{Methods: []string{http.MethodGet}, Path: "/0/debug/pprof/symbol", HandlerFunc: pprof.Symbol},
+			types.Route{Methods: []string{http.MethodGet}, Path: "/0/debug/pprof/trace", HandlerFunc: pprof.Trace},
 		)
 	}
 
 	if c.Endpoints.GraphiqlExplorer.On && c.Endpoints.Graphql.On {
+
 		d.Routes = append(d.Routes,
-			types.Route{Methods: []string{http.MethodGet}, Path: c.Endpoints.GraphiqlExplorer.Path + "*", Handler: explorer.GetStaticHandler(c.Endpoints.GraphiqlExplorer.Path)},
-			types.Route{Methods: []string{http.MethodGet}, Path: c.Endpoints.GraphiqlExplorer.Path, HandlerFunc: explorer.MustGetIndexHandlerFunc(c.Endpoints.Graphql.Path, c.Endpoints.GraphiqlExplorer.Path, c.Endpoints.GraphiqlExplorer.DefaultQuery)},
+			types.Route{Methods: []string{http.MethodGet}, Path: GraphiqlExplorerPath + "*", Handler: explorer.GetStaticHandler(GraphiqlExplorerPath)},
+			types.Route{Methods: []string{http.MethodGet}, Path: GraphiqlExplorerPath, HandlerFunc: explorer.MustGetIndexHandlerFunc(GraphqlPath, GraphiqlExplorerPath, c.Endpoints.GraphiqlExplorer.DefaultQuery)},
 		)
 	}
 
 	if c.Endpoints.Graphql.On {
-		d.Routes = append(d.Routes, types.Route{Methods: []string{http.MethodGet, http.MethodPost, http.MethodOptions}, Path: c.Endpoints.Graphql.Path, Handler: graphql.MustGetHandler(d.RootNode, d.Factory, d.ServeFunc)})
+		d.Routes = append(d.Routes, types.Route{Methods: []string{http.MethodGet, http.MethodPost, http.MethodOptions}, Path: GraphqlPath, Handler: graphql.MustGetHandler(d.RootNode, d.Factory, d.ServeFunc)})
 	}
 
 	if c.Endpoints.HttpJson.On {
