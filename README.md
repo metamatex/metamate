@@ -26,3 +26,9 @@ To spin up a metamate instance simply run `docker run metamatex/metamate:latest`
 macOs `brew install metamatex/taps/metactl`
 
 For all other platforms, please see our [releases](https://github.com/metamatex/metamate/releases)
+
+## Development
+
+MetaMate develops in multiple stages
+
+`v0.x` MetaMate tries to provide an abstract layer for all network connected datastores, which can be databases, websites, apis etc. The challenge here is to cover all major use-cases. MetaMate needs to be able to handle different kinds of paginations, entity respresentations and authorization methods.
