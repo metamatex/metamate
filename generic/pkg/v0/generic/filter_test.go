@@ -713,13 +713,13 @@ func TestEnumFilter(t *testing.T) {
 		{
 		},
 		{
-			EnumField: ptr.String(sdk.WhateverKind_RED),
+			EnumField: ptr.String(sdk.WhateverKind.Red),
 		},
 		{
-			EnumField: ptr.String(sdk.WhateverKind_BLUE),
+			EnumField: ptr.String(sdk.WhateverKind.Blue),
 		},
 		{
-			EnumField: ptr.String(sdk.WhateverKind_GREEN),
+			EnumField: ptr.String(sdk.WhateverKind.Green),
 		},
 	}
 
@@ -747,37 +747,37 @@ func TestEnumFilter(t *testing.T) {
 			expected: 1,
 		},
 		{
-			name: "is:RED",
+			name: "is:red",
 			filter: sdk.WhateverFilter{
 				EnumField: &sdk.EnumFilter{
-					Is: ptr.String(sdk.WhateverKind_RED),
+					Is: ptr.String(sdk.WhateverKind.Red),
 				},
 			},
 			expected: 1,
 		},
 		{
-			name: "not:RED",
+			name: "not:red",
 			filter: sdk.WhateverFilter{
 				EnumField: &sdk.EnumFilter{
-					Not: ptr.String(sdk.WhateverKind_RED),
+					Not: ptr.String(sdk.WhateverKind.Red),
 				},
 			},
 			expected: len(whatevers) - 1,
 		},
 		{
-			name: "in:[RED,BLUE]",
+			name: "in:[red,blue]",
 			filter: sdk.WhateverFilter{
 				EnumField: &sdk.EnumFilter{
-					In: []string{sdk.WhateverKind_RED, sdk.WhateverKind_BLUE},
+					In: []string{sdk.WhateverKind.Red, sdk.WhateverKind.Blue},
 				},
 			},
 			expected: 2,
 		},
 		{
-			name: "notIn:[RED,BLUE]",
+			name: "notIn:[red,blue]",
 			filter: sdk.WhateverFilter{
 				EnumField: &sdk.EnumFilter{
-					NotIn: []string{sdk.WhateverKind_RED, sdk.WhateverKind_BLUE},
+					NotIn: []string{sdk.WhateverKind.Red, sdk.WhateverKind.Blue},
 				},
 			},
 			expected: len(whatevers) - 2,
