@@ -48,4 +48,4 @@ Breaking changes will occur whenever we remove or rename an identifier or change
 
 #### v1.x
 
-The community intends to provide a stability guarantee from here on
+The community intends to provide a stability guarantee from `v1.x` onwards
