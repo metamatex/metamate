@@ -31,4 +31,12 @@ For all other platforms, please see our [releases](https://github.com/metamatex/
 
 MetaMate develops in multiple stages
 
-`v0.x` MetaMate tries to provide an abstract layer for all network connected datastores, which can be databases, websites, apis etc. The challenge here is to cover all major use-cases. MetaMate needs to be able to handle different kinds of paginations, entity respresentations and authorization methods.
+MetaMate tries to provide an abstraction layer for all network connected datastores, which can be databases, websites, apis etc. The challenge here is to derive an api that covers all major use-cases. MetaMate needs to be able to handle different kinds of paginations, entity respresentations and authentication methods.
+
+#### v0.x
+
+Doesn't provide a stability guarantee yet,
+
+#### v1.x
+
+Provides a stability guarantee
