@@ -35,7 +35,18 @@ MetaMate tries to provide an abstraction layer for all network connected datasto
 
 #### v0.x
 
-Doesn't provide a stability guarantee yet,
+The community behind MetaMate has a pretty good understanding of the problem domain by now.
+
+- **credential management** services need credentials to obtain tokens and tokens to make authorizated requests, services will indicate the necessitate for a token
+- **streaming** clients want to be able to subscribe to changes in a result set, a service may provide a streaming interface or emulates it MetaMate by polling
+- **tracing** developers want to monitor how requests propagate through the stack
+- **exposing the ASG via MetaMate** the asg is currently hard-coded, which requires a recompilation of the stack to deliver new types.
+- **RBAC** administrator want to be able to set rules of who can access what and what subset
+- **introducing result sets** currently results and paginations are merged into one result set
+- **split communication types** currently the types for client to MetaMate communication and MetaMate to service communication are the same which might cause some confusion
+- **specification** provide a formal specification for MetaMate's overall api as code
+
+Doesn't provide a stability guarantee yet
 
 #### v1.x
 
