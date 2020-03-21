@@ -127,12 +127,15 @@ data:
       - id: hackernews
         name: hackernews
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: metamate
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      name: metamate
   template:
     metadata:
       labels:
@@ -143,17 +146,17 @@ spec:
         - name: metamate
           image: metamatex/metamate:latest
           command: ["./metamate"]
-          args: ["-c", "/metamate.yaml"]
+          args: ["serve", "-c", "/metamate.yaml"]
           imagePullPolicy: Always
           volumeMounts:
             - name: config
               mountPath: /metamate.yaml
               subPath: metamate.yaml
       restartPolicy: Always
-    volumes:
-      - name: config
-        configMap:
-          name: metamate-config
+      volumes:
+        - name: config
+          configMap:
+            name: metamate-config
 ---
 apiVersion: v1
 kind: Service

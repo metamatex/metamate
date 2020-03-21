@@ -36,7 +36,7 @@ var serveCmd = &cobra.Command{
 					return
 				}
 
-				fmt.Printf("version: %v\nvcommit: %v\ndate: %v\n\n", version.Version, version.Commit, version.Date)
+				fmt.Printf("version: %v\ncommit: %v\ndate: %v\n\n", version.Version, version.Commit, version.Date)
 
 				for _, r := range d.Routes {
 					for _, m := range r.Methods {

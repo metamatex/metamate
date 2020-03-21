@@ -17,15 +17,16 @@ function release {
     TAG=$(git describe --exact-match --tags $(git log -n1 --pretty='%h'))
     REV=$(git rev-parse HEAD)
     DATE=$(date "+%Y-%m-%d")
+    VERSION=${TAG//v}
 
     docker run -i --rm \
-        -v $(pwd)/..:/go/src/github.com/metamatex/metamatemmono \
-        -w /go/src/github.com/metamatex/metamatemmono/metamate \
+        -v $(pwd)/..:/go/src/github.com/metamatex/metamate \
+        -w /go/src/github.com/metamatex/metamate/metamate \
         -e "GOOS=linux" \
         -e "GOARCH=amd64" \
         -e "CGO_ENABLED=1" \
         golang \
-        go build -o dist/metamate cmd/metamate/main.go
+        go build -ldflags="-X 'main.version=${VERSION}' -X 'main.date=${DATE}' -X 'main.commit=${REV}'" -o dist/metamate cmd/metamate/main.go
 
     docker build \
         --pull \
@@ -41,6 +42,10 @@ function release {
         --tag metamatex/metamate:$TAG \
         .
 
+    # docker push metamatex/metamate
+}
 
-    docker push metamatex/metamate
+function deploy {
+    kubectl delete -f deployments/kubernetes.yaml || true
+    kubectl apply -f deployments/kubernetes.yaml
 }

@@ -33,3 +33,7 @@ function generate {
     (cd gen && go mod init github.com/metamatex/metamate/gen)
     (cd hackernews-svc && ./../metactl/dist/metactl gen)
 }
+
+function deploy {
+    (cd metamate && make deploy)
+}

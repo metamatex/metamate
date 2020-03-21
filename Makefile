@@ -18,3 +18,6 @@ release:
 
 generate:
 	@${SOURCE_MAKE} && generate
+
+deploy:
+	@${SOURCE_MAKE} && deploy
