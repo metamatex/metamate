@@ -1,0 +1,24 @@
+# this file is used by metactl to generate client and service sdks
+#
+# available sdks:
+#
+# go_httpjson_client: go client sdk that transports via httpjson
+# go_httpjson_service: go server sdk that transports via httpjson
+# go_types: go types
+
+v0:
+  gen:
+    sdks:
+    - names: [go_httpjson_service]
+      # some sdks require additional data
+      data:
+        name: hackernews
+        package: github.com/metamatex/metamate/hackernews-svc
+      # defines an endpoint filter to narrow down the endpoints to included in the sdk
+      endpoints:
+        names:
+          or:
+          - GetSocialAccounts
+          - GetStatuses
+          - GetFeeds
+ 
