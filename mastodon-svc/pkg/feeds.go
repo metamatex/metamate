@@ -3,7 +3,7 @@ package pkg
 import (
 	"context"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
+	
 )
 
 const (
@@ -18,27 +18,27 @@ func getFeedsCollection(ctx context.Context, req sdk.GetFeedsRequest) (rsp sdk.G
 	feeds := []sdk.Feed{
 		{
 			Id: &sdk.ServiceId{
-				Value: ptr.String(TIMELINE_PUBLIC),
+				Value: sdk.String(TIMELINE_PUBLIC),
 			},
 		},
 		{
 			Id: &sdk.ServiceId{
-				Value: ptr.String(TIMELINE_PUBLIC_LOCAL),
+				Value: sdk.String(TIMELINE_PUBLIC_LOCAL),
 			},
 		},
 		{
 			Id: &sdk.ServiceId{
-				Value: ptr.String(TIMELINE_HOME),
+				Value: sdk.String(TIMELINE_HOME),
 			},
 		},
 		{
 			Id: &sdk.ServiceId{
-				Value: ptr.String(TIMELINE_MEDIA),
+				Value: sdk.String(TIMELINE_MEDIA),
 			},
 		},
 		{
 			Id: &sdk.ServiceId{
-				Value: ptr.String(TIMELINE_MEDIA_LOCAL),
+				Value: sdk.String(TIMELINE_MEDIA_LOCAL),
 			},
 		},
 	}

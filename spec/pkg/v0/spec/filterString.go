@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
+	
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -13,7 +13,7 @@ import (
 func getIdsFilter(suffix, caseName string) (idFilter *sdk.ServiceIdFilter) {
 	return &sdk.ServiceIdFilter{
 		Value: &sdk.StringFilter{
-			Contains: ptr.String(nameSvcCase(suffix, caseName)),
+			Contains: sdk.String(nameSvcCase(suffix, caseName)),
 		},
 	}
 }
@@ -36,28 +36,28 @@ func TestFilterStringIs(t *testing.T, ctx context.Context, f generic.Factory, h 
 				ServiceFilter: &sdk.ServiceFilter{
 					Id: &sdk.ServiceIdFilter{
 						Value: &sdk.StringFilter{
-							Is: ptr.String(svcName),
+							Is: sdk.String(svcName),
 						},
 					},
 				},
 				Select: &sdk.PostWhateversResponseSelect{
 					Meta: GetResponseMetaSelect(),
 					Whatevers: &sdk.WhateverSelect{
-						StringField: ptr.Bool(true),
+						StringField: sdk.Bool(true),
 					},
 				},
 				Whatevers: []sdk.Whatever{
 					{
 						Id: &sdk.ServiceId{
-							Value: ptr.String(nameSvcId(suffix, name, "0")),
+							Value: sdk.String(nameSvcId(suffix, name, "0")),
 						},
-						StringField: ptr.String("a"),
+						StringField: sdk.String("a"),
 					},
 					{
 						Id: &sdk.ServiceId{
-							Value: ptr.String(nameSvcId(suffix, name, "1")),
+							Value: sdk.String(nameSvcId(suffix, name, "1")),
 						},
-						StringField: ptr.String("b"),
+						StringField: sdk.String("b"),
 					},
 				},
 			}
@@ -76,7 +76,7 @@ func TestFilterStringIs(t *testing.T, ctx context.Context, f generic.Factory, h 
 				ServiceFilter: &sdk.ServiceFilter{
 					Id: &sdk.ServiceIdFilter{
 						Value: &sdk.StringFilter{
-							Is: ptr.String(svcName),
+							Is: sdk.String(svcName),
 						},
 					},
 				},
@@ -87,13 +87,13 @@ func TestFilterStringIs(t *testing.T, ctx context.Context, f generic.Factory, h 
 				Filter: &sdk.WhateverFilter{
 					Id: getIdsFilter(suffix, name),
 					StringField: &sdk.StringFilter{
-						Is: ptr.String("a"),
+						Is: sdk.String("a"),
 					},
 				},
 				Select: &sdk.GetWhateversResponseSelect{
 					Meta: GetCollectionMetaSelect(),
 					Whatevers: &sdk.WhateverSelect{
-						StringField: ptr.Bool(true),
+						StringField: sdk.Bool(true),
 					},
 				},
 			}

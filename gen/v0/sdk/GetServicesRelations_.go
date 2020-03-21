@@ -6,5 +6,5 @@ const (
 )
 
 type GetServicesRelations struct {
-    UsesServiceAccounts *GetServiceAccountsCollection `json:"usesServiceAccounts,omitempty",yaml:"usesServiceAccounts,omitempty"`
+    UsesServiceAccounts *GetServiceAccountsCollection `json:"usesServiceAccounts,omitempty" yaml:"usesServiceAccounts,omitempty"`
 }

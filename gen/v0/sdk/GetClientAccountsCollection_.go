@@ -6,10 +6,10 @@ const (
 )
 
 type GetClientAccountsCollection struct {
-    Filter *ClientAccountFilter `json:"filter,omitempty",yaml:"filter,omitempty"`
-    Pages []ServicePage `json:"pages,omitempty",yaml:"pages,omitempty"`
-    Relations *GetClientAccountsRelations `json:"relations,omitempty",yaml:"relations,omitempty"`
-    Select *ClientAccountsCollectionSelect `json:"select,omitempty",yaml:"select,omitempty"`
-    ServiceFilter *ServiceFilter `json:"serviceFilter,omitempty",yaml:"serviceFilter,omitempty"`
-    Sort *ClientAccountSort `json:"sort,omitempty",yaml:"sort,omitempty"`
+    Filter *ClientAccountFilter `json:"filter,omitempty" yaml:"filter,omitempty"`
+    Pages []ServicePage `json:"pages,omitempty" yaml:"pages,omitempty"`
+    Relations *GetClientAccountsRelations `json:"relations,omitempty" yaml:"relations,omitempty"`
+    Select *ClientAccountsCollectionSelect `json:"select,omitempty" yaml:"select,omitempty"`
+    ServiceFilter *ServiceFilter `json:"serviceFilter,omitempty" yaml:"serviceFilter,omitempty"`
+    Sort *ClientAccountSort `json:"sort,omitempty" yaml:"sort,omitempty"`
 }

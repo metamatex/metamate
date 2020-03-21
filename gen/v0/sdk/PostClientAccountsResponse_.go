@@ -6,6 +6,6 @@ const (
 )
 
 type PostClientAccountsResponse struct {
-    ClientAccounts []ClientAccount `json:"clientAccounts,omitempty",yaml:"clientAccounts,omitempty"`
-    Meta *ResponseMeta `json:"meta,omitempty",yaml:"meta,omitempty"`
+    ClientAccounts []ClientAccount `json:"clientAccounts,omitempty" yaml:"clientAccounts,omitempty"`
+    Meta *ResponseMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
 }

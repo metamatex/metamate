@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"github.com/metamatex/metamate/gen/v0/sdk"
 	"github.com/metamatex/metamate/gen/v0/sdk/transport"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
+
 	"github.com/square/go-jose"
 )
 
@@ -69,7 +69,7 @@ func (s Service) PipeClientAccounts(ctx context.Context, req sdk.PipeClientAccou
 		hashedPassword := hashPassword(s.opts.Salt, *accounts[i].Password.Value)
 
 		accounts[i].Password = &sdk.Password{
-			IsHashed:     ptr.Bool(true),
+			IsHashed:     sdk.Bool(true),
 			HashFunction: &sdk.HashFunction.Sha256,
 			Value:        &hashedPassword,
 		}
@@ -109,7 +109,7 @@ func (s Service) VerifyToken(ctx context.Context, req sdk.VerifyTokenRequest) (r
 		}
 
 		rsp.Output = &sdk.VerifyTokenOutput{
-			IsValid:         ptr.Bool(true),
+			IsValid:         sdk.Bool(true),
 			ClientAccountId: &jwtPayload.ClientAccountId,
 		}
 
@@ -141,11 +141,11 @@ func (s Service) AuthenticateClientAccount(ctx context.Context, req sdk.Authenti
 				// todo response meta select
 				ClientAccounts: &sdk.ClientAccountSelect{
 					Id: &sdk.ServiceIdSelect{
-						Value:       ptr.Bool(true),
-						ServiceName: ptr.Bool(true),
+						Value:       sdk.Bool(true),
+						ServiceName: sdk.Bool(true),
 					},
 					Password: &sdk.PasswordSelect{
-						Value: ptr.Bool(true),
+						Value: sdk.Bool(true),
 					},
 				},
 			},
@@ -206,7 +206,7 @@ func (s Service) AuthenticateClientAccount(ctx context.Context, req sdk.Authenti
 
 		rsp.Output = &sdk.AuthenticateClientAccountOutput{
 			Token: &sdk.Token{
-				Value: ptr.String(s),
+				Value: sdk.String(s),
 			},
 		}
 
@@ -218,7 +218,7 @@ func (s Service) AuthenticateClientAccount(ctx context.Context, req sdk.Authenti
 				{
 					Message: &sdk.Text{
 						Formatting: &sdk.FormattingKind.Plain,
-						Value:      ptr.String(err.Error()),
+						Value:      sdk.String(err.Error()),
 					},
 				},
 			},

@@ -88,17 +88,17 @@ func (c HttpJsonClient) GetFeeds(ctx context.Context, req sdk.GetFeedsRequest) (
 
 	return
 }
-func (c HttpJsonClient) GetPeople(ctx context.Context, req sdk.GetPeopleRequest) (rsp *sdk.GetPeopleResponse, err error) {
-	err = c.send(req, &rsp)
-
-	return
-}
 func (c HttpJsonClient) GetServiceAccounts(ctx context.Context, req sdk.GetServiceAccountsRequest) (rsp *sdk.GetServiceAccountsResponse, err error) {
 	err = c.send(req, &rsp)
 
 	return
 }
 func (c HttpJsonClient) GetServices(ctx context.Context, req sdk.GetServicesRequest) (rsp *sdk.GetServicesResponse, err error) {
+	err = c.send(req, &rsp)
+
+	return
+}
+func (c HttpJsonClient) GetSocialAccounts(ctx context.Context, req sdk.GetSocialAccountsRequest) (rsp *sdk.GetSocialAccountsResponse, err error) {
 	err = c.send(req, &rsp)
 
 	return
@@ -138,12 +138,12 @@ func (c HttpJsonClient) PostClientAccounts(ctx context.Context, req sdk.PostClie
 
 	return
 }
-func (c HttpJsonClient) PostPeople(ctx context.Context, req sdk.PostPeopleRequest) (rsp *sdk.PostPeopleResponse, err error) {
+func (c HttpJsonClient) PostServiceAccounts(ctx context.Context, req sdk.PostServiceAccountsRequest) (rsp *sdk.PostServiceAccountsResponse, err error) {
 	err = c.send(req, &rsp)
 
 	return
 }
-func (c HttpJsonClient) PostServiceAccounts(ctx context.Context, req sdk.PostServiceAccountsRequest) (rsp *sdk.PostServiceAccountsResponse, err error) {
+func (c HttpJsonClient) PostSocialAccounts(ctx context.Context, req sdk.PostSocialAccountsRequest) (rsp *sdk.PostSocialAccountsResponse, err error) {
 	err = c.send(req, &rsp)
 
 	return
@@ -163,12 +163,12 @@ func (c HttpJsonClient) PutBlueWhatevers(ctx context.Context, req sdk.PutBlueWha
 
 	return
 }
-func (c HttpJsonClient) PutPeople(ctx context.Context, req sdk.PutPeopleRequest) (rsp *sdk.PutPeopleResponse, err error) {
+func (c HttpJsonClient) PutServiceAccounts(ctx context.Context, req sdk.PutServiceAccountsRequest) (rsp *sdk.PutServiceAccountsResponse, err error) {
 	err = c.send(req, &rsp)
 
 	return
 }
-func (c HttpJsonClient) PutServiceAccounts(ctx context.Context, req sdk.PutServiceAccountsRequest) (rsp *sdk.PutServiceAccountsResponse, err error) {
+func (c HttpJsonClient) PutSocialAccounts(ctx context.Context, req sdk.PutSocialAccountsRequest) (rsp *sdk.PutSocialAccountsResponse, err error) {
 	err = c.send(req, &rsp)
 
 	return

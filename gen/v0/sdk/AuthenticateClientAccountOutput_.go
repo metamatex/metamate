@@ -6,5 +6,5 @@ const (
 )
 
 type AuthenticateClientAccountOutput struct {
-    Token *Token `json:"token,omitempty",yaml:"token,omitempty"`
+    Token *Token `json:"token,omitempty" yaml:"token,omitempty"`
 }

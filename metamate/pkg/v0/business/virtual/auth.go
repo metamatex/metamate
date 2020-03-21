@@ -18,8 +18,8 @@ import (
 )
 
 func init() {
-	handler[Auth] = func(f generic.Factory, rn *graph.RootNode, c *http.Client, opts types.VirtualSvcOpts) (h http.Handler, t string, err error) {
-		err = validateAuthOpts(opts)
+	handler[Auth] = func(f generic.Factory, rn *graph.RootNode, c *http.Client, vSvc types.VirtualSvc) (h http.Handler, t string, err error) {
+		err = validateAuthOpts(*vSvc.Opts)
 		if err != nil {
 			return
 		}
@@ -30,7 +30,7 @@ func init() {
 			Addr:       "http://metamate"},
 		)
 
-		privateKey, err := privateKeyFromString(opts.Auth.PrivateKey)
+		privateKey, err := privateKeyFromString(vSvc.Opts.Auth.PrivateKey)
 		if err != nil {
 			return
 		}
@@ -38,7 +38,7 @@ func init() {
 		svc, err := pkg.NewService(pkg.ServiceOpts{
 			Client:     cli,
 			PrivateKey: privateKey,
-			Salt:       opts.Auth.Salt,
+			Salt:       vSvc.Opts.Auth.Salt,
 		})
 		if err != nil {
 			return

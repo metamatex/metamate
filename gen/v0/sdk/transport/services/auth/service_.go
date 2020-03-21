@@ -10,9 +10,9 @@ import (
 type Service interface {
 	Name() (string)
 	GetAuthenticateClientAccountEndpoint() (sdk.AuthenticateClientAccountEndpoint)
-    AuthenticateClientAccount(context.Context, sdk.AuthenticateClientAccountRequest) (sdk.AuthenticateClientAccountResponse)
+    AuthenticateClientAccount(ctx context.Context, req sdk.AuthenticateClientAccountRequest) (rsp sdk.AuthenticateClientAccountResponse)
 	GetPipeClientAccountsEndpoint() (sdk.PipeClientAccountsEndpoint)
-    PipeClientAccounts(context.Context, sdk.PipeClientAccountsRequest) (sdk.PipeClientAccountsResponse)
+    PipeClientAccounts(ctx context.Context, req sdk.PipeClientAccountsRequest) (rsp sdk.PipeClientAccountsResponse)
 	GetVerifyTokenEndpoint() (sdk.VerifyTokenEndpoint)
-    VerifyToken(context.Context, sdk.VerifyTokenRequest) (sdk.VerifyTokenResponse)
+    VerifyToken(ctx context.Context, req sdk.VerifyTokenRequest) (rsp sdk.VerifyTokenResponse)
 }

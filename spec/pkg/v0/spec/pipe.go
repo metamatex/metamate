@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
+	
 	"testing"
 )
 
@@ -25,7 +25,7 @@ func TestPipe(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx c
 					{
 
 						Id: &sdk.ServiceId{
-							Value: ptr.String("match"),
+							Value: sdk.String("match"),
 						},
 					},
 				},

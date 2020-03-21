@@ -6,6 +6,6 @@ const (
 )
 
 type GetServicesResponse struct {
-    Meta *CollectionMeta `json:"meta,omitempty",yaml:"meta,omitempty"`
-    Services []Service `json:"services,omitempty",yaml:"services,omitempty"`
+    Meta *CollectionMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Services []Service `json:"services,omitempty" yaml:"services,omitempty"`
 }

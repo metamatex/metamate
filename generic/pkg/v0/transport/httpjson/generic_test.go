@@ -11,7 +11,6 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
 )
 
 var root *graph.RootNode
@@ -31,24 +30,24 @@ func init() {
 var rsp = sdk.GetWhateversResponse{
 	Whatevers: []sdk.Whatever{
 		{
-			StringField:  ptr.String(""),
-			Int32Field:   ptr.Int32(0),
-			Float64Field: ptr.Float64(0),
-			BoolField:    ptr.Bool(false),
-			EnumField:    ptr.String(sdk.WhateverKind_RED),
+			StringField:  sdk.String(""),
+			Int32Field:   sdk.Int32(0),
+			Float64Field: sdk.Float64(0),
+			BoolField:    sdk.Bool(false),
+			EnumField:    sdk.String(sdk.WhateverKind.Red),
 			UnionField: &sdk.WhateverUnion{
-				Kind:        ptr.String(sdk.WhateverUnionKind_stringField),
-				StringField: ptr.String(""),
+				Kind:        sdk.String(sdk.WhateverUnionKind.StringField),
+				StringField: sdk.String(""),
 			},
 			StringList:  []string{""},
 			Int32List:   []int32{0},
 			Float64List: []float64{0},
 			BoolList:    []bool{false},
-			EnumList:    []string{sdk.WhateverKind_RED},
+			EnumList:    []string{sdk.WhateverKind.Red},
 			UnionList: []sdk.WhateverUnion{
 				{
-					Kind:        ptr.String(sdk.WhateverUnionKind_stringField),
-					StringField: ptr.String(""),
+					Kind:        sdk.String(sdk.WhateverUnionKind.StringField),
+					StringField: sdk.String(""),
 				},
 			},
 		},
@@ -58,11 +57,11 @@ var rsp = sdk.GetWhateversResponse{
 var req = sdk.GetWhateversRequest{
 	Select: &sdk.GetWhateversResponseSelect{
 		Whatevers: &sdk.WhateverSelect{
-			StringField:  ptr.Bool(true),
-			Int32Field:   ptr.Bool(true),
-			Float64Field: ptr.Bool(true),
-			BoolField:    ptr.Bool(true),
-			EnumField:    ptr.Bool(true),
+			StringField:  sdk.Bool(true),
+			Int32Field:   sdk.Bool(true),
+			Float64Field: sdk.Bool(true),
+			BoolField:    sdk.Bool(true),
+			EnumField:    sdk.Bool(true),
 		},
 	},
 }

@@ -6,8 +6,8 @@ const (
 )
 
 type AuthenticateClientAccountRequest struct {
-    Input *AuthenticateClientAccountInput `json:"input,omitempty",yaml:"input,omitempty"`
-    Meta *RequestMeta `json:"meta,omitempty",yaml:"meta,omitempty"`
-    Select *AuthenticateClientAccountResponseSelect `json:"select,omitempty",yaml:"select,omitempty"`
-    ServiceFilter *ServiceFilter `json:"serviceFilter,omitempty",yaml:"serviceFilter,omitempty"`
+    Input *AuthenticateClientAccountInput `json:"input,omitempty" yaml:"input,omitempty"`
+    Meta *RequestMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Select *AuthenticateClientAccountResponseSelect `json:"select,omitempty" yaml:"select,omitempty"`
+    ServiceFilter *ServiceFilter `json:"serviceFilter,omitempty" yaml:"serviceFilter,omitempty"`
 }

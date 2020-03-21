@@ -6,5 +6,5 @@ const (
 )
 
 type GetBlueWhateversRelations struct {
-    KnewByWhatevers *GetWhateversCollection `json:"knewByWhatevers,omitempty",yaml:"knewByWhatevers,omitempty"`
+    KnewByWhatevers *GetWhateversCollection `json:"knewByWhatevers,omitempty" yaml:"knewByWhatevers,omitempty"`
 }

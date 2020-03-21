@@ -15,17 +15,17 @@ import (
 )
 
 func init() {
-	handler[Sqlx] = func(f generic.Factory, rn *graph.RootNode, cli *http.Client, opts types.VirtualSvcOpts) (h http.Handler, t string, err error) {
-		err = validateSqlxOpts(opts)
+	handler[Sqlx] = func(f generic.Factory, rn *graph.RootNode, cli *http.Client, vSvc types.VirtualSvc) (h http.Handler, t string, err error) {
+		err = validateSqlxOpts(*vSvc.Opts)
 		if err != nil {
 			return
 		}
 
 		c := sqlxTypes.Config{
-			Log:        opts.Sqlx.Log,
-			DriverName: opts.Sqlx.Driver,
-			DataSource: opts.Sqlx.Connection,
-			TypeNames:  opts.Sqlx.Types,
+			Log:        vSvc.Opts.Sqlx.Log,
+			DriverName: vSvc.Opts.Sqlx.Driver,
+			DataSource: vSvc.Opts.Sqlx.Connection,
+			TypeNames:  vSvc.Opts.Sqlx.Types,
 		}
 
 		d, err := boot.NewDependencies(rn, f, c)

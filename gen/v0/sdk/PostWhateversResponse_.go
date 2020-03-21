@@ -6,6 +6,6 @@ const (
 )
 
 type PostWhateversResponse struct {
-    Meta *ResponseMeta `json:"meta,omitempty",yaml:"meta,omitempty"`
-    Whatevers []Whatever `json:"whatevers,omitempty",yaml:"whatevers,omitempty"`
+    Meta *ResponseMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Whatevers []Whatever `json:"whatevers,omitempty" yaml:"whatevers,omitempty"`
 }

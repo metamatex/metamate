@@ -4,6 +4,12 @@ SHELL := /bin/bash
 build:
 	@${SOURCE_MAKE} && build
 
+build_metactl:
+	@${SOURCE_MAKE} && build_metactl
+
+build_metamate:
+	@${SOURCE_MAKE} && build_metamate
+
 chore:
 	@${SOURCE_MAKE} && chore
 

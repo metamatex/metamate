@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
+	
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -18,7 +18,7 @@ func TestPost(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx c
 				ServiceFilter: &sdk.ServiceFilter{
 					Id: &sdk.ServiceIdFilter{
 						Value: &sdk.StringFilter{
-							Is: ptr.String(svcName),
+							Is: sdk.String(svcName),
 						},
 					},
 				},
@@ -26,17 +26,17 @@ func TestPost(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx c
 					Meta: GetResponseMetaSelect(),
 					Whatevers: &sdk.WhateverSelect{
 						Id: &sdk.ServiceIdSelect{
-							Value: ptr.Bool(true),
+							Value: sdk.Bool(true),
 						},
-						StringField: ptr.Bool(true),
+						StringField: sdk.Bool(true),
 					},
 				},
 				Whatevers: []sdk.Whatever{
 					{
-						StringField: ptr.String("a"),
+						StringField: sdk.String("a"),
 					},
 					{
-						StringField: ptr.String("b"),
+						StringField: sdk.String("b"),
 					},
 				},
 			}
@@ -110,7 +110,7 @@ func TestRequestFilter(t *testing.T, ctx context.Context, f generic.Factory, h f
 				Whatevers: []sdk.Whatever{
 					{
 						Id: &sdk.ServiceId{
-							Value: ptr.String("match"),
+							Value: sdk.String("match"),
 						},
 					},
 				},
@@ -140,7 +140,7 @@ func TestPostWithNameId(t *testing.T, ctx context.Context, f generic.Factory, h 
 				ServiceFilter: &sdk.ServiceFilter{
 					Id: &sdk.ServiceIdFilter{
 						Value: &sdk.StringFilter{
-							Is: ptr.String(svcName),
+							Is: sdk.String(svcName),
 						},
 					},
 				},
@@ -148,13 +148,13 @@ func TestPostWithNameId(t *testing.T, ctx context.Context, f generic.Factory, h 
 					Meta: GetResponseMetaSelect(),
 					Whatevers: &sdk.WhateverSelect{
 						Id: &sdk.ServiceIdSelect{
-							Value: ptr.Bool(true),
+							Value: sdk.Bool(true),
 						},
 						AlternativeIds: &sdk.IdSelect{
-							Kind: ptr.Bool(true),
-							Name: ptr.Bool(true),
+							Kind: sdk.Bool(true),
+							Name: sdk.Bool(true),
 						},
-						StringField: ptr.Bool(true),
+						StringField: sdk.Bool(true),
 					},
 				},
 				Whatevers: []sdk.Whatever{
@@ -162,19 +162,19 @@ func TestPostWithNameId(t *testing.T, ctx context.Context, f generic.Factory, h 
 						AlternativeIds: []sdk.Id{
 							{
 								Kind: &sdk.IdKind.Name,
-								Name: ptr.String("a" + suffix),
+								Name: sdk.String("a" + suffix),
 							},
 						},
-						StringField: ptr.String("a"),
+						StringField: sdk.String("a"),
 					},
 					{
 						AlternativeIds: []sdk.Id{
 							{
 								Kind: &sdk.IdKind.Name,
-								Name: ptr.String("b" + suffix),
+								Name: sdk.String("b" + suffix),
 							},
 						},
-						StringField: ptr.String("b"),
+						StringField: sdk.String("b"),
 					},
 				},
 			}

@@ -2,12 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/metamatex/metamate/metamate/pkg/v0/boot"
+	"github.com/metamatex/metamate/metamate/cmd/metamate/v0"
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
-	"net/http"
+	"github.com/spf13/cobra"
 	"os"
-	"os/signal"
-	"syscall"
 )
 
 var (
@@ -16,39 +14,23 @@ var (
 	date    = "dev"
 )
 
-func main() {
-	go func() {
-		err := run()
-		if err != nil {
-			panic(err)
-		}
-	}()
-
-	sigs := make(chan os.Signal, 1)
-	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
-	<-sigs
+var rootCmd = &cobra.Command{
+	Use:   "metamate",
+	Short: "",
+	Long:  "",
 }
 
-func run() (err error) {
-	c := boot.NewProdConfig()
-
-	d, err := boot.NewDependencies(c, types.Version{Version: version, Commit: commit, Date: date})
-	if err != nil {
-		return
+func main() {
+	v := types.Version{
+		Version: version,
+		Commit:  commit,
+		Date:    date,
 	}
 
-	fmt.Printf("version: %v\nvcommit: %v\ndate: %v\n\n", version, commit, date)
+	v0.AddV0(rootCmd, false, v)
 
-	for _, r := range d.Routes {
-		for _, m := range r.Methods {
-			fmt.Printf("%v: %v:%v%v\n", m, c.Host.Bind, c.Host.HttpPort, r.Path)
-		}
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
-
-	err = http.ListenAndServe(fmt.Sprintf(":%v", c.Host.HttpPort), d.Router)
-	if err != nil {
-		return
-	}
-
-	return
 }

@@ -6,8 +6,8 @@ const (
 )
 
 type PipeWhateversRequest struct {
-    Auth *Auth `json:"auth,omitempty",yaml:"auth,omitempty"`
-    Context *PipeWhateversContext `json:"context,omitempty",yaml:"context,omitempty"`
-    Meta *RequestMeta `json:"meta,omitempty",yaml:"meta,omitempty"`
-    Mode *PipeMode `json:"mode,omitempty",yaml:"mode,omitempty"`
+    Auth *Auth `json:"auth,omitempty" yaml:"auth,omitempty"`
+    Context *PipeWhateversContext `json:"context,omitempty" yaml:"context,omitempty"`
+    Meta *RequestMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Mode *PipeMode `json:"mode,omitempty" yaml:"mode,omitempty"`
 }

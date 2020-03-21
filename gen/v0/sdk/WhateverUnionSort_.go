@@ -6,8 +6,8 @@ const (
 )
 
 type WhateverUnionSort struct {
-    BoolField *string `json:"boolField,omitempty",yaml:"boolField,omitempty"`
-    Float64Field *string `json:"float64Field,omitempty",yaml:"float64Field,omitempty"`
-    Int32Field *string `json:"int32Field,omitempty",yaml:"int32Field,omitempty"`
-    StringField *string `json:"stringField,omitempty",yaml:"stringField,omitempty"`
+    BoolField *string `json:"boolField,omitempty" yaml:"boolField,omitempty"`
+    Float64Field *string `json:"float64Field,omitempty" yaml:"float64Field,omitempty"`
+    Int32Field *string `json:"int32Field,omitempty" yaml:"int32Field,omitempty"`
+    StringField *string `json:"stringField,omitempty" yaml:"stringField,omitempty"`
 }

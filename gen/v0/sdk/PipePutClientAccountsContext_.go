@@ -6,8 +6,8 @@ const (
 )
 
 type PipePutClientAccountsContext struct {
-    ClientRequest *PutClientAccountsRequest `json:"clientRequest,omitempty",yaml:"clientRequest,omitempty"`
-    ClientResponse *PutClientAccountsResponse `json:"clientResponse,omitempty",yaml:"clientResponse,omitempty"`
-    ServiceRequest *PutClientAccountsRequest `json:"serviceRequest,omitempty",yaml:"serviceRequest,omitempty"`
-    ServiceResponse *PutClientAccountsResponse `json:"serviceResponse,omitempty",yaml:"serviceResponse,omitempty"`
+    ClientRequest *PutClientAccountsRequest `json:"clientRequest,omitempty" yaml:"clientRequest,omitempty"`
+    ClientResponse *PutClientAccountsResponse `json:"clientResponse,omitempty" yaml:"clientResponse,omitempty"`
+    ServiceRequest *PutClientAccountsRequest `json:"serviceRequest,omitempty" yaml:"serviceRequest,omitempty"`
+    ServiceResponse *PutClientAccountsResponse `json:"serviceResponse,omitempty" yaml:"serviceResponse,omitempty"`
 }

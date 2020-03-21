@@ -4,7 +4,7 @@ import (
 	"github.com/metamatex/metamate/asg/pkg/v0/asg"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
+
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -36,14 +36,14 @@ func TestTypeFilter(t *testing.T) {
 		{
 			name: "set:true",
 			filter: sdk.WhateverFilter{
-				Set: ptr.Bool(true),
+				Set: sdk.Bool(true),
 			},
 			expected: 1,
 		},
 		{
 			name: "set:false",
 			filter: sdk.WhateverFilter{
-				Set: ptr.Bool(false),
+				Set: sdk.Bool(false),
 			},
 			expected: 0,
 		},
@@ -80,7 +80,7 @@ func TestNestedTypeFilter(t *testing.T) {
 			name: "set:true",
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
-					Set: ptr.Bool(true),
+					Set: sdk.Bool(true),
 				},
 			},
 			expected: 1,
@@ -89,7 +89,7 @@ func TestNestedTypeFilter(t *testing.T) {
 			name: "set:false",
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
-					Set: ptr.Bool(false),
+					Set: sdk.Bool(false),
 				},
 			},
 			expected: 1,
@@ -114,28 +114,28 @@ func TestStringFilter(t *testing.T) {
 		{
 		},
 		{
-			StringField: ptr.String("a"),
+			StringField: sdk.String("a"),
 		},
 		{
-			StringField: ptr.String("A"),
+			StringField: sdk.String("A"),
 		},
 		{
-			StringField: ptr.String("b"),
+			StringField: sdk.String("b"),
 		},
 		{
-			StringField: ptr.String("B"),
+			StringField: sdk.String("B"),
 		},
 		{
-			StringField: ptr.String("c"),
+			StringField: sdk.String("c"),
 		},
 		{
-			StringField: ptr.String("C"),
+			StringField: sdk.String("C"),
 		},
 		{
-			StringField: ptr.String("yxy"),
+			StringField: sdk.String("yxy"),
 		},
 		{
-			StringField: ptr.String("yXy"),
+			StringField: sdk.String("yXy"),
 		},
 	}
 
@@ -148,7 +148,7 @@ func TestStringFilter(t *testing.T) {
 			name: "set:true",
 			filter: sdk.WhateverFilter{
 				StringField: &sdk.StringFilter{
-					Set: ptr.Bool(true),
+					Set: sdk.Bool(true),
 				},
 			},
 			expected: len(whatevers) - 1,
@@ -157,7 +157,7 @@ func TestStringFilter(t *testing.T) {
 			name: "set:false",
 			filter: sdk.WhateverFilter{
 				StringField: &sdk.StringFilter{
-					Set: ptr.Bool(false),
+					Set: sdk.Bool(false),
 				},
 				UnionField: &sdk.WhateverUnionFilter{},
 			},
@@ -167,8 +167,8 @@ func TestStringFilter(t *testing.T) {
 			name: "caseSensitive:false,is:a",
 			filter: sdk.WhateverFilter{
 				StringField: &sdk.StringFilter{
-					CaseSensitive: ptr.Bool(false),
-					Is:            ptr.String("a"),
+					CaseSensitive: sdk.Bool(false),
+					Is:            sdk.String("a"),
 				},
 			},
 			expected: 2,
@@ -177,8 +177,8 @@ func TestStringFilter(t *testing.T) {
 			name: "caseSensitive:true,is: a",
 			filter: sdk.WhateverFilter{
 				StringField: &sdk.StringFilter{
-					CaseSensitive: ptr.Bool(true),
-					Is:            ptr.String("a"),
+					CaseSensitive: sdk.Bool(true),
+					Is:            sdk.String("a"),
 				},
 			},
 			expected: 1,
@@ -187,8 +187,8 @@ func TestStringFilter(t *testing.T) {
 			name: "caseSensitive:false,not:a",
 			filter: sdk.WhateverFilter{
 				StringField: &sdk.StringFilter{
-					CaseSensitive: ptr.Bool(false),
-					Not:           ptr.String("a"),
+					CaseSensitive: sdk.Bool(false),
+					Not:           sdk.String("a"),
 				},
 			},
 			expected: len(whatevers) - 2,
@@ -197,8 +197,8 @@ func TestStringFilter(t *testing.T) {
 			name: "caseSensitive:true,not:a",
 			filter: sdk.WhateverFilter{
 				StringField: &sdk.StringFilter{
-					CaseSensitive: ptr.Bool(true),
-					Not:           ptr.String("a"),
+					CaseSensitive: sdk.Bool(true),
+					Not:           sdk.String("a"),
 				},
 			},
 			expected: len(whatevers) - 1,
@@ -207,8 +207,8 @@ func TestStringFilter(t *testing.T) {
 			name: "caseSensitive:false,contains:x",
 			filter: sdk.WhateverFilter{
 				StringField: &sdk.StringFilter{
-					CaseSensitive: ptr.Bool(false),
-					Contains:      ptr.String("x"),
+					CaseSensitive: sdk.Bool(false),
+					Contains:      sdk.String("x"),
 				},
 			},
 			expected: 2,
@@ -217,8 +217,8 @@ func TestStringFilter(t *testing.T) {
 			name: "caseSensitive:true,contains:x",
 			filter: sdk.WhateverFilter{
 				StringField: &sdk.StringFilter{
-					CaseSensitive: ptr.Bool(true),
-					Contains:      ptr.String("x"),
+					CaseSensitive: sdk.Bool(true),
+					Contains:      sdk.String("x"),
 				},
 			},
 			expected: 1,
@@ -227,8 +227,8 @@ func TestStringFilter(t *testing.T) {
 			name: "caseSensitive:false,notContains:x",
 			filter: sdk.WhateverFilter{
 				StringField: &sdk.StringFilter{
-					CaseSensitive: ptr.Bool(false),
-					NotContains:   ptr.String("x"),
+					CaseSensitive: sdk.Bool(false),
+					NotContains:   sdk.String("x"),
 				},
 			},
 			expected: len(whatevers) - 2,
@@ -237,8 +237,8 @@ func TestStringFilter(t *testing.T) {
 			name: "caseSensitive:true,notContains:x",
 			filter: sdk.WhateverFilter{
 				StringField: &sdk.StringFilter{
-					CaseSensitive: ptr.Bool(true),
-					NotContains:   ptr.String("x"),
+					CaseSensitive: sdk.Bool(true),
+					NotContains:   sdk.String("x"),
 				},
 			},
 			expected: len(whatevers) - 1,
@@ -247,8 +247,8 @@ func TestStringFilter(t *testing.T) {
 			name: "caseSensitive:false,startsWith:yx",
 			filter: sdk.WhateverFilter{
 				StringField: &sdk.StringFilter{
-					CaseSensitive: ptr.Bool(false),
-					StartsWith:    ptr.String("yx"),
+					CaseSensitive: sdk.Bool(false),
+					StartsWith:    sdk.String("yx"),
 				},
 			},
 			expected: 2,
@@ -257,8 +257,8 @@ func TestStringFilter(t *testing.T) {
 			name: "caseSensitive:true,startsWith:yx",
 			filter: sdk.WhateverFilter{
 				StringField: &sdk.StringFilter{
-					CaseSensitive: ptr.Bool(true),
-					StartsWith:    ptr.String("yx"),
+					CaseSensitive: sdk.Bool(true),
+					StartsWith:    sdk.String("yx"),
 				},
 			},
 			expected: 1,
@@ -267,8 +267,8 @@ func TestStringFilter(t *testing.T) {
 			name: "caseSensitive:false,notStartsWith:yx",
 			filter: sdk.WhateverFilter{
 				StringField: &sdk.StringFilter{
-					CaseSensitive: ptr.Bool(false),
-					NotStartsWith: ptr.String("yx"),
+					CaseSensitive: sdk.Bool(false),
+					NotStartsWith: sdk.String("yx"),
 				},
 			},
 			expected: len(whatevers) - 2,
@@ -277,8 +277,8 @@ func TestStringFilter(t *testing.T) {
 			name: "caseSensitive:true,notStartsWith:yx",
 			filter: sdk.WhateverFilter{
 				StringField: &sdk.StringFilter{
-					CaseSensitive: ptr.Bool(true),
-					NotStartsWith: ptr.String("yx"),
+					CaseSensitive: sdk.Bool(true),
+					NotStartsWith: sdk.String("yx"),
 				},
 			},
 			expected: len(whatevers) - 1,
@@ -287,8 +287,8 @@ func TestStringFilter(t *testing.T) {
 			name: "caseSensitive:false,endsWith:xy",
 			filter: sdk.WhateverFilter{
 				StringField: &sdk.StringFilter{
-					CaseSensitive: ptr.Bool(false),
-					EndsWith:      ptr.String("xy"),
+					CaseSensitive: sdk.Bool(false),
+					EndsWith:      sdk.String("xy"),
 				},
 			},
 			expected: 2,
@@ -297,8 +297,8 @@ func TestStringFilter(t *testing.T) {
 			name: "caseSensitive:true,endsWith:xy",
 			filter: sdk.WhateverFilter{
 				StringField: &sdk.StringFilter{
-					CaseSensitive: ptr.Bool(true),
-					EndsWith:      ptr.String("xy"),
+					CaseSensitive: sdk.Bool(true),
+					EndsWith:      sdk.String("xy"),
 				},
 			},
 			expected: 1,
@@ -307,8 +307,8 @@ func TestStringFilter(t *testing.T) {
 			name: "caseSensitive:false,notEndsWith:xy",
 			filter: sdk.WhateverFilter{
 				StringField: &sdk.StringFilter{
-					CaseSensitive: ptr.Bool(false),
-					NotEndsWith:   ptr.String("xy"),
+					CaseSensitive: sdk.Bool(false),
+					NotEndsWith:   sdk.String("xy"),
 				},
 			},
 			expected: len(whatevers) - 2,
@@ -317,8 +317,8 @@ func TestStringFilter(t *testing.T) {
 			name: "caseSensitive:true,notEndsWith:xy",
 			filter: sdk.WhateverFilter{
 				StringField: &sdk.StringFilter{
-					CaseSensitive: ptr.Bool(true),
-					NotEndsWith:   ptr.String("xy"),
+					CaseSensitive: sdk.Bool(true),
+					NotEndsWith:   sdk.String("xy"),
 				},
 			},
 			expected: len(whatevers) - 1,
@@ -327,7 +327,7 @@ func TestStringFilter(t *testing.T) {
 			name: "caseSensitive:false,in:[a]",
 			filter: sdk.WhateverFilter{
 				StringField: &sdk.StringFilter{
-					CaseSensitive: ptr.Bool(false),
+					CaseSensitive: sdk.Bool(false),
 					In:            []string{"a"},
 				},
 			},
@@ -337,7 +337,7 @@ func TestStringFilter(t *testing.T) {
 			name: "caseSensitive:true,in:[a]",
 			filter: sdk.WhateverFilter{
 				StringField: &sdk.StringFilter{
-					CaseSensitive: ptr.Bool(true),
+					CaseSensitive: sdk.Bool(true),
 					In:            []string{"a"},
 				},
 			},
@@ -347,7 +347,7 @@ func TestStringFilter(t *testing.T) {
 			name: "caseSensitive:false,notIn:[a]",
 			filter: sdk.WhateverFilter{
 				StringField: &sdk.StringFilter{
-					CaseSensitive: ptr.Bool(false),
+					CaseSensitive: sdk.Bool(false),
 					NotIn:         []string{"a"},
 				},
 			},
@@ -357,7 +357,7 @@ func TestStringFilter(t *testing.T) {
 			name: "caseSensitive:true,notIn:[a]",
 			filter: sdk.WhateverFilter{
 				StringField: &sdk.StringFilter{
-					CaseSensitive: ptr.Bool(true),
+					CaseSensitive: sdk.Bool(true),
 					NotIn:         []string{"a"},
 				},
 			},
@@ -386,42 +386,42 @@ func TestNestedStringFilter(t *testing.T) {
 		},
 		{
 			UnionField: &sdk.WhateverUnion{
-				StringField: ptr.String("a"),
+				StringField: sdk.String("a"),
 			},
 		},
 		{
 			UnionField: &sdk.WhateverUnion{
-				StringField: ptr.String("A"),
+				StringField: sdk.String("A"),
 			},
 		},
 		{
 			UnionField: &sdk.WhateverUnion{
-				StringField: ptr.String("b"),
+				StringField: sdk.String("b"),
 			},
 		},
 		{
 			UnionField: &sdk.WhateverUnion{
-				StringField: ptr.String("B"),
+				StringField: sdk.String("B"),
 			},
 		},
 		{
 			UnionField: &sdk.WhateverUnion{
-				StringField: ptr.String("c"),
+				StringField: sdk.String("c"),
 			},
 		},
 		{
 			UnionField: &sdk.WhateverUnion{
-				StringField: ptr.String("C"),
+				StringField: sdk.String("C"),
 			},
 		},
 		{
 			UnionField: &sdk.WhateverUnion{
-				StringField: ptr.String("yxy"),
+				StringField: sdk.String("yxy"),
 			},
 		},
 		{
 			UnionField: &sdk.WhateverUnion{
-				StringField: ptr.String("yXy"),
+				StringField: sdk.String("yXy"),
 			},
 		},
 	}
@@ -436,7 +436,7 @@ func TestNestedStringFilter(t *testing.T) {
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
 					StringField: &sdk.StringFilter{
-						Set: ptr.Bool(true),
+						Set: sdk.Bool(true),
 					},
 				},
 			},
@@ -447,7 +447,7 @@ func TestNestedStringFilter(t *testing.T) {
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
 					StringField: &sdk.StringFilter{
-						Set: ptr.Bool(false),
+						Set: sdk.Bool(false),
 					},
 				},
 			},
@@ -458,8 +458,8 @@ func TestNestedStringFilter(t *testing.T) {
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
 					StringField: &sdk.StringFilter{
-						CaseSensitive: ptr.Bool(false),
-						Is:            ptr.String("a"),
+						CaseSensitive: sdk.Bool(false),
+						Is:            sdk.String("a"),
 					},
 				},
 			},
@@ -470,8 +470,8 @@ func TestNestedStringFilter(t *testing.T) {
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
 					StringField: &sdk.StringFilter{
-						CaseSensitive: ptr.Bool(true),
-						Is:            ptr.String("a"),
+						CaseSensitive: sdk.Bool(true),
+						Is:            sdk.String("a"),
 					},
 				},
 			},
@@ -482,8 +482,8 @@ func TestNestedStringFilter(t *testing.T) {
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
 					StringField: &sdk.StringFilter{
-						CaseSensitive: ptr.Bool(false),
-						Not:           ptr.String("a"),
+						CaseSensitive: sdk.Bool(false),
+						Not:           sdk.String("a"),
 					},
 				},
 			},
@@ -494,8 +494,8 @@ func TestNestedStringFilter(t *testing.T) {
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
 					StringField: &sdk.StringFilter{
-						CaseSensitive: ptr.Bool(true),
-						Not:           ptr.String("a"),
+						CaseSensitive: sdk.Bool(true),
+						Not:           sdk.String("a"),
 					},
 				},
 			},
@@ -506,8 +506,8 @@ func TestNestedStringFilter(t *testing.T) {
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
 					StringField: &sdk.StringFilter{
-						CaseSensitive: ptr.Bool(false),
-						Contains:      ptr.String("x"),
+						CaseSensitive: sdk.Bool(false),
+						Contains:      sdk.String("x"),
 					},
 				},
 			},
@@ -518,8 +518,8 @@ func TestNestedStringFilter(t *testing.T) {
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
 					StringField: &sdk.StringFilter{
-						CaseSensitive: ptr.Bool(true),
-						Contains:      ptr.String("x"),
+						CaseSensitive: sdk.Bool(true),
+						Contains:      sdk.String("x"),
 					},
 				},
 			},
@@ -530,8 +530,8 @@ func TestNestedStringFilter(t *testing.T) {
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
 					StringField: &sdk.StringFilter{
-						CaseSensitive: ptr.Bool(false),
-						NotContains:   ptr.String("x"),
+						CaseSensitive: sdk.Bool(false),
+						NotContains:   sdk.String("x"),
 					},
 				},
 			},
@@ -542,8 +542,8 @@ func TestNestedStringFilter(t *testing.T) {
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
 					StringField: &sdk.StringFilter{
-						CaseSensitive: ptr.Bool(true),
-						NotContains:   ptr.String("x"),
+						CaseSensitive: sdk.Bool(true),
+						NotContains:   sdk.String("x"),
 					},
 				},
 			},
@@ -554,8 +554,8 @@ func TestNestedStringFilter(t *testing.T) {
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
 					StringField: &sdk.StringFilter{
-						CaseSensitive: ptr.Bool(false),
-						StartsWith:    ptr.String("yx"),
+						CaseSensitive: sdk.Bool(false),
+						StartsWith:    sdk.String("yx"),
 					},
 				},
 			},
@@ -566,8 +566,8 @@ func TestNestedStringFilter(t *testing.T) {
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
 					StringField: &sdk.StringFilter{
-						CaseSensitive: ptr.Bool(true),
-						StartsWith:    ptr.String("yx"),
+						CaseSensitive: sdk.Bool(true),
+						StartsWith:    sdk.String("yx"),
 					},
 				},
 			},
@@ -578,8 +578,8 @@ func TestNestedStringFilter(t *testing.T) {
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
 					StringField: &sdk.StringFilter{
-						CaseSensitive: ptr.Bool(false),
-						NotStartsWith: ptr.String("yx"),
+						CaseSensitive: sdk.Bool(false),
+						NotStartsWith: sdk.String("yx"),
 					},
 				},
 			},
@@ -590,8 +590,8 @@ func TestNestedStringFilter(t *testing.T) {
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
 					StringField: &sdk.StringFilter{
-						CaseSensitive: ptr.Bool(true),
-						NotStartsWith: ptr.String("yx"),
+						CaseSensitive: sdk.Bool(true),
+						NotStartsWith: sdk.String("yx"),
 					},
 				},
 			},
@@ -602,8 +602,8 @@ func TestNestedStringFilter(t *testing.T) {
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
 					StringField: &sdk.StringFilter{
-						CaseSensitive: ptr.Bool(false),
-						EndsWith:      ptr.String("xy"),
+						CaseSensitive: sdk.Bool(false),
+						EndsWith:      sdk.String("xy"),
 					},
 				},
 			},
@@ -614,8 +614,8 @@ func TestNestedStringFilter(t *testing.T) {
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
 					StringField: &sdk.StringFilter{
-						CaseSensitive: ptr.Bool(true),
-						EndsWith:      ptr.String("xy"),
+						CaseSensitive: sdk.Bool(true),
+						EndsWith:      sdk.String("xy"),
 					},
 				},
 			},
@@ -626,8 +626,8 @@ func TestNestedStringFilter(t *testing.T) {
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
 					StringField: &sdk.StringFilter{
-						CaseSensitive: ptr.Bool(false),
-						NotEndsWith:   ptr.String("xy"),
+						CaseSensitive: sdk.Bool(false),
+						NotEndsWith:   sdk.String("xy"),
 					},
 				},
 			},
@@ -638,8 +638,8 @@ func TestNestedStringFilter(t *testing.T) {
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
 					StringField: &sdk.StringFilter{
-						CaseSensitive: ptr.Bool(true),
-						NotEndsWith:   ptr.String("xy"),
+						CaseSensitive: sdk.Bool(true),
+						NotEndsWith:   sdk.String("xy"),
 					},
 				},
 			},
@@ -650,7 +650,7 @@ func TestNestedStringFilter(t *testing.T) {
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
 					StringField: &sdk.StringFilter{
-						CaseSensitive: ptr.Bool(false),
+						CaseSensitive: sdk.Bool(false),
 						In:            []string{"a"},
 					},
 				},
@@ -662,7 +662,7 @@ func TestNestedStringFilter(t *testing.T) {
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
 					StringField: &sdk.StringFilter{
-						CaseSensitive: ptr.Bool(true),
+						CaseSensitive: sdk.Bool(true),
 						In:            []string{"a"},
 					},
 				},
@@ -674,7 +674,7 @@ func TestNestedStringFilter(t *testing.T) {
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
 					StringField: &sdk.StringFilter{
-						CaseSensitive: ptr.Bool(false),
+						CaseSensitive: sdk.Bool(false),
 						NotIn:         []string{"a"},
 					},
 				},
@@ -686,7 +686,7 @@ func TestNestedStringFilter(t *testing.T) {
 			filter: sdk.WhateverFilter{
 				UnionField: &sdk.WhateverUnionFilter{
 					StringField: &sdk.StringFilter{
-						CaseSensitive: ptr.Bool(true),
+						CaseSensitive: sdk.Bool(true),
 						NotIn:         []string{"a"},
 					},
 				},
@@ -713,13 +713,13 @@ func TestEnumFilter(t *testing.T) {
 		{
 		},
 		{
-			EnumField: ptr.String(sdk.WhateverKind.Red),
+			EnumField: sdk.String(sdk.WhateverKind.Red),
 		},
 		{
-			EnumField: ptr.String(sdk.WhateverKind.Blue),
+			EnumField: sdk.String(sdk.WhateverKind.Blue),
 		},
 		{
-			EnumField: ptr.String(sdk.WhateverKind.Green),
+			EnumField: sdk.String(sdk.WhateverKind.Green),
 		},
 	}
 
@@ -732,7 +732,7 @@ func TestEnumFilter(t *testing.T) {
 			name: "set:true",
 			filter: sdk.WhateverFilter{
 				EnumField: &sdk.EnumFilter{
-					Set: ptr.Bool(true),
+					Set: sdk.Bool(true),
 				},
 			},
 			expected: len(whatevers) - 1,
@@ -741,7 +741,7 @@ func TestEnumFilter(t *testing.T) {
 			name: "set:false",
 			filter: sdk.WhateverFilter{
 				EnumField: &sdk.EnumFilter{
-					Set: ptr.Bool(false),
+					Set: sdk.Bool(false),
 				},
 			},
 			expected: 1,
@@ -750,7 +750,7 @@ func TestEnumFilter(t *testing.T) {
 			name: "is:red",
 			filter: sdk.WhateverFilter{
 				EnumField: &sdk.EnumFilter{
-					Is: ptr.String(sdk.WhateverKind.Red),
+					Is: sdk.String(sdk.WhateverKind.Red),
 				},
 			},
 			expected: 1,
@@ -759,7 +759,7 @@ func TestEnumFilter(t *testing.T) {
 			name: "not:red",
 			filter: sdk.WhateverFilter{
 				EnumField: &sdk.EnumFilter{
-					Not: ptr.String(sdk.WhateverKind.Red),
+					Not: sdk.String(sdk.WhateverKind.Red),
 				},
 			},
 			expected: len(whatevers) - 1,
@@ -802,13 +802,13 @@ func TestInt32Filter(t *testing.T) {
 		{
 		},
 		{
-			Int32Field: ptr.Int32(0),
+			Int32Field: sdk.Int32(0),
 		},
 		{
-			Int32Field: ptr.Int32(1),
+			Int32Field: sdk.Int32(1),
 		},
 		{
-			Int32Field: ptr.Int32(2),
+			Int32Field: sdk.Int32(2),
 		},
 	}
 
@@ -821,7 +821,7 @@ func TestInt32Filter(t *testing.T) {
 			name: "set:false",
 			filter: sdk.WhateverFilter{
 				Int32Field: &sdk.Int32Filter{
-					Set: ptr.Bool(false),
+					Set: sdk.Bool(false),
 				},
 			},
 			expected: 1,
@@ -830,7 +830,7 @@ func TestInt32Filter(t *testing.T) {
 			name: "set:true",
 			filter: sdk.WhateverFilter{
 				Int32Field: &sdk.Int32Filter{
-					Set: ptr.Bool(true),
+					Set: sdk.Bool(true),
 				},
 			},
 			expected: len(whatevers) - 1,
@@ -839,7 +839,7 @@ func TestInt32Filter(t *testing.T) {
 			name: "is:1",
 			filter: sdk.WhateverFilter{
 				Int32Field: &sdk.Int32Filter{
-					Is: ptr.Int32(1),
+					Is: sdk.Int32(1),
 				},
 			},
 			expected: 1,
@@ -848,7 +848,7 @@ func TestInt32Filter(t *testing.T) {
 			name: "not:1",
 			filter: sdk.WhateverFilter{
 				Int32Field: &sdk.Int32Filter{
-					Not: ptr.Int32(1),
+					Not: sdk.Int32(1),
 				},
 			},
 			expected: len(whatevers) - 1,
@@ -857,7 +857,7 @@ func TestInt32Filter(t *testing.T) {
 			name: "lt:1",
 			filter: sdk.WhateverFilter{
 				Int32Field: &sdk.Int32Filter{
-					Lt: ptr.Int32(1),
+					Lt: sdk.Int32(1),
 				},
 			},
 			expected: 1,
@@ -866,7 +866,7 @@ func TestInt32Filter(t *testing.T) {
 			name: "lte:1",
 			filter: sdk.WhateverFilter{
 				Int32Field: &sdk.Int32Filter{
-					Lte: ptr.Int32(1),
+					Lte: sdk.Int32(1),
 				},
 			},
 			expected: 2,
@@ -875,7 +875,7 @@ func TestInt32Filter(t *testing.T) {
 			name: "gt:1",
 			filter: sdk.WhateverFilter{
 				Int32Field: &sdk.Int32Filter{
-					Gt: ptr.Int32(1),
+					Gt: sdk.Int32(1),
 				},
 			},
 			expected: 1,
@@ -884,7 +884,7 @@ func TestInt32Filter(t *testing.T) {
 			name: "gte:1",
 			filter: sdk.WhateverFilter{
 				Int32Field: &sdk.Int32Filter{
-					Gte: ptr.Int32(1),
+					Gte: sdk.Int32(1),
 				},
 			},
 			expected: 2,
@@ -927,13 +927,13 @@ func TestFloat64Filter(t *testing.T) {
 		{
 		},
 		{
-			Float64Field: ptr.Float64(0),
+			Float64Field: sdk.Float64(0),
 		},
 		{
-			Float64Field: ptr.Float64(1),
+			Float64Field: sdk.Float64(1),
 		},
 		{
-			Float64Field: ptr.Float64(2),
+			Float64Field: sdk.Float64(2),
 		},
 	}
 
@@ -946,7 +946,7 @@ func TestFloat64Filter(t *testing.T) {
 			name: "set:false",
 			filter: sdk.WhateverFilter{
 				Float64Field: &sdk.Float64Filter{
-					Set: ptr.Bool(false),
+					Set: sdk.Bool(false),
 				},
 			},
 			expected: 1,
@@ -955,7 +955,7 @@ func TestFloat64Filter(t *testing.T) {
 			name: "set:true",
 			filter: sdk.WhateverFilter{
 				Float64Field: &sdk.Float64Filter{
-					Set: ptr.Bool(true),
+					Set: sdk.Bool(true),
 				},
 			},
 			expected: len(whatevers) - 1,
@@ -964,7 +964,7 @@ func TestFloat64Filter(t *testing.T) {
 			name: "is:1",
 			filter: sdk.WhateverFilter{
 				Float64Field: &sdk.Float64Filter{
-					Is: ptr.Float64(1),
+					Is: sdk.Float64(1),
 				},
 			},
 			expected: 1,
@@ -973,7 +973,7 @@ func TestFloat64Filter(t *testing.T) {
 			name: "not:1",
 			filter: sdk.WhateverFilter{
 				Float64Field: &sdk.Float64Filter{
-					Not: ptr.Float64(1),
+					Not: sdk.Float64(1),
 				},
 			},
 			expected: len(whatevers) - 1,
@@ -982,7 +982,7 @@ func TestFloat64Filter(t *testing.T) {
 			name: "lt:1",
 			filter: sdk.WhateverFilter{
 				Float64Field: &sdk.Float64Filter{
-					Lt: ptr.Float64(1),
+					Lt: sdk.Float64(1),
 				},
 			},
 			expected: 1,
@@ -991,7 +991,7 @@ func TestFloat64Filter(t *testing.T) {
 			name: "lte:1",
 			filter: sdk.WhateverFilter{
 				Float64Field: &sdk.Float64Filter{
-					Lte: ptr.Float64(1),
+					Lte: sdk.Float64(1),
 				},
 			},
 			expected: 2,
@@ -1000,7 +1000,7 @@ func TestFloat64Filter(t *testing.T) {
 			name: "gt:1",
 			filter: sdk.WhateverFilter{
 				Float64Field: &sdk.Float64Filter{
-					Gt: ptr.Float64(1),
+					Gt: sdk.Float64(1),
 				},
 			},
 			expected: 1,
@@ -1009,7 +1009,7 @@ func TestFloat64Filter(t *testing.T) {
 			name: "gte:1",
 			filter: sdk.WhateverFilter{
 				Float64Field: &sdk.Float64Filter{
-					Gte: ptr.Float64(1),
+					Gte: sdk.Float64(1),
 				},
 			},
 			expected: 2,
@@ -1052,10 +1052,10 @@ func TestBoolFilter(t *testing.T) {
 		{
 		},
 		{
-			BoolField: ptr.Bool(true),
+			BoolField: sdk.Bool(true),
 		},
 		{
-			BoolField: ptr.Bool(false),
+			BoolField: sdk.Bool(false),
 		},
 	}
 
@@ -1068,7 +1068,7 @@ func TestBoolFilter(t *testing.T) {
 			name: "set:false",
 			filter: sdk.WhateverFilter{
 				BoolField: &sdk.BoolFilter{
-					Set: ptr.Bool(false),
+					Set: sdk.Bool(false),
 				},
 			},
 			expected: 1,
@@ -1077,7 +1077,7 @@ func TestBoolFilter(t *testing.T) {
 			name: "set:true",
 			filter: sdk.WhateverFilter{
 				BoolField: &sdk.BoolFilter{
-					Set: ptr.Bool(true),
+					Set: sdk.Bool(true),
 				},
 			},
 			expected: 2,
@@ -1086,7 +1086,7 @@ func TestBoolFilter(t *testing.T) {
 			name: "is:true",
 			filter: sdk.WhateverFilter{
 				BoolField: &sdk.BoolFilter{
-					Is: ptr.Bool(true),
+					Is: sdk.Bool(true),
 				},
 			},
 			expected: 1,
@@ -1095,7 +1095,7 @@ func TestBoolFilter(t *testing.T) {
 			name: "is:false",
 			filter: sdk.WhateverFilter{
 				BoolField: &sdk.BoolFilter{
-					Is: ptr.Bool(false),
+					Is: sdk.Bool(false),
 				},
 			},
 			expected: 1,
@@ -1104,7 +1104,7 @@ func TestBoolFilter(t *testing.T) {
 			name: "not:true",
 			filter: sdk.WhateverFilter{
 				BoolField: &sdk.BoolFilter{
-					Not: ptr.Bool(true),
+					Not: sdk.Bool(true),
 				},
 			},
 			expected: 2,
@@ -1113,7 +1113,7 @@ func TestBoolFilter(t *testing.T) {
 			name: "not:false",
 			filter: sdk.WhateverFilter{
 				BoolField: &sdk.BoolFilter{
-					Not: ptr.Bool(false),
+					Not: sdk.Bool(false),
 				},
 			},
 			expected: 2,
@@ -1136,12 +1136,12 @@ func TestBoolFilter(t *testing.T) {
 func TestAndFilter(t *testing.T) {
 	whatevers := []sdk.Whatever{
 		{
-			BoolField: ptr.Bool(true),
-			Int32Field: ptr.Int32(0),
+			BoolField: sdk.Bool(true),
+			Int32Field: sdk.Int32(0),
 		},
 		{
-			BoolField: ptr.Bool(true),
-			Int32Field: ptr.Int32(1),
+			BoolField: sdk.Bool(true),
+			Int32Field: sdk.Int32(1),
 		},
 	}
 
@@ -1156,12 +1156,12 @@ func TestAndFilter(t *testing.T) {
 				And: []sdk.WhateverFilter{
 					{
 						BoolField: &sdk.BoolFilter{
-							Is: ptr.Bool(true),
+							Is: sdk.Bool(true),
 						},
 					},
 					{
 						Int32Field: &sdk.Int32Filter{
-							Is: ptr.Int32(0),
+							Is: sdk.Int32(0),
 						},
 					},
 				},

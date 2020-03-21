@@ -8,7 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
+
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -72,7 +72,7 @@ func (Service) GetGetServicesEndpoint() (sdk.GetServicesEndpoint) {
 				{
 					Mode: &sdk.GetModeFilter{
 						Kind: &sdk.EnumFilter{
-							Is: ptr.String(sdk.GetModeKind.Id),
+							Is: sdk.String(sdk.GetModeKind.Id),
 						},
 						Id: &sdk.IdFilter{
 							Kind: &sdk.EnumFilter{
@@ -106,7 +106,7 @@ func (s Service) GetServices(ctx context.Context, req sdk.GetServicesRequest) (r
 		for _, err := range errs {
 			rsp.Meta.Errors = append(rsp.Meta.Errors, sdk.Error{
 				Message: &sdk.Text{
-					Value: ptr.String(err.Error()),
+					Value: sdk.String(err.Error()),
 				},
 			})
 		}
@@ -214,12 +214,12 @@ func containsSvc(k8sSvc K8sService) (bool) {
 
 func svcFromK8sSvc(k8sSvc K8sService) (svc sdk.Service, err error) {
 	svc.Id = &sdk.ServiceId{}
-	svc.Id.Value = ptr.String(genIdValue(k8sSvc.Metadata.Namespace, k8sSvc.Metadata.Name))
+	svc.Id.Value = sdk.String(genIdValue(k8sSvc.Metadata.Namespace, k8sSvc.Metadata.Name))
 
 	svc.Url = &sdk.Url{}
-	svc.Url.Value = ptr.String("http://" + k8sSvc.Metadata.Name)
+	svc.Url.Value = sdk.String("http://" + k8sSvc.Metadata.Name)
 
-	svc.Transport = ptr.String(k8sSvc.Metadata.Annotations.Transport)
+	svc.Transport = sdk.String(k8sSvc.Metadata.Annotations.Transport)
 
 	i, err := strconv.ParseInt(k8sSvc.Metadata.Annotations.Port, 10, 32)
 	if err != nil {
@@ -228,7 +228,7 @@ func svcFromK8sSvc(k8sSvc K8sService) (svc sdk.Service, err error) {
 		return
 	}
 
-	svc.Port = ptr.Int32(int32(i))
+	svc.Port = sdk.Int32(int32(i))
 
 	return
 }

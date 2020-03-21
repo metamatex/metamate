@@ -14,7 +14,7 @@ v0:
           package: github.com/metamatex/metamate
         endpoints:
           names:
-            or: [GetFeeds, GetPeople, PutPeople, GetStatuses, PostStatuses, PutStatuses, DeleteStatuses]
+            or: [GetFeeds, GetSocialAccounts, PutSocialAccounts, GetStatuses, PostStatuses, PutStatuses, DeleteStatuses]
       - names: [go_httpjson_service]
         data:
           name: kubernetes
@@ -38,8 +38,8 @@ v0:
               - PutBlueWhatevers
               - DeleteBlueWhatevers
               - GetServices
-              - GetPeople
-              - PostPeople
+              - GetSocialAccounts
+              - PostSocialAccounts
               - AuthenticateClientAccount
               - VerifyToken
               - PostClientAccounts
@@ -50,7 +50,7 @@ v0:
               - LookupService
               - GetFeeds
               - PipeClientAccounts
-              - PutPeople
+              - PutSocialAccounts
               - DeleteStatuses
               - GetStatuses
               - PostStatuses

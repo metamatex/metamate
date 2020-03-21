@@ -6,10 +6,10 @@ const (
 )
 
 type PutStatusesRequest struct {
-    Auth *Auth `json:"auth,omitempty",yaml:"auth,omitempty"`
-    Meta *RequestMeta `json:"meta,omitempty",yaml:"meta,omitempty"`
-    Mode *PutMode `json:"mode,omitempty",yaml:"mode,omitempty"`
-    Select *PutStatusesResponseSelect `json:"select,omitempty",yaml:"select,omitempty"`
-    ServiceFilter *ServiceFilter `json:"serviceFilter,omitempty",yaml:"serviceFilter,omitempty"`
-    Statuses []Status `json:"statuses,omitempty",yaml:"statuses,omitempty"`
+    Auth *Auth `json:"auth,omitempty" yaml:"auth,omitempty"`
+    Meta *RequestMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Mode *PutMode `json:"mode,omitempty" yaml:"mode,omitempty"`
+    Select *PutStatusesResponseSelect `json:"select,omitempty" yaml:"select,omitempty"`
+    ServiceFilter *ServiceFilter `json:"serviceFilter,omitempty" yaml:"serviceFilter,omitempty"`
+    Statuses []Status `json:"statuses,omitempty" yaml:"statuses,omitempty"`
 }

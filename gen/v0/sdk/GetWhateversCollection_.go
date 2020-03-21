@@ -6,10 +6,10 @@ const (
 )
 
 type GetWhateversCollection struct {
-    Filter *WhateverFilter `json:"filter,omitempty",yaml:"filter,omitempty"`
-    Pages []ServicePage `json:"pages,omitempty",yaml:"pages,omitempty"`
-    Relations *GetWhateversRelations `json:"relations,omitempty",yaml:"relations,omitempty"`
-    Select *WhateversCollectionSelect `json:"select,omitempty",yaml:"select,omitempty"`
-    ServiceFilter *ServiceFilter `json:"serviceFilter,omitempty",yaml:"serviceFilter,omitempty"`
-    Sort *WhateverSort `json:"sort,omitempty",yaml:"sort,omitempty"`
+    Filter *WhateverFilter `json:"filter,omitempty" yaml:"filter,omitempty"`
+    Pages []ServicePage `json:"pages,omitempty" yaml:"pages,omitempty"`
+    Relations *GetWhateversRelations `json:"relations,omitempty" yaml:"relations,omitempty"`
+    Select *WhateversCollectionSelect `json:"select,omitempty" yaml:"select,omitempty"`
+    ServiceFilter *ServiceFilter `json:"serviceFilter,omitempty" yaml:"serviceFilter,omitempty"`
+    Sort *WhateverSort `json:"sort,omitempty" yaml:"sort,omitempty"`
 }

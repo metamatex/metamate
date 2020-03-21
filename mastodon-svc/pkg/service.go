@@ -78,8 +78,8 @@ func (svc Service) GetGetStatusesEndpoint() (sdk.GetStatusesEndpoint) {
 							Relation: &sdk.StringFilter{
 								In: []string{
 									sdk.StatusRelationName.StatusWasRepliedToByStatuses,
-									sdk.PersonRelationName.PersonFavorsStatuses,
-									sdk.PersonRelationName.PersonAuthorsStatuses,
+									sdk.SocialAccountRelationName.SocialAccountFavorsStatuses,
+									sdk.SocialAccountRelationName.SocialAccountAuthorsStatuses,
 									sdk.FeedRelationName.FeedContainsStatuses,
 								},
 							},
@@ -130,7 +130,7 @@ func (svc Service) GetPutStatusesEndpoint() (sdk.PutStatusesEndpoint) {
 				Relation: &sdk.RelationPutModeFilter{
 					Relation: &sdk.StringFilter{
 						In: []string{
-							sdk.PersonRelationName.PersonFavorsStatuses,
+							sdk.SocialAccountRelationName.SocialAccountFavorsStatuses,
 							sdk.StatusRelationName.StatusRebloggedByStatuses,
 						},
 					},
@@ -159,10 +159,10 @@ func (svc Service) PutStatuses(ctx context.Context, req sdk.PutStatusesRequest) 
 	return
 }
 
-func (svc Service) GetGetPeopleEndpoint() (sdk.GetPeopleEndpoint) {
-	return sdk.GetPeopleEndpoint{
-		Filter: &sdk.GetPeopleRequestFilter{
-			Or: []sdk.GetPeopleRequestFilter{
+func (svc Service) GetGetSocialAccountsEndpoint() (sdk.GetSocialAccountsEndpoint) {
+	return sdk.GetSocialAccountsEndpoint{
+		Filter: &sdk.GetSocialAccountsRequestFilter{
+			Or: []sdk.GetSocialAccountsRequestFilter{
 				{
 					Mode: &sdk.GetModeFilter{
 						Kind: &sdk.EnumFilter{
@@ -193,12 +193,12 @@ func (svc Service) GetGetPeopleEndpoint() (sdk.GetPeopleEndpoint) {
 						Relation: &sdk.RelationGetModeFilter{
 							Relation: &sdk.StringFilter{
 								In: []string{
-									sdk.PersonRelationName.PersonBlocksPeople,
-									sdk.PersonRelationName.PersonFollowedByPeople,
-									sdk.PersonRelationName.PersonFollowsPeople,
-									sdk.PersonRelationName.PersonMutesPeople,
-									sdk.PersonRelationName.PersonRequestedToBeFollowedByPeople,
-									sdk.StatusRelationName.StatusFavoredByPeople,
+									sdk.SocialAccountRelationName.SocialAccountBlocksSocialAccounts,
+									sdk.SocialAccountRelationName.SocialAccountFollowedBySocialAccounts,
+									sdk.SocialAccountRelationName.SocialAccountFollowsSocialAccounts,
+									sdk.SocialAccountRelationName.SocialAccountMutesSocialAccounts,
+									sdk.SocialAccountRelationName.SocialAccountRequestedToBeFollowedBySocialAccounts,
+									sdk.StatusRelationName.StatusFavoredBySocialAccounts,
 								},
 							},
 						},
@@ -209,25 +209,25 @@ func (svc Service) GetGetPeopleEndpoint() (sdk.GetPeopleEndpoint) {
 	}
 }
 
-func (svc Service) GetPeople(ctx context.Context, req sdk.GetPeopleRequest) (rsp sdk.GetPeopleResponse) {
+func (svc Service) GetSocialAccounts(ctx context.Context, req sdk.GetSocialAccountsRequest) (rsp sdk.GetSocialAccountsResponse) {
 	c := svc.getClient()
 
 	switch *req.Mode.Kind {
 	case sdk.GetModeKind.Search:
-		rsp = getPeopleSearch(ctx, c, req)
+		rsp = getSocialAccountsSearch(ctx, c, req)
 	case sdk.GetModeKind.Id:
-		rsp = getPersonId(ctx, c, req)
+		rsp = getSocialAccountId(ctx, c, req)
 	case sdk.GetModeKind.Relation:
-		rsp = getPeopleRelation(ctx, c, req)
+		rsp = getSocialAccountsRelation(ctx, c, req)
 	default:
 	}
 
 	return
 }
 
-func (svc Service) GetPutPeopleEndpoint() (sdk.PutPeopleEndpoint) {
-	return sdk.PutPeopleEndpoint{
-		Filter: &sdk.PutPeopleRequestFilter{
+func (svc Service) GetPutSocialAccountsEndpoint() (sdk.PutSocialAccountsEndpoint) {
+	return sdk.PutSocialAccountsEndpoint{
+		Filter: &sdk.PutSocialAccountsRequestFilter{
 			Mode: &sdk.PutModeFilter{
 				Kind: &sdk.EnumFilter{
 					Is: &sdk.PutModeKind.Relation,
@@ -236,9 +236,9 @@ func (svc Service) GetPutPeopleEndpoint() (sdk.PutPeopleEndpoint) {
 				Relation: &sdk.RelationPutModeFilter{
 					Relation: &sdk.StringFilter{
 						In: []string{
-							sdk.PersonRelationName.PersonBlocksPeople,
-							sdk.PersonRelationName.PersonFollowsPeople,
-							sdk.PersonRelationName.PersonMutesPeople,
+							sdk.SocialAccountRelationName.SocialAccountBlocksSocialAccounts,
+							sdk.SocialAccountRelationName.SocialAccountFollowsSocialAccounts,
+							sdk.SocialAccountRelationName.SocialAccountMutesSocialAccounts,
 						},
 					},
 					Operation: &sdk.EnumFilter{
@@ -254,12 +254,12 @@ func (svc Service) GetPutPeopleEndpoint() (sdk.PutPeopleEndpoint) {
 	}
 }
 
-func (svc Service) PutPeople(ctx context.Context, req sdk.PutPeopleRequest) (rsp sdk.PutPeopleResponse) {
+func (svc Service) PutSocialAccounts(ctx context.Context, req sdk.PutSocialAccountsRequest) (rsp sdk.PutSocialAccountsResponse) {
 	c := svc.getClient()
 
 	switch *req.Mode.Kind {
 	case sdk.PutModeKind.Relation:
-		rsp = putPeopleRelation(ctx, c, req)
+		rsp = putSocialAccountsRelation(ctx, c, req)
 	default:
 	}
 

@@ -6,11 +6,11 @@ const (
 )
 
 type BlueWhateverSort struct {
-    BoolField *string `json:"boolField,omitempty",yaml:"boolField,omitempty"`
-    Float64Field *string `json:"float64Field,omitempty",yaml:"float64Field,omitempty"`
-    Id *ServiceIdSort `json:"id,omitempty",yaml:"id,omitempty"`
-    Int32Field *string `json:"int32Field,omitempty",yaml:"int32Field,omitempty"`
-    Meta *TypeMetaSort `json:"meta,omitempty",yaml:"meta,omitempty"`
-    StringField *string `json:"stringField,omitempty",yaml:"stringField,omitempty"`
-    UnionField *WhateverUnionSort `json:"unionField,omitempty",yaml:"unionField,omitempty"`
+    BoolField *string `json:"boolField,omitempty" yaml:"boolField,omitempty"`
+    Float64Field *string `json:"float64Field,omitempty" yaml:"float64Field,omitempty"`
+    Id *ServiceIdSort `json:"id,omitempty" yaml:"id,omitempty"`
+    Int32Field *string `json:"int32Field,omitempty" yaml:"int32Field,omitempty"`
+    Meta *TypeMetaSort `json:"meta,omitempty" yaml:"meta,omitempty"`
+    StringField *string `json:"stringField,omitempty" yaml:"stringField,omitempty"`
+    UnionField *WhateverUnionSort `json:"unionField,omitempty" yaml:"unionField,omitempty"`
 }

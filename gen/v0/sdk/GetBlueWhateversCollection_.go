@@ -6,10 +6,10 @@ const (
 )
 
 type GetBlueWhateversCollection struct {
-    Filter *BlueWhateverFilter `json:"filter,omitempty",yaml:"filter,omitempty"`
-    Pages []ServicePage `json:"pages,omitempty",yaml:"pages,omitempty"`
-    Relations *GetBlueWhateversRelations `json:"relations,omitempty",yaml:"relations,omitempty"`
-    Select *BlueWhateversCollectionSelect `json:"select,omitempty",yaml:"select,omitempty"`
-    ServiceFilter *ServiceFilter `json:"serviceFilter,omitempty",yaml:"serviceFilter,omitempty"`
-    Sort *BlueWhateverSort `json:"sort,omitempty",yaml:"sort,omitempty"`
+    Filter *BlueWhateverFilter `json:"filter,omitempty" yaml:"filter,omitempty"`
+    Pages []ServicePage `json:"pages,omitempty" yaml:"pages,omitempty"`
+    Relations *GetBlueWhateversRelations `json:"relations,omitempty" yaml:"relations,omitempty"`
+    Select *BlueWhateversCollectionSelect `json:"select,omitempty" yaml:"select,omitempty"`
+    ServiceFilter *ServiceFilter `json:"serviceFilter,omitempty" yaml:"serviceFilter,omitempty"`
+    Sort *BlueWhateverSort `json:"sort,omitempty" yaml:"sort,omitempty"`
 }

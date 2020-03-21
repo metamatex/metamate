@@ -6,6 +6,6 @@ const (
 )
 
 type AuthenticateClientAccountOutputSelect struct {
-    All *bool `json:"all,omitempty",yaml:"all,omitempty"`
-    Token *TokenSelect `json:"token,omitempty",yaml:"token,omitempty"`
+    All *bool `json:"all,omitempty" yaml:"all,omitempty"`
+    Token *TokenSelect `json:"token,omitempty" yaml:"token,omitempty"`
 }

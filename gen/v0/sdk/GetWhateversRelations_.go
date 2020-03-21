@@ -6,7 +6,7 @@ const (
 )
 
 type GetWhateversRelations struct {
-    KnewByWhatevers *GetWhateversCollection `json:"knewByWhatevers,omitempty",yaml:"knewByWhatevers,omitempty"`
-    KnowsBlueWhatevers *GetBlueWhateversCollection `json:"knowsBlueWhatevers,omitempty",yaml:"knowsBlueWhatevers,omitempty"`
-    KnowsWhatevers *GetWhateversCollection `json:"knowsWhatevers,omitempty",yaml:"knowsWhatevers,omitempty"`
+    KnewByWhatevers *GetWhateversCollection `json:"knewByWhatevers,omitempty" yaml:"knewByWhatevers,omitempty"`
+    KnowsBlueWhatevers *GetBlueWhateversCollection `json:"knowsBlueWhatevers,omitempty" yaml:"knowsBlueWhatevers,omitempty"`
+    KnowsWhatevers *GetWhateversCollection `json:"knowsWhatevers,omitempty" yaml:"knowsWhatevers,omitempty"`
 }

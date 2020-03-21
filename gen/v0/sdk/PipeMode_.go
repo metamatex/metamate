@@ -6,6 +6,6 @@ const (
 )
 
 type PipeMode struct {
-    Context *ContextPipeMode `json:"context,omitempty",yaml:"context,omitempty"`
-    Kind *string `json:"kind,omitempty",yaml:"kind,omitempty"`
+    Context *ContextPipeMode `json:"context,omitempty" yaml:"context,omitempty"`
+    Kind *string `json:"kind,omitempty" yaml:"kind,omitempty"`
 }

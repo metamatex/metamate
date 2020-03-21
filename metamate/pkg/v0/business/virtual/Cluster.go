@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
+	
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/generic/pkg/v0/transport/httpjson"
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
@@ -23,47 +23,45 @@ type Cluster struct {
 	logErr   func(error)
 }
 
-func Deploy(c *Cluster, os []types.VirtualSvcOpts) (err error) {
-	for _, opts := range os {
-		err = validateVirtualSvcOpts(opts)
+func Deploy(c *Cluster, svcs []types.VirtualSvc) (err error) {
+	for _, svc := range svcs {
+		err = validateVirtualSvc(svc)
 		if err != nil {
 			return
 		}
 	}
 
-	for _, opts := range os {
-		if opts.Auth != nil {
-			err = c.HostName(Auth, opts)
-			if err != nil {
-				return
-			}
-		}
-
-		if opts.Mastodon != nil {
-			err = c.HostName(Mastodon, opts)
-			if err != nil {
-				return
-			}
-		}
-
-		if opts.Sqlx != nil {
-			err = c.HostName(Sqlx, opts)
-			if err != nil {
-				return
-			}
+	for _, svc := range svcs {
+		err = c.HostSvc(svc)
+		if err != nil {
+			return
 		}
 	}
 
 	return
 }
 
-func validateVirtualSvcOpts(opts types.VirtualSvcOpts) (err error) {
-	if opts.Name == "" {
+func validateVirtualSvc(svc types.VirtualSvc) (err error) {
+	if svc.Id == "" {
+		err = errors.New("must set id")
+
+		return
+	}
+
+	if svc.Name == "" {
 		err = errors.New("must set name")
 
 		return
 	}
 
+	if svc.Opts != nil {
+		return validateVirtualSvcOpts(*svc.Opts)
+	}
+
+	return
+}
+
+func validateVirtualSvcOpts(opts types.VirtualSvcOpts) (err error) {
 	c := 0
 
 	if opts.Auth != nil {
@@ -104,30 +102,60 @@ func NewCluster(rn *graph.RootNode, f generic.Factory, logErr func(err error)) (
 	return
 }
 
-func (c *Cluster) HostName(id string, opts types.VirtualSvcOpts) (err error) {
-	f, t, err := handler[id](c.f, c.rn, &http.Client{Transport: c}, opts)
+/*func (c *Cluster) HostName(name string, opts types.VirtualSvcOpts) (err error) {
+	f, t, err := handler[name](c.f, c.rn, &http.Client{Transport: c}, opts)
 	if err != nil {
 		return
 	}
 
-	_, ok := c.hs[opts.Name]
+	_, ok := c.hs[opts.Id]
 	if ok {
-		err = errors.New(fmt.Sprintf("host %v is already taken", opts.Name))
+		err = errors.New(fmt.Sprintf("host %v is already taken", opts.Id))
 
 		return
 	}
 
-	c.hs[opts.Name] = f
+	c.hs[opts.Id] = f
 
-	c.svcs[opts.Name] = sdk.Service{
+	c.svcs[opts.Id] = sdk.Service{
 		Id: &sdk.ServiceId{
-			Value: ptr.String(opts.Name),
+			Value: sdk.String(opts.Id),
 		},
-		IsVirtual: ptr.Bool(true),
+		IsVirtual: sdk.Bool(true),
 		Transport: &t,
-		Port:      ptr.Int32(80),
+		Port:      sdk.Int32(80),
 		Url: &sdk.Url{
-			Value: ptr.String("http://" + opts.Name),
+			Value: sdk.String("http://" + opts.Id),
+		},
+	}
+
+	return
+}*/
+
+func (c *Cluster) HostSvc(svc types.VirtualSvc) (err error) {
+	f, t, err := handler[svc.Name](c.f, c.rn, &http.Client{Transport: c}, svc)
+	if err != nil {
+		return
+	}
+
+	_, ok := c.hs[svc.Id]
+	if ok {
+		err = errors.New(fmt.Sprintf("host %v is already taken", svc.Id))
+
+		return
+	}
+
+	c.hs[svc.Id] = f
+
+	c.svcs[svc.Id] = sdk.Service{
+		Id: &sdk.ServiceId{
+			Value: sdk.String(svc.Id),
+		},
+		IsVirtual: sdk.Bool(true),
+		Transport: &t,
+		Port:      sdk.Int32(80),
+		Url: &sdk.Url{
+			Value: sdk.String("http://" + svc.Id),
 		},
 	}
 
@@ -146,13 +174,13 @@ func (c *Cluster) Host(id, transport string, h http.Handler) (err error) {
 
 	c.svcs[id] = sdk.Service{
 		Id: &sdk.ServiceId{
-			Value: ptr.String(id),
+			Value: sdk.String(id),
 		},
-		IsVirtual: ptr.Bool(true),
-		Transport: ptr.String(transport),
-		Port:      ptr.Int32(80),
+		IsVirtual: sdk.Bool(true),
+		Transport: sdk.String(transport),
+		Port:      sdk.Int32(80),
 		Url: &sdk.Url{
-			Value: ptr.String("http://" + id),
+			Value: sdk.String("http://" + id),
 		},
 	}
 

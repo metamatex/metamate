@@ -6,6 +6,6 @@ const (
 )
 
 type BlueWhateversCollection struct {
-    BlueWhatevers []BlueWhatever `json:"blueWhatevers,omitempty",yaml:"blueWhatevers,omitempty"`
-    Meta *CollectionMeta `json:"meta,omitempty",yaml:"meta,omitempty"`
+    BlueWhatevers []BlueWhatever `json:"blueWhatevers,omitempty" yaml:"blueWhatevers,omitempty"`
+    Meta *CollectionMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
 }

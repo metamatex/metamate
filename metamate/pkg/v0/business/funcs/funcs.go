@@ -10,7 +10,7 @@ import (
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/typenames"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
+	
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/line"
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/validation"
@@ -217,7 +217,7 @@ func SetSvcFilterToGetModeIdSvcIdFunc() types.FuncTransformer {
 				}
 			}
 
-			ctx.SvcFilter.Id.Value.Is = ptr.String(serviceName)
+			ctx.SvcFilter.Id.Value.Is = sdk.String(serviceName)
 
 			return ctx
 		},
@@ -250,7 +250,7 @@ func SetSvcFilterToGetModeRelationIdFunc() types.FuncTransformer {
 				}
 			}
 
-			ctx.SvcFilter.Id.Value.Is = ptr.String(serviceName)
+			ctx.SvcFilter.Id.Value.Is = sdk.String(serviceName)
 
 			return ctx
 		},
@@ -272,7 +272,7 @@ func SetSvcFilterToPutModeRelationIdFunc() types.FuncTransformer {
 				}
 			}
 
-			ctx.SvcFilter.Id.Value.Is = ptr.String(serviceName)
+			ctx.SvcFilter.Id.Value.Is = sdk.String(serviceName)
 
 			return ctx
 		},
@@ -328,10 +328,10 @@ func SetClientAccount(resolve *line.Line, f generic.Factory, svcFilter sdk.Servi
 				Select: &sdk.VerifyTokenResponseSelect{
 					Meta: GetResponseMetaSelect(),
 					Output: &sdk.VerifyTokenOutputSelect{
-						IsValid: ptr.Bool(true),
+						IsValid: sdk.Bool(true),
 						ClientAccountId: &sdk.ServiceIdSelect{
-							ServiceName: ptr.Bool(true),
-							Value:       ptr.Bool(true),
+							ServiceName: sdk.Bool(true),
+							Value:       sdk.Bool(true),
 						},
 					},
 				},
@@ -376,25 +376,25 @@ func SetClientAccount(resolve *line.Line, f generic.Factory, svcFilter sdk.Servi
 					Meta: GetCollectionMetaSelect(),
 					ClientAccounts: &sdk.ClientAccountSelect{
 						Id: &sdk.ServiceIdSelect{
-							ServiceName: ptr.Bool(true),
-							Value:       ptr.Bool(true),
+							ServiceName: sdk.Bool(true),
+							Value:       sdk.Bool(true),
 						},
 						AlternativeIds: &sdk.IdSelect{
-							Kind: ptr.Bool(true),
+							Kind: sdk.Bool(true),
 							Email: &sdk.EmailSelect{
-								Value: ptr.Bool(true),
+								Value: sdk.Bool(true),
 							},
 						},
 						Relations: &sdk.ClientAccountRelationsSelect{
 							OwnsServiceAccounts: &sdk.ServiceAccountsCollectionSelect{
 								ServiceAccounts: &sdk.ServiceAccountSelect{
-									Handle: ptr.Bool(true),
+									Handle: sdk.Bool(true),
 									Password: &sdk.PasswordSelect{
-										Value:    ptr.Bool(true),
-										IsHashed: ptr.Bool(true),
+										Value:    sdk.Bool(true),
+										IsHashed: sdk.Bool(true),
 									},
 									Url: &sdk.UrlSelect{
-										Value: ptr.Bool(true),
+										Value: sdk.Bool(true),
 									},
 								},
 							},
@@ -441,16 +441,16 @@ func GetClientAccount(ctx context.Context, f generic.Factory, defaultClientAccou
 	verifyReq := sdk.VerifyTokenRequest{
 		ServiceFilter: &sdk.ServiceFilter{
 			Name: &sdk.StringFilter{
-				Is: ptr.String(*authSvc.Name),
+				Is: sdk.String(*authSvc.Name),
 			},
 		},
 		Select: &sdk.VerifyTokenResponseSelect{
 			Meta: GetResponseMetaSelect(),
 			Output: &sdk.VerifyTokenOutputSelect{
-				IsValid: ptr.Bool(true),
+				IsValid: sdk.Bool(true),
 				ClientAccountId: &sdk.ServiceIdSelect{
-					ServiceName: ptr.Bool(true),
-					Value:       ptr.Bool(true),
+					ServiceName: sdk.Bool(true),
+					Value:       sdk.Bool(true),
 				},
 			},
 		},
@@ -493,25 +493,25 @@ func GetClientAccount(ctx context.Context, f generic.Factory, defaultClientAccou
 			Meta: GetCollectionMetaSelect(),
 			ClientAccounts: &sdk.ClientAccountSelect{
 				Id: &sdk.ServiceIdSelect{
-					ServiceName: ptr.Bool(true),
-					Value:       ptr.Bool(true),
+					ServiceName: sdk.Bool(true),
+					Value:       sdk.Bool(true),
 				},
 				AlternativeIds: &sdk.IdSelect{
-					Kind: ptr.Bool(true),
+					Kind: sdk.Bool(true),
 					Email: &sdk.EmailSelect{
-						Value: ptr.Bool(true),
+						Value: sdk.Bool(true),
 					},
 				},
 				Relations: &sdk.ClientAccountRelationsSelect{
 					OwnsServiceAccounts: &sdk.ServiceAccountsCollectionSelect{
 						ServiceAccounts: &sdk.ServiceAccountSelect{
-							Handle: ptr.Bool(true),
+							Handle: sdk.Bool(true),
 							Password: &sdk.PasswordSelect{
-								Value:    ptr.Bool(true),
-								IsHashed: ptr.Bool(true),
+								Value:    sdk.Bool(true),
+								IsHashed: sdk.Bool(true),
 							},
 							Url: &sdk.UrlSelect{
-								Value: ptr.Bool(true),
+								Value: sdk.Bool(true),
 							},
 						},
 					},
@@ -932,7 +932,7 @@ func ResolveRelations(resolvePl *line.Line, f generic.Factory) types.FuncTransfo
 					Kind: &sdk.GetModeKind.Relation,
 					Relation: &sdk.RelationGetMode{
 						Id:       &id,
-						Relation: ptr.String(fn.Edges.Path.BelongsTo().Name()),
+						Relation: sdk.String(fn.Edges.Path.BelongsTo().Name()),
 					},
 				}
 
@@ -1093,10 +1093,10 @@ func GetSvcs(resolve *line.Line, f generic.Factory, discoverySvc sdk.Service) ty
 				Filter: ctx.SvcFilter,
 				Select: &sdk.GetServicesResponseSelect{
 					Meta: &sdk.CollectionMetaSelect{
-						All: ptr.Bool(true),
+						All: sdk.Bool(true),
 					},
 					Services: &sdk.ServiceSelect{
-						All: ptr.Bool(true),
+						All: sdk.Bool(true),
 					},
 				},
 			}
@@ -1124,7 +1124,7 @@ func GetSvcs(resolve *line.Line, f generic.Factory, discoverySvc sdk.Service) ty
 
 func GetSvcs2(ctx context.Context, f generic.Factory, discSvc sdk.Service, endpointKind string, resolveFunc types.ResolveFunc, gSvcFilter generic.Generic) (gSvcs generic.Slice, gSvcErrs generic.Slice, err error) {
 	//if endpointKind == sdk.EnumFilter{
-	//				Is: ptr.String(endpointKind),
+	//				Is: sdk.String(endpointKind),
 	//			},
 	//		},
 	//	},
@@ -1137,15 +1137,15 @@ func GetSvcs2(ctx context.Context, f generic.Factory, discSvc sdk.Service, endpo
 	//
 	//req := sdk.GetServicesRequest{
 	//	Mode: &sdk.GetMode{
-	//		Kind: ptr.String(sdk.GetModeKind_collection),
+	//		Kind: sdk.String(sdk.GetModeKind_collection),
 	//	},
 	//	Filter: &svcFilter,
 	//	Select: &sdk.GetServicesResponseSelect{
 	//		Meta: &sdk.CollectionMetaSelect{
-	//			All: ptr.Bool(true),
+	//			All: sdk.Bool(true),
 	//		},
 	//		Services: &sdk.ServiceSelect{
-	//			All: ptr.Bool(true),
+	//			All: sdk.Bool(true),
 	//		},
 	//	},
 	//}
@@ -1211,13 +1211,13 @@ func GSvcRspToGCliRsp() types.FuncTransformer {
 func GetResponseMetaSelect() *sdk.ResponseMetaSelect {
 	return &sdk.ResponseMetaSelect{
 		Errors: &sdk.ErrorSelect{
-			Kind: ptr.Bool(true),
+			Kind: sdk.Bool(true),
 			Message: &sdk.TextSelect{
-				Formatting: ptr.Bool(true),
-				Value:      ptr.Bool(true),
+				Formatting: sdk.Bool(true),
+				Value:      sdk.Bool(true),
 			},
 			Service: &sdk.ServiceSelect{
-				Name: ptr.Bool(true),
+				Name: sdk.Bool(true),
 			},
 		},
 	}
@@ -1226,13 +1226,13 @@ func GetResponseMetaSelect() *sdk.ResponseMetaSelect {
 func GetCollectionMetaSelect() *sdk.CollectionMetaSelect {
 	return &sdk.CollectionMetaSelect{
 		Errors: &sdk.ErrorSelect{
-			Kind: ptr.Bool(true),
+			Kind: sdk.Bool(true),
 			Message: &sdk.TextSelect{
-				Formatting: ptr.Bool(true),
-				Value:      ptr.Bool(true),
+				Formatting: sdk.Bool(true),
+				Value:      sdk.Bool(true),
 			},
 			Service: &sdk.ServiceSelect{
-				Name: ptr.Bool(true),
+				Name: sdk.Bool(true),
 			},
 		},
 	}
@@ -1492,10 +1492,10 @@ func AddGSvcErrsToGSvcRsp(f generic.Factory) types.FuncTransformer {
 
 func NewError(svc *sdk.Service, kind, message string) sdk.Error {
 	return sdk.Error{
-		Kind: ptr.String(kind),
+		Kind: sdk.String(kind),
 		Message: &sdk.Text{
 			Formatting: &sdk.FormattingKind.Plain,
-			Value:      ptr.String(message),
+			Value:      sdk.String(message),
 		},
 		Service: svc,
 	}

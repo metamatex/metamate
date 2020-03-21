@@ -6,7 +6,7 @@ const (
 )
 
 type GetServiceAccountsResponseSelect struct {
-    All *bool `json:"all,omitempty",yaml:"all,omitempty"`
-    Meta *CollectionMetaSelect `json:"meta,omitempty",yaml:"meta,omitempty"`
-    ServiceAccounts *ServiceAccountSelect `json:"serviceAccounts,omitempty",yaml:"serviceAccounts,omitempty"`
+    All *bool `json:"all,omitempty" yaml:"all,omitempty"`
+    Meta *CollectionMetaSelect `json:"meta,omitempty" yaml:"meta,omitempty"`
+    ServiceAccounts *ServiceAccountSelect `json:"serviceAccounts,omitempty" yaml:"serviceAccounts,omitempty"`
 }

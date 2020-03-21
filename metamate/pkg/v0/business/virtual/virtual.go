@@ -13,7 +13,8 @@ const (
 	ReqFilter  = "reqFilter"
 	Auth       = "auth"
 	Mastodon   = "mastodon"
+	Hackernews = "hackernews"
 	Kubernetes = "kubernetes"
 )
 
-var handler = map[string]func(f generic.Factory, rn *graph.RootNode, c *http.Client, opts types.VirtualSvcOpts) (http.Handler, string, error){}
+var handler = map[string]func(f generic.Factory, rn *graph.RootNode, c *http.Client, svc types.VirtualSvc) (http.Handler, string, error){}

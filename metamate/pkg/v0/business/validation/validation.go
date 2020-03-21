@@ -10,7 +10,7 @@ import (
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/fieldflags"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/typeflags"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
+	
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 )
@@ -254,7 +254,7 @@ func getError(stage string, svc *sdk.Service, message string) sdk.Error {
 	}
 
 	return sdk.Error{
-		Kind: ptr.String(kind),
+		Kind: sdk.String(kind),
 		Message: &sdk.Text{
 			Formatting: &sdk.FormattingKind.Plain,
 			Value:      &message,

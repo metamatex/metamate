@@ -6,7 +6,7 @@ const (
 )
 
 type BlueWhateversCollectionSelect struct {
-    All *bool `json:"all,omitempty",yaml:"all,omitempty"`
-    BlueWhatevers *BlueWhateverSelect `json:"blueWhatevers,omitempty",yaml:"blueWhatevers,omitempty"`
-    Meta *CollectionMetaSelect `json:"meta,omitempty",yaml:"meta,omitempty"`
+    All *bool `json:"all,omitempty" yaml:"all,omitempty"`
+    BlueWhatevers *BlueWhateverSelect `json:"blueWhatevers,omitempty" yaml:"blueWhatevers,omitempty"`
+    Meta *CollectionMetaSelect `json:"meta,omitempty" yaml:"meta,omitempty"`
 }

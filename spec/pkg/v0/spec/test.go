@@ -6,7 +6,7 @@ import (
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/gen/v0/sdk"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
+	
 	"errors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -60,16 +60,16 @@ func requireEmptyGetRsp(t *testing.T, gRsp generic.Generic) {
 func GetCollectionMetaSelect() (*sdk.CollectionMetaSelect) {
 	return &sdk.CollectionMetaSelect{
 		Errors: &sdk.ErrorSelect{
-			Kind: ptr.Bool(true),
+			Kind: sdk.Bool(true),
 			Service: &sdk.ServiceSelect{
-				Name: ptr.Bool(true),
+				Name: sdk.Bool(true),
 			},
 			Message: &sdk.TextSelect{
-				Formatting: ptr.Bool(true),
-				Value: ptr.Bool(true),
+				Formatting: sdk.Bool(true),
+				Value: sdk.Bool(true),
 			},
 			Id: &sdk.IdSelect{
-				Kind: ptr.Bool(true),
+				Kind: sdk.Bool(true),
 			},
 		},
 	}
@@ -78,16 +78,16 @@ func GetCollectionMetaSelect() (*sdk.CollectionMetaSelect) {
 func GetResponseMetaSelect() (*sdk.ResponseMetaSelect) {
 	return &sdk.ResponseMetaSelect{
 		Errors: &sdk.ErrorSelect{
-			Kind: ptr.Bool(true),
+			Kind: sdk.Bool(true),
 			Service: &sdk.ServiceSelect{
-				Name: ptr.Bool(true),
+				Name: sdk.Bool(true),
 			},
 			Message: &sdk.TextSelect{
-				Formatting: ptr.Bool(true),
-				Value: ptr.Bool(true),
+				Formatting: sdk.Bool(true),
+				Value: sdk.Bool(true),
 			},
 			Id: &sdk.IdSelect{
-				Kind: ptr.Bool(true),
+				Kind: sdk.Bool(true),
 			},
 		},
 	}
@@ -144,7 +144,7 @@ func requireSvcHasSvcId(t *testing.T, h func(ctx context.Context, gReq generic.G
 		ServiceFilter: &sdk.ServiceFilter{
 			Id: &sdk.ServiceIdFilter{
 				Value: &sdk.StringFilter{
-					Is: ptr.String(svcName),
+					Is: sdk.String(svcName),
 				},
 			},
 		},
@@ -153,7 +153,7 @@ func requireSvcHasSvcId(t *testing.T, h func(ctx context.Context, gReq generic.G
 			Id: &sdk.Id{
 				Kind: &sdk.IdKind.ServiceId,
 				ServiceId: &sdk.ServiceId{
-					Value: ptr.String(svcIdValue),
+					Value: sdk.String(svcIdValue),
 				},
 			},
 		},
@@ -161,7 +161,7 @@ func requireSvcHasSvcId(t *testing.T, h func(ctx context.Context, gReq generic.G
 			Meta: GetCollectionMetaSelect(),
 			Whatevers: &sdk.WhateverSelect{
 				Id: &sdk.ServiceIdSelect{
-					Value: ptr.Bool(true),
+					Value: sdk.Bool(true),
 				},
 			},
 		},
@@ -188,7 +188,7 @@ func requireSvcHasNotSvcId(t *testing.T, h func(ctx context.Context, gReq generi
 		ServiceFilter: &sdk.ServiceFilter{
 			Id: &sdk.ServiceIdFilter{
 				Value: &sdk.StringFilter{
-					Is: ptr.String(svcName),
+					Is: sdk.String(svcName),
 				},
 			},
 		},
@@ -197,7 +197,7 @@ func requireSvcHasNotSvcId(t *testing.T, h func(ctx context.Context, gReq generi
 			Id: &sdk.Id{
 				Kind: &sdk.IdKind.ServiceId,
 				ServiceId: &sdk.ServiceId{
-					Value: ptr.String(svcIdValue),
+					Value: sdk.String(svcIdValue),
 				},
 			},
 		},
@@ -205,7 +205,7 @@ func requireSvcHasNotSvcId(t *testing.T, h func(ctx context.Context, gReq generi
 			Meta: GetCollectionMetaSelect(),
 			Whatevers: &sdk.WhateverSelect{
 				Id: &sdk.ServiceIdSelect{
-					Value: ptr.Bool(true),
+					Value: sdk.Bool(true),
 				},
 			},
 		},

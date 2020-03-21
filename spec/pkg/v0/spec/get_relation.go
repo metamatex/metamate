@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
+	
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -19,17 +19,17 @@ func TestGetModeRelation(t *testing.T, ctx context.Context, f generic.Factory, h
 			whatevers := []sdk.Whatever{
 				{
 					Id: &sdk.ServiceId{
-						Value: ptr.String(nameSvcId(suffix, name, "a")),
+						Value: sdk.String(nameSvcId(suffix, name, "a")),
 					},
 				},
 				{
 					Id: &sdk.ServiceId{
-						Value: ptr.String(nameSvcId(suffix, name, "b")),
+						Value: sdk.String(nameSvcId(suffix, name, "b")),
 					},
 				},
 				{
 					Id: &sdk.ServiceId{
-						Value: ptr.String(nameSvcId(suffix, name, "c")),
+						Value: sdk.String(nameSvcId(suffix, name, "c")),
 					},
 				},
 			}
@@ -45,7 +45,7 @@ func TestGetModeRelation(t *testing.T, ctx context.Context, f generic.Factory, h
 				Mode: &sdk.GetMode{
 					Kind: &sdk.GetModeKind.Relation,
 					Relation: &sdk.RelationGetMode{
-						Relation: ptr.String(sdk.WhateverRelationName.WhateverKnowsWhatevers),
+						Relation: sdk.String(sdk.WhateverRelationName.WhateverKnowsWhatevers),
 						Id: postRsp.Whatevers[0].Id,
 					},
 				},
@@ -53,8 +53,8 @@ func TestGetModeRelation(t *testing.T, ctx context.Context, f generic.Factory, h
 					Meta: GetCollectionMetaSelect(),
 					Whatevers: &sdk.WhateverSelect{
 						Id: &sdk.ServiceIdSelect{
-							ServiceName: ptr.Bool(true),
-							Value: ptr.Bool(true),
+							ServiceName: sdk.Bool(true),
+							Value: sdk.Bool(true),
 						},
 					},
 				},
@@ -81,8 +81,8 @@ func TestGetModeRelation(t *testing.T, ctx context.Context, f generic.Factory, h
 					Meta: GetCollectionMetaSelect(),
 					Whatevers: &sdk.WhateverSelect{
 						Id: &sdk.ServiceIdSelect{
-							ServiceName: ptr.Bool(true),
-							Value: ptr.Bool(true),
+							ServiceName: sdk.Bool(true),
+							Value: sdk.Bool(true),
 						},
 					},
 				},
@@ -117,17 +117,17 @@ func TestGetModeRelationInter(t *testing.T, ctx context.Context, f generic.Facto
 			whatevers := []sdk.Whatever{
 				{
 					Id: &sdk.ServiceId{
-						Value: ptr.String(nameSvcId(suffix, name, "a")),
+						Value: sdk.String(nameSvcId(suffix, name, "a")),
 					},
 				},
 				{
 					Id: &sdk.ServiceId{
-						Value: ptr.String(nameSvcId(suffix, name, "b")),
+						Value: sdk.String(nameSvcId(suffix, name, "b")),
 					},
 				},
 				{
 					Id: &sdk.ServiceId{
-						Value: ptr.String(nameSvcId(suffix, name, "c")),
+						Value: sdk.String(nameSvcId(suffix, name, "c")),
 					},
 				},
 			}
@@ -145,7 +145,7 @@ func TestGetModeRelationInter(t *testing.T, ctx context.Context, f generic.Facto
 				Mode: &sdk.GetMode{
 					Kind: &sdk.GetModeKind.Relation,
 					Relation: &sdk.RelationGetMode{
-						Relation: ptr.String(sdk.WhateverRelationName.WhateverKnowsWhatevers),
+						Relation: sdk.String(sdk.WhateverRelationName.WhateverKnowsWhatevers),
 						Id: postRspA.Whatevers[0].Id,
 					},
 				},
@@ -153,8 +153,8 @@ func TestGetModeRelationInter(t *testing.T, ctx context.Context, f generic.Facto
 					Meta: GetCollectionMetaSelect(),
 					Whatevers: &sdk.WhateverSelect{
 						Id: &sdk.ServiceIdSelect{
-							ServiceName: ptr.Bool(true),
-							Value: ptr.Bool(true),
+							ServiceName: sdk.Bool(true),
+							Value: sdk.Bool(true),
 						},
 					},
 				},
@@ -184,8 +184,8 @@ func TestGetModeRelationInter(t *testing.T, ctx context.Context, f generic.Facto
 					Meta: GetCollectionMetaSelect(),
 					Whatevers: &sdk.WhateverSelect{
 						Id: &sdk.ServiceIdSelect{
-							ServiceName: ptr.Bool(true),
-							Value: ptr.Bool(true),
+							ServiceName: sdk.Bool(true),
+							Value: sdk.Bool(true),
 						},
 					},
 				},

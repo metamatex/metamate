@@ -6,8 +6,8 @@ const (
 )
 
 type VerifyTokenRequest struct {
-    Input *VerifyTokenInput `json:"input,omitempty",yaml:"input,omitempty"`
-    Meta *RequestMeta `json:"meta,omitempty",yaml:"meta,omitempty"`
-    Select *VerifyTokenResponseSelect `json:"select,omitempty",yaml:"select,omitempty"`
-    ServiceFilter *ServiceFilter `json:"serviceFilter,omitempty",yaml:"serviceFilter,omitempty"`
+    Input *VerifyTokenInput `json:"input,omitempty" yaml:"input,omitempty"`
+    Meta *RequestMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Select *VerifyTokenResponseSelect `json:"select,omitempty" yaml:"select,omitempty"`
+    ServiceFilter *ServiceFilter `json:"serviceFilter,omitempty" yaml:"serviceFilter,omitempty"`
 }

@@ -5,7 +5,7 @@ import (
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
+	
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -21,7 +21,7 @@ func TestGetModeId(t *testing.T, ctx context.Context, f generic.Factory, h func(
 				ServiceFilter: &sdk.ServiceFilter{
 					Id: &sdk.ServiceIdFilter{
 						Value: &sdk.StringFilter{
-							Is: ptr.String(svcName),
+							Is: sdk.String(svcName),
 						},
 					},
 				},
@@ -29,17 +29,17 @@ func TestGetModeId(t *testing.T, ctx context.Context, f generic.Factory, h func(
 					Meta: GetResponseMetaSelect(),
 					Whatevers: &sdk.WhateverSelect{
 						Id: &sdk.ServiceIdSelect{
-							Value: ptr.Bool(true),
+							Value: sdk.Bool(true),
 						},
-						StringField: ptr.Bool(true),
+						StringField: sdk.Bool(true),
 					},
 				},
 				Whatevers: []sdk.Whatever{
 					{
 						Id: &sdk.ServiceId{
-							Value: ptr.String(nameSvcId(suffix, name, "0")),
+							Value: sdk.String(nameSvcId(suffix, name, "0")),
 						},
-						StringField: ptr.String("hi"),
+						StringField: sdk.String("hi"),
 					},
 				},
 			}
@@ -58,7 +58,7 @@ func TestGetModeId(t *testing.T, ctx context.Context, f generic.Factory, h func(
 				ServiceFilter: &sdk.ServiceFilter{
 					Id: &sdk.ServiceIdFilter{
 						Value: &sdk.StringFilter{
-							Is: ptr.String(svcName),
+							Is: sdk.String(svcName),
 						},
 					},
 				},
@@ -75,9 +75,9 @@ func TestGetModeId(t *testing.T, ctx context.Context, f generic.Factory, h func(
 					Meta: GetCollectionMetaSelect(),
 					Whatevers: &sdk.WhateverSelect{
 						Id: &sdk.ServiceIdSelect{
-							Value: ptr.Bool(true),
+							Value: sdk.Bool(true),
 						},
-						StringField: ptr.Bool(true),
+						StringField: sdk.Bool(true),
 					},
 				},
 			}
@@ -114,7 +114,7 @@ func TestGetModeIdWithZeroId(t *testing.T, ctx context.Context, f generic.Factor
 					Id: &sdk.Id{
 						Kind: &sdk.IdKind.ServiceId,
 						ServiceId: &sdk.ServiceId{
-							Value: ptr.String(""),
+							Value: sdk.String(""),
 						},
 					},
 				},
@@ -122,9 +122,9 @@ func TestGetModeIdWithZeroId(t *testing.T, ctx context.Context, f generic.Factor
 					Meta: GetCollectionMetaSelect(),
 					Whatevers: &sdk.WhateverSelect{
 						Id: &sdk.ServiceIdSelect{
-							Value: ptr.Bool(true),
+							Value: sdk.Bool(true),
 						},
-						StringField: ptr.Bool(true),
+						StringField: sdk.Bool(true),
 					},
 				},
 			}
@@ -157,7 +157,7 @@ func TestGetModeIdWithServiceFilter(t *testing.T, ctx context.Context, f generic
 				ServiceFilter: &sdk.ServiceFilter{
 					Id: &sdk.ServiceIdFilter{
 						Value: &sdk.StringFilter{
-							Is: ptr.String(svcNameA),
+							Is: sdk.String(svcNameA),
 						},
 					},
 				},
@@ -165,14 +165,14 @@ func TestGetModeIdWithServiceFilter(t *testing.T, ctx context.Context, f generic
 					Meta: GetResponseMetaSelect(),
 					Whatevers: &sdk.WhateverSelect{
 						Id: &sdk.ServiceIdSelect{
-							Value: ptr.Bool(true),
+							Value: sdk.Bool(true),
 						},
 					},
 				},
 				Whatevers: []sdk.Whatever{
 					{
 						Id: &sdk.ServiceId{
-							Value: ptr.String(nameSvcId(suffix, name, "0")),
+							Value: sdk.String(nameSvcId(suffix, name, "0")),
 						},
 					},
 				},
@@ -216,7 +216,7 @@ func TestGetModeIdWithNameId(t *testing.T, ctx context.Context, f generic.Factor
 				ServiceFilter: &sdk.ServiceFilter{
 					Id: &sdk.ServiceIdFilter{
 						Value: &sdk.StringFilter{
-							Is: ptr.String(svcName),
+							Is: sdk.String(svcName),
 						},
 					},
 				},
@@ -224,13 +224,13 @@ func TestGetModeIdWithNameId(t *testing.T, ctx context.Context, f generic.Factor
 					Meta: GetResponseMetaSelect(),
 					Whatevers: &sdk.WhateverSelect{
 						Id: &sdk.ServiceIdSelect{
-							Value: ptr.Bool(true),
+							Value: sdk.Bool(true),
 						},
 						AlternativeIds: &sdk.IdSelect{
-							Kind: ptr.Bool(true),
-							Name: ptr.Bool(true),
+							Kind: sdk.Bool(true),
+							Name: sdk.Bool(true),
 						},
-						StringField: ptr.Bool(true),
+						StringField: sdk.Bool(true),
 					},
 				},
 				Whatevers: []sdk.Whatever{
@@ -238,10 +238,10 @@ func TestGetModeIdWithNameId(t *testing.T, ctx context.Context, f generic.Factor
 						AlternativeIds: []sdk.Id{
 							{
 								Kind: &sdk.IdKind.Name,
-								Name: ptr.String(nameSvcId(suffix, name, "0")),
+								Name: sdk.String(nameSvcId(suffix, name, "0")),
 							},
 						},
-						StringField: ptr.String("a"),
+						StringField: sdk.String("a"),
 					},
 				},
 			}
@@ -260,7 +260,7 @@ func TestGetModeIdWithNameId(t *testing.T, ctx context.Context, f generic.Factor
 				ServiceFilter: &sdk.ServiceFilter{
 					Id: &sdk.ServiceIdFilter{
 						Value: &sdk.StringFilter{
-							Is: ptr.String(svcName),
+							Is: sdk.String(svcName),
 						},
 					},
 				},
@@ -275,13 +275,13 @@ func TestGetModeIdWithNameId(t *testing.T, ctx context.Context, f generic.Factor
 					Meta: GetCollectionMetaSelect(),
 					Whatevers: &sdk.WhateverSelect{
 						Id: &sdk.ServiceIdSelect{
-							Value: ptr.Bool(true),
+							Value: sdk.Bool(true),
 						},
 						AlternativeIds: &sdk.IdSelect{
-							Kind: ptr.Bool(true),
-							Name: ptr.Bool(true),
+							Kind: sdk.Bool(true),
+							Name: sdk.Bool(true),
 						},
-						StringField: ptr.Bool(true),
+						StringField: sdk.Bool(true),
 					},
 				},
 			}
@@ -321,17 +321,17 @@ func TestGetModeIdWithSelfReferencingRelation(t *testing.T, ctx context.Context,
 			whatevers := []sdk.Whatever{
 				{
 					Id: &sdk.ServiceId{
-						Value: ptr.String(nameSvcId(suffix, name, "a")),
+						Value: sdk.String(nameSvcId(suffix, name, "a")),
 					},
 				},
 				{
 					Id: &sdk.ServiceId{
-						Value: ptr.String(nameSvcId(suffix, name, "b")),
+						Value: sdk.String(nameSvcId(suffix, name, "b")),
 					},
 				},
 				{
 					Id: &sdk.ServiceId{
-						Value: ptr.String(nameSvcId(suffix, name, "c")),
+						Value: sdk.String(nameSvcId(suffix, name, "c")),
 					},
 				},
 			}
@@ -354,7 +354,7 @@ func TestGetModeIdWithSelfReferencingRelation(t *testing.T, ctx context.Context,
 				ServiceFilter: &sdk.ServiceFilter{
 					Id: &sdk.ServiceIdFilter{
 						Value: &sdk.StringFilter{
-							Is: ptr.String(svcName),
+							Is: sdk.String(svcName),
 						},
 					},
 				},
@@ -362,13 +362,13 @@ func TestGetModeIdWithSelfReferencingRelation(t *testing.T, ctx context.Context,
 					Meta: GetCollectionMetaSelect(),
 					Whatevers: &sdk.WhateverSelect{
 						Id: &sdk.ServiceIdSelect{
-							Value: ptr.Bool(true),
+							Value: sdk.Bool(true),
 						},
 						AlternativeIds: &sdk.IdSelect{
-							Kind: ptr.Bool(true),
-							Name: ptr.Bool(true),
+							Kind: sdk.Bool(true),
+							Name: sdk.Bool(true),
 							Email: &sdk.EmailSelect{
-								Value: ptr.Bool(true),
+								Value: sdk.Bool(true),
 							},
 						},
 						Relations: &sdk.WhateverRelationsSelect{
@@ -376,7 +376,7 @@ func TestGetModeIdWithSelfReferencingRelation(t *testing.T, ctx context.Context,
 								Meta: GetCollectionMetaSelect(),
 								Whatevers: &sdk.WhateverSelect{
 									Id: &sdk.ServiceIdSelect{
-										Value: ptr.Bool(true),
+										Value: sdk.Bool(true),
 									},
 								},
 							},
@@ -422,7 +422,7 @@ func TestGetModeIdWithRelation(t *testing.T, ctx context.Context, f generic.Fact
 			whatevers := []sdk.Whatever{
 				{
 					Id: &sdk.ServiceId{
-						Value: ptr.String(nameSvcId(suffix, name, "a")),
+						Value: sdk.String(nameSvcId(suffix, name, "a")),
 					},
 				},
 			}
@@ -430,12 +430,12 @@ func TestGetModeIdWithRelation(t *testing.T, ctx context.Context, f generic.Fact
 			blueWhatevers := []sdk.BlueWhatever{
 				{
 					Id: &sdk.ServiceId{
-						Value: ptr.String(nameSvcId(suffix, name, "a")),
+						Value: sdk.String(nameSvcId(suffix, name, "a")),
 					},
 				},
 				{
 					Id: &sdk.ServiceId{
-						Value: ptr.String(nameSvcId(suffix, name, "b")),
+						Value: sdk.String(nameSvcId(suffix, name, "b")),
 					},
 				},
 			}
@@ -460,7 +460,7 @@ func TestGetModeIdWithRelation(t *testing.T, ctx context.Context, f generic.Fact
 				ServiceFilter: &sdk.ServiceFilter{
 					Id: &sdk.ServiceIdFilter{
 						Value: &sdk.StringFilter{
-							Is: ptr.String(svcName),
+							Is: sdk.String(svcName),
 						},
 					},
 				},
@@ -468,13 +468,13 @@ func TestGetModeIdWithRelation(t *testing.T, ctx context.Context, f generic.Fact
 					Meta: GetCollectionMetaSelect(),
 					Whatevers: &sdk.WhateverSelect{
 						Id: &sdk.ServiceIdSelect{
-							Value: ptr.Bool(true),
+							Value: sdk.Bool(true),
 						},
 						AlternativeIds: &sdk.IdSelect{
-							Kind: ptr.Bool(true),
-							Name: ptr.Bool(true),
+							Kind: sdk.Bool(true),
+							Name: sdk.Bool(true),
 							Email: &sdk.EmailSelect{
-								Value: ptr.Bool(true),
+								Value: sdk.Bool(true),
 							},
 						},
 						Relations: &sdk.WhateverRelationsSelect{
@@ -482,7 +482,7 @@ func TestGetModeIdWithRelation(t *testing.T, ctx context.Context, f generic.Fact
 								Meta: GetCollectionMetaSelect(),
 								BlueWhatevers: &sdk.BlueWhateverSelect{
 									Id: &sdk.ServiceIdSelect{
-										Value: ptr.Bool(true),
+										Value: sdk.Bool(true),
 									},
 								},
 							},

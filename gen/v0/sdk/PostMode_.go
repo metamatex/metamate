@@ -6,6 +6,6 @@ const (
 )
 
 type PostMode struct {
-    Collection *CollectionPostMode `json:"collection,omitempty",yaml:"collection,omitempty"`
-    Kind *string `json:"kind,omitempty",yaml:"kind,omitempty"`
+    Collection *CollectionPostMode `json:"collection,omitempty" yaml:"collection,omitempty"`
+    Kind *string `json:"kind,omitempty" yaml:"kind,omitempty"`
 }

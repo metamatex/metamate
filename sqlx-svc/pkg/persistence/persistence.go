@@ -9,7 +9,7 @@ import (
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
+	
 	"github.com/metamatex/metamate/sqlx-svc/pkg/persistence/sql"
 )
 
@@ -208,31 +208,31 @@ func GetAlternativeIds(supportedIdKinds map[string]bool, db sqlx.Ext, typeName s
 			switch k {
 			case sdk.IdKind.Email:
 				id = sdk.Id{
-					Kind: ptr.String(k),
+					Kind: sdk.String(k),
 					Email: &sdk.Email{
-						Value: ptr.String(s),
+						Value: sdk.String(s),
 					},
 				}
 			case sdk.IdKind.Name:
 				id = sdk.Id{
-					Kind: ptr.String(k),
-					Name: ptr.String(s),
+					Kind: sdk.String(k),
+					Name: sdk.String(s),
 				}
 			case sdk.IdKind.Username:
 				id = sdk.Id{
-					Kind:     ptr.String(k),
-					Username: ptr.String(s),
+					Kind:     sdk.String(k),
+					Username: sdk.String(s),
 				}
 			case sdk.IdKind.Ean:
 				id = sdk.Id{
-					Kind: ptr.String(k),
-					Ean:  ptr.String(s),
+					Kind: sdk.String(k),
+					Ean:  sdk.String(s),
 				}
 			case sdk.IdKind.Url:
 				id = sdk.Id{
-					Kind: ptr.String(k),
+					Kind: sdk.String(k),
 					Url: &sdk.Url{
-						Value: ptr.String(s),
+						Value: sdk.String(s),
 					},
 				}
 			default:

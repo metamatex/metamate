@@ -6,6 +6,6 @@ const (
 )
 
 type PutMode struct {
-    Kind *string `json:"kind,omitempty",yaml:"kind,omitempty"`
-    Relation *RelationPutMode `json:"relation,omitempty",yaml:"relation,omitempty"`
+    Kind *string `json:"kind,omitempty" yaml:"kind,omitempty"`
+    Relation *RelationPutMode `json:"relation,omitempty" yaml:"relation,omitempty"`
 }

@@ -6,7 +6,7 @@ const (
 )
 
 type ContextPipeMode struct {
-    Method *string `json:"method,omitempty",yaml:"method,omitempty"`
-    Requester *string `json:"requester,omitempty",yaml:"requester,omitempty"`
-    Stage *string `json:"stage,omitempty",yaml:"stage,omitempty"`
+    Method *string `json:"method,omitempty" yaml:"method,omitempty"`
+    Requester *string `json:"requester,omitempty" yaml:"requester,omitempty"`
+    Stage *string `json:"stage,omitempty" yaml:"stage,omitempty"`
 }

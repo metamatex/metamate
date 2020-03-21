@@ -4,3 +4,5 @@ dist
 bin
 **/node_modules
 **/metactl.yaml
+metamate.yaml
+**/metamate.yaml

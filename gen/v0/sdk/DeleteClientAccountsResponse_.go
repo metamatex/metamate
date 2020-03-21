@@ -6,5 +6,5 @@ const (
 )
 
 type DeleteClientAccountsResponse struct {
-    Meta *ResponseMeta `json:"meta,omitempty",yaml:"meta,omitempty"`
+    Meta *ResponseMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
 }

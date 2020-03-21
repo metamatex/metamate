@@ -14,16 +14,16 @@ import (
 )
 
 func init() {
-	handler[Mastodon] = func(f generic.Factory, rn *graph.RootNode, c *http.Client, opts types.VirtualSvcOpts) (h http.Handler, t string, err error) {
-		err = validateMastodonOpts(opts)
+	handler[Mastodon] = func(f generic.Factory, rn *graph.RootNode, c *http.Client, vSvc types.VirtualSvc) (h http.Handler, t string, err error) {
+		err = validateMastodonOpts(*vSvc.Opts)
 		if err != nil {
 			return
 		}
 
 		svc := pkg.NewService(pkg.ServiceOpts{
-			Host:         opts.Mastodon.Host,
-			ClientId:     opts.Mastodon.ClientId,
-			ClientSecret: opts.Mastodon.ClientSecret,
+			Host:         vSvc.Opts.Mastodon.Host,
+			ClientId:     vSvc.Opts.Mastodon.ClientId,
+			ClientSecret: vSvc.Opts.Mastodon.ClientSecret,
 		})
 
 		h = mastodon.NewHttpJsonServer(mastodon.HttpJsonServerOpts{Service: svc})

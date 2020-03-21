@@ -10,5 +10,5 @@ import (
 type Service interface {
 	Name() (string)
 	GetGetServicesEndpoint() (sdk.GetServicesEndpoint)
-    GetServices(context.Context, sdk.GetServicesRequest) (sdk.GetServicesResponse)
+    GetServices(ctx context.Context, req sdk.GetServicesRequest) (rsp sdk.GetServicesResponse)
 }

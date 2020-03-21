@@ -2,6 +2,14 @@
 
 set -eox pipefail
 
+function build_metactl {
+    (cd metactl && make build)
+}
+
+function build_metamate {
+    (cd metamate && make build)
+}
+
 function build {
     (cd metactl && make build)
     generate
@@ -23,4 +31,5 @@ function release {
 function generate {
     ./metactl/dist/metactl gen
     (cd gen && go mod init github.com/metamatex/metamate/gen)
+    (cd hackernews-svc && ./../metactl/dist/metactl gen)
 }

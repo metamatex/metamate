@@ -13,7 +13,7 @@ import (
 )
 
 func init() {
-	handler[Kubernetes] = func(f generic.Factory, rn *graph.RootNode, c *http.Client, opts types.VirtualSvcOpts) (h http.Handler, t string, err error) {
+	handler[Kubernetes] = func(f generic.Factory, rn *graph.RootNode, c *http.Client, vSvc types.VirtualSvc) (h http.Handler, t string, err error) {
 		svc, err := pkg.NewService()
 		if err != nil {
 			return

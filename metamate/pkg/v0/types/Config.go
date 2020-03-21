@@ -5,17 +5,17 @@ import (
 )
 
 type Config struct {
-	DiscoverySvc         sdk.Service       `yaml:"discoverySvc"`
-	AuthSvcFilter        sdk.ServiceFilter `yaml:"authSvc"`
-	DefaultClientAccount sdk.ClientAccount `yaml:"defaultClientAccount"`
-	Endpoints            EndpointsConfig   `yaml:"endpoints"`
-	Host                 HostConfig        `yaml:"host"`
-	Log                  LogConfig         `yaml:"log"`
-	Virtual              VirtualConfig
+	DiscoverySvc         sdk.Service       `yaml:"discoverySvc,omitempty"`
+	AuthSvcFilter        sdk.ServiceFilter `yaml:"authSvc,omitempty"`
+	DefaultClientAccount sdk.ClientAccount `yaml:"defaultClientAccount,omitempty"`
+	Endpoints            EndpointsConfig   `yaml:"endpoints,omitempty"`
+	Host                 HostConfig        `yaml:"host,omitempty"`
+	Log                  LogConfig         `yaml:"log,omitempty"`
+	Virtual              VirtualConfig     `yaml:"virtual,omitempty"`
 }
 
 type VirtualConfig struct {
-	Services []VirtualSvcOpts
+	Services []VirtualSvc
 }
 
 type LogConfig struct {
@@ -23,47 +23,47 @@ type LogConfig struct {
 }
 
 type EndpointsConfig struct {
-	Admin            AdminEndpointConfig            `yaml:"config"`
-	Config           ConfigEndpointConfig           `yaml:"config"`
-	Prometheus       PrometheusEndpointConfig       `yaml:"prometheus"`
-	Debug            DebugEndpointConfig            `yaml:"debug"`
-	Graphql          GraphqlEndpointConfig          `yaml:"graphql"`
-	GraphiqlExplorer GraphiqlExplorerEndpointConfig `yaml:"graphiqlExplorer"`
-	HttpJson         HttpJsonEndpoint               `yaml:"httpJson"`
+	Admin            AdminEndpointConfig            `yaml:"admin,omitempty"`
+	Config           ConfigEndpointConfig           `yaml:"config,omitempty"`
+	Prometheus       PrometheusEndpointConfig       `yaml:"prometheus,omitempty"`
+	Debug            DebugEndpointConfig            `yaml:"debug,omitempty"`
+	Graphql          GraphqlEndpointConfig          `yaml:"graphql,omitempty"`
+	GraphiqlExplorer GraphiqlExplorerEndpointConfig `yaml:"graphiqlExplorer,omitempty"`
+	HttpJson         HttpJsonEndpoint               `yaml:"httpJson,omitempty"`
 }
 
 type ConfigEndpointConfig struct {
-	On bool `yaml:"on"`
+	On bool `yaml:"on,omitempty"`
 }
 
 type PrometheusEndpointConfig struct {
-	On   bool   `yaml:"on"`
+	On   bool   `yaml:"on,omitempty"`
 }
 
 type DebugEndpointConfig struct {
-	On bool `yaml:"on"`
+	On bool `yaml:"on,omitempty"`
 }
 
 type HostConfig struct {
-	Bind     string `yaml:"bind"`
-	HttpPort int    `yaml:"httpPort"`
+	Bind     string `yaml:"bind,omitempty"`
+	HttpPort int    `yaml:"httpPort,omitempty"`
+	AllowedOrigins []string `yaml:"allowedOrigins,omitempty"`
 }
 
 type GraphiqlExplorerEndpointConfig struct {
-	On           bool   `yaml:"on"`
-	DefaultQuery string `yaml:"defaultQuery"`
+	On           bool   `yaml:"on,omitempty"`
+	DefaultQuery string `yaml:"defaultQuery,omitempty"`
 }
 
 type GraphqlEndpointConfig struct {
-	On             bool     `yaml:"on"`
-	PlaygroundPath string   `yaml:"playgroundPath"`
-	AllowedOrigins []string `yaml:"allowedOrigins"`
+	On             bool     `yaml:"on,omitempty"`
+	PlaygroundPath string   `yaml:"playgroundPath,omitempty"`
 }
 
 type AdminEndpointConfig struct {
-	On bool `yaml:"on"`
+	On bool `yaml:"on,omitempty"`
 }
 
 type HttpJsonEndpoint struct {
-	On   bool   `yaml:"on"`
+	On   bool   `yaml:"on,omitempty"`
 }

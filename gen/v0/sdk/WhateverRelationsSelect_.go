@@ -6,8 +6,8 @@ const (
 )
 
 type WhateverRelationsSelect struct {
-    All *bool `json:"all,omitempty",yaml:"all,omitempty"`
-    KnewByWhatevers *WhateversCollectionSelect `json:"knewByWhatevers,omitempty",yaml:"knewByWhatevers,omitempty"`
-    KnowsBlueWhatevers *BlueWhateversCollectionSelect `json:"knowsBlueWhatevers,omitempty",yaml:"knowsBlueWhatevers,omitempty"`
-    KnowsWhatevers *WhateversCollectionSelect `json:"knowsWhatevers,omitempty",yaml:"knowsWhatevers,omitempty"`
+    All *bool `json:"all,omitempty" yaml:"all,omitempty"`
+    KnewByWhatevers *WhateversCollectionSelect `json:"knewByWhatevers,omitempty" yaml:"knewByWhatevers,omitempty"`
+    KnowsBlueWhatevers *BlueWhateversCollectionSelect `json:"knowsBlueWhatevers,omitempty" yaml:"knowsBlueWhatevers,omitempty"`
+    KnowsWhatevers *WhateversCollectionSelect `json:"knowsWhatevers,omitempty" yaml:"knowsWhatevers,omitempty"`
 }

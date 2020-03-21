@@ -10,6 +10,8 @@ replace github.com/metamatex/metamate/mastodon-svc => ../mastodon-svc
 
 replace github.com/metamatex/metamate/sqlx-svc => ../sqlx-svc
 
+replace github.com/metamatex/metamate/hackernews-svc => ../hackernews-svc
+
 replace github.com/metamatex/metamate/kubernetes-svc => ../kubernetes-svc
 
 replace github.com/metamatex/metamate/generic => ../generic
@@ -30,12 +32,17 @@ require (
 	github.com/metamatex/metamate/auth-svc v0.0.0-00010101000000-000000000000
 	github.com/metamatex/metamate/gen v0.0.0-00010101000000-000000000000
 	github.com/metamatex/metamate/generic v0.0.0-00010101000000-000000000000
+	github.com/metamatex/metamate/hackernews-svc v0.0.0-00010101000000-000000000000
 	github.com/metamatex/metamate/kubernetes-svc v0.0.0-00010101000000-000000000000
 	github.com/metamatex/metamate/mastodon-svc v0.0.0-00010101000000-000000000000
 	github.com/metamatex/metamate/spec v0.0.0-00010101000000-000000000000
 	github.com/metamatex/metamate/sqlx-svc v0.0.0-00010101000000-000000000000
+	github.com/pkg/errors v0.8.1
 	github.com/prometheus/client_golang v1.5.0
 	github.com/prometheus/common v0.9.1
 	github.com/rs/cors v1.7.0
+	github.com/spf13/afero v1.1.2
+	github.com/spf13/cobra v0.0.6
+	github.com/spf13/viper v1.6.2
 	gopkg.in/yaml.v2 v2.2.8
 )

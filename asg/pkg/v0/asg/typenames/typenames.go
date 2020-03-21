@@ -38,19 +38,19 @@ const (
 	Translation = "Translation"
 	Text        = "Text"
 
-	Info       = "Info"
-	Person     = "Person"
-	Status     = "Status"
-	Feed       = "Feed"
-	FeedKind   = "FeedKind"
-	Attachment = "Attachment"
+	Info          = "Info"
+	SocialAccount = "SocialAccount"
+	Status        = "Status"
+	Feed          = "Feed"
+	FeedKind      = "FeedKind"
+	Attachment    = "Attachment"
 
 	DurationScalar = "DurationScalar"
 
 	LocationQuery = "LocationQuery"
 	Cache         = "Cache"
 
-	LengthValue = "LengthValue"
+	LengthValue  = "LengthValue"
 	LengthScalar = "LengthScalar"
 
 	Image = "Image"
@@ -96,8 +96,8 @@ const (
 	Auth           = "Auth"
 
 	CurrencyScalar = "CurrencyScalar"
-	Transaction = "Transaction"
-	BankAccount     = "BankAccount"
+	Transaction    = "Transaction"
+	BankAccount    = "BankAccount"
 )
 
 func Sort(name string) (string) {

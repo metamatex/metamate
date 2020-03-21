@@ -6,10 +6,10 @@ const (
 )
 
 type PostStatusesRequest struct {
-    Auth *Auth `json:"auth,omitempty",yaml:"auth,omitempty"`
-    Meta *RequestMeta `json:"meta,omitempty",yaml:"meta,omitempty"`
-    Mode *PostMode `json:"mode,omitempty",yaml:"mode,omitempty"`
-    Select *PostStatusesResponseSelect `json:"select,omitempty",yaml:"select,omitempty"`
-    ServiceFilter *ServiceFilter `json:"serviceFilter,omitempty",yaml:"serviceFilter,omitempty"`
-    Statuses []Status `json:"statuses,omitempty",yaml:"statuses,omitempty"`
+    Auth *Auth `json:"auth,omitempty" yaml:"auth,omitempty"`
+    Meta *RequestMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Mode *PostMode `json:"mode,omitempty" yaml:"mode,omitempty"`
+    Select *PostStatusesResponseSelect `json:"select,omitempty" yaml:"select,omitempty"`
+    ServiceFilter *ServiceFilter `json:"serviceFilter,omitempty" yaml:"serviceFilter,omitempty"`
+    Statuses []Status `json:"statuses,omitempty" yaml:"statuses,omitempty"`
 }

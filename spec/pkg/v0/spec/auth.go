@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
+	
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -23,7 +23,7 @@ func requirePostWhatevers(t *testing.T, ctx context.Context, f generic.Factory, 
 		ServiceFilter: &sdk.ServiceFilter{
 			Id: &sdk.ServiceIdFilter{
 				Value: &sdk.StringFilter{
-					Is: ptr.String(svcName),
+					Is: sdk.String(svcName),
 				},
 			},
 		},
@@ -35,13 +35,13 @@ func requirePostWhatevers(t *testing.T, ctx context.Context, f generic.Factory, 
 			Meta: GetResponseMetaSelect(),
 			Whatevers: &sdk.WhateverSelect{
 				Id: &sdk.ServiceIdSelect{
-					Value: ptr.Bool(true),
+					Value: sdk.Bool(true),
 				},
 				AlternativeIds: &sdk.IdSelect{
-					Kind: ptr.Bool(true),
-					Name: ptr.Bool(true),
+					Kind: sdk.Bool(true),
+					Name: sdk.Bool(true),
 					Email: &sdk.EmailSelect{
-						Value: ptr.Bool(true),
+						Value: sdk.Bool(true),
 					},
 				},
 			},
@@ -68,7 +68,7 @@ func requirePostBlueWhatevers(t *testing.T, ctx context.Context, f generic.Facto
 		ServiceFilter: &sdk.ServiceFilter{
 			Id: &sdk.ServiceIdFilter{
 				Value: &sdk.StringFilter{
-					Is: ptr.String(svcName),
+					Is: sdk.String(svcName),
 				},
 			},
 		},
@@ -80,13 +80,13 @@ func requirePostBlueWhatevers(t *testing.T, ctx context.Context, f generic.Facto
 			Meta: GetResponseMetaSelect(),
 			BlueWhatevers: &sdk.BlueWhateverSelect{
 				Id: &sdk.ServiceIdSelect{
-					Value: ptr.Bool(true),
+					Value: sdk.Bool(true),
 				},
 				AlternativeIds: &sdk.IdSelect{
-					Kind: ptr.Bool(true),
-					Name: ptr.Bool(true),
+					Kind: sdk.Bool(true),
+					Name: sdk.Bool(true),
 					Email: &sdk.EmailSelect{
-						Value: ptr.Bool(true),
+						Value: sdk.Bool(true),
 					},
 				},
 			},
@@ -112,7 +112,7 @@ func requirePostClientAccount(t *testing.T, ctx context.Context, f generic.Facto
 		ServiceFilter: &sdk.ServiceFilter{
 			Id: &sdk.ServiceIdFilter{
 				Value: &sdk.StringFilter{
-					Is: ptr.String(svcName),
+					Is: sdk.String(svcName),
 				},
 			},
 		},
@@ -124,19 +124,19 @@ func requirePostClientAccount(t *testing.T, ctx context.Context, f generic.Facto
 			Meta: GetResponseMetaSelect(),
 			ClientAccounts: &sdk.ClientAccountSelect{
 				Id: &sdk.ServiceIdSelect{
-					Value: ptr.Bool(true),
+					Value: sdk.Bool(true),
 				},
 				AlternativeIds: &sdk.IdSelect{
-					Kind: ptr.Bool(true),
-					Name: ptr.Bool(true),
+					Kind: sdk.Bool(true),
+					Name: sdk.Bool(true),
 					Email: &sdk.EmailSelect{
-						Value: ptr.Bool(true),
+						Value: sdk.Bool(true),
 					},
 				},
 				Password: &sdk.PasswordSelect{
-					IsHashed:     ptr.Bool(true),
-					HashFunction: ptr.Bool(true),
-					Value:        ptr.Bool(true),
+					IsHashed:     sdk.Bool(true),
+					HashFunction: sdk.Bool(true),
+					Value:        sdk.Bool(true),
 				},
 			},
 		},
@@ -146,12 +146,12 @@ func requirePostClientAccount(t *testing.T, ctx context.Context, f generic.Facto
 					{
 						Kind: &sdk.IdKind.Email,
 						Email: &sdk.Email{
-							Value: ptr.String(email),
+							Value: sdk.String(email),
 						},
 					},
 				},
 				Password: &sdk.Password{
-					Value: ptr.String(password),
+					Value: sdk.String(password),
 				},
 			},
 		},
@@ -185,7 +185,7 @@ func requireAuthenticateClientAccount(t *testing.T, ctx context.Context, f gener
 		ServiceFilter: &sdk.ServiceFilter{
 			Id: &sdk.ServiceIdFilter{
 				Value: &sdk.StringFilter{
-					Is: ptr.String(svcName),
+					Is: sdk.String(svcName),
 				},
 			},
 		},
@@ -193,7 +193,7 @@ func requireAuthenticateClientAccount(t *testing.T, ctx context.Context, f gener
 			Meta: GetResponseMetaSelect(),
 			Output: &sdk.AuthenticateClientAccountOutputSelect{
 				Token: &sdk.TokenSelect{
-					Value: ptr.Bool(true),
+					Value: sdk.Bool(true),
 				},
 			},
 		},
@@ -201,10 +201,10 @@ func requireAuthenticateClientAccount(t *testing.T, ctx context.Context, f gener
 			Id: &sdk.Id{
 				Kind: &sdk.IdKind.Email,
 				Email: &sdk.Email{
-					Value: ptr.String(email),
+					Value: sdk.String(email),
 				},
 			},
-			Password: ptr.String(password),
+			Password: sdk.String(password),
 		},
 	}
 
@@ -242,7 +242,7 @@ func TestToken(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx 
 			ServiceFilter: &sdk.ServiceFilter{
 				Id: &sdk.ServiceIdFilter{
 					Value: &sdk.StringFilter{
-						Is: ptr.String(storageSvcName),
+						Is: sdk.String(storageSvcName),
 					},
 				},
 			},
@@ -254,32 +254,32 @@ func TestToken(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx 
 				Meta: GetResponseMetaSelect(),
 				ServiceAccounts: &sdk.ServiceAccountSelect{
 					Id: &sdk.ServiceIdSelect{
-						Value: ptr.Bool(true),
+						Value: sdk.Bool(true),
 					},
 					AlternativeIds: &sdk.IdSelect{
-						Kind: ptr.Bool(true),
-						Name: ptr.Bool(true),
+						Kind: sdk.Bool(true),
+						Name: sdk.Bool(true),
 						Email: &sdk.EmailSelect{
-							Value: ptr.Bool(true),
+							Value: sdk.Bool(true),
 						},
 					},
 					Url: &sdk.UrlSelect{
-						Value: ptr.Bool(true),
+						Value: sdk.Bool(true),
 					},
-					Handle: ptr.Bool(true),
+					Handle: sdk.Bool(true),
 					Password: &sdk.PasswordSelect{
-						IsHashed: ptr.Bool(true),
-						Value:    ptr.Bool(true),
+						IsHashed: sdk.Bool(true),
+						Value:    sdk.Bool(true),
 					},
 				},
 			},
 			ServiceAccounts: []sdk.ServiceAccount{
 				{
 					Url: &sdk.Url{
-						Value: ptr.String("example.com"),
+						Value: sdk.String("example.com"),
 					},
 					Password: &sdk.Password{
-						Value: ptr.String("example123"),
+						Value: sdk.String("example123"),
 					},
 				},
 			},
@@ -299,7 +299,7 @@ func TestToken(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx 
 			ServiceFilter: &sdk.ServiceFilter{
 				Id: &sdk.ServiceIdFilter{
 					Value: &sdk.StringFilter{
-						Is: ptr.String(storageSvcName),
+						Is: sdk.String(storageSvcName),
 					},
 				},
 			},
@@ -355,17 +355,17 @@ func TestVerifyToken(t *testing.T, ctx context.Context, f generic.Factory, h fun
 			ServiceFilter: &sdk.ServiceFilter{
 				Id: &sdk.ServiceIdFilter{
 					Value: &sdk.StringFilter{
-						Is: ptr.String(svcName),
+						Is: sdk.String(svcName),
 					},
 				},
 			},
 			Select: &sdk.VerifyTokenResponseSelect{
 				Meta: GetResponseMetaSelect(),
 				Output: &sdk.VerifyTokenOutputSelect{
-					IsValid: ptr.Bool(true),
+					IsValid: sdk.Bool(true),
 					ClientAccountId: &sdk.ServiceIdSelect{
-						ServiceName: ptr.Bool(true),
-						Value:       ptr.Bool(true),
+						ServiceName: sdk.Bool(true),
+						Value:       sdk.Bool(true),
 					},
 				},
 			},

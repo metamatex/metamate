@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/mattn/go-mastodon"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
+	
 )
 
 func getStatusId(ctx context.Context, c *mastodon.Client, req sdk.GetStatusesRequest) (rsp sdk.GetStatusesResponse) {
@@ -29,7 +29,7 @@ func getStatusId(ctx context.Context, c *mastodon.Client, req sdk.GetStatusesReq
 		rsp.Meta.Errors = append(rsp.Meta.Errors, sdk.Error{
 			Message: &sdk.Text{
 				Formatting: &sdk.FormattingKind.Plain,
-				Value:      ptr.String(err.Error()),
+				Value:      sdk.String(err.Error()),
 			},
 		})
 	}
@@ -54,7 +54,7 @@ func getStatusesSearch(ctx context.Context, c *mastodon.Client, req sdk.GetStatu
 		rsp.Meta.Errors = append(rsp.Meta.Errors, sdk.Error{
 			Message: &sdk.Text{
 				Formatting: &sdk.FormattingKind.Plain,
-				Value:      ptr.String(err.Error()),
+				Value:      sdk.String(err.Error()),
 			},
 		})
 	}
@@ -96,12 +96,12 @@ func getStatusesRelation(ctx context.Context, c *mastodon.Client, req sdk.GetSta
 			//
 			//statuses = c.Descendants
 		// todo scope to me
-		case sdk.PersonRelationName.PersonFavorsStatuses:
+		case sdk.SocialAccountRelationName.SocialAccountFavorsStatuses:
 			statuses, err = c.GetFavourites(ctx, pg)
 			if err != nil {
 				return
 			}
-		case sdk.PersonRelationName.PersonAuthorsStatuses:
+		case sdk.SocialAccountRelationName.SocialAccountAuthorsStatuses:
 			// todo v1: support IdUnion
 			//var id mastodon.ID
 			//if *req.Mode.Relation.Id.Kind == sdk.ID_ME {
@@ -171,7 +171,7 @@ func getStatusesRelation(ctx context.Context, c *mastodon.Client, req sdk.GetSta
 		rsp.Meta.Errors = append(rsp.Meta.Errors, sdk.Error{
 			Message: &sdk.Text{
 				Formatting: &sdk.FormattingKind.Plain,
-				Value:      ptr.String(err.Error()),
+				Value:      sdk.String(err.Error()),
 			},
 		})
 	}
@@ -180,12 +180,12 @@ func getStatusesRelation(ctx context.Context, c *mastodon.Client, req sdk.GetSta
 	//	pagination := &sdk.Pagination{
 	//		Previous: &sdk.Page{
 	//			CursorPage: &sdk.CursorPage{
-	//				Value: ptr.String(string(pg.SinceID)),
+	//				Value: sdk.String(string(pg.SinceID)),
 	//			},
 	//		},
 	//		Next: &sdk.Page{
 	//			CursorPage: &sdk.CursorPage{
-	//				Value: ptr.String(string(pg.MaxID)),
+	//				Value: sdk.String(string(pg.MaxID)),
 	//			},
 	//		},
 	//	}
@@ -207,7 +207,7 @@ func putStatusesRelation(ctx context.Context, c *mastodon.Client, req sdk.PutSta
 
 	add := func() (errs []error) {
 		switch *req.Mode.Relation.Relation {
-		case sdk.PersonRelationName.PersonFavorsStatuses:
+		case sdk.SocialAccountRelationName.SocialAccountFavorsStatuses:
 			for _, id := range req.Mode.Relation.Ids {
 				_, err := c.Favourite(ctx, mastodon.ID(*id.Value))
 				if err != nil {
@@ -229,7 +229,7 @@ func putStatusesRelation(ctx context.Context, c *mastodon.Client, req sdk.PutSta
 
 	remove := func() (errs []error) {
 		switch *req.Mode.Relation.Relation {
-		case sdk.PersonRelationName.PersonFavorsStatuses:
+		case sdk.SocialAccountRelationName.SocialAccountFavorsStatuses:
 			for _, id := range req.Mode.Relation.Ids {
 				_, err := c.Unfavourite(ctx, mastodon.ID(*id.Value))
 				if err != nil {
@@ -260,7 +260,7 @@ func putStatusesRelation(ctx context.Context, c *mastodon.Client, req sdk.PutSta
 		rsp.Meta.Errors = append(rsp.Meta.Errors, sdk.Error{
 			Message: &sdk.Text{
 				Formatting: &sdk.FormattingKind.Plain,
-				Value:      ptr.String(err.Error()),
+				Value:      sdk.String(err.Error()),
 			},
 		})
 	}
@@ -286,7 +286,7 @@ func postStatuses(ctx context.Context, c *mastodon.Client, req sdk.PostStatusesR
 		rsp.Meta.Errors = append(rsp.Meta.Errors, sdk.Error{
 			Message: &sdk.Text{
 				Formatting: &sdk.FormattingKind.Plain,
-				Value:      ptr.String(err.Error()),
+				Value:      sdk.String(err.Error()),
 			},
 		})
 	}
@@ -311,7 +311,7 @@ func deleteStatuses(ctx context.Context, c *mastodon.Client, req sdk.DeleteStatu
 		rsp.Meta.Errors = append(rsp.Meta.Errors, sdk.Error{
 			Message: &sdk.Text{
 				Formatting: &sdk.FormattingKind.Plain,
-				Value:      ptr.String(err.Error()),
+				Value:      sdk.String(err.Error()),
 			},
 		})
 	}

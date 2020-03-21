@@ -4,7 +4,6 @@ package mastodon
 import (
 	"encoding/json"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
 	"github.com/metamatex/metamate/gen/v0/sdk/transport"
 	"net/http"
 	"reflect"
@@ -38,23 +37,23 @@ func (s HttpJsonServer) send(w http.ResponseWriter, rsp interface{}) (err error)
 func (s HttpJsonServer) getService() (sdk.Service) {
 	deleteStatusesEndpoint := s.opts.Service.GetDeleteStatusesEndpoint()
 	getFeedsEndpoint := s.opts.Service.GetGetFeedsEndpoint()
-	getPeopleEndpoint := s.opts.Service.GetGetPeopleEndpoint()
+	getSocialAccountsEndpoint := s.opts.Service.GetGetSocialAccountsEndpoint()
 	getStatusesEndpoint := s.opts.Service.GetGetStatusesEndpoint()
 	postStatusesEndpoint := s.opts.Service.GetPostStatusesEndpoint()
-	putPeopleEndpoint := s.opts.Service.GetPutPeopleEndpoint()
+	putSocialAccountsEndpoint := s.opts.Service.GetPutSocialAccountsEndpoint()
 	putStatusesEndpoint := s.opts.Service.GetPutStatusesEndpoint()
 
 	return sdk.Service{
-		Name: ptr.String(s.opts.Service.Name()),
-		SdkVersion: ptr.String(sdk.Version),
+		Name: sdk.String(s.opts.Service.Name()),
+		SdkVersion: sdk.String(sdk.Version),
 		Endpoints: &sdk.Endpoints{
 			LookupService: &sdk.LookupServiceEndpoint{},
 			DeleteStatuses: &deleteStatusesEndpoint,
 			GetFeeds: &getFeedsEndpoint,
-			GetPeople: &getPeopleEndpoint,
+			GetSocialAccounts: &getSocialAccountsEndpoint,
 			GetStatuses: &getStatusesEndpoint,
 			PostStatuses: &postStatusesEndpoint,
-			PutPeople: &putPeopleEndpoint,
+			PutSocialAccounts: &putSocialAccountsEndpoint,
 			PutStatuses: &putStatusesEndpoint,
 		},
 	}
@@ -106,14 +105,14 @@ func (s HttpJsonServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         if err != nil {
             return
         }
-    case sdk.GetPeopleRequestName:
-        var req sdk.GetPeopleRequest
+    case sdk.GetSocialAccountsRequestName:
+        var req sdk.GetSocialAccountsRequest
         err := json.NewDecoder(r.Body).Decode(&req)
         if err != nil {
             return
         }
 
-        rsp := s.opts.Service.GetPeople(r.Context(), req)
+        rsp := s.opts.Service.GetSocialAccounts(r.Context(), req)
 
         err = s.send(w, rsp)
         if err != nil {
@@ -145,14 +144,14 @@ func (s HttpJsonServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         if err != nil {
             return
         }
-    case sdk.PutPeopleRequestName:
-        var req sdk.PutPeopleRequest
+    case sdk.PutSocialAccountsRequestName:
+        var req sdk.PutSocialAccountsRequest
         err := json.NewDecoder(r.Body).Decode(&req)
         if err != nil {
             return
         }
 
-        rsp := s.opts.Service.PutPeople(r.Context(), req)
+        rsp := s.opts.Service.PutSocialAccounts(r.Context(), req)
 
         err = s.send(w, rsp)
         if err != nil {

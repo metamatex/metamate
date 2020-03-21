@@ -6,6 +6,6 @@ const (
 )
 
 type VerifyTokenOutput struct {
-    ClientAccountId *ServiceId `json:"clientAccountId,omitempty",yaml:"clientAccountId,omitempty"`
-    IsValid *bool `json:"isValid,omitempty",yaml:"isValid,omitempty"`
+    ClientAccountId *ServiceId `json:"clientAccountId,omitempty" yaml:"clientAccountId,omitempty"`
+    IsValid *bool `json:"isValid,omitempty" yaml:"isValid,omitempty"`
 }

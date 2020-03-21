@@ -6,5 +6,5 @@ const (
 )
 
 type VerifyTokenInput struct {
-    Token *Token `json:"token,omitempty",yaml:"token,omitempty"`
+    Token *Token `json:"token,omitempty" yaml:"token,omitempty"`
 }

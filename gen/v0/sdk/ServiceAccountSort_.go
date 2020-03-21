@@ -6,9 +6,9 @@ const (
 )
 
 type ServiceAccountSort struct {
-    Handle *string `json:"handle,omitempty",yaml:"handle,omitempty"`
-    Id *ServiceIdSort `json:"id,omitempty",yaml:"id,omitempty"`
-    Meta *TypeMetaSort `json:"meta,omitempty",yaml:"meta,omitempty"`
-    Password *PasswordSort `json:"password,omitempty",yaml:"password,omitempty"`
-    Url *UrlSort `json:"url,omitempty",yaml:"url,omitempty"`
+    Handle *string `json:"handle,omitempty" yaml:"handle,omitempty"`
+    Id *ServiceIdSort `json:"id,omitempty" yaml:"id,omitempty"`
+    Meta *TypeMetaSort `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Password *PasswordSort `json:"password,omitempty" yaml:"password,omitempty"`
+    Url *UrlSort `json:"url,omitempty" yaml:"url,omitempty"`
 }

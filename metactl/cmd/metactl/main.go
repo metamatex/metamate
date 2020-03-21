@@ -21,7 +21,7 @@ var rootCmd = &cobra.Command{
 	Long:  "",
 }
 
-func init() {
+func main() {
 	v := types.Version{
 		Version: version,
 		Commit: commit,
@@ -29,9 +29,7 @@ func init() {
 	}
 
 	v0.AddV0(rootCmd, false, v)
-}
 
-func main() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)

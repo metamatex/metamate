@@ -6,6 +6,6 @@ const (
 )
 
 type GetServiceAccountsRelations struct {
-    OwnedByClientAccounts *GetClientAccountsCollection `json:"ownedByClientAccounts,omitempty",yaml:"ownedByClientAccounts,omitempty"`
-    UsedByServices *GetServicesCollection `json:"usedByServices,omitempty",yaml:"usedByServices,omitempty"`
+    OwnedByClientAccounts *GetClientAccountsCollection `json:"ownedByClientAccounts,omitempty" yaml:"ownedByClientAccounts,omitempty"`
+    UsedByServices *GetServicesCollection `json:"usedByServices,omitempty" yaml:"usedByServices,omitempty"`
 }

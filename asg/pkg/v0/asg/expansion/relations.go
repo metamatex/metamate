@@ -131,9 +131,9 @@ func createTypeRelationships(root *graph.RootNode, fromToCardinalityRelationPath
 			fns = append(fns, graph.TypeField(typenames.FieldName(to), typenames.Relationship(from, to)))
 		}
 
-		_, ok := toMap[typenames.Person]
+		_, ok := toMap[typenames.SocialAccount]
 		if ok {
-			fns = append(fns, graph.TypeField(fieldnames.Me, typenames.Relationship(from, typenames.Person)))
+			fns = append(fns, graph.TypeField(fieldnames.Me, typenames.Relationship(from, typenames.SocialAccount)))
 		}
 
 		name := typenames.Relationships(from)
@@ -148,7 +148,7 @@ func createTypeRelationships(root *graph.RootNode, fromToCardinalityRelationPath
 
 func generateRelationships(root *graph.RootNode, fromToCardinalityRelationPaths map[string]map[string]map[string][]*graph.PathNode) {
 	for from, toMap := range fromToCardinalityRelationPaths {
-		cardinalityMap, ok := toMap[typenames.Person]
+		cardinalityMap, ok := toMap[typenames.SocialAccount]
 		if !ok {
 		    continue
 		}

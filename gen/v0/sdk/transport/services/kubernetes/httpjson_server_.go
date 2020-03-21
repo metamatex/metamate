@@ -4,7 +4,6 @@ package kubernetes
 import (
 	"encoding/json"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
 	"github.com/metamatex/metamate/gen/v0/sdk/transport"
 	"net/http"
 	"reflect"
@@ -39,8 +38,8 @@ func (s HttpJsonServer) getService() (sdk.Service) {
 	getServicesEndpoint := s.opts.Service.GetGetServicesEndpoint()
 
 	return sdk.Service{
-		Name: ptr.String(s.opts.Service.Name()),
-		SdkVersion: ptr.String(sdk.Version),
+		Name: sdk.String(s.opts.Service.Name()),
+		SdkVersion: sdk.String(sdk.Version),
 		Endpoints: &sdk.Endpoints{
 			LookupService: &sdk.LookupServiceEndpoint{},
 			GetServices: &getServicesEndpoint,

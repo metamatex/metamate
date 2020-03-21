@@ -6,10 +6,10 @@ const (
 )
 
 type WhateverUnion struct {
-    BoolField *bool `json:"boolField,omitempty",yaml:"boolField,omitempty"`
-    EnumField *string `json:"enumField,omitempty",yaml:"enumField,omitempty"`
-    Float64Field *float64 `json:"float64Field,omitempty",yaml:"float64Field,omitempty"`
-    Int32Field *int32 `json:"int32Field,omitempty",yaml:"int32Field,omitempty"`
-    Kind *string `json:"kind,omitempty",yaml:"kind,omitempty"`
-    StringField *string `json:"stringField,omitempty",yaml:"stringField,omitempty"`
+    BoolField *bool `json:"boolField,omitempty" yaml:"boolField,omitempty"`
+    EnumField *string `json:"enumField,omitempty" yaml:"enumField,omitempty"`
+    Float64Field *float64 `json:"float64Field,omitempty" yaml:"float64Field,omitempty"`
+    Int32Field *int32 `json:"int32Field,omitempty" yaml:"int32Field,omitempty"`
+    Kind *string `json:"kind,omitempty" yaml:"kind,omitempty"`
+    StringField *string `json:"stringField,omitempty" yaml:"stringField,omitempty"`
 }

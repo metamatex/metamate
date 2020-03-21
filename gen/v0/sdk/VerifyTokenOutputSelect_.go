@@ -6,7 +6,7 @@ const (
 )
 
 type VerifyTokenOutputSelect struct {
-    All *bool `json:"all,omitempty",yaml:"all,omitempty"`
-    ClientAccountId *ServiceIdSelect `json:"clientAccountId,omitempty",yaml:"clientAccountId,omitempty"`
-    IsValid *bool `json:"isValid,omitempty",yaml:"isValid,omitempty"`
+    All *bool `json:"all,omitempty" yaml:"all,omitempty"`
+    ClientAccountId *ServiceIdSelect `json:"clientAccountId,omitempty" yaml:"clientAccountId,omitempty"`
+    IsValid *bool `json:"isValid,omitempty" yaml:"isValid,omitempty"`
 }

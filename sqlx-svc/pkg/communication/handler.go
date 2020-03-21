@@ -8,7 +8,7 @@ import (
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
+	
 )
 
 func GetServer(supportedIdKinds map[string]bool, db sqlx.Ext, rn *graph.RootNode, f generic.Factory, gGetServiceRsp generic.Generic) (func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic)) {
@@ -46,7 +46,7 @@ func ToMessageErrors(errs []error) (errs0 []sdk.Error) {
 	for _, err := range errs {
 		errs0 = append(errs0, sdk.Error{
 			Message: &sdk.Text{
-				Value: ptr.String(err.Error()),
+				Value: sdk.String(err.Error()),
 			},
 		})
 	}

@@ -6,7 +6,7 @@ const (
 )
 
 type ClientAccountSort struct {
-    Id *ServiceIdSort `json:"id,omitempty",yaml:"id,omitempty"`
-    Meta *TypeMetaSort `json:"meta,omitempty",yaml:"meta,omitempty"`
-    Password *PasswordSort `json:"password,omitempty",yaml:"password,omitempty"`
+    Id *ServiceIdSort `json:"id,omitempty" yaml:"id,omitempty"`
+    Meta *TypeMetaSort `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Password *PasswordSort `json:"password,omitempty" yaml:"password,omitempty"`
 }

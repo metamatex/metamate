@@ -6,7 +6,7 @@ const (
 )
 
 type AuthenticateClientAccountResponseSelect struct {
-    All *bool `json:"all,omitempty",yaml:"all,omitempty"`
-    Meta *ResponseMetaSelect `json:"meta,omitempty",yaml:"meta,omitempty"`
-    Output *AuthenticateClientAccountOutputSelect `json:"output,omitempty",yaml:"output,omitempty"`
+    All *bool `json:"all,omitempty" yaml:"all,omitempty"`
+    Meta *ResponseMetaSelect `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Output *AuthenticateClientAccountOutputSelect `json:"output,omitempty" yaml:"output,omitempty"`
 }

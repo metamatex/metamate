@@ -186,7 +186,7 @@ func getObjectFieldType(sCtx SchemaContext, asInput bool, fn *graph.FieldNode) (
 			o = sCtx.MustGetObject(fn.Edges.Type.Holds().Name() + suffix)
 		}
 	case graph.FieldKindEnum:
-		o = sCtx.MustGetEnum(fn.Edges.Enum.Holds().Name())
+		o = graphql.String
 	case graph.FieldKindString:
 		o = graphql.String
 	case graph.FieldKindInt32:
@@ -203,7 +203,7 @@ func getObjectFieldType(sCtx SchemaContext, asInput bool, fn *graph.FieldNode) (
 			o = graphql.NewList(sCtx.MustGetObject(fn.Edges.Type.Holds().Name() + suffix))
 		}
 	case graph.FieldKindEnumList:
-		o = graphql.NewList(sCtx.MustGetEnum(fn.Edges.Enum.Holds().Name()))
+		o = graphql.NewList(graphql.String)
 	case graph.FieldKindStringList:
 		o = graphql.NewList(graphql.String)
 	case graph.FieldKindInt32List:

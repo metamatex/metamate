@@ -6,8 +6,8 @@ const (
 )
 
 type PipeDeleteWhateversContext struct {
-    ClientRequest *DeleteWhateversRequest `json:"clientRequest,omitempty",yaml:"clientRequest,omitempty"`
-    ClientResponse *DeleteWhateversResponse `json:"clientResponse,omitempty",yaml:"clientResponse,omitempty"`
-    ServiceRequest *DeleteWhateversRequest `json:"serviceRequest,omitempty",yaml:"serviceRequest,omitempty"`
-    ServiceResponse *DeleteWhateversResponse `json:"serviceResponse,omitempty",yaml:"serviceResponse,omitempty"`
+    ClientRequest *DeleteWhateversRequest `json:"clientRequest,omitempty" yaml:"clientRequest,omitempty"`
+    ClientResponse *DeleteWhateversResponse `json:"clientResponse,omitempty" yaml:"clientResponse,omitempty"`
+    ServiceRequest *DeleteWhateversRequest `json:"serviceRequest,omitempty" yaml:"serviceRequest,omitempty"`
+    ServiceResponse *DeleteWhateversResponse `json:"serviceResponse,omitempty" yaml:"serviceResponse,omitempty"`
 }

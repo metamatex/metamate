@@ -91,7 +91,6 @@ var goTypedHttpJsonServiceTpl = `package {{ index .Data "name" }}
 import (
 	"encoding/json"
 	"{{ $package }}/gen/v0/sdk"
-	"{{ $package }}/gen/v0/sdk/utils/ptr"
 	"{{ $package }}/gen/v0/sdk/transport"
 	"net/http"
 	"reflect"
@@ -130,8 +129,8 @@ func (s HttpJsonServer) getService() (sdk.Service) {
 {{- end }}
 
 	return sdk.Service{
-		Name: ptr.String(s.opts.Service.Name()),
-		SdkVersion: ptr.String(sdk.Version),
+		Name: sdk.String(s.opts.Service.Name()),
+		SdkVersion: sdk.String(sdk.Version),
 		Endpoints: &sdk.Endpoints{
 			LookupService: &sdk.LookupServiceEndpoint{},
 {{- range $ei, $endpoint := .Endpoints.Slice.Sort }}

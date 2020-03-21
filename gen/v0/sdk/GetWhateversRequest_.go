@@ -6,13 +6,13 @@ const (
 )
 
 type GetWhateversRequest struct {
-    Auth *Auth `json:"auth,omitempty",yaml:"auth,omitempty"`
-    Filter *WhateverFilter `json:"filter,omitempty",yaml:"filter,omitempty"`
-    Meta *RequestMeta `json:"meta,omitempty",yaml:"meta,omitempty"`
-    Mode *GetMode `json:"mode,omitempty",yaml:"mode,omitempty"`
-    Pages []ServicePage `json:"pages,omitempty",yaml:"pages,omitempty"`
-    Relations *GetWhateversRelations `json:"relations,omitempty",yaml:"relations,omitempty"`
-    Select *GetWhateversResponseSelect `json:"select,omitempty",yaml:"select,omitempty"`
-    ServiceFilter *ServiceFilter `json:"serviceFilter,omitempty",yaml:"serviceFilter,omitempty"`
-    Sort *WhateverSort `json:"sort,omitempty",yaml:"sort,omitempty"`
+    Auth *Auth `json:"auth,omitempty" yaml:"auth,omitempty"`
+    Filter *WhateverFilter `json:"filter,omitempty" yaml:"filter,omitempty"`
+    Meta *RequestMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Mode *GetMode `json:"mode,omitempty" yaml:"mode,omitempty"`
+    Pages []ServicePage `json:"pages,omitempty" yaml:"pages,omitempty"`
+    Relations *GetWhateversRelations `json:"relations,omitempty" yaml:"relations,omitempty"`
+    Select *GetWhateversResponseSelect `json:"select,omitempty" yaml:"select,omitempty"`
+    ServiceFilter *ServiceFilter `json:"serviceFilter,omitempty" yaml:"serviceFilter,omitempty"`
+    Sort *WhateverSort `json:"sort,omitempty" yaml:"sort,omitempty"`
 }

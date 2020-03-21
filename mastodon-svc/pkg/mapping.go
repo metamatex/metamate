@@ -3,7 +3,7 @@ package pkg
 import (
 	"github.com/mattn/go-mastodon"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
+
 )
 
 func MapStatusesFromMastodonStatuses(statuses []*mastodon.Status) (statuses0 []sdk.Status) {
@@ -42,7 +42,7 @@ func MapStatusFromMastodonStatus(status mastodon.Status) (status0 sdk.Status) {
 	// ✔ status.Language
 	// status.Pinned
 
-	author := MapPersonFromMastodonAccount(status.Account)
+	author := MapSocialAccountFromMastodonAccount(status.Account)
 
 	var muted *bool
 	muted0, ok := status.Muted.(bool)
@@ -76,53 +76,53 @@ func MapStatusFromMastodonStatus(status mastodon.Status) (status0 sdk.Status) {
 
 	status0 = sdk.Status{
 		Id: &sdk.ServiceId{
-			Value: ptr.String(string(status.ID)),
+			Value: sdk.String(string(status.ID)),
 		},
 		AlternativeIds: []sdk.Id{
 			{
 				Kind: &sdk.IdKind.Url,
 				Url: &sdk.Url{
-					Value: ptr.String(string(status.URL)),
+					Value: sdk.String(string(status.URL)),
 				},
 			},
 			{
 				Kind: &sdk.IdKind.Url,
 				Url: &sdk.Url{
-					Value: ptr.String(string(status.URI)),
+					Value: sdk.String(string(status.URI)),
 				},
 			},
 		},
 		SpoilerText: &sdk.Text{
 			Formatting: &sdk.FormattingKind.Plain,
-			Value:      ptr.String(status.SpoilerText),
-			Language:   ptr.String(FromISO6391[status.Language]),
+			Value:      sdk.String(status.SpoilerText),
+			Language:   sdk.String(FromISO6391[status.Language]),
 		},
-		Sensitive: ptr.Bool(status.Sensitive),
+		Sensitive: sdk.Bool(status.Sensitive),
 		Content: &sdk.Text{
 			Formatting: &sdk.FormattingKind.Plain,
-			Value:      ptr.String(status.Content),
-			Language:   ptr.String(FromISO6391[status.Language]),
+			Value:      sdk.String(status.Content),
+			Language:   sdk.String(FromISO6391[status.Language]),
 		},
 		Relations: &sdk.StatusRelations{
-			MentionsPeople: &sdk.PeopleCollection{
-				People: MapFromMastodonMentions(status.Mentions),
+			MentionsSocialAccounts: &sdk.SocialAccountsCollection{
+				SocialAccounts: MapFromMastodonMentions(status.Mentions),
 			},
-			FavoredByPeople: &sdk.PeopleCollection{
+			FavoredBySocialAccounts: &sdk.SocialAccountsCollection{
 				Meta: &sdk.CollectionMeta{
-					Count: ptr.Int32(int32(status.FavouritesCount)),
+					Count: sdk.Int32(int32(status.FavouritesCount)),
 				},
 			},
 			RebloggedByStatuses: &sdk.StatusesCollection{
 				Meta: &sdk.CollectionMeta{
-					Count: ptr.Int32(int32(status.ReblogsCount)),
+					Count: sdk.Int32(int32(status.ReblogsCount)),
 				},
 			},
 			WasRepliedToByStatuses: &sdk.StatusesCollection{
 				Meta: &sdk.CollectionMeta{
-					Count: ptr.Int32(int32(status.RepliesCount)),
+					Count: sdk.Int32(int32(status.RepliesCount)),
 				},
 			},
-			AuthoredByPerson: &author,
+			AuthoredBySocialAccount: &author,
 		},
 		Relationships: &sdk.StatusRelationships{
 			FavoredByMe: favourited,
@@ -140,7 +140,7 @@ func MapStatusFromMastodonStatus(status mastodon.Status) (status0 sdk.Status) {
 	}
 
 	if repliesToAccountId != nil {
-		status0.Relations.RepliesToPerson = &sdk.Person{
+		status0.Relations.RepliesToSocialAccount = &sdk.SocialAccount{
 			Id: &sdk.ServiceId{
 				Value: repliesToAccountId,
 			},
@@ -180,31 +180,31 @@ func MapAttachmentFromMastodonAttachment(attachment *mastodon.Attachment) (attac
 
 	attachment0 = sdk.Attachment{
 		Id: &sdk.ServiceId{
-			Value: ptr.String(string(attachment.ID)),
+			Value: sdk.String(string(attachment.ID)),
 		},
 		AlternativeIds: []sdk.Id{
 			{
 				Kind: &sdk.IdKind.Url,
 				Url: &sdk.Url{
-					Value: ptr.String(string(attachment.URL)),
+					Value: sdk.String(string(attachment.URL)),
 				},
 			},
 			{
 				Kind: &sdk.IdKind.Url,
 				Url: &sdk.Url{
-					Value: ptr.String(string(attachment.RemoteURL)),
+					Value: sdk.String(string(attachment.RemoteURL)),
 				},
 			},
 			{
 				Kind: &sdk.IdKind.Url,
 				Url: &sdk.Url{
-					Value: ptr.String(string(attachment.PreviewURL)),
+					Value: sdk.String(string(attachment.PreviewURL)),
 				},
 			},
 			{
 				Kind: &sdk.IdKind.Url,
 				Url: &sdk.Url{
-					Value: ptr.String(string(attachment.TextURL)),
+					Value: sdk.String(string(attachment.TextURL)),
 				},
 			},
 		},
@@ -214,15 +214,15 @@ func MapAttachmentFromMastodonAttachment(attachment *mastodon.Attachment) (attac
 	return
 }
 
-func MapPeopleFromMastodonAccounts(accounts []*mastodon.Account) (people []sdk.Person) {
+func MapSocialAccountsFromMastodonAccounts(accounts []*mastodon.Account) (people []sdk.SocialAccount) {
 	for _, account := range accounts {
-		people = append(people, MapPersonFromMastodonAccount(*account))
+		people = append(people, MapSocialAccountFromMastodonAccount(*account))
 	}
 
 	return
 }
 
-func MapPersonFromMastodonAccount(account mastodon.Account) (person sdk.Person) {
+func MapSocialAccountFromMastodonAccount(account mastodon.Account) (person sdk.SocialAccount) {
 	// ✔ account.ID             ID
 	// ✔ account.Username       string
 	// ✔ account.Acct           string
@@ -243,54 +243,54 @@ func MapPersonFromMastodonAccount(account mastodon.Account) (person sdk.Person) 
 	// account.Fields         []Field
 	// account.Bot            bool
 
-	person = sdk.Person{
+	person = sdk.SocialAccount{
 		Id: &sdk.ServiceId{
-			Value: ptr.String(string(account.ID)),
+			Value: sdk.String(string(account.ID)),
 		},
 		AlternativeIds: []sdk.Id{
 			{
 				Kind: &sdk.IdKind.Url,
 				Url: &sdk.Url{
-					Value: ptr.String(string(account.URL)),
+					Value: sdk.String(string(account.URL)),
 				},
 			},
 			{
 				Kind:     &sdk.IdKind.Username,
-				Username: ptr.String(account.Username),
+				Username: sdk.String(account.Username),
 			},
 			{
 				Kind: &sdk.IdKind.Name,
-				Name: ptr.String(account.Acct),
+				Name: sdk.String(account.Acct),
 			},
 		},
 		Note: &sdk.Text{
 			Formatting: &sdk.FormattingKind.Html,
-			Value:      ptr.String(account.Note),
+			Value:      sdk.String(account.Note),
 		},
 		Avatar: &sdk.Image{
 			Url: &sdk.Url{
-				Value: ptr.String(account.Avatar),
+				Value: sdk.String(account.Avatar),
 			},
 		},
 		Header: &sdk.Image{
 			Url: &sdk.Url{
-				Value: ptr.String(account.Header),
+				Value: sdk.String(account.Header),
 			},
 		},
-		Relations: &sdk.PersonRelations{
-			FollowedByPeople: &sdk.PeopleCollection{
+		Relations: &sdk.SocialAccountRelations{
+			FollowedBySocialAccounts: &sdk.SocialAccountsCollection{
 				Meta: &sdk.CollectionMeta{
-					Count: ptr.Int32(int32(account.FollowersCount)),
+					Count: sdk.Int32(int32(account.FollowersCount)),
 				},
 			},
-			FollowsPeople: &sdk.PeopleCollection{
+			FollowsSocialAccounts: &sdk.SocialAccountsCollection{
 				Meta: &sdk.CollectionMeta{
-					Count: ptr.Int32(int32(account.FollowingCount)),
+					Count: sdk.Int32(int32(account.FollowingCount)),
 				},
 			},
 			AuthorsStatuses: &sdk.StatusesCollection{
 				Meta: &sdk.CollectionMeta{
-					Count: ptr.Int32(int32(account.StatusesCount)),
+					Count: sdk.Int32(int32(account.StatusesCount)),
 				},
 			},
 		},
@@ -299,7 +299,7 @@ func MapPersonFromMastodonAccount(account mastodon.Account) (person sdk.Person) 
 	return
 }
 
-func MapFromMastodonMentions(mentions []mastodon.Mention) (people []sdk.Person) {
+func MapFromMastodonMentions(mentions []mastodon.Mention) (people []sdk.SocialAccount) {
 	for _, m := range mentions {
 		people = append(people, MapFromMastodonMention(m))
 	}
@@ -307,30 +307,30 @@ func MapFromMastodonMentions(mentions []mastodon.Mention) (people []sdk.Person) 
 	return
 }
 
-func MapFromMastodonMention(mention mastodon.Mention) (person sdk.Person) {
+func MapFromMastodonMention(mention mastodon.Mention) (person sdk.SocialAccount) {
 	// ✔ mention.URL      string
 	// ✔ mention.Username string
 	// ✔ mention.Acct     string
 	// ✔ mention.ID       mastodon.ID
 
-	person = sdk.Person{
+	person = sdk.SocialAccount{
 		Id: &sdk.ServiceId{
-			Value: ptr.String(string(mention.ID)),
+			Value: sdk.String(string(mention.ID)),
 		},
 		AlternativeIds: []sdk.Id{
 			{
 				Kind: &sdk.IdKind.Url,
 				Url: &sdk.Url{
-					Value: ptr.String(string(mention.URL)),
+					Value: sdk.String(string(mention.URL)),
 				},
 			},
 			{
 				Kind:     &sdk.IdKind.Username,
-				Username: ptr.String(mention.Username),
+				Username: sdk.String(mention.Username),
 			},
 			{
 				Kind: &sdk.IdKind.Name,
-				Name: ptr.String(mention.Acct),
+				Name: sdk.String(mention.Acct),
 			},
 		},
 	}

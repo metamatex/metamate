@@ -6,10 +6,10 @@ const (
 )
 
 type PostWhateversRequest struct {
-    Auth *Auth `json:"auth,omitempty",yaml:"auth,omitempty"`
-    Meta *RequestMeta `json:"meta,omitempty",yaml:"meta,omitempty"`
-    Mode *PostMode `json:"mode,omitempty",yaml:"mode,omitempty"`
-    Select *PostWhateversResponseSelect `json:"select,omitempty",yaml:"select,omitempty"`
-    ServiceFilter *ServiceFilter `json:"serviceFilter,omitempty",yaml:"serviceFilter,omitempty"`
-    Whatevers []Whatever `json:"whatevers,omitempty",yaml:"whatevers,omitempty"`
+    Auth *Auth `json:"auth,omitempty" yaml:"auth,omitempty"`
+    Meta *RequestMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Mode *PostMode `json:"mode,omitempty" yaml:"mode,omitempty"`
+    Select *PostWhateversResponseSelect `json:"select,omitempty" yaml:"select,omitempty"`
+    ServiceFilter *ServiceFilter `json:"serviceFilter,omitempty" yaml:"serviceFilter,omitempty"`
+    Whatevers []Whatever `json:"whatevers,omitempty" yaml:"whatevers,omitempty"`
 }

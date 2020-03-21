@@ -6,6 +6,6 @@ const (
 )
 
 type VerifyTokenResponse struct {
-    Meta *ResponseMeta `json:"meta,omitempty",yaml:"meta,omitempty"`
-    Output *VerifyTokenOutput `json:"output,omitempty",yaml:"output,omitempty"`
+    Meta *ResponseMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Output *VerifyTokenOutput `json:"output,omitempty" yaml:"output,omitempty"`
 }

@@ -16,7 +16,7 @@ var versionCmd = &cobra.Command{
 		case 0:
 			t = version.Version
 		default:
-			t = fmt.Sprintf("version: %v\ncommit: %v\ndate: %v\n", version.Version, version.Commit, version.Date)
+			t = fmt.Sprintf("version: %v\ncommit: %v\ndate: %v", version.Version, version.Commit, version.Date)
 		}
 
 		o := types.Output{

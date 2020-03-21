@@ -6,6 +6,6 @@ const (
 )
 
 type AuthenticateClientAccountInput struct {
-    Id *Id `json:"id,omitempty",yaml:"id,omitempty"`
-    Password *string `json:"password,omitempty",yaml:"password,omitempty"`
+    Id *Id `json:"id,omitempty" yaml:"id,omitempty"`
+    Password *string `json:"password,omitempty" yaml:"password,omitempty"`
 }

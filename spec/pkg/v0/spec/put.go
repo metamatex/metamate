@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
+	
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -18,17 +18,17 @@ func TestPutRelationMode(t *testing.T, ctx context.Context, f generic.Factory, h
 			whatevers := []sdk.Whatever{
 				{
 					Id: &sdk.ServiceId{
-						Value: ptr.String(nameSvcId(suffix, name, "a")),
+						Value: sdk.String(nameSvcId(suffix, name, "a")),
 					},
 				},
 				{
 					Id: &sdk.ServiceId{
-						Value: ptr.String(nameSvcId(suffix, name, "b")),
+						Value: sdk.String(nameSvcId(suffix, name, "b")),
 					},
 				},
 				{
 					Id: &sdk.ServiceId{
-						Value: ptr.String(nameSvcId(suffix, name, "c")),
+						Value: sdk.String(nameSvcId(suffix, name, "c")),
 					},
 				},
 			}
@@ -60,8 +60,8 @@ func requirePutWhatevers(t *testing.T, ctx context.Context, f generic.Factory, h
 			Relation: &sdk.RelationPutMode{
 				Id: id,
 				Ids: ids,
-				Relation:  ptr.String(relationName),
-				Operation: ptr.String(operation),
+				Relation:  sdk.String(relationName),
+				Operation: sdk.String(operation),
 			},
 		},
 		Select: &sdk.PutWhateversResponseSelect{
@@ -86,8 +86,8 @@ func requirePutBlueWhatevers(t *testing.T, ctx context.Context, f generic.Factor
 			Relation: &sdk.RelationPutMode{
 				Id: id,
 				Ids: ids,
-				Relation:  ptr.String(relationName),
-				Operation: ptr.String(operation),
+				Relation:  sdk.String(relationName),
+				Operation: sdk.String(operation),
 			},
 		},
 		Select: &sdk.PutBlueWhateversResponseSelect{

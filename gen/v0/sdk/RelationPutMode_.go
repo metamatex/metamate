@@ -6,8 +6,8 @@ const (
 )
 
 type RelationPutMode struct {
-    Id *ServiceId `json:"id,omitempty",yaml:"id,omitempty"`
-    Ids []ServiceId `json:"ids,omitempty",yaml:"ids,omitempty"`
-    Operation *string `json:"operation,omitempty",yaml:"operation,omitempty"`
-    Relation *string `json:"relation,omitempty",yaml:"relation,omitempty"`
+    Id *ServiceId `json:"id,omitempty" yaml:"id,omitempty"`
+    Ids []ServiceId `json:"ids,omitempty" yaml:"ids,omitempty"`
+    Operation *string `json:"operation,omitempty" yaml:"operation,omitempty"`
+    Relation *string `json:"relation,omitempty" yaml:"relation,omitempty"`
 }

@@ -64,7 +64,7 @@ type Service interface {
 	Name() (string)
 {{- range $i, $endpoint := .Endpoints.Slice.Sort }}
 	Get{{ $endpoint.Name }}Endpoint() (sdk.{{ $endpoint.Name }}Endpoint)
-    {{ $endpoint.Name }}(context.Context, sdk.{{ $endpoint.Edges.Type.Request.Name }}) (sdk.{{ $endpoint.Edges.Type.Response.Name }})
+    {{ $endpoint.Name }}(ctx context.Context, req sdk.{{ $endpoint.Edges.Type.Request.Name }}) (rsp sdk.{{ $endpoint.Edges.Type.Response.Name }})
 {{- end }}
 }`
 
@@ -72,40 +72,40 @@ var goTypesTpl = `package sdk
 {{ define "fields" }}
 {{- range $fi, $field := . }}
 {{- if $field.IsBool }}
-    {{ camel $field.Name }} *bool ` + "`" + `json:"{{ $field.Name }},omitempty",yaml:"{{ $field.Name }},omitempty"` + "`" + `
+    {{ camel $field.Name }} *bool ` + "`" + `json:"{{ $field.Name }},omitempty" yaml:"{{ $field.Name }},omitempty"` + "`" + `
 {{- end }}
 {{- if $field.IsFloat64 }}
-    {{ camel $field.Name }} *float64 ` + "`" + `json:"{{ $field.Name }},omitempty",yaml:"{{ $field.Name }},omitempty"` + "`" + `
+    {{ camel $field.Name }} *float64 ` + "`" + `json:"{{ $field.Name }},omitempty" yaml:"{{ $field.Name }},omitempty"` + "`" + `
 {{- end }}
 {{- if $field.IsString }}
-    {{ camel $field.Name }} *string ` + "`" + `json:"{{ $field.Name }},omitempty",yaml:"{{ $field.Name }},omitempty"{{- if $field.Flags.Is "hash" false -}},hash:"ignore"{{- end -}}` + "`" + `
+    {{ camel $field.Name }} *string ` + "`" + `json:"{{ $field.Name }},omitempty" yaml:"{{ $field.Name }},omitempty"{{- if $field.Flags.Is "hash" false -}},hash:"ignore"{{- end -}}` + "`" + `
 {{- end }}
 {{- if $field.IsInt32 }}
-    {{ camel $field.Name }} *int32 ` + "`" + `json:"{{ $field.Name }},omitempty",yaml:"{{ $field.Name }},omitempty"` + "`" + `
+    {{ camel $field.Name }} *int32 ` + "`" + `json:"{{ $field.Name }},omitempty" yaml:"{{ $field.Name }},omitempty"` + "`" + `
 {{- end }}
 {{- if $field.IsType }}
-    {{ camel $field.Name }} *{{ $field.Edges.Type.Holds.Name }} ` + "`" + `json:"{{ $field.Name }},omitempty",yaml:"{{ $field.Name }},omitempty"` + "`" + `
+    {{ camel $field.Name }} *{{ $field.Edges.Type.Holds.Name }} ` + "`" + `json:"{{ $field.Name }},omitempty" yaml:"{{ $field.Name }},omitempty"` + "`" + `
 {{- end }}
 {{- if $field.IsEnum }}
-    {{ camel $field.Name }} *string ` + "`" + `json:"{{ $field.Name }},omitempty",yaml:"{{ $field.Name }},omitempty"` + "`" + `
+    {{ camel $field.Name }} *string ` + "`" + `json:"{{ $field.Name }},omitempty" yaml:"{{ $field.Name }},omitempty"` + "`" + `
 {{- end }}
 {{- if $field.IsStringList }}
-    {{ camel $field.Name }} []string ` + "`" + `json:"{{ $field.Name }},omitempty",yaml:"{{ $field.Name }},omitempty"` + "`" + `
+    {{ camel $field.Name }} []string ` + "`" + `json:"{{ $field.Name }},omitempty" yaml:"{{ $field.Name }},omitempty"` + "`" + `
 {{- end }}
 {{- if $field.IsInt32List }}
-    {{ camel $field.Name }} []int32 ` + "`" + `json:"{{ $field.Name }},omitempty",yaml:"{{ $field.Name }},omitempty"` + "`" + `
+    {{ camel $field.Name }} []int32 ` + "`" + `json:"{{ $field.Name }},omitempty" yaml:"{{ $field.Name }},omitempty"` + "`" + `
 {{- end }}
 {{- if $field.IsFloat64List }}
-    {{ camel $field.Name }} []float64 ` + "`" + `json:"{{ $field.Name }},omitempty",yaml:"{{ $field.Name }},omitempty"` + "`" + `
+    {{ camel $field.Name }} []float64 ` + "`" + `json:"{{ $field.Name }},omitempty" yaml:"{{ $field.Name }},omitempty"` + "`" + `
 {{- end }}
 {{- if $field.IsBoolList }}
-    {{ camel $field.Name }} []bool ` + "`" + `json:"{{ $field.Name }},omitempty",yaml:"{{ $field.Name }},omitempty"` + "`" + `
+    {{ camel $field.Name }} []bool ` + "`" + `json:"{{ $field.Name }},omitempty" yaml:"{{ $field.Name }},omitempty"` + "`" + `
 {{- end }}
 {{- if $field.IsTypeList }}
-    {{ camel $field.Name }} []{{ $field.Edges.Type.Holds.Name }} ` + "`" + `json:"{{ $field.Name }},omitempty",yaml:"{{ $field.Name }},omitempty"` + "`" + `
+    {{ camel $field.Name }} []{{ $field.Edges.Type.Holds.Name }} ` + "`" + `json:"{{ $field.Name }},omitempty" yaml:"{{ $field.Name }},omitempty"` + "`" + `
 {{- end }}
 {{- if $field.IsEnumList }}
-    {{ camel $field.Name }} []string ` + "`" + `json:"{{ $field.Name }},omitempty",yaml:"{{ $field.Name }},omitempty"` + "`" + `
+    {{ camel $field.Name }} []string ` + "`" + `json:"{{ $field.Name }},omitempty" yaml:"{{ $field.Name }},omitempty"` + "`" + `
 {{- end }}
 {{- end }}
 {{- end }}

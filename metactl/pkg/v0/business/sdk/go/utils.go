@@ -18,7 +18,7 @@ func init() {
 
 	tasks[TaskUtilsPtr] = types.RenderTask{
 		TemplateData: &goUtilsPtrTpl,
-		Out:          ptr.String("utils/ptr/ptr_.go"),
+		Out:          ptr.String("ptr_.go"),
 	}
 }
 
@@ -51,7 +51,7 @@ func Print(i interface{}) {
 	println(Sprint(i))
 }`
 
-var goUtilsPtrTpl = `package ptr
+var goUtilsPtrTpl = `package sdk
 
 func String(s string) (*string) {
 	return &s

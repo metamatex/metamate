@@ -6,8 +6,8 @@ const (
 )
 
 type PipeWhateversContext struct {
-    Delete *PipeDeleteWhateversContext `json:"delete,omitempty",yaml:"delete,omitempty"`
-    Get *PipeGetWhateversContext `json:"get,omitempty",yaml:"get,omitempty"`
-    Post *PipePostWhateversContext `json:"post,omitempty",yaml:"post,omitempty"`
-    Put *PipePutWhateversContext `json:"put,omitempty",yaml:"put,omitempty"`
+    Delete *PipeDeleteWhateversContext `json:"delete,omitempty" yaml:"delete,omitempty"`
+    Get *PipeGetWhateversContext `json:"get,omitempty" yaml:"get,omitempty"`
+    Post *PipePostWhateversContext `json:"post,omitempty" yaml:"post,omitempty"`
+    Put *PipePutWhateversContext `json:"put,omitempty" yaml:"put,omitempty"`
 }

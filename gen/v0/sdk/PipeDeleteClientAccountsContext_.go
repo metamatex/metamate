@@ -6,8 +6,8 @@ const (
 )
 
 type PipeDeleteClientAccountsContext struct {
-    ClientRequest *DeleteClientAccountsRequest `json:"clientRequest,omitempty",yaml:"clientRequest,omitempty"`
-    ClientResponse *DeleteClientAccountsResponse `json:"clientResponse,omitempty",yaml:"clientResponse,omitempty"`
-    ServiceRequest *DeleteClientAccountsRequest `json:"serviceRequest,omitempty",yaml:"serviceRequest,omitempty"`
-    ServiceResponse *DeleteClientAccountsResponse `json:"serviceResponse,omitempty",yaml:"serviceResponse,omitempty"`
+    ClientRequest *DeleteClientAccountsRequest `json:"clientRequest,omitempty" yaml:"clientRequest,omitempty"`
+    ClientResponse *DeleteClientAccountsResponse `json:"clientResponse,omitempty" yaml:"clientResponse,omitempty"`
+    ServiceRequest *DeleteClientAccountsRequest `json:"serviceRequest,omitempty" yaml:"serviceRequest,omitempty"`
+    ServiceResponse *DeleteClientAccountsResponse `json:"serviceResponse,omitempty" yaml:"serviceResponse,omitempty"`
 }

@@ -10,9 +10,11 @@ replace github.com/metamatex/metamate/gen => ./gen
 
 replace github.com/metamatex/metamate/generic => ./generic
 
-replace github.com/metamatex/metamate/mastodon-svc => ./mastodon-svc
+replace github.com/metamatex/metamate/hackernews-svc => ./hackernews-svc
 
 replace github.com/metamatex/metamate/kubernetes-svc => ./kubernetes-svc
+
+replace github.com/metamatex/metamate/mastodon-svc => ./mastodon-svc
 
 replace github.com/metamatex/metamate/metactl => ./metactl
 

@@ -6,5 +6,5 @@ const (
 )
 
 type GetClientAccountsRelations struct {
-    OwnsServiceAccounts *GetServiceAccountsCollection `json:"ownsServiceAccounts,omitempty",yaml:"ownsServiceAccounts,omitempty"`
+    OwnsServiceAccounts *GetServiceAccountsCollection `json:"ownsServiceAccounts,omitempty" yaml:"ownsServiceAccounts,omitempty"`
 }

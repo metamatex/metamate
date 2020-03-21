@@ -6,6 +6,6 @@ const (
 )
 
 type PipeClientAccountsResponse struct {
-    Context *PipeClientAccountsContext `json:"context,omitempty",yaml:"context,omitempty"`
-    Meta *ResponseMeta `json:"meta,omitempty",yaml:"meta,omitempty"`
+    Context *PipeClientAccountsContext `json:"context,omitempty" yaml:"context,omitempty"`
+    Meta *ResponseMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
 }

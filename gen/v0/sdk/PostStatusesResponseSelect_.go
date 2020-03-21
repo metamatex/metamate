@@ -6,7 +6,7 @@ const (
 )
 
 type PostStatusesResponseSelect struct {
-    All *bool `json:"all,omitempty",yaml:"all,omitempty"`
-    Meta *ResponseMetaSelect `json:"meta,omitempty",yaml:"meta,omitempty"`
-    Statuses *StatusSelect `json:"statuses,omitempty",yaml:"statuses,omitempty"`
+    All *bool `json:"all,omitempty" yaml:"all,omitempty"`
+    Meta *ResponseMetaSelect `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Statuses *StatusSelect `json:"statuses,omitempty" yaml:"statuses,omitempty"`
 }

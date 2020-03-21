@@ -6,6 +6,6 @@ const (
 )
 
 type PasswordSort struct {
-    IsHashed *string `json:"isHashed,omitempty",yaml:"isHashed,omitempty"`
-    Value *string `json:"value,omitempty",yaml:"value,omitempty"`
+    IsHashed *string `json:"isHashed,omitempty" yaml:"isHashed,omitempty"`
+    Value *string `json:"value,omitempty" yaml:"value,omitempty"`
 }

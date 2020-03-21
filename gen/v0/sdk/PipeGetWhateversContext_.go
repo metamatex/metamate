@@ -6,8 +6,8 @@ const (
 )
 
 type PipeGetWhateversContext struct {
-    ClientRequest *GetWhateversRequest `json:"clientRequest,omitempty",yaml:"clientRequest,omitempty"`
-    ClientResponse *GetWhateversResponse `json:"clientResponse,omitempty",yaml:"clientResponse,omitempty"`
-    ServiceRequest *GetWhateversRequest `json:"serviceRequest,omitempty",yaml:"serviceRequest,omitempty"`
-    ServiceResponse *GetWhateversResponse `json:"serviceResponse,omitempty",yaml:"serviceResponse,omitempty"`
+    ClientRequest *GetWhateversRequest `json:"clientRequest,omitempty" yaml:"clientRequest,omitempty"`
+    ClientResponse *GetWhateversResponse `json:"clientResponse,omitempty" yaml:"clientResponse,omitempty"`
+    ServiceRequest *GetWhateversRequest `json:"serviceRequest,omitempty" yaml:"serviceRequest,omitempty"`
+    ServiceResponse *GetWhateversResponse `json:"serviceResponse,omitempty" yaml:"serviceResponse,omitempty"`
 }

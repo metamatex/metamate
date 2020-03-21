@@ -6,6 +6,6 @@ const (
 )
 
 type AuthenticateClientAccountResponse struct {
-    Meta *ResponseMeta `json:"meta,omitempty",yaml:"meta,omitempty"`
-    Output *AuthenticateClientAccountOutput `json:"output,omitempty",yaml:"output,omitempty"`
+    Meta *ResponseMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Output *AuthenticateClientAccountOutput `json:"output,omitempty" yaml:"output,omitempty"`
 }

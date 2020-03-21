@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
+	
 	"testing"
 )
 
@@ -18,7 +18,7 @@ func TestGetModeCollection(t *testing.T, ctx context.Context, f generic.Factory,
 				ServiceFilter: &sdk.ServiceFilter{
 					Id: &sdk.ServiceIdFilter{
 						Value: &sdk.StringFilter{
-							Is: ptr.String(svcName),
+							Is: sdk.String(svcName),
 						},
 					},
 				},
@@ -30,20 +30,20 @@ func TestGetModeCollection(t *testing.T, ctx context.Context, f generic.Factory,
 					Meta: GetResponseMetaSelect(),
 					Whatevers: &sdk.WhateverSelect{
 						Id: &sdk.ServiceIdSelect{
-							Value: ptr.Bool(true),
+							Value: sdk.Bool(true),
 						},
-						StringField: ptr.Bool(true),
+						StringField: sdk.Bool(true),
 					},
 				},
 				Whatevers: []sdk.Whatever{
 					{
 						Id: &sdk.ServiceId{
-							Value: ptr.String(name),
+							Value: sdk.String(name),
 						},
-						StringField: ptr.String("a"),
+						StringField: sdk.String("a"),
 					},
 					{
-						StringField: ptr.String("b"),
+						StringField: sdk.String("b"),
 					},
 				},
 			}
@@ -59,7 +59,7 @@ func TestGetModeCollection(t *testing.T, ctx context.Context, f generic.Factory,
 				ServiceFilter: &sdk.ServiceFilter{
 					Id: &sdk.ServiceIdFilter{
 						Value: &sdk.StringFilter{
-							Is: ptr.String(svcName),
+							Is: sdk.String(svcName),
 						},
 					},
 				},
@@ -71,9 +71,9 @@ func TestGetModeCollection(t *testing.T, ctx context.Context, f generic.Factory,
 					Meta: GetCollectionMetaSelect(),
 					Whatevers: &sdk.WhateverSelect{
 						Id: &sdk.ServiceIdSelect{
-							Value: ptr.Bool(true),
+							Value: sdk.Bool(true),
 						},
-						StringField: ptr.Bool(true),
+						StringField: sdk.Bool(true),
 					},
 				},
 			}

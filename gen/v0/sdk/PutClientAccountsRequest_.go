@@ -6,10 +6,10 @@ const (
 )
 
 type PutClientAccountsRequest struct {
-    Auth *Auth `json:"auth,omitempty",yaml:"auth,omitempty"`
-    ClientAccounts []ClientAccount `json:"clientAccounts,omitempty",yaml:"clientAccounts,omitempty"`
-    Meta *RequestMeta `json:"meta,omitempty",yaml:"meta,omitempty"`
-    Mode *PutMode `json:"mode,omitempty",yaml:"mode,omitempty"`
-    Select *PutClientAccountsResponseSelect `json:"select,omitempty",yaml:"select,omitempty"`
-    ServiceFilter *ServiceFilter `json:"serviceFilter,omitempty",yaml:"serviceFilter,omitempty"`
+    Auth *Auth `json:"auth,omitempty" yaml:"auth,omitempty"`
+    ClientAccounts []ClientAccount `json:"clientAccounts,omitempty" yaml:"clientAccounts,omitempty"`
+    Meta *RequestMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Mode *PutMode `json:"mode,omitempty" yaml:"mode,omitempty"`
+    Select *PutClientAccountsResponseSelect `json:"select,omitempty" yaml:"select,omitempty"`
+    ServiceFilter *ServiceFilter `json:"serviceFilter,omitempty" yaml:"serviceFilter,omitempty"`
 }

@@ -6,7 +6,7 @@ import (
 	"context"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
+	
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/generic/pkg/v0/transport/httpjson"
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
@@ -14,7 +14,7 @@ import (
 )
 
 func init() {
-	handler[ReqFilter] = func(f generic.Factory, rn *graph.RootNode, c *http.Client, opts types.VirtualSvcOpts) (h http.Handler, t string, err error) {
+	handler[ReqFilter] = func(f generic.Factory, rn *graph.RootNode, c *http.Client, vSvc types.VirtualSvc) (h http.Handler, t string, err error) {
 		h = httpjson.NewServer(httpjson.ServerOpts{
 			Root:    rn,
 			Factory: f,
@@ -31,7 +31,7 @@ func init() {
 												Some: &sdk.WhateverFilter{
 													Id: &sdk.ServiceIdFilter{
 														Value: &sdk.StringFilter{
-															Is: ptr.String("match"),
+															Is: sdk.String("match"),
 														},
 													},
 												},

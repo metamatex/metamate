@@ -6,10 +6,10 @@ const (
 )
 
 type DeleteWhateversRequest struct {
-    Auth *Auth `json:"auth,omitempty",yaml:"auth,omitempty"`
-    Ids []ServiceId `json:"ids,omitempty",yaml:"ids,omitempty"`
-    Meta *RequestMeta `json:"meta,omitempty",yaml:"meta,omitempty"`
-    Mode *DeleteMode `json:"mode,omitempty",yaml:"mode,omitempty"`
-    Select *DeleteWhateversResponseSelect `json:"select,omitempty",yaml:"select,omitempty"`
-    ServiceFilter *ServiceFilter `json:"serviceFilter,omitempty",yaml:"serviceFilter,omitempty"`
+    Auth *Auth `json:"auth,omitempty" yaml:"auth,omitempty"`
+    Ids []ServiceId `json:"ids,omitempty" yaml:"ids,omitempty"`
+    Meta *RequestMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Mode *DeleteMode `json:"mode,omitempty" yaml:"mode,omitempty"`
+    Select *DeleteWhateversResponseSelect `json:"select,omitempty" yaml:"select,omitempty"`
+    ServiceFilter *ServiceFilter `json:"serviceFilter,omitempty" yaml:"serviceFilter,omitempty"`
 }

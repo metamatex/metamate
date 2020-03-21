@@ -6,6 +6,6 @@ const (
 )
 
 type PostStatusesResponse struct {
-    Meta *ResponseMeta `json:"meta,omitempty",yaml:"meta,omitempty"`
-    Statuses []Status `json:"statuses,omitempty",yaml:"statuses,omitempty"`
+    Meta *ResponseMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Statuses []Status `json:"statuses,omitempty" yaml:"statuses,omitempty"`
 }

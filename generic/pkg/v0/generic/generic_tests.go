@@ -9,20 +9,20 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils/ptr"
+	
 )
 
 var w = sdk.Whatever{
-	StringField:  ptr.String("a"),
-	Int32Field:   ptr.Int32(1),
-	Float64Field: ptr.Float64(1),
-	BoolField:    ptr.Bool(true),
-	EnumField:    ptr.String(sdk.WhateverKind.Red),
+	StringField:  sdk.String("a"),
+	Int32Field:   sdk.Int32(1),
+	Float64Field: sdk.Float64(1),
+	BoolField:    sdk.Bool(true),
+	EnumField:    sdk.String(sdk.WhateverKind.Red),
 	UnionField: &sdk.WhateverUnion{
-		StringField:  ptr.String("a"),
-		Int32Field:   ptr.Int32(1),
-		Float64Field: ptr.Float64(1),
-		BoolField:    ptr.Bool(true),
+		StringField:  sdk.String("a"),
+		Int32Field:   sdk.Int32(1),
+		Float64Field: sdk.Float64(1),
+		BoolField:    sdk.Bool(true),
 	},
 	StringList:  []string{"a"},
 	Int32List:   []int32{1},
@@ -31,16 +31,16 @@ var w = sdk.Whatever{
 	EnumList:    []string{sdk.WhateverKind.Red},
 	UnionList: []sdk.WhateverUnion{
 		{
-			StringField:  ptr.String("a"),
-			Int32Field:   ptr.Int32(1),
-			Float64Field: ptr.Float64(1),
-			BoolField:    ptr.Bool(true),
+			StringField:  sdk.String("a"),
+			Int32Field:   sdk.Int32(1),
+			Float64Field: sdk.Float64(1),
+			BoolField:    sdk.Bool(true),
 		},
 		{
-			StringField:  ptr.String("b"),
-			Int32Field:   ptr.Int32(2),
-			Float64Field: ptr.Float64(2),
-			BoolField:    ptr.Bool(true),
+			StringField:  sdk.String("b"),
+			Int32Field:   sdk.Int32(2),
+			Float64Field: sdk.Float64(2),
+			BoolField:    sdk.Bool(true),
 		},
 	},
 }
