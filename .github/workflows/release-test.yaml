@@ -13,4 +13,8 @@ jobs:
       - run: kubectl get pod -n default
       - run: kubectl get pod
       - run: kubectl version
+      - run: $GITHUB_WORKSPACE/bin/kubectl
+      - run: $GITHUB_WORKSPACE/bin/kubectl version
+      - run: ls -lah $GITHUB_WORKSPACE/bin/kubectl version
+      - run: which kubectl
       - run: echo hi
