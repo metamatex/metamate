@@ -11,5 +11,6 @@ jobs:
       - run: mv kubectl $GITHUB_WORKSPACE/bin/kubectl
       - run: chmod +x $GITHUB_WORKSPACE/bin/kubectl
       - run: mkdir $HOME/.kube
+      - run: echo hi
       - run: echo "${{ secrets.METAMATE_ONE_KUBECONFIG }}" > $HOME/.kube/config
       - run: (cd metamate && make deploy)
