@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: mkdir $GITHUB_WORKSPACE/bin
-      - run: curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.17.0/bin/linux/amd64/kubectl > $GITHUB_WORKSPACE/bin/kubectl
+      - run: curl -LO -o $GITHUB_WORKSPACE/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.17.0/bin/linux/amd64/kubectl
       - run: chmod +x $GITHUB_WORKSPACE/bin/kubectl
       - run: mkdir $HOME/.kube
       - run: echo "${{ secrets.METAMATE_ONE_KUBECONFIG }}" > $HOME/.kube/config
