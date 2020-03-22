@@ -4,6 +4,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - run: echo "::add-path::$GITHUB_WORKSPACE/bin"
       - run: mkdir $GITHUB_WORKSPACE/bin
       - run: curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.17.0/bin/linux/amd64/kubectl
