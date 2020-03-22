@@ -12,4 +12,5 @@ jobs:
       - run: echo "::add-path::$GITHUB_WORKSPACE/bin"
       - run: kubectl get pod -n default
       - run: kubectl get pod
+      - run: kubectl version
       - run: echo hi
