@@ -7,8 +7,8 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "::add-path::$GITHUB_WORKSPACE/bin"
       - uses: actions/checkout@v2
+      - run: echo "::add-path::$GITHUB_WORKSPACE/bin"
       - uses: actions/setup-go@v1
         with:
           go-version: '1.13'
@@ -21,9 +21,9 @@ jobs:
     needs: [release]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - run: echo "::add-path::$GITHUB_WORKSPACE/bin"
       - run: mkdir $GITHUB_WORKSPACE/bin
-      - uses: actions/checkout@v2
       - run: curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.17.0/bin/linux/amd64/kubectl
       - run: mv kubectl $GITHUB_WORKSPACE/bin/kubectl
       - run: chmod +x $GITHUB_WORKSPACE/bin/kubectl
