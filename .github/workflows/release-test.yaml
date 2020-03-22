@@ -11,3 +11,4 @@ jobs:
       - run: echo "${{ secrets.METAMATE_ONE_KUBECONFIG }}" > $HOME/.kube/config
       - run: echo "::add-path::$GITHUB_WORKSPACE/bin"
       - run: kubectl get pod -n default
+      - run: kubectl get pod
