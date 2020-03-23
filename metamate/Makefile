@@ -12,3 +12,6 @@ release:
 
 deploy:
 	@${SOURCE_MAKE} && deploy
+
+test:
+	@${SOURCE_MAKE} && test

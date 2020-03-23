@@ -7,6 +7,7 @@ import (
 	"github.com/metamatex/metamate/generic/pkg/v0/transport/httpjson"
 	"github.com/metamatex/metamate/metamate/pkg/v0/boot"
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/line"
+	"github.com/metamatex/metamate/metamate/pkg/v0/config"
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 	"github.com/metamatex/metamate/spec/pkg/v0/spec"
 	"log"
@@ -24,7 +25,7 @@ const (
 )
 
 func TestBoot(t *testing.T) {
-	c := boot.NewBaseConfig()
+	c := config.DefaultConfig
 
 	d, err := boot.NewDependencies(c, types.Version{})
 	if err != nil {

@@ -622,7 +622,7 @@ func SetId() types.FuncTransformer {
 }
 
 func New(f generic.Factory, subject string) types.FuncTransformer {
-	name := fmt.Sprintf("new %v")
+	name := fmt.Sprintf("new %v", subject)
 
 	switch subject {
 	case types.GSvcRsp:

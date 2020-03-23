@@ -49,3 +49,7 @@ function deploy {
     kubectl delete -f deployments/kubernetes.yaml || true
     kubectl apply -f deployments/kubernetes.yaml
 }
+
+function test {
+    go test ./...
+}

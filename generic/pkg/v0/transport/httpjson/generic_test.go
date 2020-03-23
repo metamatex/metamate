@@ -89,10 +89,10 @@ func TestGenericClientGenericServer(t *testing.T) {
 
 	err := func() (err error) {
 		addr := "127.0.0.1:57004"
-		s := NewServer(root, f, NewHandler(t, f), addr)
+		s := NewServer(ServerOpts{Root: root, Factory: f, Handler: NewHandler(t, f)})
 
 		go func() {
-			err := s.Listen()
+			err = http.ListenAndServe(addr, s)
 			if err != nil {
 				t.Error(err)
 			}
@@ -112,11 +112,6 @@ func TestGenericClientGenericServer(t *testing.T) {
 		}
 
 		assert.Equal(t, rsp, rsp0)
-
-		err = s.Close(ctx)
-		if err != nil {
-			return
-		}
 
 		return
 	}()
