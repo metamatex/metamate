@@ -376,3 +376,10 @@ code {
 #root .isCompact .docExplorerShow {
   display: none;
 }
+
+#root .isCompact .open-in-explorer-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #fff;
+}

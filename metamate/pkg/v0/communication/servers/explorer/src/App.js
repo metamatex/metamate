@@ -189,7 +189,7 @@ function App() {
                         title="Toggle Dark Mode"
                         onClick={handleToggleDark}
                     />}
-                    <a className={"toolbar-button"}>hi</a>
+                    {parameters.isCompact ? <a style={{color: parameters.color}} href="https://metamate.io" target="_blank" className={"toolbar-button open-in-explorer-button"}>Open in explorer</a> : null}
                 </GraphiQL.Toolbar>
             </GraphiQL>
         </div>
