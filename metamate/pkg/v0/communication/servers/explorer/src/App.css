@@ -117,7 +117,7 @@ code {
 }
 
 #root .logo {
-  height: 40px;
+  height: 32px;
 }
 
 #root .doc-explorer-title {
@@ -207,7 +207,7 @@ code {
   background-color: #282c34 !important;
 }
 
-#root button.toolbar-button {
+#root .toolbar-button {
   color: rgba(0, 102, 255, 1);
   border: none;
   box-shadow: none;
@@ -215,7 +215,7 @@ code {
   font-weight: bold;
 }
 
-#root .isDark button.toolbar-button {
+#root .isDark .toolbar-button {
   background: #282c34;
 }
 

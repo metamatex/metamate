@@ -189,6 +189,7 @@ function App() {
                         title="Toggle Dark Mode"
                         onClick={handleToggleDark}
                     />}
+                    <a className={"toolbar-button"}>hi</a>
                 </GraphiQL.Toolbar>
             </GraphiQL>
         </div>
