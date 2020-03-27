@@ -29,7 +29,7 @@ For all other platforms, please see our [releases](https://github.com/metamatex/
 
 ## Development
 
-MetaMate tries to provide an abstraction layer for all network connected datastores, which can be databases, websites, apis etc. The challenge here is to derive an api and internal concepts that cover all major use-cases. MetaMate needs to be able to handle different kinds of paginations, entity respresentations and authentication methods.
+MetaMate aims to provide an abstraction layer for all network connected datastores, which can be databases, websites, apis etc. The challenge here is to derive an api and internal concepts that cover all major use-cases. MetaMate needs to be able to handle different kinds of pagination, entity representations, authentication methods etc.
 
 #### v0.x
 

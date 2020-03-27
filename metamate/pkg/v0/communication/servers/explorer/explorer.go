@@ -1,5 +1,3 @@
-//go:generate yarn build
-//go:generate esc -pkg explorer -o static.go -prefix build build
 package explorer
 
 import (

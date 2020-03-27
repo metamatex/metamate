@@ -7,17 +7,11 @@ import (
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/funcs"
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/line"
+	"github.com/metamatex/metamate/metamate/pkg/v0/config"
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 )
 
-const (
-	CliReq = "client request"
-	SvcReq = "service request"
-	SvcRsp = "service response"
-	CliRsp = "client response"
-)
-
-func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Service, authSvcFilter sdk.ServiceFilter, defaultClientAccount sdk.ClientAccount, reqHs map[bool]map[string]types.RequestHandler, linkStore types.LinkStore, svqReqLog func(ctx types.ReqCtx)) *line.Line {
+func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Service, authSvcFilter sdk.ServiceFilter, defaultClientAccount sdk.ClientAccount, reqHs map[bool]map[string]types.RequestHandler, linkStore types.LinkStore, logTemplates types.InternalLogTemplates) *line.Line {
 	resolveLine := line.Do()
 
 	cliReqErrL := getErrLine(f, types.GCliRsp)
@@ -29,7 +23,7 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 		Do(
 			//funcs.Copy(types.GCliReq, types.GCliReq),
 			funcs.SetId(),
-			funcs.SetStage(CliReq),
+			funcs.SetStage(config.CliReq),
 			funcs.Copy(types.GCliReq, types.ForTypeNode),
 			funcs.Copy(types.GCliReq, types.Method),
 			funcs.Copy(types.GCliReq, types.SvcFilter),
@@ -37,6 +31,7 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 			funcs.New(f, types.GCliRsp),
 		).
 		Add(SetDefaults(f)).
+		Do(funcs.ValidateCliReq(f)).
 		If(
 			func(ctx types.ReqCtx) bool {
 				return true
@@ -79,7 +74,7 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 				),
 		).
 		Add(PipeContext(f, resolveLine)).
-		Do(funcs.SetStage(SvcReq)).
+		Do(funcs.SetStage(config.SvcReq)).
 		Switch(
 			funcs.By(types.Method),
 			map[string]*line.Line{
@@ -88,7 +83,9 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 						funcs.RequireOneGSvc(),
 						funcs.SetFirstGSvc(),
 						funcs.Copy(types.GCliReq, types.GSvcReq),
-						funcs.HandleSvcReq(reqHs, svqReqLog),
+						funcs.Log(config.SvcReq, logTemplates),
+						funcs.HandleSvcReq(reqHs),
+						funcs.Log(config.SvcRsp, logTemplates),
 						funcs.GSvcRspToGCliRsp(),
 					),
 				sdk.Methods.Action: line.
@@ -97,7 +94,9 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 						funcs.SetFirstGSvc(),
 						funcs.Copy(types.GCliReq, types.GSvcReq),
 						funcs.Func(func(ctx types.ReqCtx) types.ReqCtx { ctx.GSvcReq.MustDelete(fieldnames.ServiceFilter); return ctx }),
-						funcs.HandleSvcReq(reqHs, svqReqLog),
+						funcs.Log(config.SvcReq, logTemplates),
+						funcs.HandleSvcReq(reqHs),
+						funcs.Log(config.SvcRsp, logTemplates),
 						funcs.GSvcRspToGCliRsp(),
 					),
 				sdk.Methods.Put: line.
@@ -116,7 +115,9 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 										line.
 											Do(
 												funcs.KeepLocalSvcIds(f),
-												funcs.HandleSvcReq(reqHs, svqReqLog),
+												funcs.Log(config.SvcReq, logTemplates),
+												funcs.HandleSvcReq(reqHs),
+												funcs.Log(config.SvcRsp, logTemplates),
 												funcs.GSvcRspToGCliRsp(),
 											),
 										line.
@@ -145,12 +146,14 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 										Do(
 											funcs.Copy(types.GCliReq, types.GSvcReq),
 											funcs.Func(func(ctx types.ReqCtx) types.ReqCtx { ctx.GSvcReq.MustDelete(fieldnames.ServiceFilter); return ctx }),
-											funcs.HandleSvcReq(reqHs, svqReqLog),
+											funcs.Log(config.SvcReq, logTemplates),
+											funcs.HandleSvcReq(reqHs),
+											funcs.Log(config.SvcRsp, logTemplates),
 											funcs.AddSvcToSvcIds(),
 										),
 									funcs.CollectSvcRsps,
 								),
-							sdk.Methods.Get: line.New(SvcReq).
+							sdk.Methods.Get: line.New(config.SvcReq).
 								Switch(
 									funcs.By(types.Mode),
 									map[string]*line.Line{
@@ -163,7 +166,9 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 													Do(
 														funcs.Copy(types.GCliReq, types.GSvcReq),
 														funcs.Func(func(ctx types.ReqCtx) types.ReqCtx { ctx.GSvcReq.MustDelete(fieldnames.ServiceFilter); return ctx }),
-														funcs.HandleSvcReq(reqHs, svqReqLog),
+														funcs.Log(config.SvcReq, logTemplates),
+														funcs.HandleSvcReq(reqHs),
+														funcs.Log(config.SvcRsp, logTemplates),
 														funcs.AddSvcToSvcIds(),
 													),
 												funcs.CollectSvcRsps,
@@ -178,12 +183,14 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 													Do(
 														funcs.Copy(types.GCliReq, types.GSvcReq),
 														funcs.Func(func(ctx types.ReqCtx) types.ReqCtx { ctx.GSvcReq.MustDelete(fieldnames.ServiceFilter); return ctx }),
-														funcs.HandleSvcReq(reqHs, svqReqLog),
+														funcs.Log(config.SvcReq, logTemplates),
+														funcs.HandleSvcReq(reqHs),
+														funcs.Log(config.SvcRsp, logTemplates),
 														funcs.AddSvcToSvcIds(),
 													).
 													If(
 														funcs.IsType(types.GSvcRsp, sdk.GetServicesResponseName, true),
-														FetchSvcDataFromSvcs(f, reqHs, svqReqLog),
+														FetchSvcDataFromSvcs(f, reqHs, logTemplates),
 													),
 												funcs.CollectSvcRsps,
 											),
@@ -198,7 +205,9 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 												[]*line.Line{
 													line.
 														Do(
-															funcs.HandleSvcReq(reqHs, svqReqLog),
+															funcs.Log(config.SvcReq, logTemplates),
+															funcs.HandleSvcReq(reqHs),
+															funcs.Log(config.SvcRsp, logTemplates),
 															funcs.AddSvcToSvcIds(),
 														),
 													line.
@@ -442,7 +451,7 @@ func PipeContext(f generic.Factory, resolveLine *line.Line) func(l *line.Line) *
 	}
 }
 
-func FetchSvcDataFromSvcs(f generic.Factory, hs map[bool]map[string]types.RequestHandler, log func(ctx types.ReqCtx)) (l *line.Line) {
+func FetchSvcDataFromSvcs(f generic.Factory, hs map[bool]map[string]types.RequestHandler, logTemplates types.InternalLogTemplates) (l *line.Line) {
 	return line.Parallel(
 		-1,
 		funcs.Map(types.GSvcRsp, types.GEntity),
@@ -450,7 +459,9 @@ func FetchSvcDataFromSvcs(f generic.Factory, hs map[bool]map[string]types.Reques
 			Do(
 				funcs.Set(f, types.GSvcReq, sdk.LookupServiceRequest{}),
 				funcs.Copy(types.GEntity, types.Svc),
-				funcs.HandleSvcReq(hs, log),
+				funcs.Log(config.SvcReq, logTemplates),
+				funcs.HandleSvcReq(hs),
+				funcs.Log(config.SvcRsp, logTemplates),
 				funcs.Func(func(ctx types.ReqCtx) types.ReqCtx {
 					gEndpoints, ok := ctx.GSvcRsp.Generic(fieldnames.Output, fieldnames.Service, fieldnames.Endpoints)
 					if ok {

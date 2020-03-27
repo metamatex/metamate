@@ -15,7 +15,6 @@ red #ff035b
 blue #0066ff
 */
 
-
 @font-face {
   font-family: 'Menlo Regular';
   font-style: normal;
@@ -191,7 +190,7 @@ code {
   color: #ed06ff;
 }
 
-#root .dark input {
+#root .isDark input {
   color: #bbb;
   background: #282c34;
 }
@@ -204,7 +203,7 @@ code {
   font-size: 1em !important;
 }
 
-#root .dark .graphiql-explorer-root button {
+#root .isDark .graphiql-explorer-root button {
   background-color: #282c34 !important;
 }
 
@@ -216,7 +215,7 @@ code {
   font-weight: bold;
 }
 
-#root .dark button.toolbar-button {
+#root .isDark button.toolbar-button {
   background: #282c34;
 }
 
@@ -225,7 +224,7 @@ code {
   border: none;
 }
 
-#root .dark .CodeMirror-scroll {
+#root .isDark .CodeMirror-scroll {
   background: #282c34;
 }
 
@@ -237,11 +236,11 @@ code {
   font-weight: bold;
 }
 
-#root .dark .docExplorerShow {
+#root .isDark .docExplorerShow {
   background: #21252b;
 }
 
-#root .dark .historyPaneWrap {
+#root .isDark .historyPaneWrap {
   background: #21252b;
   color: #bbb;
 }
@@ -251,7 +250,7 @@ code {
   background: #ddd;
 }
 
-#root .dark .topBar {
+#root .isDark .topBar {
   background: #21252b;
 }
 
@@ -259,15 +258,15 @@ code {
   color: rgba(0, 102, 255, 1);
 }
 
-#root .dark .history-contents > li {
+#root .isDark .history-contents > li {
   border-bottom: 1px solid #333841;
 }
 
-#root .dark .CodeMirror-linenumber {
+#root .isDark .CodeMirror-linenumber {
   color: #454c5c;
 }
 
-#root .dark .CodeMirror-selected {
+#root .isDark .CodeMirror-selected {
   background: #404859;
 }
 
@@ -276,31 +275,31 @@ code {
   font-weight: bold;
 }
 
-#root .dark .history-contents {
+#root .isDark .history-contents {
   background: #21252b;
   color: #bbb;
 }
 
-#root .dark .CodeMirror-gutters {
+#root .isDark .CodeMirror-gutters {
   background: #282c34;
   border-left: 1px solid #333841;
   border-right: 1px solid #333841;
 }
 
-#root .dark .CodeMirror-gutter.CodeMirror-foldgutter {
+#root .isDark .CodeMirror-gutter.CodeMirror-foldgutter {
   border-left: 1px solid #333841;
   border-right: 1px solid #333841;
 }
 
-#root .dark .graphiql-explorer-node svg path {
+#root .isDark .graphiql-explorer-node svg path {
   fill: #4f575f;
 }
 
-#root .dark .doc-explorer {
+#root .isDark .doc-explorer {
   background: #21252b;
 }
 
-#root .dark .doc-explorer {
+#root .isDark .doc-explorer {
   background: #21252b;
 }
 
@@ -308,27 +307,72 @@ code {
   border-top: none;
 }
 
-#root .dark .doc-explorer-contents {
+#root .isDark .doc-explorer-contents {
   background: #21252b;
 }
 
-#root .dark .variable-editor-title {
+#root .isDark .variable-editor-title {
   background: #21252b;
   border-color: #333841;
 }
 
-#root .dark div::-webkit-scrollbar-thumb {
+#root .isDark div::-webkit-scrollbar-thumb {
   background: #282c34;
   border-left: 1px solid #333841;
   border-right: 1px solid #333841;
 }
 
-#root .dark div::-webkit-scrollbar-track  {
+#root .isDark div::-webkit-scrollbar-track  {
   background: #21252b;
   border: 1px solid #333841;
 }
 
-#root .dark div::-webkit-scrollbar  {
+#root .isDark div::-webkit-scrollbar  {
   border: 1px solid #333841;
 }
 
+
+
+
+
+
+#root .isCompact .CodeMirror-linenumbers, #root .isCompact .CodeMirror-linenumber {
+  display: none;
+}
+
+#root .isCompact .CodeMirror-foldgutter, #root .isCompact .CodeMirror-foldgutter-open, #root .isCompact .CodeMirror-foldgutter-folded {
+  display: none;
+}
+
+#root .isCompact .CodeMirror-sizer {
+  margin-left: 0px;
+}
+
+#root .isCompact .topBar {
+  background: #fff;
+}
+
+#root .isCompact .editorWrap .CodeMirror-gutters {
+  display: none;
+}
+
+#root .isCompact .variable-editor {
+  display: none;
+}
+
+#root .isCompact .CodeMirror-lines {
+  /*padding: 0;*/
+}
+
+#root .isCompact .graphiql-container .title {
+  display: none;
+}
+
+#root .isCompact .graphiql-container .execute-button-wrap {
+  margin: 0;
+  margin-left: -5px;
+}
+
+#root .isCompact .docExplorerShow {
+  display: none;
+}

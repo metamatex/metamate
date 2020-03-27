@@ -17,4 +17,5 @@ type Dependencies struct {
 	ServeFunc          ServeFunc
 	Router             http.Handler
 	Routes             []Route
+	InternalLogTemplates InternalLogTemplates
 }

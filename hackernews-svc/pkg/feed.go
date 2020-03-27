@@ -6,11 +6,20 @@ import (
 	"net/http"
 )
 
+const (
+	TopStories = "topstories"
+	NewStories = "newstories"
+	BestStories = "beststories"
+	AskStories = "askstories"
+	ShowStories = "showstories"
+	JobStories = "jobstories"
+)
+
 func getFeedsCollection(c *http.Client, req sdk.GetFeedsRequest) (fs []sdk.Feed, errs []error) {
 	fs = []sdk.Feed{
 		{
 			Id: &sdk.ServiceId{
-				Value: sdk.String("topstories"),
+				Value: sdk.String(TopStories),
 			},
 			Info: &sdk.Info{
 				Name: &sdk.Text{
@@ -21,7 +30,7 @@ func getFeedsCollection(c *http.Client, req sdk.GetFeedsRequest) (fs []sdk.Feed,
 		},
 		{
 			Id: &sdk.ServiceId{
-				Value: sdk.String("newstories"),
+				Value: sdk.String(NewStories),
 			},
 			Info: &sdk.Info{
 				Name: &sdk.Text{
@@ -32,7 +41,7 @@ func getFeedsCollection(c *http.Client, req sdk.GetFeedsRequest) (fs []sdk.Feed,
 		},
 		{
 			Id: &sdk.ServiceId{
-				Value: sdk.String("beststories"),
+				Value: sdk.String(BestStories),
 			},
 			Info: &sdk.Info{
 				Name: &sdk.Text{
@@ -43,7 +52,7 @@ func getFeedsCollection(c *http.Client, req sdk.GetFeedsRequest) (fs []sdk.Feed,
 		},
 		{
 			Id: &sdk.ServiceId{
-				Value: sdk.String("askstories"),
+				Value: sdk.String(AskStories),
 			},
 			Info: &sdk.Info{
 				Name: &sdk.Text{
@@ -54,7 +63,7 @@ func getFeedsCollection(c *http.Client, req sdk.GetFeedsRequest) (fs []sdk.Feed,
 		},
 		{
 			Id: &sdk.ServiceId{
-				Value: sdk.String("showstories"),
+				Value: sdk.String(ShowStories),
 			},
 			Info: &sdk.Info{
 				Name: &sdk.Text{
@@ -65,7 +74,7 @@ func getFeedsCollection(c *http.Client, req sdk.GetFeedsRequest) (fs []sdk.Feed,
 		},
 		{
 			Id: &sdk.ServiceId{
-				Value: sdk.String("jobstories"),
+				Value: sdk.String(JobStories),
 			},
 			Info: &sdk.Info{
 				Name: &sdk.Text{

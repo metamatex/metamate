@@ -25,6 +25,7 @@ import (
 	"log"
 	"net/http"
 	"net/http/pprof"
+	"text/template"
 )
 
 func bootVirtualCluster(rn *graph.RootNode, f generic.Factory) (c *virtual.Cluster, err error) {
@@ -55,6 +56,8 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 
 	d.LinkStore = persistence.NewMemoryLinkStore()
 
+	d.InternalLogTemplates = toInternalLogTemplates(c.Log.Internal)
+
 	c0, err := bootVirtualCluster(d.RootNode, d.Factory)
 	if err != nil {
 		return
@@ -79,11 +82,13 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 		},
 	}
 
-	d.SvcReqLog = func(ctx types.ReqCtx) {
-		log.Print(*ctx.Svc.Url.Value + " : " + ctx.GSvcReq.Type().Name())
-	}
+	//d.SvcReqLog = func(ctx types.ReqCtx) {
+	//	ctx.
+	//
+	//	log.Print(*ctx.Svc.Url.Value + " : " + ctx.GSvcReq.Type().Name())
+	//}
 
-	d.ResolveLine = pipeline.NewResolveLine(d.RootNode, d.Factory, c.DiscoverySvc, c.AuthSvcFilter, c.DefaultClientAccount, reqHs, d.LinkStore, d.SvcReqLog)
+	d.ResolveLine = pipeline.NewResolveLine(d.RootNode, d.Factory, c.DiscoverySvc, c.AuthSvcFilter, c.DefaultClientAccount, reqHs, d.LinkStore, d.InternalLogTemplates)
 
 	d.ServeFunc = func(ctx context.Context, gCliReq generic.Generic) generic.Generic {
 		gCliReq = gCliReq.Copy()
@@ -184,4 +189,18 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 	d.Router = router
 
 	return d, nil
+}
+
+func toInternalLogTemplates(c types.InternalLogConfig) (t types.InternalLogTemplates) {
+	t = types.InternalLogTemplates{}
+
+	for stageName, types0 := range c {
+		t[stageName] = map[string]*template.Template{}
+
+		for typeName, p := range types0 {
+			t[stageName][typeName] = template.Must(template.New("").Parse(p))
+		}
+	}
+
+	return
 }

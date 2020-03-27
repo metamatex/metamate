@@ -6,6 +6,17 @@ import "graphiql/graphiql.css"
 import { getIntrospectionQuery, buildClientSchema } from "graphql"
 
 const parameters = {};
+window.location.search
+    .substr(1)
+    .split(`&`)
+    .forEach(function(entry) {
+        var eq = entry.indexOf(`=`)
+        if (eq >= 0) {
+            parameters[decodeURIComponent(entry.slice(0, eq))] = decodeURIComponent(
+                entry.slice(eq + 1)
+            )
+        }
+    })
 
 function updateURL() {
     window.history.replaceState(null, null, locationQuery(parameters))
@@ -52,8 +63,8 @@ const storedExplorerPaneState =
         : false;
 
 const storeIsDarkState =
-    typeof parameters.dark !== `undefined`
-        ? parameters.dark !== `false`
+    typeof parameters.isDark !== `undefined`
+        ? parameters.isDark !== `false`
         : window.localStorage
         ? window.localStorage.getItem(`graphiql:isDark`) !== `false`
         : false;
@@ -76,7 +87,7 @@ function App() {
             mounted = true;
         });
 
-        setQuery((window.localStorage && window.localStorage.getItem(`graphiql:query`)) || window.defaultQuery);
+        setQuery(parameters.query || (window.localStorage && window.localStorage.getItem(`graphiql:query`)) || window.defaultQuery);
     }, [mounted]);
 
     const handleEditQuery = query => {
@@ -103,7 +114,7 @@ function App() {
         const newIsDark = !isDark;
         if (window.localStorage) {
             window.localStorage.setItem(
-                `graphiql:dark`,
+                `graphiql:isDark`,
                 newIsDark
             )
         }
@@ -114,7 +125,7 @@ function App() {
     };
 
     return (
-        <div className={"graphiql-container " + (isDark ? 'dark' : '')}>
+        <div className={"graphiql-container" + (isDark ? ' isDark' : '') + (parameters.isCompact ? ' isCompact' : '')}>
             <GraphiQLExplorer
                 schema={schema}
                 query={query}
@@ -154,31 +165,30 @@ function App() {
                 onEditVariables={onEditVariables}
                 onEditOperationName={onEditOperationName}
             >
-                <GraphiQL.Logo>
-                    <img className="logo" src="/static/logo.png" alt=""/>
-                </GraphiQL.Logo>
+                    {parameters.isCompact ? null : <GraphiQL.Logo>
+                    <img className="logo" src="/static/logo/blue_transparent.svg" alt=""/>
+        </GraphiQL.Logo>}
                 <GraphiQL.Toolbar>
-                    <GraphiQL.Button
+        {parameters.isCompact ? null : <GraphiQL.Button
                         label="Prettify"
                         title="Prettify Query (Shift-Ctrl-P)"
                         onClick={() => graphiql.handlePrettifyQuery()}
-                    />
-                    <GraphiQL.Button
+                    />}
+                    {parameters.isCompact ? null : <GraphiQL.Button
                         label="History"
                         title="Show History"
                         onClick={() => graphiql.handleToggleHistory()}
-                    />
-                    <GraphiQL.Button
+                    />}
+                    {parameters.isCompact ? null : <GraphiQL.Button
                         label="Explorer"
                         title="Toggle Explorer"
                         onClick={handleToggleExplorer}
-                    />
-                    <GraphiQL.Button
-                        className={"bratan"}
+                    />}
+                    {parameters.isCompact ? null : <GraphiQL.Button
                         label={isDark ? '🌕 Light' : '🌑 Dark'}
                         title="Toggle Dark Mode"
                         onClick={handleToggleDark}
-                    />
+                    />}
                 </GraphiQL.Toolbar>
             </GraphiQL>
         </div>

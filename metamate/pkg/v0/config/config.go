@@ -7,11 +7,19 @@ import (
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 )
 
-const GraphiqlExplorerPath = "/explorer"
-const GraphqlPath = "/graphql"
-const ConfigFileName = "metamate"
-const ConfigFileExtension = "yaml"
-const ConfigFile = ConfigFileName +  "." + ConfigFileExtension
+const (
+	CliReq = "ClientRequest"
+	SvcReq = "ServiceRequest"
+	SvcRsp = "ServiceResponse"
+	CliRsp = "ClientResponse"
+	GraphiqlExplorerPath = "/explorer"
+	GraphqlPath = "/graphql"
+	ConfigFileName = "metamate"
+	ConfigFileExtension = "yaml"
+	ConfigFile = ConfigFileName +  "." + ConfigFileExtension
+)
+
+
 
 var DefaultConfig = types.Config{
 	Host: types.HostConfig{

@@ -1,4 +1,3 @@
-//go:generate esc -pkg index -o static.go static
 package index
 
 import (
@@ -13,7 +12,7 @@ var tpl = template.Must(template.New("index.html").Parse(`
 <html>
 <head>
 	<title>MetaMate - Index</title>
-	<link rel="icon" href="/static/favicon.ico" />
+	<link rel="icon" href="/static/logo/blue/favicon.ico" />
 </head>
 <body>
 <p>version: {{ .Version.Version }}</p>

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/metamatex/metamate/hackernews-svc/gen/v0/sdk"
+	"strconv"
 
 	"net/http"
 )
@@ -85,8 +86,12 @@ func getStatusesRelation(c *http.Client, req sdk.GetStatusesRequest) (ss []sdk.S
 				ss = as[0].Relations.AuthorsStatuses.Statuses
 
 				break
+			case sdk.FeedRelationName.FeedContainsStatuses:
+				ss, errs = getFeedContainsStatuses(c, *req.Mode.Relation.Id.Value)
+
+				break
 			default:
-				err = errors.New(fmt.Sprintf("can't handle id %v", req.Mode.Id))
+				err = errors.New(fmt.Sprintf("can't handle relation %v", *req.Mode.Relation.Relation))
 
 				return
 			}
@@ -94,6 +99,46 @@ func getStatusesRelation(c *http.Client, req sdk.GetStatusesRequest) (ss []sdk.S
 			err = errors.New(fmt.Sprintf("can't handle id %v", req.Mode.Id))
 
 			return
+		}
+
+		return
+	}()
+	if err != nil {
+		errs = append(errs, err)
+	}
+
+	return
+}
+
+
+func getFeedContainsStatuses(c *http.Client, feed string) (ss []sdk.Status, errs []error) {
+	err := func() (err error) {
+		m := map[string]string{
+			TopStories: "https://hacker-news.firebaseio.com/v0/topstories.json",
+			NewStories: "https://hacker-news.firebaseio.com/v0/newstories.json",
+			BestStories: "https://hacker-news.firebaseio.com/v0/beststories.json",
+			AskStories: "https://hacker-news.firebaseio.com/v0/askstories.json",
+			ShowStories: "https://hacker-news.firebaseio.com/v0/showstories.json",
+			JobStories: "https://hacker-news.firebaseio.com/v0/jobstories.json",
+		}
+
+		rsp, err := c.Get(m[feed])
+		if err != nil {
+			return
+		}
+
+		var ids []int
+		err = json.NewDecoder(rsp.Body).Decode(&ids)
+		if err != nil {
+			return
+		}
+
+		for _, id := range ids {
+			ss = append(ss, sdk.Status{
+				Id: &sdk.ServiceId{
+					Value: sdk.String(strconv.Itoa(id)),
+				},
+			})
 		}
 
 		return

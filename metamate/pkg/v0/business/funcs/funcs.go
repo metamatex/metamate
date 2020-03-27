@@ -1,6 +1,7 @@
 package funcs
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
@@ -10,7 +11,8 @@ import (
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/typenames"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	
+	"github.com/metamatex/metamate/metamate/pkg/v0/config"
+
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/line"
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/validation"
@@ -875,7 +877,7 @@ func SelectCliRsp() types.FuncTransformer {
 	}
 }
 
-func HandleSvcReq(hs map[bool]map[string]types.RequestHandler, log func(types.ReqCtx)) types.FuncTransformer {
+func HandleSvcReq(hs map[bool]map[string]types.RequestHandler) types.FuncTransformer {
 	return types.FuncTransformer{
 		Name0: HandleReqName,
 		Func: func(ctx types.ReqCtx) types.ReqCtx {
@@ -901,12 +903,60 @@ func HandleSvcReq(hs map[bool]map[string]types.RequestHandler, log func(types.Re
 					return ctx
 				}
 
-				if log != nil {
-					log(ctx)
-				}
-
 				return ctx
 			}(ctx)
+
+			return ctx
+		},
+	}
+}
+
+func Log(stage string, stages types.InternalLogTemplates) types.FuncTransformer {
+	return types.FuncTransformer{
+		Name0: SelectCliRspName,
+		Func: func(ctx types.ReqCtx) types.ReqCtx {
+			ts, ok := stages[stage]
+			if !ok {
+				ts, ok = stages["*"]
+				if !ok {
+					return ctx
+				}
+			}
+
+			var s generic.Generic
+			switch stage {
+			case config.CliReq:
+				s = ctx.GCliReq
+			case config.SvcReq:
+				s = ctx.GSvcReq
+			case config.SvcRsp:
+				s = ctx.GSvcRsp
+			case config.CliRsp:
+				s = ctx.GCliRsp
+			default:
+				panic(fmt.Sprintf("no case for stage: %v", stage))
+			}
+
+			t, ok := ts[s.Type().Name()]
+			if !ok {
+				t, ok = ts["*"]
+				if !ok {
+					return ctx
+				}
+			}
+
+			var b bytes.Buffer
+			err := t.Execute(&b, types.InternalLogData{
+				Subject: s,
+				Ctx: ctx,
+			})
+			if err != nil {
+				ctx.Errs = append(ctx.Errs, NewError(nil, sdk.ErrorKind.Internal, err.Error()))
+
+				return ctx
+			}
+
+			println(b.String())
 
 			return ctx
 		},

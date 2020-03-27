@@ -20,7 +20,11 @@ type VirtualConfig struct {
 
 type LogConfig struct {
 	Http bool
+	Internal InternalLogConfig
 }
+
+// stage, type, format
+type InternalLogConfig map[string]map[string]string
 
 type EndpointsConfig struct {
 	Admin            AdminEndpointConfig            `yaml:"admin,omitempty"`
