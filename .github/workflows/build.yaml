@@ -16,8 +16,5 @@ jobs:
         with:
           go-version: '1.13'
       - run: go get -u github.com/mjibson/esc
-      - run: ls -lah ${{ github.workspace }}/go/bin
-      - run: echo $PATH
-      - run: esc
       - run: (cd metamate/pkg/v0/communication/servers/explorer && yarn install)
       - run: make build
