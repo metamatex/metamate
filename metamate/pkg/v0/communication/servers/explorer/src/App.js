@@ -125,7 +125,9 @@ function App() {
     };
 
     return (
-        <div className={"graphiql-container" + (isDark ? ' isDark' : '') + (parameters.isCompact ? ' isCompact' : '')}>
+
+    <div className={"graphiql-container" + (isDark ? ' isDark' : '') + (parameters.isCompact ? ' isCompact' : '')}>
+        {parameters.color ? <style dangerouslySetInnerHTML={{__html: `#root .execute-button { border: none; background: ` + parameters.color + ` }`}}></style>: null}
             <GraphiQLExplorer
                 schema={schema}
                 query={query}
@@ -189,7 +191,7 @@ function App() {
                         title="Toggle Dark Mode"
                         onClick={handleToggleDark}
                     />}
-                    {parameters.isCompact ? <a style={{color: parameters.color}} href="https://metamate.io" target="_blank" className={"toolbar-button open-in-explorer-button"}>Open in explorer</a> : null}
+                    {parameters.isCompact ? <a style={{color: parameters.color}} href={"http://" + window.location.host + window.location.pathname + "?query=" +encodeURI(parameters.query)} target="_blank" className={"toolbar-button open-in-explorer-button"}>Open in explorer</a> : null}
                 </GraphiQL.Toolbar>
             </GraphiQL>
         </div>
