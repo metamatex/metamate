@@ -2,6 +2,7 @@
 .idea
 dist
 bin
+go
 **/node_modules
 metamate.yaml
 
