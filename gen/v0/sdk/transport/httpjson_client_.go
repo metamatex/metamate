@@ -53,26 +53,6 @@ func (c HttpJsonClient) send(req interface{}, rsp interface{}) (err error) {
 
 	return
 }
-func (c HttpJsonClient) AuthenticateClientAccount(ctx context.Context, req sdk.AuthenticateClientAccountRequest) (rsp *sdk.AuthenticateClientAccountResponse, err error) {
-	err = c.send(req, &rsp)
-
-	return
-}
-func (c HttpJsonClient) DeleteBlueWhatevers(ctx context.Context, req sdk.DeleteBlueWhateversRequest) (rsp *sdk.DeleteBlueWhateversResponse, err error) {
-	err = c.send(req, &rsp)
-
-	return
-}
-func (c HttpJsonClient) DeleteStatuses(ctx context.Context, req sdk.DeleteStatusesRequest) (rsp *sdk.DeleteStatusesResponse, err error) {
-	err = c.send(req, &rsp)
-
-	return
-}
-func (c HttpJsonClient) DeleteWhatevers(ctx context.Context, req sdk.DeleteWhateversRequest) (rsp *sdk.DeleteWhateversResponse, err error) {
-	err = c.send(req, &rsp)
-
-	return
-}
 func (c HttpJsonClient) GetBlueWhatevers(ctx context.Context, req sdk.GetBlueWhateversRequest) (rsp *sdk.GetBlueWhateversResponse, err error) {
 	err = c.send(req, &rsp)
 
@@ -114,76 +94,6 @@ func (c HttpJsonClient) GetWhatevers(ctx context.Context, req sdk.GetWhateversRe
 	return
 }
 func (c HttpJsonClient) LookupService(ctx context.Context, req sdk.LookupServiceRequest) (rsp *sdk.LookupServiceResponse, err error) {
-	err = c.send(req, &rsp)
-
-	return
-}
-func (c HttpJsonClient) PipeClientAccounts(ctx context.Context, req sdk.PipeClientAccountsRequest) (rsp *sdk.PipeClientAccountsResponse, err error) {
-	err = c.send(req, &rsp)
-
-	return
-}
-func (c HttpJsonClient) PipeWhatevers(ctx context.Context, req sdk.PipeWhateversRequest) (rsp *sdk.PipeWhateversResponse, err error) {
-	err = c.send(req, &rsp)
-
-	return
-}
-func (c HttpJsonClient) PostBlueWhatevers(ctx context.Context, req sdk.PostBlueWhateversRequest) (rsp *sdk.PostBlueWhateversResponse, err error) {
-	err = c.send(req, &rsp)
-
-	return
-}
-func (c HttpJsonClient) PostClientAccounts(ctx context.Context, req sdk.PostClientAccountsRequest) (rsp *sdk.PostClientAccountsResponse, err error) {
-	err = c.send(req, &rsp)
-
-	return
-}
-func (c HttpJsonClient) PostServiceAccounts(ctx context.Context, req sdk.PostServiceAccountsRequest) (rsp *sdk.PostServiceAccountsResponse, err error) {
-	err = c.send(req, &rsp)
-
-	return
-}
-func (c HttpJsonClient) PostSocialAccounts(ctx context.Context, req sdk.PostSocialAccountsRequest) (rsp *sdk.PostSocialAccountsResponse, err error) {
-	err = c.send(req, &rsp)
-
-	return
-}
-func (c HttpJsonClient) PostStatuses(ctx context.Context, req sdk.PostStatusesRequest) (rsp *sdk.PostStatusesResponse, err error) {
-	err = c.send(req, &rsp)
-
-	return
-}
-func (c HttpJsonClient) PostWhatevers(ctx context.Context, req sdk.PostWhateversRequest) (rsp *sdk.PostWhateversResponse, err error) {
-	err = c.send(req, &rsp)
-
-	return
-}
-func (c HttpJsonClient) PutBlueWhatevers(ctx context.Context, req sdk.PutBlueWhateversRequest) (rsp *sdk.PutBlueWhateversResponse, err error) {
-	err = c.send(req, &rsp)
-
-	return
-}
-func (c HttpJsonClient) PutServiceAccounts(ctx context.Context, req sdk.PutServiceAccountsRequest) (rsp *sdk.PutServiceAccountsResponse, err error) {
-	err = c.send(req, &rsp)
-
-	return
-}
-func (c HttpJsonClient) PutSocialAccounts(ctx context.Context, req sdk.PutSocialAccountsRequest) (rsp *sdk.PutSocialAccountsResponse, err error) {
-	err = c.send(req, &rsp)
-
-	return
-}
-func (c HttpJsonClient) PutStatuses(ctx context.Context, req sdk.PutStatusesRequest) (rsp *sdk.PutStatusesResponse, err error) {
-	err = c.send(req, &rsp)
-
-	return
-}
-func (c HttpJsonClient) PutWhatevers(ctx context.Context, req sdk.PutWhateversRequest) (rsp *sdk.PutWhateversResponse, err error) {
-	err = c.send(req, &rsp)
-
-	return
-}
-func (c HttpJsonClient) VerifyToken(ctx context.Context, req sdk.VerifyTokenRequest) (rsp *sdk.VerifyTokenResponse, err error) {
 	err = c.send(req, &rsp)
 
 	return

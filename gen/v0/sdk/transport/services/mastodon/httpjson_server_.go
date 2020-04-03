@@ -35,26 +35,18 @@ func (s HttpJsonServer) send(w http.ResponseWriter, rsp interface{}) (err error)
 }
 
 func (s HttpJsonServer) getService() (sdk.Service) {
-	deleteStatusesEndpoint := s.opts.Service.GetDeleteStatusesEndpoint()
 	getFeedsEndpoint := s.opts.Service.GetGetFeedsEndpoint()
 	getSocialAccountsEndpoint := s.opts.Service.GetGetSocialAccountsEndpoint()
 	getStatusesEndpoint := s.opts.Service.GetGetStatusesEndpoint()
-	postStatusesEndpoint := s.opts.Service.GetPostStatusesEndpoint()
-	putSocialAccountsEndpoint := s.opts.Service.GetPutSocialAccountsEndpoint()
-	putStatusesEndpoint := s.opts.Service.GetPutStatusesEndpoint()
 
 	return sdk.Service{
 		Name: sdk.String(s.opts.Service.Name()),
 		SdkVersion: sdk.String(sdk.Version),
 		Endpoints: &sdk.Endpoints{
 			LookupService: &sdk.LookupServiceEndpoint{},
-			DeleteStatuses: &deleteStatusesEndpoint,
 			GetFeeds: &getFeedsEndpoint,
 			GetSocialAccounts: &getSocialAccountsEndpoint,
 			GetStatuses: &getStatusesEndpoint,
-			PostStatuses: &postStatusesEndpoint,
-			PutSocialAccounts: &putSocialAccountsEndpoint,
-			PutStatuses: &putStatusesEndpoint,
 		},
 	}
 }
@@ -79,19 +71,6 @@ func (s HttpJsonServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				return
 			}
-    case sdk.DeleteStatusesRequestName:
-        var req sdk.DeleteStatusesRequest
-        err := json.NewDecoder(r.Body).Decode(&req)
-        if err != nil {
-            return
-        }
-
-        rsp := s.opts.Service.DeleteStatuses(r.Context(), req)
-
-        err = s.send(w, rsp)
-        if err != nil {
-            return
-        }
     case sdk.GetFeedsRequestName:
         var req sdk.GetFeedsRequest
         err := json.NewDecoder(r.Body).Decode(&req)
@@ -126,45 +105,6 @@ func (s HttpJsonServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         }
 
         rsp := s.opts.Service.GetStatuses(r.Context(), req)
-
-        err = s.send(w, rsp)
-        if err != nil {
-            return
-        }
-    case sdk.PostStatusesRequestName:
-        var req sdk.PostStatusesRequest
-        err := json.NewDecoder(r.Body).Decode(&req)
-        if err != nil {
-            return
-        }
-
-        rsp := s.opts.Service.PostStatuses(r.Context(), req)
-
-        err = s.send(w, rsp)
-        if err != nil {
-            return
-        }
-    case sdk.PutSocialAccountsRequestName:
-        var req sdk.PutSocialAccountsRequest
-        err := json.NewDecoder(r.Body).Decode(&req)
-        if err != nil {
-            return
-        }
-
-        rsp := s.opts.Service.PutSocialAccounts(r.Context(), req)
-
-        err = s.send(w, rsp)
-        if err != nil {
-            return
-        }
-    case sdk.PutStatusesRequestName:
-        var req sdk.PutStatusesRequest
-        err := json.NewDecoder(r.Body).Decode(&req)
-        if err != nil {
-            return
-        }
-
-        rsp := s.opts.Service.PutStatuses(r.Context(), req)
 
         err = s.send(w, rsp)
         if err != nil {

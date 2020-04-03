@@ -9,18 +9,10 @@ import (
 
 type Service interface {
 	Name() (string)
-	GetDeleteStatusesEndpoint() (sdk.DeleteStatusesEndpoint)
-    DeleteStatuses(ctx context.Context, req sdk.DeleteStatusesRequest) (rsp sdk.DeleteStatusesResponse)
 	GetGetFeedsEndpoint() (sdk.GetFeedsEndpoint)
     GetFeeds(ctx context.Context, req sdk.GetFeedsRequest) (rsp sdk.GetFeedsResponse)
 	GetGetSocialAccountsEndpoint() (sdk.GetSocialAccountsEndpoint)
     GetSocialAccounts(ctx context.Context, req sdk.GetSocialAccountsRequest) (rsp sdk.GetSocialAccountsResponse)
 	GetGetStatusesEndpoint() (sdk.GetStatusesEndpoint)
     GetStatuses(ctx context.Context, req sdk.GetStatusesRequest) (rsp sdk.GetStatusesResponse)
-	GetPostStatusesEndpoint() (sdk.PostStatusesEndpoint)
-    PostStatuses(ctx context.Context, req sdk.PostStatusesRequest) (rsp sdk.PostStatusesResponse)
-	GetPutSocialAccountsEndpoint() (sdk.PutSocialAccountsEndpoint)
-    PutSocialAccounts(ctx context.Context, req sdk.PutSocialAccountsRequest) (rsp sdk.PutSocialAccountsResponse)
-	GetPutStatusesEndpoint() (sdk.PutStatusesEndpoint)
-    PutStatuses(ctx context.Context, req sdk.PutStatusesRequest) (rsp sdk.PutStatusesResponse)
 }

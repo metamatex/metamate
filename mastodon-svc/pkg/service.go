@@ -40,16 +40,6 @@ func (svc Service) getClient() (c *mastodon.Client) {
 	return c
 }
 
-func (svc Service) GetDeleteStatusesEndpoint() (sdk.DeleteStatusesEndpoint) {
-	return sdk.DeleteStatusesEndpoint{}
-}
-
-func (svc Service) DeleteStatuses(ctx context.Context, req sdk.DeleteStatusesRequest) (sdk.DeleteStatusesResponse) {
-	c := svc.getClient()
-
-	return deleteStatuses(ctx, c, req)
-}
-
 func (svc Service) GetGetStatusesEndpoint() (sdk.GetStatusesEndpoint) {
 	return sdk.GetStatusesEndpoint{
 		Filter: &sdk.GetStatusesRequestFilter{
@@ -101,58 +91,6 @@ func (svc Service) GetStatuses(ctx context.Context, req sdk.GetStatusesRequest) 
 		rsp = getStatusesRelation(ctx, c, req)
 	case sdk.GetModeKind.Search:
 		rsp = getStatusesSearch(ctx, c, req)
-	default:
-	}
-
-	return
-}
-
-func (svc Service) GetPostStatusesEndpoint() (sdk.PostStatusesEndpoint) {
-	return sdk.PostStatusesEndpoint{
-		Filter: &sdk.PostStatusesRequestFilter{},
-	}
-}
-
-func (svc Service) PostStatuses(ctx context.Context, req sdk.PostStatusesRequest) (rsp sdk.PostStatusesResponse) {
-	c := svc.getClient()
-
-	return postStatuses(ctx, c, req)
-}
-
-func (svc Service) GetPutStatusesEndpoint() (sdk.PutStatusesEndpoint) {
-	return sdk.PutStatusesEndpoint{
-		Filter: &sdk.PutStatusesRequestFilter{
-			Mode: &sdk.PutModeFilter{
-				Kind: &sdk.EnumFilter{
-					Is: &sdk.PutModeKind.Relation,
-				},
-				// todo v1 filter for Id.Kind == "me"
-				Relation: &sdk.RelationPutModeFilter{
-					Relation: &sdk.StringFilter{
-						In: []string{
-							sdk.SocialAccountRelationName.SocialAccountFavorsStatuses,
-							sdk.StatusRelationName.StatusRebloggedByStatuses,
-						},
-					},
-					Operation: &sdk.EnumFilter{
-						In: []string{
-							sdk.RelationOperation.Add,
-							sdk.RelationOperation.Remove,
-						},
-					},
-					// todo v1 filter for Id.Kind == "serviceId"
-				},
-			},
-		},
-	}
-}
-
-func (svc Service) PutStatuses(ctx context.Context, req sdk.PutStatusesRequest) (rsp sdk.PutStatusesResponse) {
-	c := svc.getClient()
-
-	switch *req.Mode.Kind {
-	case sdk.PutModeKind.Relation:
-		rsp = putStatusesRelation(ctx, c, req)
 	default:
 	}
 
@@ -219,47 +157,6 @@ func (svc Service) GetSocialAccounts(ctx context.Context, req sdk.GetSocialAccou
 		rsp = getSocialAccountId(ctx, c, req)
 	case sdk.GetModeKind.Relation:
 		rsp = getSocialAccountsRelation(ctx, c, req)
-	default:
-	}
-
-	return
-}
-
-func (svc Service) GetPutSocialAccountsEndpoint() (sdk.PutSocialAccountsEndpoint) {
-	return sdk.PutSocialAccountsEndpoint{
-		Filter: &sdk.PutSocialAccountsRequestFilter{
-			Mode: &sdk.PutModeFilter{
-				Kind: &sdk.EnumFilter{
-					Is: &sdk.PutModeKind.Relation,
-				},
-				// todo v1 filter for Id.Kind == "me"
-				Relation: &sdk.RelationPutModeFilter{
-					Relation: &sdk.StringFilter{
-						In: []string{
-							sdk.SocialAccountRelationName.SocialAccountBlocksSocialAccounts,
-							sdk.SocialAccountRelationName.SocialAccountFollowsSocialAccounts,
-							sdk.SocialAccountRelationName.SocialAccountMutesSocialAccounts,
-						},
-					},
-					Operation: &sdk.EnumFilter{
-						In: []string{
-							sdk.RelationOperation.Add,
-							sdk.RelationOperation.Remove,
-						},
-					},
-					// todo v1 filter for Id.Kind == "serviceId"
-				},
-			},
-		},
-	}
-}
-
-func (svc Service) PutSocialAccounts(ctx context.Context, req sdk.PutSocialAccountsRequest) (rsp sdk.PutSocialAccountsResponse) {
-	c := svc.getClient()
-
-	switch *req.Mode.Kind {
-	case sdk.PutModeKind.Relation:
-		rsp = putSocialAccountsRelation(ctx, c, req)
 	default:
 	}
 
