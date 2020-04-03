@@ -687,9 +687,6 @@ func ResolveRelations(resolvePl *line.Line, f generic.Factory) types.FuncTransfo
 				ctx0 := resolvePl.Transform(types.ReqCtx{
 					GCliReq:            gGetReq,
 					ClientAccount:      ctx.ClientAccount,
-					DoCliReqProcessing: false,
-					DoCliReqValidation: false,
-					DoSetClientAccount: false,
 				})
 
 				gCollection := f.New(gGetCollection.Type().Edges.Type.For().Edges.Type.Collection())
@@ -705,6 +702,77 @@ func ResolveRelations(resolvePl *line.Line, f generic.Factory) types.FuncTransfo
 
 				return
 			})
+
+			return ctx
+		},
+	}
+}
+
+func GetEntityById(f generic.Factory, resolvePl *line.Line) types.FuncTransformer {
+	return types.FuncTransformer{
+		Name0: HandleReqName,
+		Func: func(ctx types.ReqCtx) types.ReqCtx {
+			gGetReq := f.New(ctx.GEntity.Type().Edges.Type.GetRequest())
+
+			id := sdk.ServiceId{}
+			ctx.GEntity.MustGeneric(fieldnames.Id).MustToStruct(&id)
+
+			getMode := sdk.GetMode{
+				Kind: &sdk.GetModeKind.Id,
+				Id: &sdk.Id{
+					Kind: &sdk.IdKind.ServiceId,
+					ServiceId: &id,
+				},
+			}
+
+			gGetReq.MustSetGeneric([]string{fieldnames.Mode}, f.MustFromStruct(getMode))
+
+			ctx0 := resolvePl.Transform(types.ReqCtx{
+				GCliReq:            gGetReq,
+				ClientAccount:      ctx.ClientAccount,
+			})
+
+			gSlice, ok := ctx0.GCliRsp.GenericSlice(ctx.GEntity.Type().PluralFieldName())
+			if ok {
+				for _, g := range gSlice.Get() {
+					serviceName, ok := g.String(fieldnames.Id, fieldnames.ServiceName)
+					if !ok || serviceName != *id.ServiceName {
+						continue
+					}
+
+					value, ok := g.String(fieldnames.Id, fieldnames.Value)
+					if !ok || value != *id.Value {
+						continue
+					}
+
+					ctx.GEntity = g
+
+					break
+				}
+			}
+
+			return ctx
+		},
+	}
+}
+
+func AddSvcToEntities(f generic.Factory) types.FuncTransformer {
+	return types.FuncTransformer{
+		Name0: AddSvcToEntitiesName,
+		Func: func(ctx types.ReqCtx) types.ReqCtx {
+			gSlice, ok := ctx.GSvcRsp.GenericSlice(ctx.GSvcRsp.Type().Edges.Type.For().PluralFieldName())
+			if !ok {
+				return ctx
+			}
+
+			var gs []generic.Generic
+			for _, g := range gSlice.Get() {
+				g.MustSetGeneric([]string{fieldnames.Meta, fieldnames.Service}, f.MustFromStruct(ctx.Svc))
+
+				gs = append(gs, g)
+			}
+
+			gSlice.Set(gs)
 
 			return ctx
 		},
@@ -850,8 +918,6 @@ func GetById(f generic.Factory, resolve *line.Line) types.FuncTransformer {
 		Name0: "",
 		Func: func(ctx types.ReqCtx) types.ReqCtx {
 			gGetReq := f.New(ctx.ForTypeNode.Edges.Type.GetRequest())
-
-			gGetReq.MustSetGeneric([]string{fieldnames.Select}, ctx.GRspSelect)
 
 			getMode := sdk.GetMode{
 				Kind: &sdk.GetModeKind.Id,

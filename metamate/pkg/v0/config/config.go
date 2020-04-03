@@ -18,8 +18,6 @@ const (
 	ConfigFile = ConfigFileName +  "." + ConfigFileExtension
 )
 
-
-
 var DefaultConfig = types.Config{
 	Host: types.HostConfig{
 		Bind:           "0.0.0.0",

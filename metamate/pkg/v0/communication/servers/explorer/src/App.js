@@ -10,13 +10,14 @@ window.location.search
     .substr(1)
     .split(`&`)
     .forEach(function(entry) {
-        var eq = entry.indexOf(`=`)
+        let eq = entry.indexOf(`=`);
+
         if (eq >= 0) {
             parameters[decodeURIComponent(entry.slice(0, eq))] = decodeURIComponent(
                 entry.slice(eq + 1)
             )
         }
-    })
+    });
 
 function updateURL() {
     window.history.replaceState(null, null, locationQuery(parameters))

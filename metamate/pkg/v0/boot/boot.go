@@ -2,6 +2,8 @@ package boot
 
 import (
 	"context"
+	"crypto/tls"
+	"fmt"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg"
@@ -22,10 +24,12 @@ import (
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/cors"
+	"golang.org/x/crypto/acme/autocert"
 	"log"
 	"net/http"
 	"net/http/pprof"
 	"text/template"
+	"time"
 )
 
 func bootVirtualCluster(rn *graph.RootNode, f generic.Factory) (c *virtual.Cluster, err error) {
@@ -52,6 +56,18 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 		return
 	}
 
+	if c.DiscoverySvc.Endpoints == nil {
+		c.DiscoverySvc.Endpoints = &sdk.Endpoints{}
+	}
+
+	if c.DiscoverySvc.Endpoints.GetServices == nil {
+		c.DiscoverySvc.Endpoints.GetServices = &sdk.GetServicesEndpoint{}
+	}
+
+	if c.DiscoverySvc.Endpoints.LookupService == nil {
+		c.DiscoverySvc.Endpoints.LookupService = &sdk.LookupServiceEndpoint{}
+	}
+
 	d.Factory = generic.NewFactory(d.RootNode)
 
 	d.LinkStore = persistence.NewMemoryLinkStore()
@@ -73,20 +89,39 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 		Transport: c0,
 	}
 
-	reqHs := map[bool]map[string]types.RequestHandler{
-		true: {
-			sdk.ServiceTransport.HttpJson: httpjsonHandler.GetRequestHandler(d.Factory, vclient),
-		},
-		false: {
-			sdk.ServiceTransport.HttpJson: httpjsonHandler.GetRequestHandler(d.Factory, client),
-		},
+	//cache := persistence.NewLruCache(256, 5 * time.Minute)
+
+	cacheHandlerF := func(h func(ctx context.Context, addr string, gSvcReq generic.Generic) (gSvcRsp generic.Generic, err error)) (func(ctx context.Context, addr string, gSvcReq generic.Generic) (gSvcRsp generic.Generic, err error)) {
+		return func(ctx context.Context, addr string, gSvcReq generic.Generic) (gSvcRsp generic.Generic, err error) {
+			//v, ok := cache.Get(gSvcReq.GetHash())
+			//if !ok {
+			//	gSvcRsp, err = h(ctx, addr, gSvcReq)
+			//    if err != nil {
+			//        return
+			//    }
+			//
+			//    cache.Add(gSvcReq.GetHash(), gSvcRsp)
+			//
+			//	return
+			//}
+			//
+			//gSvcRsp, ok = v.(generic.Generic)
+			//if !ok {
+			//    panic("expected generic")
+			//}
+
+			return h(ctx, addr, gSvcReq)
+		}
 	}
 
-	//d.SvcReqLog = func(ctx types.ReqCtx) {
-	//	ctx.
-	//
-	//	log.Print(*ctx.Svc.Url.Value + " : " + ctx.GSvcReq.Type().Name())
-	//}
+	reqHs := map[bool]map[string]types.RequestHandler{
+		true: {
+			sdk.ServiceTransport.HttpJson: cacheHandlerF(httpjsonHandler.GetRequestHandler(d.Factory, vclient)),
+		},
+		false: {
+			sdk.ServiceTransport.HttpJson: cacheHandlerF(httpjsonHandler.GetRequestHandler(d.Factory, client)),
+		},
+	}
 
 	d.ResolveLine = pipeline.NewResolveLine(d.RootNode, d.Factory, c.DiscoverySvc, reqHs, d.LinkStore, d.InternalLogTemplates)
 
@@ -131,7 +166,6 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 	}
 
 	if c.Endpoints.GraphiqlExplorer.On && c.Endpoints.Graphql.On {
-
 		d.Routes = append(d.Routes,
 			types.Route{Methods: []string{http.MethodGet}, Path: config.GraphiqlExplorerPath + "*", Handler: explorer.GetStaticHandler(config.GraphiqlExplorerPath)},
 			types.Route{Methods: []string{http.MethodGet}, Path: config.GraphiqlExplorerPath, HandlerFunc: explorer.MustGetIndexHandlerFunc(config.GraphqlPath, config.GraphiqlExplorerPath, c.Endpoints.GraphiqlExplorer.DefaultQuery)},
@@ -154,7 +188,7 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 	}
 
 	d.Routes = append(d.Routes, types.Route{Methods: []string{http.MethodGet}, Path: "/static*", Handler: index.GetStaticHandler()})
-	d.Routes = append(d.Routes, types.Route{Methods: []string{http.MethodGet}, Path: "/", HandlerFunc: index.GetIndexHandlerFunc(c.Host.HttpPort, d.Routes, v)})
+	d.Routes = append(d.Routes, types.Route{Methods: []string{http.MethodGet}, Path: "/", HandlerFunc: index.GetIndexHandlerFunc(d.Routes, v)})
 
 	router := chi.NewRouter()
 
@@ -183,6 +217,53 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 
 	d.Router = router
 
+	httpServer := &http.Server{
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 5 * time.Second,
+		IdleTimeout:  120 * time.Second,
+		Handler:      router,
+		Addr:         ":80",
+	}
+
+	if c.Host.HttpsOn {
+		m := &autocert.Manager{
+			Prompt: autocert.AcceptTOS,
+			HostPolicy: func(ctx context.Context, host string) error {
+				if host == c.Host.Domain {
+					return nil
+				}
+
+				return fmt.Errorf("acme/autocert: only %s host is allowed", c.Host.Domain)
+			},
+			Cache: autocert.DirCache(c.Host.CertCacheDir),
+		}
+
+		httpServer = &http.Server{
+			ReadTimeout:  5 * time.Second,
+			WriteTimeout: 5 * time.Second,
+			IdleTimeout:  120 * time.Second,
+			Handler:      HttpsRedirectHandler{},
+			Addr:         ":80",
+		}
+
+		httpsServer := &http.Server{
+			ReadTimeout:  5 * time.Second,
+			WriteTimeout: 5 * time.Second,
+			IdleTimeout:  120 * time.Second,
+			Handler:      router,
+			Addr: ":443",
+			TLSConfig: &tls.Config{GetCertificate: m.GetCertificate},
+		}
+
+		httpServer.Handler = m.HTTPHandler(httpServer.Handler)
+
+		d.Run = append(d.Run, func()(err error) {
+			return httpsServer.ListenAndServeTLS("", "")
+		})
+	}
+
+	d.Run = append(d.Run, httpServer.ListenAndServe)
+
 	return d, nil
 }
 
@@ -199,3 +280,11 @@ func toInternalLogTemplates(c types.InternalLogConfig) (t types.InternalLogTempl
 
 	return
 }
+
+type HttpsRedirectHandler struct {}
+
+func (h HttpsRedirectHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	newURI := "https://" + r.Host + r.URL.String()
+	http.Redirect(w, r, newURI, http.StatusFound)
+}
+

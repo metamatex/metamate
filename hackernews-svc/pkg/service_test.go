@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/metamatex/metamate/hackernews-svc/gen/v0/sdk"
 	"github.com/metamatex/metamate/hackernews-svc/gen/v0/sdk/utils"
+	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
 )
@@ -18,7 +19,8 @@ func TestService_GetFeedsCollection(t *testing.T) {
 		},
 	})
 
-	utils.Print(rsp)
+	assert.True(t, len(rsp.Feeds) != 0)
+	assert.True(t, rsp.Meta == nil || len(rsp.Meta.Errors) == 0)
 }
 
 func TestService_GetSocialAccountsId(t *testing.T) {
@@ -48,7 +50,8 @@ func TestService_GetSocialAccountsId(t *testing.T) {
 	for _, req := range reqs {
 		rsp := svc.GetSocialAccounts(ctx, req)
 
-		utils.Print(rsp)
+		assert.True(t, len(rsp.SocialAccounts) == 1)
+		assert.True(t, rsp.Meta == nil || len(rsp.Meta.Errors) == 0)
 	}
 }
 
@@ -95,3 +98,24 @@ func TestService_GetStatusesRelation(t *testing.T) {
 		utils.Print(rsp)
 	}
 }
+
+func TestService_GetStatusesSearch(t *testing.T) {
+	reqs := []sdk.GetStatusesRequest{
+		{
+			Mode: &sdk.GetMode{
+				Kind: &sdk.GetModeKind.Search,
+				Search: &sdk.SearchGetMode{
+					Term: sdk.String("21stio"),
+				},
+			},
+		},
+	}
+
+	for _, req := range reqs {
+		rsp := svc.GetStatuses(ctx, req)
+
+		utils.Print(rsp)
+	}
+}
+
+

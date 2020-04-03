@@ -10,6 +10,7 @@ import (
 	"github.com/graphql-go/handler"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/typeflags"
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 	"log"
@@ -54,6 +55,74 @@ func ExecuteQuery(schema graphql.Schema, query string) (r *graphql.Result, err e
 	return
 }
 
+func getField(path []string, f *ast.Field) (*ast.Field) {
+	if len(path) == 0 {
+		panic("len(path) == 0")
+	}
+	for _, s := range f.SelectionSet.Selections {
+		s, ok := s.(*ast.Field)
+		if !ok {
+			continue
+		}
+
+		if s.Name.Value == path[0] {
+			if len(path) == 1 {
+				return s
+			} else {
+				return getField(path[1:], s)
+			}
+		}
+	}
+
+	return nil
+}
+
+func fillGetNode(f generic.Factory, params graphql.ResolveParams, g generic.Generic, field *ast.Field) (g0 generic.Generic, err error) {
+	argsM := argumentsToMap(field.Arguments)
+
+	selectedMap, err := selectedFieldsFromSelections(params, field.SelectionSet.Selections)
+	if err != nil {
+		return
+	}
+
+	for _, fn := range g.Type().Edges.Fields.Holds() {
+		_, ok := argsM[fn.Name()]
+		if ok {
+			g.MustSetGeneric([]string{fn.Name()}, f.MustFromStringInterfaceMap(fn.Edges.Type.Holds(), argsM[fn.Name()].(map[string]interface{})))
+		}
+
+		if fn.Edges.Type.Holds().Flags().Is(typeflags.IsSelect, true) {
+			gSelect := f.MustFromStringInterfaceMap(fn.Edges.Type.Holds(), selectedMap)
+
+			g.MustSetGeneric([]string{fieldnames.Select}, gSelect)
+		}
+	}
+
+	getRelationsField := getField([]string{g.Type().Edges.Type.For().PluralFieldName(), fieldnames.Relations}, params.Info.FieldASTs[0])
+	if getRelationsField != nil {
+		gGetRelations := f.New(g.Type().Edges.Type.For().Edges.Type.GetRelations())
+
+		for _, fn := range gGetRelations.Type().Edges.Fields.Holds() {
+			getCollectionField := getField([]string{fn.Name()}, getRelationsField)
+			if getCollectionField != nil {
+				gGetCollection := f.New(fn.Edges.Type.Holds())
+				gGetCollection, err = fillGetNode(f, params, gGetCollection, getCollectionField)
+				if err != nil {
+				    return
+				}
+
+				gGetRelations.MustSetGeneric([]string{fn.Name()}, gGetCollection)
+			}
+		}
+
+		g.MustSetGeneric([]string{fieldnames.Relations}, gGetRelations)
+	}
+
+	g0 = g
+
+	return
+}
+
 func composeResolve(f generic.Factory, serveFunc types.ServeFunc, en *graph.EndpointNode) func(params graphql.ResolveParams) (m interface{}, err error) {
 	return func(params graphql.ResolveParams) (m interface{}, err error) {
 		defer func() {
@@ -63,22 +132,12 @@ func composeResolve(f generic.Factory, serveFunc types.ServeFunc, en *graph.Endp
 			}
 		}()
 
-		selectedMap, err := getSelectedFields(params)
-		if err != nil {
-			return
-		}
-
 		gCliReq := f.New(en.Edges.Type.Request())
-		for _, fn := range en.Edges.Type.Request().Edges.Fields.Holds() {
-			_, ok := params.Args[fn.Name()]
-			if ok {
-				gCliReq.MustSetGeneric([]string{fn.Name()}, f.MustFromStringInterfaceMap(fn.Edges.Type.Holds(), params.Args[fn.Name()].(map[string]interface{})))
-			}
+
+		gCliReq, err = fillGetNode(f, params, gCliReq, params.Info.FieldASTs[0])
+		if err != nil {
+		    return
 		}
-
-		gSelect := f.MustFromStringInterfaceMap(en.Edges.Type.Response().Edges.Type.SelectedBy(), selectedMap)
-
-		gCliReq.MustSetGeneric([]string{fieldnames.Select}, gSelect)
 
 		var ctx context.Context
 		if params.Context != nil {
@@ -94,49 +153,6 @@ func composeResolve(f generic.Factory, serveFunc types.ServeFunc, en *graph.Endp
 		return
 	}
 }
-
-func getSelectedFields(params graphql.ResolveParams) (selected map[string]interface{}, err error) {
-	fieldASTs := params.Info.FieldASTs
-	if len(fieldASTs) == 0 {
-		err = fmt.Errorf("getSelectedFields: ResolveParams has no fields")
-
-		return
-	}
-
-	selected, err = selectedFieldsFromSelections(params, fieldASTs[0].SelectionSet.Selections)
-	if err != nil {
-		return
-	}
-
-	return
-}
-
-//func getRelationsFromSelections(selections []ast.Selection) (relations map[string]interface{}, err error) {
-//	relations = map[string]interface{}{}
-//
-//	for _, s := range selections {
-//		switch sth := s.(type) {
-//		case *ast.Field:
-//			if len(sth.Arguments) != 0 {
-//				relations[sth.Name.Value] = argumentsToMap(sth.Arguments)
-//			}
-//
-//			if sth.SelectionSet != nil {
-//				selected[s.Name.Value], err = getRelationsFromSelections(sth.SelectionSet.Selections)
-//				if err != nil {
-//					return
-//				}
-//			}
-//		case *ast.FragmentSpread:
-//		default:
-//			err = fmt.Errorf("getRelationsFromSelections: found unexpected selection type %v", sth)
-//
-//			return
-//		}
-//	}
-//
-//	return
-//}
 
 func selectedFieldsFromSelections(params graphql.ResolveParams, selections []ast.Selection) (selected map[string]interface{}, err error) {
 	selected = map[string]interface{}{}

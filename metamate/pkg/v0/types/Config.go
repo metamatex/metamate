@@ -49,6 +49,9 @@ type HostConfig struct {
 	Bind     string `yaml:"bind,omitempty"`
 	HttpPort int    `yaml:"httpPort,omitempty"`
 	AllowedOrigins []string `yaml:"allowedOrigins,omitempty"`
+	Domain string `yaml:"domain,omitempty"`
+	HttpsOn bool `yaml:"httpsOn,omitempty"`
+	CertCacheDir string `yaml:"certCacheDir,omitempty"`
 }
 
 type GraphiqlExplorerEndpointConfig struct {

@@ -25,6 +25,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/go-chi/chi v4.0.3+incompatible
 	github.com/go-ozzo/ozzo-validation v3.6.0+incompatible
+	github.com/golang/groupcache v0.0.0-20190129154638-5b532d6fd5ef
 	github.com/google/uuid v1.1.1
 	github.com/graphql-go/graphql v0.7.9
 	github.com/graphql-go/handler v0.2.3
@@ -44,5 +45,6 @@ require (
 	github.com/spf13/afero v1.1.2
 	github.com/spf13/cobra v0.0.6
 	github.com/spf13/viper v1.6.2
+	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073
 	gopkg.in/yaml.v2 v2.2.8
 )

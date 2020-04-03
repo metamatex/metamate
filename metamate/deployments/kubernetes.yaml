@@ -43,7 +43,7 @@ data:
       transport: httpJson
       url:
         value: http://discovery
-    authSvc:
+    authSvcFilter:
       id:
         value:
           is: auth
@@ -67,11 +67,19 @@ data:
         "on": true
     host:
       bind: 0.0.0.0
-      httpPort: 80
+      domain: metamate.one
+      httpsOn: false
       allowedOrigins:
       - '*'
     log:
       http: true
+      internal:
+        ClientRequest:
+          "*": "{{ .Ctx.GCliReq.Type.Name }}"
+        ServiceRequest:
+          "*": "{{ .Ctx.Svc.Url.Value }} : \n{{ .Ctx.GSvcReq.Type.Name }}\n{{ .Ctx.GSvcReq.Sprint }}\n\n{{ .Ctx.GSvcRsp.Type.Name }}\n{{ .Ctx.GSvcRsp.Sprint }}"
+        ServiceResponse:
+          "*": "{{ .Ctx.Svc.Url.Value }} : \n{{ .Ctx.GSvcReq.Type.Name }}\n{{ .Ctx.GSvcReq.Sprint }}\n\n{{ .Ctx.GSvcRsp.Type.Name }}\n{{ .Ctx.GSvcRsp.Sprint }}"
     virtual:
       services:
       - id: auth
@@ -170,3 +178,7 @@ spec:
       protocol: TCP
       port: 80
       targetPort: 80
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 443

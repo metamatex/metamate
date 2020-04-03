@@ -6,7 +6,6 @@ import (
 	"github.com/metamatex/metamate/metamate/pkg/v0/config"
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 	"github.com/spf13/cobra"
-	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -40,16 +39,18 @@ var serveCmd = &cobra.Command{
 
 				for _, r := range d.Routes {
 					for _, m := range r.Methods {
-						fmt.Printf("%v: %v:%v%v\n", m, c.Host.Bind, c.Host.HttpPort, r.Path)
+						fmt.Printf("%v: %v:%v\n", m, c.Host.Bind, r.Path)
 					}
 				}
 
-				err = http.ListenAndServe(fmt.Sprintf(":%v", c.Host.HttpPort), d.Router)
-				if err != nil {
-					return
+				errCh := make(chan error)
+				for i, _ := range d.Run {
+					go func(i int) {
+						errCh <- d.Run[i]()
+					}(i)
 				}
 
-				return
+				return <-errCh
 			}()
 			if err != nil {
 				panic(err)

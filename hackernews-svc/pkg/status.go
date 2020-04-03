@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-type story struct {
+type firebaseStory struct {
 	Id          *int32
 	Deleted     *bool
 	Type        *string
@@ -26,6 +26,24 @@ type story struct {
 	Title       *string
 	Parts       []int32
 	Descandants *int32
+}
+
+type searchHnStory struct {
+	CreatedAt      *string `json:"created_at"`
+	Title          *string
+	Url            *string
+	Author         *string
+	Points         *int
+	StoryText      *string `json:"story_text"`
+	CommentText    *string `json:"comment_text"`
+	NumComments    *int    `json:"num_comments"`
+	StoryId        *int    `json:"story_id"`
+	StoryTitle     *string `json:"story_title"`
+	StoryUrl       *string `json:"story_url"`
+	ParentId       *int    `json:"parent_id"`
+	CreateAtI      *int    `json:"created_at_i"`
+	RelevanceScore *int    `json:"relevance_score"`
+	ObjectId       *string `json:"objectID"`
 }
 
 func getStatusesId(c *http.Client, req sdk.GetStatusesRequest) (ss []sdk.Status, errs []error) {
@@ -46,13 +64,13 @@ func getStatusesId(c *http.Client, req sdk.GetStatusesRequest) (ss []sdk.Status,
 			return
 		}
 
-		s := story{}
+		s := firebaseStory{}
 		err = json.NewDecoder(rsp.Body).Decode(&s)
 		if err != nil {
 			return
 		}
 
-		ss = append(ss, mapStoryToStatus(s))
+		ss = append(ss, mapFirebaseStoryToStatus(s))
 
 		return
 	}()
@@ -74,7 +92,7 @@ func getStatusesRelation(c *http.Client, req sdk.GetStatusesRequest) (ss []sdk.S
 					Mode: &sdk.GetMode{
 						Kind: &sdk.GetModeKind.Id,
 						Id: &sdk.Id{
-							Kind: &sdk.IdKind.ServiceId,
+							Kind:      &sdk.IdKind.ServiceId,
 							ServiceId: req.Mode.Relation.Id,
 						},
 					},
@@ -110,16 +128,15 @@ func getStatusesRelation(c *http.Client, req sdk.GetStatusesRequest) (ss []sdk.S
 	return
 }
 
-
 func getFeedContainsStatuses(c *http.Client, feed string) (ss []sdk.Status, errs []error) {
 	err := func() (err error) {
 		m := map[string]string{
-			TopStories: "https://hacker-news.firebaseio.com/v0/topstories.json",
-			NewStories: "https://hacker-news.firebaseio.com/v0/newstories.json",
+			TopStories:  "https://hacker-news.firebaseio.com/v0/topstories.json",
+			NewStories:  "https://hacker-news.firebaseio.com/v0/newstories.json",
 			BestStories: "https://hacker-news.firebaseio.com/v0/beststories.json",
-			AskStories: "https://hacker-news.firebaseio.com/v0/askstories.json",
+			AskStories:  "https://hacker-news.firebaseio.com/v0/askstories.json",
 			ShowStories: "https://hacker-news.firebaseio.com/v0/showstories.json",
-			JobStories: "https://hacker-news.firebaseio.com/v0/jobstories.json",
+			JobStories:  "https://hacker-news.firebaseio.com/v0/jobstories.json",
 		}
 
 		rsp, err := c.Get(m[feed])
@@ -150,8 +167,8 @@ func getFeedContainsStatuses(c *http.Client, feed string) (ss []sdk.Status, errs
 	return
 }
 
-func mapStoryToStatus(s story) (s0 sdk.Status) {
-	//type story struct {
+func mapFirebaseStoryToStatus(s firebaseStory) (s0 sdk.Status) {
+	//type firebaseStory struct {
 	//	Id          int32          x
 	//	Deleted     bool
 	//	Type        string
@@ -264,4 +281,63 @@ func mapStoryToStatus(s story) (s0 sdk.Status) {
 	}
 
 	return s0
+}
+
+func getStatusesSearch(c *http.Client, req sdk.GetStatusesRequest) (ss []sdk.Status, errs []error) {
+	err := func() (err error) {
+		var url string
+
+		url = fmt.Sprintf("http://hn.algolia.com/api/v1/search?query=%v", *req.Mode.Search.Term)
+
+		rsp, err := c.Get(url)
+		if err != nil {
+			return
+		}
+
+		var r struct {
+			Hits []searchHnStory
+		}
+		err = json.NewDecoder(rsp.Body).Decode(&r)
+		if err != nil {
+			return
+		}
+
+		for _, s := range r.Hits {
+			ss = append(ss, mapSearchHNStoryToStatus(s))
+		}
+
+		return
+	}()
+	if err != nil {
+		errs = append(errs, err)
+	}
+
+	return
+}
+
+
+func mapSearchHNStoryToStatus(s searchHnStory) (s0 sdk.Status) {
+	//type searchHnStory struct {
+	//	CreatedAt      *string `json:"created_at"`
+	//	Title          *string
+	//	Url            *string
+	//	Author         *string
+	//	Points         *int
+	//	StoryText      *string `json:"story_text"`
+	//	CommentText    *string `json:"comment_text"`
+	//	NumComments    *int    `json:"num_comments"`
+	//	StoryId        *int    `json:"story_id"`
+	//	StoryTitle     *string `json:"story_title"`
+	//	StoryUrl       *string `json:"story_url"`
+	//	ParentId       *int    `json:"parent_id"`
+	//	CreateAtI      *int    `json:"created_at_i"`
+	//	RelevanceScore *int    `json:"relevance_score"`
+	//	x ObjectId       *string `json:"objectID"`
+	//}
+
+	return sdk.Status{
+		Id: &sdk.ServiceId{
+			Value: s.ObjectId,
+		},
+	}
 }
