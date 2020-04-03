@@ -173,7 +173,22 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 													),
 												funcs.CollectSvcRsps,
 											),
-										sdk.GetModeKind.Search: line.Do(),
+										sdk.GetModeKind.Search: line.
+											Parallel(
+												-1,
+												funcs.Map(types.Svcs, types.Svc),
+												line.
+													Error(svcReqErrL, true).
+													Do(
+														funcs.Copy(types.GCliReq, types.GSvcReq),
+														funcs.Func(func(ctx types.ReqCtx) types.ReqCtx { ctx.GSvcReq.MustDelete(fieldnames.ServiceFilter); return ctx }),
+														funcs.Log(config.SvcReq, logTemplates),
+														funcs.HandleSvcReq(reqHs),
+														funcs.Log(config.SvcRsp, logTemplates),
+														funcs.AddSvcToSvcIds(),
+													),
+												funcs.CollectSvcRsps,
+											),
 										sdk.GetModeKind.Collection: line.
 											Parallel(
 												-1,
@@ -238,6 +253,14 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 					Do(
 						funcs.ReduceSvcRspsToCliRsp(f),
 						funcs.ReduceSvcRspErrsToCliRspErrs(f),
+					).
+					Parallel(
+						-1,
+						funcs.Map(types.GCliRsp, types.GEntity),
+						line.If(funcs.EntityOnlyContainsServiceId, line.Do(funcs.GetEntityById(f, resolveLine))),
+						funcs.Collect(types.GEntity, types.GCliRsp),
+					).
+					Do(
 						funcs.HardFilterGCliRsp(),
 					).
 					If(

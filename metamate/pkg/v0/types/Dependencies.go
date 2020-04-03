@@ -7,15 +7,13 @@ import (
 )
 
 type Dependencies struct {
-	RootNode           *graph.RootNode
-	Factory            generic.Factory
-	ReqHandler         map[string]RequestHandler
-	LinkStore          LinkStore
-	ResolveLine        Transformer
-	SvcReqLog          func(ctx ReqCtx)
-	ClientTransportLog func(ctx ReqCtx)
-	ServeFunc          ServeFunc
-	Router             http.Handler
-	Routes             []Route
+	RootNode             *graph.RootNode
+	Factory              generic.Factory
+	LinkStore            LinkStore
+	ResolveLine          Transformer
+	ServeFunc            ServeFunc
+	Router               http.Handler
+	Routes               []Route
 	InternalLogTemplates InternalLogTemplates
+	Run                  []func() (err error)
 }

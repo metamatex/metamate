@@ -69,6 +69,8 @@ func (svc Service) GetStatuses(ctx context.Context, req sdk.GetStatusesRequest) 
 		ss, errs = getStatusesId(svc.c, req)
 	case sdk.GetModeKind.Relation:
 		ss, errs = getStatusesRelation(svc.c, req)
+	case sdk.GetModeKind.Search:
+		ss, errs = getStatusesSearch(svc.c, req)
 	default:
 		errs = append(errs, errors.New(fmt.Sprintf("can't handle %v", req)))
 	}

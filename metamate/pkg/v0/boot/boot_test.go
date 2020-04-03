@@ -64,9 +64,9 @@ func TestBoot(t *testing.T) {
 
 	//spec.TestDiscovery(t, ctx, d.Factory, f)
 
-	//FTestHackernews(t, ctx, d.Factory, f)
+	FTestHackernewsGetStatusesRelation(t, ctx, d.Factory, f)
 
-	FTestHackernewsSocialAccount(t, ctx, d.Factory, f)
+	//FTestHackernewsSocialAccount(t, ctx, d.Factory, f)
 
 	//spec.TestEmptyPost(t, ctx, d.Factory, f)
 	//
@@ -150,6 +150,13 @@ func FTestHackernews(t *testing.T, ctx context.Context, f generic.Factory, h fun
 				},
 				Relations: &sdk.GetFeedsRelations{
 					ContainsStatuses: &sdk.GetStatusesCollection{
+						Filter: &sdk.StatusFilter{
+							Content: &sdk.TextFilter{
+								Value: &sdk.StringFilter{
+									Contains: sdk.String("Ask"),
+								},
+							},
+						},
 						Select: &sdk.StatusesCollectionSelect{
 							Meta: &sdk.CollectionMetaSelect{
 								Errors: &sdk.ErrorSelect{
@@ -199,11 +206,11 @@ func FTestHackernewsSocialAccount(t *testing.T, ctx context.Context, f generic.F
 					},
 				},
 				Mode: &sdk.GetMode{
-					Kind:       &sdk.GetModeKind.Id,
+					Kind: &sdk.GetModeKind.Id,
 					Id: &sdk.Id{
 						Kind: &sdk.IdKind.ServiceId,
 						ServiceId: &sdk.ServiceId{
-							Value: sdk.String("21stio"),
+							Value:       sdk.String("21stio"),
 							ServiceName: sdk.String("hackernews"),
 						},
 					},
@@ -246,6 +253,78 @@ func FTestHackernewsSocialAccount(t *testing.T, ctx context.Context, f generic.F
 									ServiceName: sdk.Bool(true),
 								},
 							},
+						},
+					},
+				},
+			}
+
+			gGetRsp, err := h(ctx, f.MustFromStruct(getReq))
+			if err != nil {
+				return
+			}
+
+			gGetRsp.Print()
+
+			return
+		}()
+		if err != nil {
+			t.Error(err)
+		}
+	})
+}
+
+func FTestHackernewsGetStatusesRelation(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error)) {
+	name := "FTestHackernewsGetStatusesRelation"
+	t.Run(name, func(t *testing.T) {
+		t.Parallel()
+
+		err := func() (err error) {
+			getReq := sdk.GetStatusesRequest{
+				Mode: &sdk.GetMode{
+					Kind: &sdk.GetModeKind.Relation,
+					Relation: &sdk.RelationGetMode{
+						Id: &sdk.ServiceId{
+							ServiceName: sdk.String("hackernews"),
+							Value: sdk.String("21stio"),
+						},
+						Relation: &sdk.SocialAccountRelationName.SocialAccountAuthorsStatuses,
+					},
+				},
+				Filter: &sdk.StatusFilter{
+					Content: &sdk.TextFilter{
+						Value: &sdk.StringFilter{
+							Contains: sdk.String("Ask"),
+						},
+					},
+				},
+			}
+
+			gGetRsp, err := h(ctx, f.MustFromStruct(getReq))
+			if err != nil {
+				return
+			}
+
+			gGetRsp.Print()
+
+			return
+		}()
+		if err != nil {
+			t.Error(err)
+		}
+	})
+}
+
+func FTestHackernewsGetFeedsCollection(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error)) {
+	name := "FTestHackernewsGetFeedsCollection"
+	t.Run(name, func(t *testing.T) {
+		t.Parallel()
+
+		err := func() (err error) {
+			getReq := sdk.GetFeedsRequest{
+				Filter: &sdk.FeedFilter{
+					Id: &sdk.ServiceIdFilter{
+						Value: &sdk.StringFilter{
+							Contains: sdk.String("top"),
 						},
 					},
 				},

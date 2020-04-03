@@ -67,6 +67,7 @@ type Generic interface {
 	Sprint() (string)
 	Sanitize()
 	Hash()
+	GetHash() string
 	ToStruct(interface{}) (error)
 	MustToStruct(interface{}) ()
 	ToStringInterfaceMap() (map[string]interface{})

@@ -2,6 +2,7 @@ package funcs
 
 import (
 	"fmt"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 )
 
@@ -70,4 +71,12 @@ func IsType(subject string, name string, b bool) func(ctx types.ReqCtx) bool {
 	}
 
 	panic(fmt.Sprintf("subject %v not supported", subject))
+}
+
+func EntityOnlyContainsServiceId(ctx types.ReqCtx) bool  {
+	m := ctx.GEntity.ToStringInterfaceMap()
+
+	_, ok := m[fieldnames.Id]
+
+	return ok && len(m) == 1
 }

@@ -25,18 +25,25 @@ func TestGraphql(t *testing.T) {
 			return
 		}
 
-		q := `query MyQuery {
-  getFeeds {
+		q := `query {
+  getFeeds(
+    serviceFilter: {id: {value: {is: "hackernews"}}},
+    filter: {id: {value: {is: "topstories"}}},
+  ) {
     feeds {
       id {
         serviceName
         value
       }
       relations {
-        containsStatuses(filter: {id: {value: {is: "home"}}}) {
+        containsStatuses(filter: {id: {value: {is: "someStatus"}}}) {
           statuses {
-            id {
+       			id {
               serviceName
+              value
+            }
+            content {
+              formatting
               value
             }
           }

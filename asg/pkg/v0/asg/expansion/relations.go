@@ -74,6 +74,8 @@ func generateGetRelations(root *graph.RootNode, paths map[string]map[string]map[
 		typeflags.IsGetRelations: true,
 	})
 
+	tn.Edges.Type.Resolver.SetGetRelations(graph.ToNodeId(typenames.GetRelations(tn.Name())))
+
 	return
 }
 

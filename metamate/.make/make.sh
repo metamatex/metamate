@@ -49,7 +49,8 @@ function release {
         --tag metamatex/metamate:$TAG \
         .
 
-    docker push metamatex/metamate
+    docker push metamatex/metamate:latest
+    docker push metamatex/metamate:$TAG
 }
 
 function deploy {

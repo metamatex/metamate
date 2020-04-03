@@ -6,7 +6,7 @@ import (
 
 type Config struct {
 	DiscoverySvc         sdk.Service       `yaml:"discoverySvc,omitempty"`
-	AuthSvcFilter        sdk.ServiceFilter `yaml:"authSvc,omitempty"`
+	AuthSvcFilter        sdk.ServiceFilter `yaml:"authSvcFilter,omitempty"`
 	DefaultClientAccount sdk.ClientAccount `yaml:"defaultClientAccount,omitempty"`
 	Endpoints            EndpointsConfig   `yaml:"endpoints,omitempty"`
 	Host                 HostConfig        `yaml:"host,omitempty"`
@@ -52,6 +52,9 @@ type HostConfig struct {
 	Bind     string `yaml:"bind,omitempty"`
 	HttpPort int    `yaml:"httpPort,omitempty"`
 	AllowedOrigins []string `yaml:"allowedOrigins,omitempty"`
+	Domain string `yaml:"domain,omitempty"`
+	HttpsOn bool `yaml:"httpsOn,omitempty"`
+	CertCacheDir string `yaml:"certCacheDir,omitempty"`
 }
 
 type GraphiqlExplorerEndpointConfig struct {

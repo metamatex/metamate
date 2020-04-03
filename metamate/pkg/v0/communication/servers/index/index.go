@@ -39,19 +39,12 @@ type templateData struct {
 	Version types.Version
 }
 
-func GetIndexHandlerFunc(port int, rs []types.Route, v types.Version) http.HandlerFunc {
+func GetIndexHandlerFunc(rs []types.Route, v types.Version) http.HandlerFunc {
 	return func(writer http.ResponseWriter, req *http.Request) {
 		var ls []link
 
-		switch port {
-		case 80:
-			for _, r := range rs {
-				ls = append(ls, link{Label: r.Path, Href: fmt.Sprintf("http://%v%v", req.Host, r.Path)})
-			}
-		default:
-			for _, r := range rs {
-				ls = append(ls, link{Label: r.Path, Href: fmt.Sprintf("http://%v:%v%v", req.Host, port, r.Path)})
-			}
+		for _, r := range rs {
+			ls = append(ls, link{Label: r.Path, Href: fmt.Sprintf("http://%v%v", req.Host, r.Path)})
 		}
 
 		err := tpl.Execute(writer, templateData{Version: v, Links:ls})
