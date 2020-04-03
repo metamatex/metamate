@@ -34,7 +34,6 @@ const (
 	ClientAccount      = "ClientAccount"
 	DoCliReqValidation = "DoCliReqValidation"
 	DoCliReqProcessing = "DoCliReqProcessing"
-	DoSetClientAccount = "DoSetClientAccount"
 )
 
 type ReqCtx struct {

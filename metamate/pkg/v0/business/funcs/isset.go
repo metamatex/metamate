@@ -52,10 +52,6 @@ func Is(subject string, b bool) func(ctx types.ReqCtx) bool {
 		return func(ctx types.ReqCtx) bool {
 			return ctx.DoCliReqValidation == b
 		}
-	case types.DoSetClientAccount:
-		return func(ctx types.ReqCtx) bool {
-			return ctx.DoSetClientAccount == b
-		}
 	}
 
 	panic(fmt.Sprintf("funcs.Is: subject %v not supported", subject))

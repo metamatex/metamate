@@ -88,7 +88,7 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 	//	log.Print(*ctx.Svc.Url.Value + " : " + ctx.GSvcReq.Type().Name())
 	//}
 
-	d.ResolveLine = pipeline.NewResolveLine(d.RootNode, d.Factory, c.DiscoverySvc, c.AuthSvcFilter, c.DefaultClientAccount, reqHs, d.LinkStore, d.InternalLogTemplates)
+	d.ResolveLine = pipeline.NewResolveLine(d.RootNode, d.Factory, c.DiscoverySvc, reqHs, d.LinkStore, d.InternalLogTemplates)
 
 	d.ServeFunc = func(ctx context.Context, gCliReq generic.Generic) generic.Generic {
 		gCliReq = gCliReq.Copy()
@@ -109,11 +109,6 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 	err = c0.HostBus("metamate", d.ServeFunc)
 	if err != nil {
 		return
-	}
-
-	if c.Endpoints.Admin.On {
-		d.Routes = append(d.Routes, types.Route{Methods: []string{http.MethodGet}, Path: "/admin*", Handler: admin.GetStaticHandler("/admin")})
-		d.Routes = append(d.Routes, types.Route{Methods: []string{http.MethodGet}, Path: "/admin", HandlerFunc: admin.MustGetIndexHandlerFunc("/admin")})
 	}
 
 	if c.Endpoints.Config.On {

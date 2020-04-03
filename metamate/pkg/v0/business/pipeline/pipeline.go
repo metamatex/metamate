@@ -11,7 +11,7 @@ import (
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 )
 
-func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Service, authSvcFilter sdk.ServiceFilter, defaultClientAccount sdk.ClientAccount, reqHs map[bool]map[string]types.RequestHandler, linkStore types.LinkStore, logTemplates types.InternalLogTemplates) *line.Line {
+func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Service, reqHs map[bool]map[string]types.RequestHandler, linkStore types.LinkStore, logTemplates types.InternalLogTemplates) *line.Line {
 	resolveLine := line.Do()
 
 	cliReqErrL := getErrLine(f, types.GCliRsp)
@@ -21,7 +21,6 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 	resolveLine.
 		Error(cliReqErrL, true).
 		Do(
-			//funcs.Copy(types.GCliReq, types.GCliReq),
 			funcs.SetId(),
 			funcs.SetStage(config.CliReq),
 			funcs.Copy(types.GCliReq, types.ForTypeNode),
@@ -42,18 +41,8 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 		Switch(
 			funcs.By(types.Method),
 			map[string]*line.Line{
-				sdk.Methods.Post:   line.Do(funcs.Copy(types.GCliReq, types.Mode)),
 				sdk.Methods.Get:    line.Do(funcs.Copy(types.GCliReq, types.Mode)),
-				sdk.Methods.Put:    line.Do(funcs.Copy(types.GCliReq, types.Mode)),
-				sdk.Methods.Delete: line.Do(funcs.Copy(types.GCliReq, types.Mode)),
 			},
-		).
-		If(
-			funcs.Is(types.DoSetClientAccount, true),
-			line.If(
-				funcs.Isset(types.GCliReq, []string{fieldnames.Auth, fieldnames.Token}, true),
-				line.Do(funcs.SetClientAccount(resolveLine, f, authSvcFilter, defaultClientAccount)),
-			),
 		).
 		Add(NarrowSvcFilterToModeId).
 		Do(
@@ -73,21 +62,10 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 					}),
 				),
 		).
-		Add(PipeContext(f, resolveLine)).
 		Do(funcs.SetStage(config.SvcReq)).
 		Switch(
 			funcs.By(types.Method),
 			map[string]*line.Line{
-				sdk.Methods.Pipe: line.
-					Do(
-						funcs.RequireOneGSvc(),
-						funcs.SetFirstGSvc(),
-						funcs.Copy(types.GCliReq, types.GSvcReq),
-						funcs.Log(config.SvcReq, logTemplates),
-						funcs.HandleSvcReq(reqHs),
-						funcs.Log(config.SvcRsp, logTemplates),
-						funcs.GSvcRspToGCliRsp(),
-					),
 				sdk.Methods.Action: line.
 					Do(
 						funcs.RequireOneGSvc(),
@@ -99,60 +77,10 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 						funcs.Log(config.SvcRsp, logTemplates),
 						funcs.GSvcRspToGCliRsp(),
 					),
-				sdk.Methods.Put: line.
-					Switch(
-						funcs.By(types.Mode),
-						map[string]*line.Line{
-							sdk.PutModeKind.Relation: line.
-								Do(
-									funcs.RequireOneGSvc(),
-									funcs.SetFirstGSvc(),
-									funcs.Copy(types.GCliReq, types.GSvcReq),
-									funcs.Func(func(ctx types.ReqCtx) types.ReqCtx { ctx.GSvcReq.MustDelete(fieldnames.ServiceFilter); return ctx }),
-								).
-								Concurrent(
-									[]*line.Line{
-										line.
-											Do(
-												funcs.KeepLocalSvcIds(f),
-												funcs.Log(config.SvcReq, logTemplates),
-												funcs.HandleSvcReq(reqHs),
-												funcs.Log(config.SvcRsp, logTemplates),
-												funcs.GSvcRspToGCliRsp(),
-											),
-										line.
-											Do(
-												funcs.KeepInterSvcIds(f),
-												funcs.PutInterSvcIds(rn, f, linkStore),
-											),
-									},
-									funcs.CollectSvcRsps,
-								).
-								Do(
-									funcs.CollectGSvcErrsFromGSvcRsps(f),
-									funcs.AddGSvcErrsToGCliRsp(f),
-								),
-						}),
 				line.Default: line.
 					Switch(
 						funcs.By(types.Method),
 						map[string]*line.Line{
-							sdk.Methods.Post: line.
-								Parallel(
-									-1,
-									funcs.Map(types.Svcs, types.Svc),
-									line.
-										Error(svcReqErrL, true).
-										Do(
-											funcs.Copy(types.GCliReq, types.GSvcReq),
-											funcs.Func(func(ctx types.ReqCtx) types.ReqCtx { ctx.GSvcReq.MustDelete(fieldnames.ServiceFilter); return ctx }),
-											funcs.Log(config.SvcReq, logTemplates),
-											funcs.HandleSvcReq(reqHs),
-											funcs.Log(config.SvcRsp, logTemplates),
-											funcs.AddSvcToSvcIds(),
-										),
-									funcs.CollectSvcRsps,
-								),
 							sdk.Methods.Get: line.New(config.SvcReq).
 								Switch(
 									funcs.By(types.Mode),
@@ -300,11 +228,6 @@ func NarrowSvcFilterToModeId(l *line.Line) *line.Line {
 }
 
 func SetDefaults(f generic.Factory) func(l *line.Line) *line.Line {
-	gPostMode := f.MustFromStruct(sdk.PostMode{
-		Kind:       &sdk.PostModeKind.Collection,
-		Collection: &sdk.CollectionPostMode{},
-	})
-
 	gGetMode := f.MustFromStruct(sdk.GetMode{
 		Kind:       &sdk.GetModeKind.Collection,
 		Collection: &sdk.CollectionGetMode{},
@@ -315,7 +238,6 @@ func SetDefaults(f generic.Factory) func(l *line.Line) *line.Line {
 			Switch(
 				funcs.By(types.Method),
 				map[string]*line.Line{
-					sdk.Methods.Post: line.Do(funcs.SetDefaultSelect()),
 					sdk.Methods.Get:  line.Do(funcs.SetDefaultSelect()),
 				},
 			).
@@ -324,13 +246,6 @@ func SetDefaults(f generic.Factory) func(l *line.Line) *line.Line {
 				line.Switch(
 					funcs.By(types.Method),
 					map[string]*line.Line{
-						sdk.Methods.Post: line.Do(
-							funcs.Func(func(ctx types.ReqCtx) types.ReqCtx {
-								ctx.GCliReq.MustSetGeneric([]string{fieldnames.Mode}, gPostMode)
-
-								return ctx
-							}),
-						),
 						sdk.Methods.Get: line.Do(
 							funcs.Func(func(ctx types.ReqCtx) types.ReqCtx {
 								ctx.GCliReq.MustSetGeneric([]string{fieldnames.Mode}, gGetMode)
@@ -339,113 +254,6 @@ func SetDefaults(f generic.Factory) func(l *line.Line) *line.Line {
 							}),
 						),
 					},
-				),
-			)
-	}
-}
-
-func PipeContext(f generic.Factory, resolveLine *line.Line) func(l *line.Line) *line.Line {
-	return func(l *line.Line) *line.Line {
-		return l.
-			If(
-				func(ctx types.ReqCtx) bool {
-					method := ctx.GCliReq.Type().Edges.Endpoint.BelongsTo().Data.Method
-
-					if method == sdk.Methods.Pipe || method == sdk.Methods.Action {
-						return false
-					}
-
-					if ctx.GCliReq.Type().Name() == sdk.GetServicesRequestName {
-						return false
-					}
-
-					return true
-				},
-				line.Do(
-					funcs.Func(func(ctx types.ReqCtx) types.ReqCtx {
-						gCliReq := f.New(ctx.GCliReq.Type().Edges.Type.For().Edges.Type.PipeRequest())
-
-						if ctx.GCliReq != nil {
-							gCliReq.MustSetGeneric([]string{fieldnames.Context, ctx.Method, fieldnames.ClientRequest}, ctx.GCliReq)
-						}
-
-						if ctx.GSvcReq != nil {
-							gCliReq.MustSetGeneric([]string{fieldnames.Context, ctx.Method, fieldnames.ServiceRequest}, ctx.GSvcReq)
-						}
-
-						if ctx.GSvcRsp != nil {
-							gCliReq.MustSetGeneric([]string{fieldnames.Context, ctx.Method, fieldnames.ServiceResponse}, ctx.GSvcRsp)
-						}
-
-						if ctx.GCliRsp != nil {
-							gCliReq.MustSetGeneric([]string{fieldnames.Context, ctx.Method, fieldnames.ClientResponse}, ctx.GCliRsp)
-						}
-
-						m := sdk.PipeMode{
-							Kind: &sdk.PipeModeKind.Context,
-							Context: &sdk.ContextPipeMode{
-								Method:    &ctx.Method,
-								Requester: &sdk.BusActor.Client,
-								Stage:     &sdk.RequestStage.Request,
-							},
-						}
-
-						gCliReq.MustSetGeneric([]string{fieldnames.Mode}, f.MustFromStruct(m))
-
-						ctx0 := resolveLine.Transform(types.ReqCtx{
-							GCliReq: gCliReq,
-						})
-
-						gErrs, ok := ctx0.GCliRsp.GenericSlice(fieldnames.Meta, fieldnames.Errors)
-						if ok {
-							var errs []sdk.Error
-							gErrs.MustToStructs(&errs)
-
-							var errs0 []sdk.Error
-							for i, _ := range errs {
-								switch *errs[i].Kind {
-								case sdk.ErrorKind.NoServiceMatch:
-								default:
-									errs0 = append(errs0, sdk.Error{
-										Kind:  &sdk.ErrorKind.Pipe,
-										Wraps: &errs[i],
-									})
-								}
-							}
-
-							ctx.Errs = errs0
-						}
-
-						if ctx.GCliReq != nil {
-							g, ok := ctx0.GCliRsp.Generic(fieldnames.Context, ctx.Method, fieldnames.ClientRequest)
-							if ok {
-								ctx.GCliReq = g
-							}
-						}
-
-						if ctx.GSvcReq != nil {
-							g, ok := ctx0.GCliRsp.Generic(fieldnames.Context, ctx.Method, fieldnames.ServiceRequest)
-							if ok {
-								ctx.GSvcReq = g
-							}
-						}
-
-						if ctx.GSvcRsp != nil {
-							g, ok := ctx0.GCliRsp.Generic(fieldnames.Context, ctx.Method, fieldnames.ServiceResponse)
-							if ok {
-								ctx.GSvcRsp = g
-							}
-						}
-
-						if ctx.GCliRsp != nil {
-							g, ok := ctx0.GCliRsp.Generic(fieldnames.Context, ctx.Method, fieldnames.ClientResponse)
-							if ok {
-								ctx.GCliRsp = g
-							}
-						}
-
-						return ctx
-					}),
 				),
 			)
 	}

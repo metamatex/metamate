@@ -1,9 +1,0 @@
-v0:
-  gen:
-    tasks:
-      - template: types.gotpl
-        out: "src/Sdk_.ts"
-        dependencies:
-          endpoints:
-            names:
-              or: [PostClientAccounts,GetClientAccounts,PostServiceAccounts,GetServiceAccounts,GetWhatevers,GetServices]
