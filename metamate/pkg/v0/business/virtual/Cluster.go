@@ -64,15 +64,7 @@ func validateVirtualSvc(svc types.VirtualSvc) (err error) {
 func validateVirtualSvcOpts(opts types.VirtualSvcOpts) (err error) {
 	c := 0
 
-	if opts.Auth != nil {
-		c++
-	}
-
 	if opts.Mastodon != nil {
-		c++
-	}
-
-	if opts.Sqlx != nil {
 		c++
 	}
 

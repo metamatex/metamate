@@ -38,21 +38,6 @@ func MapSvcIds(ctx types.ReqCtx) (ctxs []types.ReqCtx) {
 	return
 }
 
-func CollectGs(ctx types.ReqCtx, ctxs []types.ReqCtx) types.ReqCtx {
-	gs := []generic.Generic{}
-	for _, ctx0 := range ctxs {
-		gs = append(gs, ctx0.GEntity)
-	}
-
-	gSlice, ok := ctx.GCliRsp.GenericSlice(ctx.ForTypeNode.PluralFieldName())
-	if ok {
-		gSlice.Set(gs)
-		ctx.GCliRsp.MustSetGenericSlice([]string{ctx.ForTypeNode.PluralFieldName()}, gSlice)
-	}
-
-	return ctx
-}
-
 func Collect(from, to string) func(ctx types.ReqCtx, ctxs []types.ReqCtx) types.ReqCtx {
 	switch from {
 	case types.GEntity:

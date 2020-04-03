@@ -9,7 +9,6 @@ import (
 type Dependencies struct {
 	RootNode             *graph.RootNode
 	Factory              generic.Factory
-	LinkStore            LinkStore
 	ResolveLine          Transformer
 	ServeFunc            ServeFunc
 	Router               http.Handler

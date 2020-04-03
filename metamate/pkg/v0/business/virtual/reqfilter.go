@@ -42,10 +42,10 @@ func init() {
 							},
 						},
 					})
-				case sdk.PostWhateversRequestName:
-					println("RequestFilterService.PostWhatevers called")
+				case sdk.GetWhateversRequestName:
+					println("RequestFilterService.GetWhatevers called")
 
-					return f.MustFromStruct(sdk.PostWhateversResponse{})
+					return f.MustFromStruct(sdk.GetWhateversResponse{})
 				}
 
 				return

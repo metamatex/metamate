@@ -944,34 +944,6 @@ func GetById(f generic.Factory, resolve *line.Line) types.FuncTransformer {
 	}
 }
 
-func GetInterSvcIds(rn *graph.RootNode, store types.LinkStore) types.FuncTransformer {
-	return types.FuncTransformer{
-		Name0: "",
-		Func: func(ctx types.ReqCtx) types.ReqCtx {
-			relationMode := sdk.RelationGetMode{}
-			ctx.GSvcReq.MustGeneric(fieldnames.Mode, fieldnames.Relation).MustToStruct(&relationMode)
-
-			pn, err := rn.Paths.ByName(*relationMode.Relation)
-			if err != nil {
-				ctx.Errs = append(ctx.Errs, NewError(nil, sdk.ErrorKind.Internal, err.Error()))
-
-				return ctx
-			}
-
-			rn0 := pn.Edges.Relation.BelongsTo()
-
-			ctx.SvcIds, err = store.GetLinks(rn0.Name(), pn.Data.IsActive, *relationMode.Id)
-			if err != nil {
-				ctx.Errs = append(ctx.Errs, NewError(nil, sdk.ErrorKind.Internal, err.Error()))
-
-				return ctx
-			}
-
-			return ctx
-		},
-	}
-}
-
 func Inspect() types.FuncTransformer {
 	return types.FuncTransformer{
 		Name0: "",
