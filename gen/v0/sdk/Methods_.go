@@ -7,16 +7,10 @@ const (
 
 var Methods = struct{
     Action string
-    Delete string
     Get string
     Pipe string
-    Post string
-    Put string
 }{
     Action: "action",
-    Delete: "delete",
     Get: "get",
     Pipe: "pipe",
-    Post: "post",
-    Put: "put",
 }

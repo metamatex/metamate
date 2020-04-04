@@ -7,11 +7,8 @@ const (
 
 type PipeSocialAccountsContextFilter struct {
     And []PipeSocialAccountsContextFilter `json:"and,omitempty" yaml:"and,omitempty"`
-    Delete *PipeDeleteSocialAccountsContextFilter `json:"delete,omitempty" yaml:"delete,omitempty"`
     Get *PipeGetSocialAccountsContextFilter `json:"get,omitempty" yaml:"get,omitempty"`
     Not []PipeSocialAccountsContextFilter `json:"not,omitempty" yaml:"not,omitempty"`
     Or []PipeSocialAccountsContextFilter `json:"or,omitempty" yaml:"or,omitempty"`
-    Post *PipePostSocialAccountsContextFilter `json:"post,omitempty" yaml:"post,omitempty"`
-    Put *PipePutSocialAccountsContextFilter `json:"put,omitempty" yaml:"put,omitempty"`
     Set *bool `json:"set,omitempty" yaml:"set,omitempty"`
 }

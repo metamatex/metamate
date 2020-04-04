@@ -7,11 +7,8 @@ const (
 
 type PipeStatusesContextFilter struct {
     And []PipeStatusesContextFilter `json:"and,omitempty" yaml:"and,omitempty"`
-    Delete *PipeDeleteStatusesContextFilter `json:"delete,omitempty" yaml:"delete,omitempty"`
     Get *PipeGetStatusesContextFilter `json:"get,omitempty" yaml:"get,omitempty"`
     Not []PipeStatusesContextFilter `json:"not,omitempty" yaml:"not,omitempty"`
     Or []PipeStatusesContextFilter `json:"or,omitempty" yaml:"or,omitempty"`
-    Post *PipePostStatusesContextFilter `json:"post,omitempty" yaml:"post,omitempty"`
-    Put *PipePutStatusesContextFilter `json:"put,omitempty" yaml:"put,omitempty"`
     Set *bool `json:"set,omitempty" yaml:"set,omitempty"`
 }

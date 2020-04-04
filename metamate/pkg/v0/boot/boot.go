@@ -7,20 +7,17 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg"
-	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/metamatex/metamate/gen/v0/sdk"
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/generic/pkg/v0/transport/httpjson"
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/pipeline"
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/virtual"
 	httpjsonHandler "github.com/metamatex/metamate/metamate/pkg/v0/communication/clients/httpjson"
-	"github.com/metamatex/metamate/metamate/pkg/v0/communication/servers/admin"
 	configServer "github.com/metamatex/metamate/metamate/pkg/v0/communication/servers/config"
 	"github.com/metamatex/metamate/metamate/pkg/v0/communication/servers/explorer"
 	"github.com/metamatex/metamate/metamate/pkg/v0/communication/servers/graphql"
 	"github.com/metamatex/metamate/metamate/pkg/v0/communication/servers/index"
 	"github.com/metamatex/metamate/metamate/pkg/v0/config"
-	"github.com/metamatex/metamate/metamate/pkg/v0/persistence"
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/cors"
@@ -31,24 +28,6 @@ import (
 	"text/template"
 	"time"
 )
-
-func bootVirtualCluster(rn *graph.RootNode, f generic.Factory) (c *virtual.Cluster, err error) {
-	c = virtual.NewCluster(rn, f, func(err error) {
-		panic(err)
-	})
-
-	//err = c.HostSvc(types.VirtualSvc{Id: virtual.Pipe, Name: virtual.Pipe})
-	//if err != nil {
-	//	return
-	//}
-	//
-	//err = c.HostSvc(types.VirtualSvc{Id: virtual.ReqFilter, Name: virtual.ReqFilter})
-	//if err != nil {
-	//	return
-	//}
-
-	return
-}
 
 func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err error) {
 	d.RootNode, err = asg.New()
@@ -70,14 +49,11 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 
 	d.Factory = generic.NewFactory(d.RootNode)
 
-	d.LinkStore = persistence.NewMemoryLinkStore()
-
 	d.InternalLogTemplates = toInternalLogTemplates(c.Log.Internal)
 
-	c0, err := bootVirtualCluster(d.RootNode, d.Factory)
-	if err != nil {
-		return
-	}
+	c0 := virtual.NewCluster(d.RootNode, d.Factory, func(err error) {
+		panic(err)
+	})
 
 	err = virtual.Deploy(c0, c.Virtual.Services)
 	if err != nil {
@@ -123,7 +99,7 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 		},
 	}
 
-	d.ResolveLine = pipeline.NewResolveLine(d.RootNode, d.Factory, c.DiscoverySvc, c.AuthSvcFilter, c.DefaultClientAccount, reqHs, d.LinkStore, d.InternalLogTemplates)
+	d.ResolveLine = pipeline.NewResolveLine(d.RootNode, d.Factory, c.DiscoverySvc, reqHs, d.InternalLogTemplates)
 
 	d.ServeFunc = func(ctx context.Context, gCliReq generic.Generic) generic.Generic {
 		gCliReq = gCliReq.Copy()
@@ -144,11 +120,6 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 	err = c0.HostBus("metamate", d.ServeFunc)
 	if err != nil {
 		return
-	}
-
-	if c.Endpoints.Admin.On {
-		d.Routes = append(d.Routes, types.Route{Methods: []string{http.MethodGet}, Path: "/admin*", Handler: admin.GetStaticHandler("/admin")})
-		d.Routes = append(d.Routes, types.Route{Methods: []string{http.MethodGet}, Path: "/admin", HandlerFunc: admin.MustGetIndexHandlerFunc("/admin")})
 	}
 
 	if c.Endpoints.Config.On {
@@ -256,13 +227,13 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 			WriteTimeout: 5 * time.Second,
 			IdleTimeout:  120 * time.Second,
 			Handler:      router,
-			Addr: ":443",
-			TLSConfig: &tls.Config{GetCertificate: m.GetCertificate},
+			Addr:         ":443",
+			TLSConfig:    &tls.Config{GetCertificate: m.GetCertificate},
 		}
 
 		httpServer.Handler = m.HTTPHandler(httpServer.Handler)
 
-		d.Run = append(d.Run, func()(err error) {
+		d.Run = append(d.Run, func() (err error) {
 			return httpsServer.ListenAndServeTLS("", "")
 		})
 	}
@@ -286,10 +257,9 @@ func toInternalLogTemplates(c types.InternalLogConfig) (t types.InternalLogTempl
 	return
 }
 
-type HttpsRedirectHandler struct {}
+type HttpsRedirectHandler struct{}
 
 func (h HttpsRedirectHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	newURI := "https://" + r.Host + r.URL.String()
 	http.Redirect(w, r, newURI, http.StatusFound)
 }
-

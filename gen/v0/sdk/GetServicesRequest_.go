@@ -6,12 +6,10 @@ const (
 )
 
 type GetServicesRequest struct {
-    Auth *Auth `json:"auth,omitempty" yaml:"auth,omitempty"`
     Filter *ServiceFilter `json:"filter,omitempty" yaml:"filter,omitempty"`
     Meta *RequestMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
     Mode *GetMode `json:"mode,omitempty" yaml:"mode,omitempty"`
     Pages []ServicePage `json:"pages,omitempty" yaml:"pages,omitempty"`
-    Relations *GetServicesRelations `json:"relations,omitempty" yaml:"relations,omitempty"`
     Select *GetServicesResponseSelect `json:"select,omitempty" yaml:"select,omitempty"`
     ServiceFilter *ServiceFilter `json:"serviceFilter,omitempty" yaml:"serviceFilter,omitempty"`
     Sort *ServiceSort `json:"sort,omitempty" yaml:"sort,omitempty"`

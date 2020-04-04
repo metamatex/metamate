@@ -2,26 +2,6 @@
 package graph
 
 
-type EndpointNodeEdges struct {
-	Type EndpointToTypeEdges
-	Enums EndpointToEnumsEdges
-	Types EndpointToTypesEdges
-}
-
-func NewEndpointNodeEdges(n *EndpointNode) (EndpointNodeEdges) {
-	return EndpointNodeEdges{
-		Type: EndpointToTypeEdges{
-			Resolver: NewEndpointToTypeIdResolver(n),
-		},
-		Enums: EndpointToEnumsEdges{
-			Resolver: NewEndpointToEnumsIdResolver(n),
-		},
-		Types: EndpointToTypesEdges{
-			Resolver: NewEndpointToTypesIdResolver(n),
-		},
-	}
-}
-
 type EnumNodeEdges struct {
 	Type EnumToTypeEdges
 }
@@ -134,6 +114,26 @@ func NewPathNodeEdges(n *PathNode) (PathNodeEdges) {
 		},
 		Type: PathToTypeEdges{
 			Resolver: NewPathToTypeIdResolver(n),
+		},
+	}
+}
+
+type EndpointNodeEdges struct {
+	Type EndpointToTypeEdges
+	Enums EndpointToEnumsEdges
+	Types EndpointToTypesEdges
+}
+
+func NewEndpointNodeEdges(n *EndpointNode) (EndpointNodeEdges) {
+	return EndpointNodeEdges{
+		Type: EndpointToTypeEdges{
+			Resolver: NewEndpointToTypeIdResolver(n),
+		},
+		Enums: EndpointToEnumsEdges{
+			Resolver: NewEndpointToEnumsIdResolver(n),
+		},
+		Types: EndpointToTypesEdges{
+			Resolver: NewEndpointToTypesIdResolver(n),
 		},
 	}
 }

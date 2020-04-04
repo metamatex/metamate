@@ -6,8 +6,6 @@ import (
 
 type Config struct {
 	DiscoverySvc         sdk.Service       `yaml:"discoverySvc,omitempty"`
-	AuthSvcFilter        sdk.ServiceFilter `yaml:"authSvcFilter,omitempty"`
-	DefaultClientAccount sdk.ClientAccount `yaml:"defaultClientAccount,omitempty"`
 	Endpoints            EndpointsConfig   `yaml:"endpoints,omitempty"`
 	Host                 HostConfig        `yaml:"host,omitempty"`
 	Log                  LogConfig         `yaml:"log,omitempty"`
@@ -27,7 +25,6 @@ type LogConfig struct {
 type InternalLogConfig map[string]map[string]string
 
 type EndpointsConfig struct {
-	Admin            AdminEndpointConfig            `yaml:"admin,omitempty"`
 	Config           ConfigEndpointConfig           `yaml:"config,omitempty"`
 	Prometheus       PrometheusEndpointConfig       `yaml:"prometheus,omitempty"`
 	Debug            DebugEndpointConfig            `yaml:"debug,omitempty"`
@@ -65,10 +62,6 @@ type GraphiqlExplorerEndpointConfig struct {
 type GraphqlEndpointConfig struct {
 	On             bool     `yaml:"on,omitempty"`
 	PlaygroundPath string   `yaml:"playgroundPath,omitempty"`
-}
-
-type AdminEndpointConfig struct {
-	On bool `yaml:"on,omitempty"`
 }
 
 type HttpJsonEndpoint struct {

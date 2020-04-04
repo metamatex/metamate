@@ -13,46 +13,6 @@ func CollectSvcRsps(ctx types.ReqCtx, ctxs []types.ReqCtx) types.ReqCtx {
 	return ctx
 }
 
-func CollectCliRsps(ctx types.ReqCtx, ctxs []types.ReqCtx) types.ReqCtx {
-	for _, ctx0 := range ctxs {
-		ctx.GCliRsps = append(ctx.GCliRsps, ctx0.GCliRsp)
-	}
-
-	return ctx
-}
-
-func MapSvcIds(ctx types.ReqCtx) (ctxs []types.ReqCtx) {
-	if len(ctx.Svcs) == 0 {
-		return
-	}
-
-	for i, _ := range ctx.SvcIds {
-		ctxs = append(ctxs, types.ReqCtx{
-			GCliReq:     ctx.GCliReq,
-			GRspSelect:  ctx.GRspSelect,
-			SvcId:       &ctx.SvcIds[i],
-			ForTypeNode: ctx.ForTypeNode,
-		})
-	}
-
-	return
-}
-
-func CollectGs(ctx types.ReqCtx, ctxs []types.ReqCtx) types.ReqCtx {
-	gs := []generic.Generic{}
-	for _, ctx0 := range ctxs {
-		gs = append(gs, ctx0.GEntity)
-	}
-
-	gSlice, ok := ctx.GCliRsp.GenericSlice(ctx.ForTypeNode.PluralFieldName())
-	if ok {
-		gSlice.Set(gs)
-		ctx.GCliRsp.MustSetGenericSlice([]string{ctx.ForTypeNode.PluralFieldName()}, gSlice)
-	}
-
-	return ctx
-}
-
 func Collect(from, to string) func(ctx types.ReqCtx, ctxs []types.ReqCtx) types.ReqCtx {
 	switch from {
 	case types.GEntity:
@@ -114,7 +74,6 @@ func Map(from, to string) func(ctx types.ReqCtx) (ctxs []types.ReqCtx) {
 				gs := gSlice.Get()
 				for i, _ := range gs {
 					ctxs = append(ctxs, types.ReqCtx{
-						ClientAccount: ctx.ClientAccount,
 						GCliReq:       ctx.GCliReq,
 						GEntity:       gs[i],
 						ForTypeNode:   ctx.ForTypeNode,
@@ -136,7 +95,6 @@ func Map(from, to string) func(ctx types.ReqCtx) (ctxs []types.ReqCtx) {
 				gs := gSlice.Get()
 				for i, _ := range gs {
 					ctxs = append(ctxs, types.ReqCtx{
-						ClientAccount: ctx.ClientAccount,
 						GSvcReq:       ctx.GSvcReq,
 						GEntity:       gs[i],
 						ForTypeNode:   ctx.ForTypeNode,

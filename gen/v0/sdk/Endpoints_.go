@@ -6,62 +6,19 @@ const (
 )
 
 type Endpoints struct {
-    AuthenticateClientAccount *AuthenticateClientAccountEndpoint `json:"authenticateClientAccount,omitempty" yaml:"authenticateClientAccount,omitempty"`
-    DeleteAttachments *DeleteAttachmentsEndpoint `json:"deleteAttachments,omitempty" yaml:"deleteAttachments,omitempty"`
-    DeleteBankAccounts *DeleteBankAccountsEndpoint `json:"deleteBankAccounts,omitempty" yaml:"deleteBankAccounts,omitempty"`
-    DeleteBlueWhatevers *DeleteBlueWhateversEndpoint `json:"deleteBlueWhatevers,omitempty" yaml:"deleteBlueWhatevers,omitempty"`
-    DeleteClientAccounts *DeleteClientAccountsEndpoint `json:"deleteClientAccounts,omitempty" yaml:"deleteClientAccounts,omitempty"`
-    DeleteFeeds *DeleteFeedsEndpoint `json:"deleteFeeds,omitempty" yaml:"deleteFeeds,omitempty"`
-    DeleteServiceAccounts *DeleteServiceAccountsEndpoint `json:"deleteServiceAccounts,omitempty" yaml:"deleteServiceAccounts,omitempty"`
-    DeleteServices *DeleteServicesEndpoint `json:"deleteServices,omitempty" yaml:"deleteServices,omitempty"`
-    DeleteSocialAccounts *DeleteSocialAccountsEndpoint `json:"deleteSocialAccounts,omitempty" yaml:"deleteSocialAccounts,omitempty"`
-    DeleteStatuses *DeleteStatusesEndpoint `json:"deleteStatuses,omitempty" yaml:"deleteStatuses,omitempty"`
-    DeleteTransactions *DeleteTransactionsEndpoint `json:"deleteTransactions,omitempty" yaml:"deleteTransactions,omitempty"`
-    DeleteWhatevers *DeleteWhateversEndpoint `json:"deleteWhatevers,omitempty" yaml:"deleteWhatevers,omitempty"`
     GetAttachments *GetAttachmentsEndpoint `json:"getAttachments,omitempty" yaml:"getAttachments,omitempty"`
-    GetBankAccounts *GetBankAccountsEndpoint `json:"getBankAccounts,omitempty" yaml:"getBankAccounts,omitempty"`
     GetBlueWhatevers *GetBlueWhateversEndpoint `json:"getBlueWhatevers,omitempty" yaml:"getBlueWhatevers,omitempty"`
-    GetClientAccounts *GetClientAccountsEndpoint `json:"getClientAccounts,omitempty" yaml:"getClientAccounts,omitempty"`
     GetFeeds *GetFeedsEndpoint `json:"getFeeds,omitempty" yaml:"getFeeds,omitempty"`
-    GetServiceAccounts *GetServiceAccountsEndpoint `json:"getServiceAccounts,omitempty" yaml:"getServiceAccounts,omitempty"`
     GetServices *GetServicesEndpoint `json:"getServices,omitempty" yaml:"getServices,omitempty"`
     GetSocialAccounts *GetSocialAccountsEndpoint `json:"getSocialAccounts,omitempty" yaml:"getSocialAccounts,omitempty"`
     GetStatuses *GetStatusesEndpoint `json:"getStatuses,omitempty" yaml:"getStatuses,omitempty"`
-    GetTransactions *GetTransactionsEndpoint `json:"getTransactions,omitempty" yaml:"getTransactions,omitempty"`
     GetWhatevers *GetWhateversEndpoint `json:"getWhatevers,omitempty" yaml:"getWhatevers,omitempty"`
     LookupService *LookupServiceEndpoint `json:"lookupService,omitempty" yaml:"lookupService,omitempty"`
     PipeAttachments *PipeAttachmentsEndpoint `json:"pipeAttachments,omitempty" yaml:"pipeAttachments,omitempty"`
-    PipeBankAccounts *PipeBankAccountsEndpoint `json:"pipeBankAccounts,omitempty" yaml:"pipeBankAccounts,omitempty"`
     PipeBlueWhatevers *PipeBlueWhateversEndpoint `json:"pipeBlueWhatevers,omitempty" yaml:"pipeBlueWhatevers,omitempty"`
-    PipeClientAccounts *PipeClientAccountsEndpoint `json:"pipeClientAccounts,omitempty" yaml:"pipeClientAccounts,omitempty"`
     PipeFeeds *PipeFeedsEndpoint `json:"pipeFeeds,omitempty" yaml:"pipeFeeds,omitempty"`
-    PipeServiceAccounts *PipeServiceAccountsEndpoint `json:"pipeServiceAccounts,omitempty" yaml:"pipeServiceAccounts,omitempty"`
     PipeServices *PipeServicesEndpoint `json:"pipeServices,omitempty" yaml:"pipeServices,omitempty"`
     PipeSocialAccounts *PipeSocialAccountsEndpoint `json:"pipeSocialAccounts,omitempty" yaml:"pipeSocialAccounts,omitempty"`
     PipeStatuses *PipeStatusesEndpoint `json:"pipeStatuses,omitempty" yaml:"pipeStatuses,omitempty"`
-    PipeTransactions *PipeTransactionsEndpoint `json:"pipeTransactions,omitempty" yaml:"pipeTransactions,omitempty"`
     PipeWhatevers *PipeWhateversEndpoint `json:"pipeWhatevers,omitempty" yaml:"pipeWhatevers,omitempty"`
-    PostAttachments *PostAttachmentsEndpoint `json:"postAttachments,omitempty" yaml:"postAttachments,omitempty"`
-    PostBankAccounts *PostBankAccountsEndpoint `json:"postBankAccounts,omitempty" yaml:"postBankAccounts,omitempty"`
-    PostBlueWhatevers *PostBlueWhateversEndpoint `json:"postBlueWhatevers,omitempty" yaml:"postBlueWhatevers,omitempty"`
-    PostClientAccounts *PostClientAccountsEndpoint `json:"postClientAccounts,omitempty" yaml:"postClientAccounts,omitempty"`
-    PostFeeds *PostFeedsEndpoint `json:"postFeeds,omitempty" yaml:"postFeeds,omitempty"`
-    PostServiceAccounts *PostServiceAccountsEndpoint `json:"postServiceAccounts,omitempty" yaml:"postServiceAccounts,omitempty"`
-    PostServices *PostServicesEndpoint `json:"postServices,omitempty" yaml:"postServices,omitempty"`
-    PostSocialAccounts *PostSocialAccountsEndpoint `json:"postSocialAccounts,omitempty" yaml:"postSocialAccounts,omitempty"`
-    PostStatuses *PostStatusesEndpoint `json:"postStatuses,omitempty" yaml:"postStatuses,omitempty"`
-    PostTransactions *PostTransactionsEndpoint `json:"postTransactions,omitempty" yaml:"postTransactions,omitempty"`
-    PostWhatevers *PostWhateversEndpoint `json:"postWhatevers,omitempty" yaml:"postWhatevers,omitempty"`
-    PutAttachments *PutAttachmentsEndpoint `json:"putAttachments,omitempty" yaml:"putAttachments,omitempty"`
-    PutBankAccounts *PutBankAccountsEndpoint `json:"putBankAccounts,omitempty" yaml:"putBankAccounts,omitempty"`
-    PutBlueWhatevers *PutBlueWhateversEndpoint `json:"putBlueWhatevers,omitempty" yaml:"putBlueWhatevers,omitempty"`
-    PutClientAccounts *PutClientAccountsEndpoint `json:"putClientAccounts,omitempty" yaml:"putClientAccounts,omitempty"`
-    PutFeeds *PutFeedsEndpoint `json:"putFeeds,omitempty" yaml:"putFeeds,omitempty"`
-    PutServiceAccounts *PutServiceAccountsEndpoint `json:"putServiceAccounts,omitempty" yaml:"putServiceAccounts,omitempty"`
-    PutServices *PutServicesEndpoint `json:"putServices,omitempty" yaml:"putServices,omitempty"`
-    PutSocialAccounts *PutSocialAccountsEndpoint `json:"putSocialAccounts,omitempty" yaml:"putSocialAccounts,omitempty"`
-    PutStatuses *PutStatusesEndpoint `json:"putStatuses,omitempty" yaml:"putStatuses,omitempty"`
-    PutTransactions *PutTransactionsEndpoint `json:"putTransactions,omitempty" yaml:"putTransactions,omitempty"`
-    PutWhatevers *PutWhateversEndpoint `json:"putWhatevers,omitempty" yaml:"putWhatevers,omitempty"`
-    VerifyToken *VerifyTokenEndpoint `json:"verifyToken,omitempty" yaml:"verifyToken,omitempty"`
 }

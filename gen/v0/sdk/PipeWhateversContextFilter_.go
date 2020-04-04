@@ -7,11 +7,8 @@ const (
 
 type PipeWhateversContextFilter struct {
     And []PipeWhateversContextFilter `json:"and,omitempty" yaml:"and,omitempty"`
-    Delete *PipeDeleteWhateversContextFilter `json:"delete,omitempty" yaml:"delete,omitempty"`
     Get *PipeGetWhateversContextFilter `json:"get,omitempty" yaml:"get,omitempty"`
     Not []PipeWhateversContextFilter `json:"not,omitempty" yaml:"not,omitempty"`
     Or []PipeWhateversContextFilter `json:"or,omitempty" yaml:"or,omitempty"`
-    Post *PipePostWhateversContextFilter `json:"post,omitempty" yaml:"post,omitempty"`
-    Put *PipePutWhateversContextFilter `json:"put,omitempty" yaml:"put,omitempty"`
     Set *bool `json:"set,omitempty" yaml:"set,omitempty"`
 }

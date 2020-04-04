@@ -14,7 +14,6 @@ type IdSelect struct {
     Me *bool `json:"me,omitempty" yaml:"me,omitempty"`
     Name *bool `json:"name,omitempty" yaml:"name,omitempty"`
     ServiceId *ServiceIdSelect `json:"serviceId,omitempty" yaml:"serviceId,omitempty"`
-    Token *TokenSelect `json:"token,omitempty" yaml:"token,omitempty"`
     Url *UrlSelect `json:"url,omitempty" yaml:"url,omitempty"`
     Username *bool `json:"username,omitempty" yaml:"username,omitempty"`
 }

@@ -34,7 +34,6 @@ const (
 	ClientAccount      = "ClientAccount"
 	DoCliReqValidation = "DoCliReqValidation"
 	DoCliReqProcessing = "DoCliReqProcessing"
-	DoSetClientAccount = "DoSetClientAccount"
 )
 
 type ReqCtx struct {
@@ -60,7 +59,6 @@ type ReqCtx struct {
 	GEntities          generic.Slice
 	SvcId              *sdk.ServiceId
 	SvcIds             []sdk.ServiceId
-	ClientAccount      *sdk.ClientAccount
 	DoCliReqValidation bool
 	DoCliReqProcessing bool
 	DoSetClientAccount bool
@@ -78,7 +76,6 @@ func (c ReqCtx) Copy() (ctx ReqCtx, err error) {
 		GSvcRsps:           c.GSvcRsps, // todo
 		EndpointNode:       c.EndpointNode,
 		Errs:               c.Errs, // todo
-		ClientAccount:      c.ClientAccount,
 		DoCliReqValidation: c.DoCliReqValidation,
 		DoCliReqProcessing: c.DoCliReqProcessing,
 		DoSetClientAccount: c.DoSetClientAccount,

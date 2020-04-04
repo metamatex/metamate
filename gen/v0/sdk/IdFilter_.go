@@ -17,7 +17,6 @@ type IdFilter struct {
     Or []IdFilter `json:"or,omitempty" yaml:"or,omitempty"`
     ServiceId *ServiceIdFilter `json:"serviceId,omitempty" yaml:"serviceId,omitempty"`
     Set *bool `json:"set,omitempty" yaml:"set,omitempty"`
-    Token *TokenFilter `json:"token,omitempty" yaml:"token,omitempty"`
     Url *UrlFilter `json:"url,omitempty" yaml:"url,omitempty"`
     Username *StringFilter `json:"username,omitempty" yaml:"username,omitempty"`
 }

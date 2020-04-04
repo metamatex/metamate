@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/metamatex/metamate/gen/v0/sdk"
 	
@@ -48,6 +49,7 @@ func validateVirtualSvc(svc types.VirtualSvc) (err error) {
 		return
 	}
 
+	spew.Dump(svc)
 	if svc.Name == "" {
 		err = errors.New("must set name")
 
@@ -64,15 +66,7 @@ func validateVirtualSvc(svc types.VirtualSvc) (err error) {
 func validateVirtualSvcOpts(opts types.VirtualSvcOpts) (err error) {
 	c := 0
 
-	if opts.Auth != nil {
-		c++
-	}
-
 	if opts.Mastodon != nil {
-		c++
-	}
-
-	if opts.Sqlx != nil {
 		c++
 	}
 
@@ -101,36 +95,6 @@ func NewCluster(rn *graph.RootNode, f generic.Factory, logErr func(err error)) (
 
 	return
 }
-
-/*func (c *Cluster) HostName(name string, opts types.VirtualSvcOpts) (err error) {
-	f, t, err := handler[name](c.f, c.rn, &http.Client{Transport: c}, opts)
-	if err != nil {
-		return
-	}
-
-	_, ok := c.hs[opts.Id]
-	if ok {
-		err = errors.New(fmt.Sprintf("host %v is already taken", opts.Id))
-
-		return
-	}
-
-	c.hs[opts.Id] = f
-
-	c.svcs[opts.Id] = sdk.Service{
-		Id: &sdk.ServiceId{
-			Value: sdk.String(opts.Id),
-		},
-		IsVirtual: sdk.Bool(true),
-		Transport: &t,
-		Port:      sdk.Int32(80),
-		Url: &sdk.Url{
-			Value: sdk.String("http://" + opts.Id),
-		},
-	}
-
-	return
-}*/
 
 func (c *Cluster) HostSvc(svc types.VirtualSvc) (err error) {
 	f, t, err := handler[svc.Name](c.f, c.rn, &http.Client{Transport: c}, svc)

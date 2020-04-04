@@ -15,10 +15,6 @@ func generateGetRequest(root *graph.RootNode, tn *graph.TypeNode) {
 		graph.TypeField(fieldnames.Mode, typenames.GetMode, graph.Flags{
 			fieldflags.ValidateIsSet: true,
 		}),
-		graph.TypeField(fieldnames.Auth, typenames.Auth, graph.Flags{
-			fieldflags.Filter:        false,
-			fieldflags.ValidateIsSet: false,
-		}),
 		graph.TypeField(fieldnames.ServiceFilter, typenames.Filter(typenames.Service), graph.Flags{
 			fieldflags.Filter:        false,
 			fieldflags.ValidateIsSet: false,

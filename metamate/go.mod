@@ -4,11 +4,7 @@ go 1.13
 
 replace github.com/metamatex/metamate/asg => ../asg
 
-replace github.com/metamatex/metamate/auth-svc => ../auth-svc
-
 replace github.com/metamatex/metamate/mastodon-svc => ../mastodon-svc
-
-replace github.com/metamatex/metamate/sqlx-svc => ../sqlx-svc
 
 replace github.com/metamatex/metamate/hackernews-svc => ../hackernews-svc
 
@@ -30,14 +26,12 @@ require (
 	github.com/graphql-go/graphql v0.7.9
 	github.com/graphql-go/handler v0.2.3
 	github.com/metamatex/metamate/asg v0.0.0-00010101000000-000000000000
-	github.com/metamatex/metamate/auth-svc v0.0.0-00010101000000-000000000000
 	github.com/metamatex/metamate/gen v0.0.0-00010101000000-000000000000
 	github.com/metamatex/metamate/generic v0.0.0-00010101000000-000000000000
 	github.com/metamatex/metamate/hackernews-svc v0.0.0-00010101000000-000000000000
 	github.com/metamatex/metamate/kubernetes-svc v0.0.0-00010101000000-000000000000
 	github.com/metamatex/metamate/mastodon-svc v0.0.0-00010101000000-000000000000
 	github.com/metamatex/metamate/spec v0.0.0-00010101000000-000000000000
-	github.com/metamatex/metamate/sqlx-svc v0.0.0-00010101000000-000000000000
 	github.com/pkg/errors v0.8.1
 	github.com/prometheus/client_golang v1.5.0
 	github.com/prometheus/common v0.9.1

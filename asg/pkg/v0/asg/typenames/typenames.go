@@ -30,12 +30,10 @@ const (
 	TimestampKind     = "TimestampKind"
 	Timestamp         = "Timestamp"
 	RequestMeta       = "RequestMeta"
-	ResponseKind      = "ResponseKind"
 	ResponseMeta      = "ResponseMeta"
 	CollectionMeta    = "CollectionMeta"
 	TypeMeta          = "TypeMeta"
 
-	Translation = "Translation"
 	Text        = "Text"
 
 	Info          = "Info"
@@ -64,40 +62,20 @@ const (
 
 	RelationOperation = "RelationOperation"
 
-	PostMode           = "PostMode"
-	CollectionPostMode = "CollectionPostMode"
-
-	DeleteMode           = "DeleteMode"
-	CollectionDeleteMode = "CollectionDeleteMode"
-
 	GetMode           = "GetMode"
 	CollectionGetMode = "CollectionGetMode"
 	IdGetMode         = "IdGetMode"
 	RelationGetMode   = "RelationGetMode"
 	SearchGetMode     = "SearchGetMode"
 
-	PutMode         = "PutMode"
-	RelationPutMode = "RelationPutMode"
-
 	PipeMode        = "PipeMode"
 	ContextPipeMode = "ContextPipeMode"
-
-	Trace = "Trace"
-	Span  = "Span"
 
 	Whatever      = "Whatever"
 	BlueWhatever  = "BlueWhatever"
 	WhateverUnion = "WhateverUnion"
 
-	ClientAccount  = "ClientAccount"
-	ServiceAccount = "ServiceAccount"
-	Password       = "Password"
-	Token          = "Token"
-	Auth           = "Auth"
-
 	CurrencyScalar = "CurrencyScalar"
-	Transaction    = "Transaction"
-	BankAccount    = "BankAccount"
 )
 
 func Sort(name string) (string) {
@@ -184,30 +162,6 @@ func GetResponse(name string) (string) {
 	return "Get" + utils.Plural(name) + "Response"
 }
 
-func PostRequest(name string) (string) {
-	return "Post" + utils.Plural(name) + "Request"
-}
-
-func PostResponse(name string) (string) {
-	return "Post" + utils.Plural(name) + "Response"
-}
-
-func PutRequest(name string) (string) {
-	return "Put" + utils.Plural(name) + "Request"
-}
-
-func PutResponse(name string) (string) {
-	return "Put" + utils.Plural(name) + "Response"
-}
-
-func DeleteRequest(name string) (string) {
-	return "Delete" + utils.Plural(name) + "Request"
-}
-
-func DeleteResponse(name string) (string) {
-	return "Delete" + utils.Plural(name) + "Response"
-}
-
 func PipeRequest(name string) (string) {
 	return "Pipe" + utils.Plural(name) + "Request"
 }
@@ -220,20 +174,8 @@ func PipeContext(name string) (string) {
 	return "Pipe" + utils.Plural(name) + "Context"
 }
 
-func PipePostContext(name string) (string) {
-	return "PipePost" + utils.Plural(name) + "Context"
-}
-
 func PipeGetContext(name string) (string) {
 	return "PipeGet" + utils.Plural(name) + "Context"
-}
-
-func PipePutContext(name string) (string) {
-	return "PipePut" + utils.Plural(name) + "Context"
-}
-
-func PipeDeleteContext(name string) (string) {
-	return "PipeDelete" + utils.Plural(name) + "Context"
 }
 
 func GetRelations(name string) (string) {
@@ -246,8 +188,4 @@ func GetCollection(name string) (string) {
 
 func Collection(name string) (string) {
 	return utils.Plural(name) + "Collection"
-}
-
-func GetNode(name string) (string) {
-	return "Get" + utils.Plural(name) + "Node"
 }
