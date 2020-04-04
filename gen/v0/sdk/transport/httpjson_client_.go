@@ -58,17 +58,7 @@ func (c HttpJsonClient) GetBlueWhatevers(ctx context.Context, req sdk.GetBlueWha
 
 	return
 }
-func (c HttpJsonClient) GetClientAccounts(ctx context.Context, req sdk.GetClientAccountsRequest) (rsp *sdk.GetClientAccountsResponse, err error) {
-	err = c.send(req, &rsp)
-
-	return
-}
 func (c HttpJsonClient) GetFeeds(ctx context.Context, req sdk.GetFeedsRequest) (rsp *sdk.GetFeedsResponse, err error) {
-	err = c.send(req, &rsp)
-
-	return
-}
-func (c HttpJsonClient) GetServiceAccounts(ctx context.Context, req sdk.GetServiceAccountsRequest) (rsp *sdk.GetServiceAccountsResponse, err error) {
 	err = c.send(req, &rsp)
 
 	return
@@ -94,6 +84,11 @@ func (c HttpJsonClient) GetWhatevers(ctx context.Context, req sdk.GetWhateversRe
 	return
 }
 func (c HttpJsonClient) LookupService(ctx context.Context, req sdk.LookupServiceRequest) (rsp *sdk.LookupServiceResponse, err error) {
+	err = c.send(req, &rsp)
+
+	return
+}
+func (c HttpJsonClient) PipeWhatevers(ctx context.Context, req sdk.PipeWhateversRequest) (rsp *sdk.PipeWhateversResponse, err error) {
 	err = c.send(req, &rsp)
 
 	return

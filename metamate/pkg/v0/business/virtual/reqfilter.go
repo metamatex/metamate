@@ -25,17 +25,8 @@ func init() {
 						Output: &sdk.LookupServiceOutput{
 							Service: &sdk.Service{
 								Endpoints: &sdk.Endpoints{
-									PostWhatevers: &sdk.PostWhateversEndpoint{
-										Filter: &sdk.PostWhateversRequestFilter{
-											Whatevers: &sdk.WhateverListFilter{
-												Some: &sdk.WhateverFilter{
-													Id: &sdk.ServiceIdFilter{
-														Value: &sdk.StringFilter{
-															Is: sdk.String("match"),
-														},
-													},
-												},
-											},
+									GetWhatevers: &sdk.GetWhateversEndpoint{
+										Filter: &sdk.GetWhateversRequestFilter{
 										},
 									},
 								},

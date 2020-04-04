@@ -13,7 +13,6 @@ type Service struct {
     Meta *TypeMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
     Name *string `json:"name,omitempty" yaml:"name,omitempty"`
     Port *int32 `json:"port,omitempty" yaml:"port,omitempty"`
-    Relations *ServiceRelations `json:"relations,omitempty" yaml:"relations,omitempty"`
     SdkVersion *string `json:"sdkVersion,omitempty" yaml:"sdkVersion,omitempty"`
     Transport *string `json:"transport,omitempty" yaml:"transport,omitempty"`
     Url *Url `json:"url,omitempty" yaml:"url,omitempty"`

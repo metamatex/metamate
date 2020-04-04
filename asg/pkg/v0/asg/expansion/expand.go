@@ -103,9 +103,6 @@ func Expand(verbosity int, root *graph.RootNode) (err error) {
 	Step(verbosity, root, "generate response types", func() {
 		root.Types.Flagged(typeflags.GetEndpoints, true).Each(func(tn *graph.TypeNode) {
 			generateGetResponse(root, tn)
-			generatePostResponse(root, tn)
-			generatePutResponse(root, tn)
-			generateDeleteResponse(root, tn)
 		})
 	})
 
@@ -117,9 +114,6 @@ func Expand(verbosity int, root *graph.RootNode) (err error) {
 		root.Types.ByNames(typenames.Pagination, typenames.ResponseMeta, typenames.CollectionMeta).Each(func(tn *graph.TypeNode) {
 			generateSelectRecursive(root, tn)
 		})
-
-		// todo
-		generateSelectRecursive(root, root.Types.MustByName("ClientAccountsCollection"))
 	})
 
 	Step(verbosity, root, "generate request types", func() {
@@ -140,19 +134,12 @@ func Expand(verbosity int, root *graph.RootNode) (err error) {
 					fieldflags.Filter: false,
 				}))
 			}
-
-			generatePostRequest(root, tn)
-			generatePutRequest(root, tn)
-			generateDeleteRequest(root, tn)
 		})
 	})
 
 	Step(verbosity, root, "generate pipe contexts", func() {
 		root.Types.Flagged(typeflags.GetEndpoints, true).Each(func(tn *graph.TypeNode) {
-			generatePipePostContext(root, tn)
 			generatePipeGetContext(root, tn)
-			generatePipePutContext(root, tn)
-			generatePipeDeleteContext(root, tn)
 			generatePipeContext(root, tn)
 		})
 	})
@@ -194,20 +181,14 @@ func Expand(verbosity int, root *graph.RootNode) (err error) {
 
 	Step(verbosity, root, "generate endpoints", func() {
 		root.Types.Flagged(typeflags.GetEndpoints, true).Each(func(tn *graph.TypeNode) {
-			generatePostEndpoint(root, tn)
 			generateGetEndpoint(root, tn)
-			generatePutEndpoint(root, tn)
-			generateDeleteEndpoint(root, tn)
 			generatePipeEndpoint(root, tn)
 		})
 	})
 
 	Step(verbosity, root, "generate endpoint types", func() {
 		root.Types.Flagged(typeflags.GetEndpoints, true).Each(func(tn *graph.TypeNode) {
-			generatePostEndpointType(root, tn)
 			generateGetEndpointType(root, tn)
-			generatePutEndpointType(root, tn)
-			generateDeleteEndpointType(root, tn)
 			generatePipeEndpointType(root, tn)
 		})
 	})

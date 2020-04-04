@@ -18,7 +18,6 @@ import (
 	"github.com/metamatex/metamate/metamate/pkg/v0/communication/servers/graphql"
 	"github.com/metamatex/metamate/metamate/pkg/v0/communication/servers/index"
 	"github.com/metamatex/metamate/metamate/pkg/v0/config"
-	"github.com/metamatex/metamate/metamate/pkg/v0/persistence"
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/cors"
@@ -49,8 +48,6 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 	}
 
 	d.Factory = generic.NewFactory(d.RootNode)
-
-	d.LinkStore = persistence.NewMemoryLinkStore()
 
 	d.InternalLogTemplates = toInternalLogTemplates(c.Log.Internal)
 
@@ -102,7 +99,7 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 		},
 	}
 
-	d.ResolveLine = pipeline.NewResolveLine(d.RootNode, d.Factory, c.DiscoverySvc, reqHs, d.LinkStore, d.InternalLogTemplates)
+	d.ResolveLine = pipeline.NewResolveLine(d.RootNode, d.Factory, c.DiscoverySvc, reqHs, d.InternalLogTemplates)
 
 	d.ServeFunc = func(ctx context.Context, gCliReq generic.Generic) generic.Generic {
 		gCliReq = gCliReq.Copy()
@@ -230,13 +227,13 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 			WriteTimeout: 5 * time.Second,
 			IdleTimeout:  120 * time.Second,
 			Handler:      router,
-			Addr: ":443",
-			TLSConfig: &tls.Config{GetCertificate: m.GetCertificate},
+			Addr:         ":443",
+			TLSConfig:    &tls.Config{GetCertificate: m.GetCertificate},
 		}
 
 		httpServer.Handler = m.HTTPHandler(httpServer.Handler)
 
-		d.Run = append(d.Run, func()(err error) {
+		d.Run = append(d.Run, func() (err error) {
 			return httpsServer.ListenAndServeTLS("", "")
 		})
 	}
@@ -260,10 +257,9 @@ func toInternalLogTemplates(c types.InternalLogConfig) (t types.InternalLogTempl
 	return
 }
 
-type HttpsRedirectHandler struct {}
+type HttpsRedirectHandler struct{}
 
 func (h HttpsRedirectHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	newURI := "https://" + r.Host + r.URL.String()
 	http.Redirect(w, r, newURI, http.StatusFound)
 }
-

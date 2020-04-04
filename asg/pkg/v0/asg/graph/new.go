@@ -42,26 +42,6 @@ func NewRoot() (root *RootNode) {
 }
 
 func addActionEndpoints(root *RootNode) () {
-	root.AddActionEndpoint(endpointnames.AuthenticateClientAccount,
-		FieldNodeSlice{
-			TypeField(fieldnames.Id, typenames.Id),
-			StringField(fieldnames.Password),
-		},
-		FieldNodeSlice{
-			TypeField(fieldnames.Token, typenames.Token),
-		},
-	)
-
-	root.AddActionEndpoint(endpointnames.VerifyToken,
-		FieldNodeSlice{
-			TypeField(fieldnames.Token, typenames.Token),
-		},
-		FieldNodeSlice{
-			BoolField("isValid"),
-			TypeField("clientAccountId", typenames.ServiceId),
-		},
-	)
-
 	root.AddActionEndpoint(endpointnames.LookupService,
 		FieldNodeSlice{},
 		FieldNodeSlice{
@@ -71,11 +51,6 @@ func addActionEndpoints(root *RootNode) () {
 }
 
 func addExpansion(root *RootNode) () {
-	root.AddTypeNode(typenames.Auth, FieldNodeSlice{
-		TypeField(fieldnames.Token, typenames.Token),
-		TypeField(fieldnames.ClientAccount, typenames.ClientAccount),
-	})
-
 	root.AddTypeNode(typenames.IdGetMode, FieldNodeSlice{
 		TypeField(fieldnames.Id, typenames.Id),
 	})
@@ -94,33 +69,11 @@ func addExpansion(root *RootNode) () {
 		ListField(TypeField("pages", typenames.ServicePage)),
 	})
 
-	root.AddUnion(typenames.PostMode, []interface{}{
-		TypeField(fieldnames.Collection, typenames.CollectionPostMode),
-	})
-
-	root.AddTypeNode(typenames.CollectionPostMode, FieldNodeSlice{})
-
 	root.AddUnion(typenames.GetMode, []interface{}{
 		TypeField(fieldnames.Collection, typenames.CollectionGetMode),
 		TypeField(fieldnames.Id, typenames.Id),
 		TypeField(fieldnames.Relation, typenames.RelationGetMode),
 		TypeField(fieldnames.Search, typenames.SearchGetMode),
-	})
-
-	root.AddTypeNode(typenames.RelationPutMode, FieldNodeSlice{
-		TypeField(fieldnames.Id, typenames.ServiceId),
-		StringField(fieldnames.Relation),
-		EnumField(fieldnames.Operation, typenames.RelationOperation),
-		ListField(TypeField(fieldnames.Ids, typenames.ServiceId)),
-	})
-
-	root.AddUnion(typenames.PutMode, []interface{}{
-		TypeField(fieldnames.Relation, typenames.RelationPutMode),
-	})
-
-	root.AddUnion(typenames.DeleteMode, []interface{}{
-		BoolField(fieldnames.Archive),
-		BoolField(fieldnames.Permanent),
 	})
 
 	root.AddUnion(typenames.PipeMode, []interface{}{
@@ -132,27 +85,6 @@ func addExpansion(root *RootNode) () {
 		EnumField(fieldnames.Method, enumnames.Methods),
 		EnumField(fieldnames.Requester, enumnames.BusActor),
 	})
-
-	//root.AddTypeNode(typenames.Trace, FieldNodeSlice{
-	//}, Flags{
-	//	typeflags.GetEndpoints: true,
-	//})
-	//
-	//root.AddTypeNode(typenames.Span, FieldNodeSlice{
-	//	TypeField(fieldnames.Data, typenames.Text),
-	//}, Flags{
-	//	typeflags.GetEndpoints: true,
-	//})
-	//
-	//root.AddRelationNode(
-	//	RelationPath{typenames.Trace, []string{present.Spans}, cardinality.One, typenames.Span},
-	//	RelationPath{typenames.Span, []string{past.Spanned, preposition.By}, cardinality.One, typenames.Trace},
-	//)
-	//
-	//root.AddRelationNode(
-	//	RelationPath{typenames.Span, []string{present.Spans}, cardinality.Many, typenames.Span},
-	//	RelationPath{typenames.Span, []string{past.Spanned, preposition.By}, cardinality.One, typenames.Trace},
-	//)
 
 	root.AddEnumNode(enumnames.RequestStage, []string{
 		"request",
@@ -166,19 +98,10 @@ func addExpansion(root *RootNode) () {
 	})
 
 	root.AddEnumNode(enumnames.Methods, []string{
-		"post",
 		"get",
-		"put",
-		"delete",
 		"pipe",
 		"action",
 	})
-
-	//root.AddTypeNode(Translation, FieldNodeSlice{
-	//	EnumField("language", Language),
-	//	EnumField("formatting", FormattingKind),
-	//	StringField("value"),
-	//})
 
 	root.AddEnumNode(enumnames.ErrorKind, []string{
 		"service",
@@ -251,11 +174,6 @@ func addExpansion(root *RootNode) () {
 		TypeField("next", typenames.Page),
 	})
 
-	root.AddEnumNode(enumnames.RelationOperation, []string{
-		"add",
-		"remove",
-	})
-
 	root.AddEnumNode(enumnames.SortKind, []string{
 		"asc",
 		"desc",
@@ -265,40 +183,6 @@ func addExpansion(root *RootNode) () {
 }
 
 func addEntities(root *RootNode) () {
-	root.AddEnumNode(enumnames.HashFunction, []string{
-		"md5",
-		"sha1",
-		"sha224",
-		"sha256",
-		"sha384",
-		"sha512",
-		"sha3",
-	})
-
-	root.AddTypeNode(typenames.ClientAccount, FieldNodeSlice{
-		TypeField(fieldnames.Password, typenames.Password),
-	}, Flags{
-		typeflags.GetEndpoints: true,
-	})
-
-	root.AddTypeNode(typenames.ServiceAccount, FieldNodeSlice{
-		TypeField(fieldnames.Url, typenames.Url),
-		StringField(fieldnames.Handle),
-		TypeField(fieldnames.Password, typenames.Password),
-	}, Flags{
-		typeflags.GetEndpoints: true,
-	})
-
-	root.AddTypeNode(typenames.Password, FieldNodeSlice{
-		BoolField("isHashed"),
-		EnumField("hashFunction", enumnames.HashFunction),
-		StringField("value"),
-	})
-
-	root.AddTypeNode(typenames.Token, FieldNodeSlice{
-		StringField("value"),
-	})
-
 	root.AddTypeNode(typenames.TypeMeta, FieldNodeSlice{
 		TypeField(fieldnames.Service, typenames.Service),
 		BoolField("archived"),
@@ -417,7 +301,6 @@ func addEntities(root *RootNode) () {
 		TypeField(fieldnames.ServiceId, typenames.ServiceId),
 		StringField(fieldnames.Local),
 		BoolField(fieldnames.Me),
-		TypeField(fieldnames.Token, typenames.Token),
 		typenames.Email,
 	})
 
@@ -577,16 +460,6 @@ func addEntities(root *RootNode) () {
 		RelationPath{typenames.BlueWhatever, []string{past.Knew, preposition.By}, cardinality.Many, typenames.Whatever},
 	)
 
-	root.AddRelationNode(
-		RelationPath{typenames.ClientAccount, []string{present.Owns}, cardinality.Many, typenames.ServiceAccount},
-		RelationPath{typenames.ServiceAccount, []string{past.Owned, preposition.By}, cardinality.One, typenames.ClientAccount},
-	)
-
-	root.AddRelationNode(
-		RelationPath{typenames.Service, []string{present.Uses}, cardinality.Many, typenames.ServiceAccount},
-		RelationPath{typenames.ServiceAccount, []string{past.Used, preposition.By}, cardinality.Many, typenames.Service},
-	)
-
 	root.AddEnumNode(enumnames.WhateverKind, []string{
 		"red",
 		"blue",
@@ -642,22 +515,4 @@ func addEntities(root *RootNode) () {
 	})
 
 	root.AddScalar(typenames.CurrencyScalar, enumnames.CurrencyUnit)
-
-	root.AddTypeNode(typenames.BankAccount, FieldNodeSlice{
-		TypeField("balance", typenames.CurrencyScalar),
-		StringField("iban"),
-		StringField("bankName"),
-	}, Flags{
-		typeflags.GetEndpoints: true,
-	})
-
-	root.AddTypeNode(typenames.Transaction, FieldNodeSlice{
-		TypeField("amount", typenames.CurrencyScalar),
-		StringField("payee"),
-		StringField("category"),
-		StringField("reference"),
-		TypeField("createdAt", typenames.Timestamp),
-	}, Flags{
-		typeflags.GetEndpoints: true,
-	})
 }

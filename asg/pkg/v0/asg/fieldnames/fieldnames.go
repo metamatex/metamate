@@ -3,7 +3,6 @@ package fieldnames
 const (
 	Mode            = "mode"
 	Auth            = "auth"
-	ClientAccount   = "clientAccount"
 	Select          = "select"
 	Meta            = "meta"
 	Input           = "input"
@@ -14,9 +13,6 @@ const (
 	Services        = "services"
 	Errors          = "errors"
 	Message         = "message"
-	Token           = "token"
-	Password        = "password"
-	Cache           = "cache"
 	Pages           = "pages"
 	Id              = "id"
 	Value           = "value"
@@ -63,10 +59,7 @@ const (
 	ServiceRequest  = "serviceRequest"
 	ServiceResponse = "serviceResponse"
 	ClientResponse  = "clientResponse"
-	Post            = "post"
 	Get             = "get"
-	Put             = "put"
-	Delete          = "delete"
 	IsVirtual       = "isVirtual"
 )
 

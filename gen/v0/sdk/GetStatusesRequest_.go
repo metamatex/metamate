@@ -6,7 +6,6 @@ const (
 )
 
 type GetStatusesRequest struct {
-    Auth *Auth `json:"auth,omitempty" yaml:"auth,omitempty"`
     Filter *StatusFilter `json:"filter,omitempty" yaml:"filter,omitempty"`
     Meta *RequestMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
     Mode *GetMode `json:"mode,omitempty" yaml:"mode,omitempty"`

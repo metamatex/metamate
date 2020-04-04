@@ -414,16 +414,6 @@ func (r TypeToEndpointIdResolver) BelongsTo()(NodeId) {
 	return r.d["BelongsTo"]
 }
 
-func (r *TypeToEndpointIdResolver) SetPost(id NodeId) (*TypeToEndpointIdResolver) {
-	r.set("Post", id)
-
-	return r
-}
-
-func (r TypeToEndpointIdResolver) Post()(NodeId) {
-	return r.d["Post"]
-}
-
 func (r *TypeToEndpointIdResolver) SetGet(id NodeId) (*TypeToEndpointIdResolver) {
 	r.set("Get", id)
 
@@ -442,26 +432,6 @@ func (r *TypeToEndpointIdResolver) SetPipe(id NodeId) (*TypeToEndpointIdResolver
 
 func (r TypeToEndpointIdResolver) Pipe()(NodeId) {
 	return r.d["Pipe"]
-}
-
-func (r *TypeToEndpointIdResolver) SetPut(id NodeId) (*TypeToEndpointIdResolver) {
-	r.set("Put", id)
-
-	return r
-}
-
-func (r TypeToEndpointIdResolver) Put()(NodeId) {
-	return r.d["Put"]
-}
-
-func (r *TypeToEndpointIdResolver) SetDelete(id NodeId) (*TypeToEndpointIdResolver) {
-	r.set("Delete", id)
-
-	return r
-}
-
-func (r TypeToEndpointIdResolver) Delete()(NodeId) {
-	return r.d["Delete"]
 }
 
 
@@ -638,64 +608,14 @@ func (r TypeToTypeIdResolver) GetResponse()(NodeId) {
 	return r.d["GetResponse"]
 }
 
-func (r *TypeToTypeIdResolver) SetPostRequest(id NodeId) (*TypeToTypeIdResolver) {
-	r.set("PostRequest", id)
+func (r *TypeToTypeIdResolver) SetGetEndpoint(id NodeId) (*TypeToTypeIdResolver) {
+	r.set("GetEndpoint", id)
 
 	return r
 }
 
-func (r TypeToTypeIdResolver) PostRequest()(NodeId) {
-	return r.d["PostRequest"]
-}
-
-func (r *TypeToTypeIdResolver) SetPostResponse(id NodeId) (*TypeToTypeIdResolver) {
-	r.set("PostResponse", id)
-
-	return r
-}
-
-func (r TypeToTypeIdResolver) PostResponse()(NodeId) {
-	return r.d["PostResponse"]
-}
-
-func (r *TypeToTypeIdResolver) SetPutRequest(id NodeId) (*TypeToTypeIdResolver) {
-	r.set("PutRequest", id)
-
-	return r
-}
-
-func (r TypeToTypeIdResolver) PutRequest()(NodeId) {
-	return r.d["PutRequest"]
-}
-
-func (r *TypeToTypeIdResolver) SetPutResponse(id NodeId) (*TypeToTypeIdResolver) {
-	r.set("PutResponse", id)
-
-	return r
-}
-
-func (r TypeToTypeIdResolver) PutResponse()(NodeId) {
-	return r.d["PutResponse"]
-}
-
-func (r *TypeToTypeIdResolver) SetDeleteRequest(id NodeId) (*TypeToTypeIdResolver) {
-	r.set("DeleteRequest", id)
-
-	return r
-}
-
-func (r TypeToTypeIdResolver) DeleteRequest()(NodeId) {
-	return r.d["DeleteRequest"]
-}
-
-func (r *TypeToTypeIdResolver) SetDeleteResponse(id NodeId) (*TypeToTypeIdResolver) {
-	r.set("DeleteResponse", id)
-
-	return r
-}
-
-func (r TypeToTypeIdResolver) DeleteResponse()(NodeId) {
-	return r.d["DeleteResponse"]
+func (r TypeToTypeIdResolver) GetEndpoint()(NodeId) {
+	return r.d["GetEndpoint"]
 }
 
 func (r *TypeToTypeIdResolver) SetPipeRequest(id NodeId) (*TypeToTypeIdResolver) {
@@ -716,46 +636,6 @@ func (r *TypeToTypeIdResolver) SetPipeResponse(id NodeId) (*TypeToTypeIdResolver
 
 func (r TypeToTypeIdResolver) PipeResponse()(NodeId) {
 	return r.d["PipeResponse"]
-}
-
-func (r *TypeToTypeIdResolver) SetPostEndpoint(id NodeId) (*TypeToTypeIdResolver) {
-	r.set("PostEndpoint", id)
-
-	return r
-}
-
-func (r TypeToTypeIdResolver) PostEndpoint()(NodeId) {
-	return r.d["PostEndpoint"]
-}
-
-func (r *TypeToTypeIdResolver) SetGetEndpoint(id NodeId) (*TypeToTypeIdResolver) {
-	r.set("GetEndpoint", id)
-
-	return r
-}
-
-func (r TypeToTypeIdResolver) GetEndpoint()(NodeId) {
-	return r.d["GetEndpoint"]
-}
-
-func (r *TypeToTypeIdResolver) SetPutEndpoint(id NodeId) (*TypeToTypeIdResolver) {
-	r.set("PutEndpoint", id)
-
-	return r
-}
-
-func (r TypeToTypeIdResolver) PutEndpoint()(NodeId) {
-	return r.d["PutEndpoint"]
-}
-
-func (r *TypeToTypeIdResolver) SetDeleteEndpoint(id NodeId) (*TypeToTypeIdResolver) {
-	r.set("DeleteEndpoint", id)
-
-	return r
-}
-
-func (r TypeToTypeIdResolver) DeleteEndpoint()(NodeId) {
-	return r.d["DeleteEndpoint"]
 }
 
 func (r *TypeToTypeIdResolver) SetPipeEndpoint(id NodeId) (*TypeToTypeIdResolver) {

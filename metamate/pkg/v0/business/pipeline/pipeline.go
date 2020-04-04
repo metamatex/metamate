@@ -11,7 +11,7 @@ import (
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 )
 
-func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Service, reqHs map[bool]map[string]types.RequestHandler, linkStore types.LinkStore, logTemplates types.InternalLogTemplates) *line.Line {
+func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Service, reqHs map[bool]map[string]types.RequestHandler, logTemplates types.InternalLogTemplates) *line.Line {
 	resolveLine := line.Do()
 
 	cliReqErrL := getErrLine(f, types.GCliRsp)
@@ -143,36 +143,10 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 												funcs.SetFirstGSvc(),
 												funcs.Copy(types.GCliReq, types.GSvcReq),
 												funcs.Func(func(ctx types.ReqCtx) types.ReqCtx { ctx.GSvcReq.MustDelete(fieldnames.ServiceFilter); return ctx }),
-											).
-											Concurrent(
-												[]*line.Line{
-													line.
-														Do(
-															funcs.Log(config.SvcReq, logTemplates),
-															funcs.HandleSvcReq(reqHs),
-															funcs.Log(config.SvcRsp, logTemplates),
-															funcs.AddSvcToSvcIds(),
-														),
-													line.
-														Do(
-															funcs.CollectGRspSelectFromGCliReq(),
-															funcs.GetInterSvcIds(rn, linkStore),
-														).
-														Parallel(
-															-1,
-															funcs.MapSvcIds,
-															line.Do(funcs.GetById(f, resolveLine)),
-															funcs.CollectCliRsps,
-														).
-														Do(
-															funcs.CollectGSvcErrsFromGCliRsps(f),
-															funcs.CollectGEntitiesFromGCliRsps(f),
-															funcs.New(f, types.GSvcRsp),
-															funcs.AddGSvcErrsToGSvcRsp(f),
-															funcs.AddGEntitiesToGSvcRsp(),
-														),
-												},
-												funcs.CollectSvcRsps,
+												funcs.Log(config.SvcReq, logTemplates),
+												funcs.HandleSvcReq(reqHs),
+												funcs.Log(config.SvcRsp, logTemplates),
+												funcs.AddSvcToSvcIds(),
 											),
 									},
 								),
@@ -237,13 +211,6 @@ func NarrowSvcFilterToModeId(l *line.Line) *line.Line {
 						map[string]*line.Line{
 							sdk.GetModeKind.Id:       line.Do(funcs.SetSvcFilterToGetModeIdSvcIdFunc()),
 							sdk.GetModeKind.Relation: line.Do(funcs.SetSvcFilterToGetModeRelationIdFunc()),
-						},
-					),
-				sdk.Methods.Put: line.
-					Switch(
-						funcs.By(types.Mode),
-						map[string]*line.Line{
-							sdk.PutModeKind.Relation: line.Do(funcs.SetSvcFilterToPutModeRelationIdFunc()),
 						},
 					),
 			},

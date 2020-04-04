@@ -8,10 +8,8 @@ import (
 )
 
 const (
-	Sqlx       = "sqlx"
 	Pipe       = "pipe"
 	ReqFilter  = "reqFilter"
-	Auth       = "auth"
 	Mastodon   = "mastodon"
 	Hackernews = "hackernews"
 	Kubernetes = "kubernetes"

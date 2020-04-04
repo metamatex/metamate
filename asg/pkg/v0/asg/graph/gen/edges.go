@@ -102,10 +102,10 @@ var nodeEdges = NodeEdges{
 	},
 	Type: &NodeEdge{
 		One: &Edges{
-			Type: &StaticDynamic{Static: []string{"For", "FilteredBy", "SortedBy", "SelectedBy", "Collection", "Request", "Response", "GetRequest", "GetCollection", "GetRelations", "GetResponse", "GetEndpoint",
+			Type: &StaticDynamic{Static: []string{"For", "FilteredBy", "SortedBy", "SelectedBy", "Collection", "Request", "Response", "GetRequest", "GetCollection", "GetRelations", "GetResponse", "GetEndpoint", "PipeRequest", "PipeResponse", "PipeEndpoint",
 			}},
 			Enum:     &StaticDynamic{Static: []string{"For", "ListKind"}},
-			Endpoint: &StaticDynamic{Static: []string{"BelongsTo", "Get",}},
+			Endpoint: &StaticDynamic{Static: []string{"BelongsTo", "Get", "Pipe",}},
 		},
 		Many: &Edges{
 			Field:    &StaticDynamic{Static: []string{"Holds", "EdgedByFields", "EdgedByListFields"}},

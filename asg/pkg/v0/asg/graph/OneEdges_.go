@@ -221,11 +221,8 @@ func (e RelationToPathEdges) Passive() (*PathNode) {
 
 const (
 	TypeBelongsToEndpoint = "Type,one,Endpoint,BelongsTo"
-	TypePostEndpoint = "Type,one,Endpoint,Post"
 	TypeGetEndpoint = "Type,one,Endpoint,Get"
 	TypePipeEndpoint = "Type,one,Endpoint,Pipe"
-	TypePutEndpoint = "Type,one,Endpoint,Put"
-	TypeDeleteEndpoint = "Type,one,Endpoint,Delete"
 )
 
 type TypeToEndpointEdges struct {
@@ -240,13 +237,6 @@ func (e TypeToEndpointEdges) BelongsTo() (*EndpointNode) {
 
 	return e.Resolver.n.root.Endpoints.MustById(e.Resolver.BelongsTo())
 }
-func (e TypeToEndpointEdges) Post() (*EndpointNode) {
-	if e.Resolver.Post() == "" {
-		return nil
-	}
-
-	return e.Resolver.n.root.Endpoints.MustById(e.Resolver.Post())
-}
 func (e TypeToEndpointEdges) Get() (*EndpointNode) {
 	if e.Resolver.Get() == "" {
 		return nil
@@ -260,20 +250,6 @@ func (e TypeToEndpointEdges) Pipe() (*EndpointNode) {
 	}
 
 	return e.Resolver.n.root.Endpoints.MustById(e.Resolver.Pipe())
-}
-func (e TypeToEndpointEdges) Put() (*EndpointNode) {
-	if e.Resolver.Put() == "" {
-		return nil
-	}
-
-	return e.Resolver.n.root.Endpoints.MustById(e.Resolver.Put())
-}
-func (e TypeToEndpointEdges) Delete() (*EndpointNode) {
-	if e.Resolver.Delete() == "" {
-		return nil
-	}
-
-	return e.Resolver.n.root.Endpoints.MustById(e.Resolver.Delete())
 }
 
 const (
@@ -313,18 +289,9 @@ const (
 	TypeGetCollectionType = "Type,one,Type,GetCollection"
 	TypeGetRelationsType = "Type,one,Type,GetRelations"
 	TypeGetResponseType = "Type,one,Type,GetResponse"
-	TypePostRequestType = "Type,one,Type,PostRequest"
-	TypePostResponseType = "Type,one,Type,PostResponse"
-	TypePutRequestType = "Type,one,Type,PutRequest"
-	TypePutResponseType = "Type,one,Type,PutResponse"
-	TypeDeleteRequestType = "Type,one,Type,DeleteRequest"
-	TypeDeleteResponseType = "Type,one,Type,DeleteResponse"
+	TypeGetEndpointType = "Type,one,Type,GetEndpoint"
 	TypePipeRequestType = "Type,one,Type,PipeRequest"
 	TypePipeResponseType = "Type,one,Type,PipeResponse"
-	TypePostEndpointType = "Type,one,Type,PostEndpoint"
-	TypeGetEndpointType = "Type,one,Type,GetEndpoint"
-	TypePutEndpointType = "Type,one,Type,PutEndpoint"
-	TypeDeleteEndpointType = "Type,one,Type,DeleteEndpoint"
 	TypePipeEndpointType = "Type,one,Type,PipeEndpoint"
 )
 
@@ -410,47 +377,12 @@ func (e TypeToTypeEdges) GetResponse() (*TypeNode) {
 
 	return e.Resolver.n.root.Types.MustById(e.Resolver.GetResponse())
 }
-func (e TypeToTypeEdges) PostRequest() (*TypeNode) {
-	if e.Resolver.PostRequest() == "" {
+func (e TypeToTypeEdges) GetEndpoint() (*TypeNode) {
+	if e.Resolver.GetEndpoint() == "" {
 		return nil
 	}
 
-	return e.Resolver.n.root.Types.MustById(e.Resolver.PostRequest())
-}
-func (e TypeToTypeEdges) PostResponse() (*TypeNode) {
-	if e.Resolver.PostResponse() == "" {
-		return nil
-	}
-
-	return e.Resolver.n.root.Types.MustById(e.Resolver.PostResponse())
-}
-func (e TypeToTypeEdges) PutRequest() (*TypeNode) {
-	if e.Resolver.PutRequest() == "" {
-		return nil
-	}
-
-	return e.Resolver.n.root.Types.MustById(e.Resolver.PutRequest())
-}
-func (e TypeToTypeEdges) PutResponse() (*TypeNode) {
-	if e.Resolver.PutResponse() == "" {
-		return nil
-	}
-
-	return e.Resolver.n.root.Types.MustById(e.Resolver.PutResponse())
-}
-func (e TypeToTypeEdges) DeleteRequest() (*TypeNode) {
-	if e.Resolver.DeleteRequest() == "" {
-		return nil
-	}
-
-	return e.Resolver.n.root.Types.MustById(e.Resolver.DeleteRequest())
-}
-func (e TypeToTypeEdges) DeleteResponse() (*TypeNode) {
-	if e.Resolver.DeleteResponse() == "" {
-		return nil
-	}
-
-	return e.Resolver.n.root.Types.MustById(e.Resolver.DeleteResponse())
+	return e.Resolver.n.root.Types.MustById(e.Resolver.GetEndpoint())
 }
 func (e TypeToTypeEdges) PipeRequest() (*TypeNode) {
 	if e.Resolver.PipeRequest() == "" {
@@ -465,34 +397,6 @@ func (e TypeToTypeEdges) PipeResponse() (*TypeNode) {
 	}
 
 	return e.Resolver.n.root.Types.MustById(e.Resolver.PipeResponse())
-}
-func (e TypeToTypeEdges) PostEndpoint() (*TypeNode) {
-	if e.Resolver.PostEndpoint() == "" {
-		return nil
-	}
-
-	return e.Resolver.n.root.Types.MustById(e.Resolver.PostEndpoint())
-}
-func (e TypeToTypeEdges) GetEndpoint() (*TypeNode) {
-	if e.Resolver.GetEndpoint() == "" {
-		return nil
-	}
-
-	return e.Resolver.n.root.Types.MustById(e.Resolver.GetEndpoint())
-}
-func (e TypeToTypeEdges) PutEndpoint() (*TypeNode) {
-	if e.Resolver.PutEndpoint() == "" {
-		return nil
-	}
-
-	return e.Resolver.n.root.Types.MustById(e.Resolver.PutEndpoint())
-}
-func (e TypeToTypeEdges) DeleteEndpoint() (*TypeNode) {
-	if e.Resolver.DeleteEndpoint() == "" {
-		return nil
-	}
-
-	return e.Resolver.n.root.Types.MustById(e.Resolver.DeleteEndpoint())
 }
 func (e TypeToTypeEdges) PipeEndpoint() (*TypeNode) {
 	if e.Resolver.PipeEndpoint() == "" {

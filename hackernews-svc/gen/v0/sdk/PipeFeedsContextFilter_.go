@@ -7,11 +7,8 @@ const (
 
 type PipeFeedsContextFilter struct {
     And []PipeFeedsContextFilter `json:"and,omitempty" yaml:"and,omitempty"`
-    Delete *PipeDeleteFeedsContextFilter `json:"delete,omitempty" yaml:"delete,omitempty"`
     Get *PipeGetFeedsContextFilter `json:"get,omitempty" yaml:"get,omitempty"`
     Not []PipeFeedsContextFilter `json:"not,omitempty" yaml:"not,omitempty"`
     Or []PipeFeedsContextFilter `json:"or,omitempty" yaml:"or,omitempty"`
-    Post *PipePostFeedsContextFilter `json:"post,omitempty" yaml:"post,omitempty"`
-    Put *PipePutFeedsContextFilter `json:"put,omitempty" yaml:"put,omitempty"`
     Set *bool `json:"set,omitempty" yaml:"set,omitempty"`
 }

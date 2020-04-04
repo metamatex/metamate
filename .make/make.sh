@@ -11,7 +11,7 @@ function build_metamate {
 }
 
 function build {
-    (cd asg/pkg/v0/asg/graph/gen && go run edges.go && go run nodemap.go && go run nodeslice.go)
+    (cd asg/pkg/v0/asg/graph && go run gen/edges.go && go run gen/nodemap.go && go run gen/nodeslice.go)
     (cd metactl && make build)
     generate
     (cd metactl && make build)

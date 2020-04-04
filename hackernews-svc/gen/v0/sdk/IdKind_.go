@@ -12,7 +12,6 @@ var IdKind = struct{
     Me string
     Name string
     ServiceId string
-    Token string
     Url string
     Username string
 }{
@@ -22,7 +21,6 @@ var IdKind = struct{
     Me: "me",
     Name: "name",
     ServiceId: "serviceId",
-    Token: "token",
     Url: "url",
     Username: "username",
 }

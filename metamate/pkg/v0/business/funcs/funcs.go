@@ -19,31 +19,18 @@ import (
 )
 
 const (
-	HashCliReqName                         = "hash request"
-	CreateRspName                          = "create client response"
-	SetForTnName                           = "set for typenode"
-	ProcessCliReqName                      = "process client request"
 	ValidateCliReqName                     = "validate client request"
-	SetClientAccountName                   = "set system account"
 	ProcessCliRspName                      = "process client response"
-	HashCliRspName                         = "hash client response"
 	ValidateCliRspName                     = "validate client response"
-	FilterCliRspName                       = "filter client response"
 	SelectCliRspName                       = "select client response"
 	SetStageName                           = "set stage"
 	GetSvcsName                            = "get services"
 	RequireOneGSvcName                     = "require one service"
 	SetFirstGSvcName                       = "set first service"
 	GSvcRspToGCliRspName                   = "service response to client response"
-	GetSvcFilterFromReqName                = "get service filter from request"
-	GetEndpointKindFromReqName             = "get endpoint kind from request"
-	GetSvcReqName                          = "get service request"
 	FuncName                               = "func"
-	ProcessSvcReqName                      = "process service request"
-	HashSvcReqName                         = "hash service request"
 	HandleReqName                          = "handle request"
 	AddSvcToEntitiesName                   = "add service to entities"
-	CollectSvcRspErrsName                  = "collect service response errors"
 	SetSvcFilterToGetModeIdSvcIdName       = "set service filter to get mode id service id"
 	SetSvcFilterToGetModeRelationSvcIdName = "set service filter to get mode relation service id"
 )
@@ -164,17 +151,6 @@ func ApplySvcEndpointReqFilters(f generic.Factory) types.FuncTransformer {
 	}
 }
 
-func CollectGRspSelectFromGCliReq() types.FuncTransformer {
-	return types.FuncTransformer{
-		Name0: "collect response select from client request",
-		Func: func(ctx types.ReqCtx) types.ReqCtx {
-			ctx.GRspSelect = ctx.GCliReq.MustGeneric(fieldnames.Select)
-
-			return ctx
-		},
-	}
-}
-
 func SetSvcFilterToGetModeIdSvcIdFunc() types.FuncTransformer {
 	return types.FuncTransformer{
 		Name0: SetSvcFilterToGetModeIdSvcIdName,
@@ -198,28 +174,6 @@ func SetSvcFilterToGetModeIdSvcIdFunc() types.FuncTransformer {
 }
 
 func SetSvcFilterToGetModeRelationIdFunc() types.FuncTransformer {
-	return types.FuncTransformer{
-		Name0: SetSvcFilterToGetModeRelationSvcIdName,
-		Func: func(ctx types.ReqCtx) types.ReqCtx {
-			serviceName, ok := ctx.GCliReq.String(fieldnames.Mode, fieldnames.Relation, fieldnames.Id, fieldnames.ServiceName)
-			if !ok {
-				return ctx
-			}
-
-			if ctx.SvcFilter.Id == nil {
-				ctx.SvcFilter.Id = &sdk.ServiceIdFilter{
-					Value: &sdk.StringFilter{},
-				}
-			}
-
-			ctx.SvcFilter.Id.Value.Is = sdk.String(serviceName)
-
-			return ctx
-		},
-	}
-}
-
-func SetSvcFilterToPutModeRelationIdFunc() types.FuncTransformer {
 	return types.FuncTransformer{
 		Name0: SetSvcFilterToGetModeRelationSvcIdName,
 		Func: func(ctx types.ReqCtx) types.ReqCtx {
@@ -686,7 +640,6 @@ func ResolveRelations(resolvePl *line.Line, f generic.Factory) types.FuncTransfo
 
 				ctx0 := resolvePl.Transform(types.ReqCtx{
 					GCliReq:            gGetReq,
-					ClientAccount:      ctx.ClientAccount,
 				})
 
 				gCollection := f.New(gGetCollection.Type().Edges.Type.For().Edges.Type.Collection())
@@ -729,7 +682,6 @@ func GetEntityById(f generic.Factory, resolvePl *line.Line) types.FuncTransforme
 
 			ctx0 := resolvePl.Transform(types.ReqCtx{
 				GCliReq:            gGetReq,
-				ClientAccount:      ctx.ClientAccount,
 			})
 
 			gSlice, ok := ctx0.GCliRsp.GenericSlice(ctx.GEntity.Type().PluralFieldName())
@@ -913,117 +865,11 @@ func GSvcRspToGCliRsp() types.FuncTransformer {
 	}
 }
 
-func GetById(f generic.Factory, resolve *line.Line) types.FuncTransformer {
-	return types.FuncTransformer{
-		Name0: "",
-		Func: func(ctx types.ReqCtx) types.ReqCtx {
-			gGetReq := f.New(ctx.ForTypeNode.Edges.Type.GetRequest())
-
-			getMode := sdk.GetMode{
-				Kind: &sdk.GetModeKind.Id,
-				Id: &sdk.Id{
-					Kind:      &sdk.IdKind.ServiceId,
-					ServiceId: ctx.SvcId,
-				},
-			}
-
-			gGetReq.MustSetGeneric([]string{fieldnames.Mode}, f.MustFromStruct(getMode))
-
-			ctx0 := resolve.Transform(types.ReqCtx{
-				ClientAccount:      ctx.ClientAccount,
-				GCliReq:            gGetReq,
-				DoSetClientAccount: false,
-				DoCliReqProcessing: false,
-				DoCliReqValidation: false,
-			})
-
-			ctx.GCliRsp = ctx0.GCliRsp
-
-			return ctx
-		},
-	}
-}
-
 func Inspect() types.FuncTransformer {
 	return types.FuncTransformer{
 		Name0: "",
 		Func: func(ctx types.ReqCtx) types.ReqCtx {
 			ctx.Inspect()
-
-			return ctx
-		},
-	}
-}
-
-func mapSvcIdsBySvcName(ids []sdk.ServiceId) (m map[string][]sdk.ServiceId) {
-	m = map[string][]sdk.ServiceId{}
-
-	for _, id := range ids {
-		m[*id.ServiceName] = append(m[*id.ServiceName], id)
-	}
-
-	return
-}
-
-func CollectGSvcErrsFromGCliRsps(f generic.Factory) types.FuncTransformer {
-	return types.FuncTransformer{
-		Name0: "",
-		Func: func(ctx types.ReqCtx) types.ReqCtx {
-			gErrs := f.MustFromStructs([]sdk.Error{})
-			for _, gCliRsp := range ctx.GCliRsps {
-				gSlice0, ok := gCliRsp.GenericSlice(fieldnames.Meta, fieldnames.Errors)
-				if !ok {
-					continue
-				}
-
-				gErrs.Append(gSlice0.Get()...)
-			}
-
-			gErrs.MustToStructs(&ctx.Errs)
-
-			return ctx
-		},
-	}
-}
-
-func CollectGEntitiesFromGCliRsps(f generic.Factory) types.FuncTransformer {
-	return types.FuncTransformer{
-		Name0: "",
-		Func: func(ctx types.ReqCtx) types.ReqCtx {
-			gEntities := f.NewSlice(ctx.ForTypeNode)
-
-			for _, gCliRsp := range ctx.GCliRsps {
-				gEntities0, ok := gCliRsp.GenericSlice(ctx.ForTypeNode.PluralFieldName())
-				if !ok {
-					continue
-				}
-
-				gEntities.Append(gEntities0.Get()...)
-			}
-
-			ctx.GEntities = gEntities
-
-			return ctx
-		},
-	}
-}
-
-func AddGEntitiesToGSvcRsp() types.FuncTransformer {
-	return types.FuncTransformer{
-		Name0: "",
-		Func: func(ctx types.ReqCtx) types.ReqCtx {
-			ctx.GSvcRsp.MustSetGenericSlice([]string{ctx.ForTypeNode.PluralFieldName()}, ctx.GEntities)
-
-			return ctx
-		},
-	}
-}
-
-func AddGSvcErrsToGSvcRsp(f generic.Factory) types.FuncTransformer {
-	return types.FuncTransformer{
-		Name0: "",
-		Func: func(ctx types.ReqCtx) types.ReqCtx {
-			ctx.GSvcRsp.MustSetGenericSlice([]string{fieldnames.Meta, fieldnames.Errors}, f.MustFromStructs(ctx.Errs))
 
 			return ctx
 		},

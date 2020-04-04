@@ -13,7 +13,6 @@ type Id struct {
     Me *bool `json:"me,omitempty" yaml:"me,omitempty"`
     Name *string `json:"name,omitempty" yaml:"name,omitempty"`
     ServiceId *ServiceId `json:"serviceId,omitempty" yaml:"serviceId,omitempty"`
-    Token *Token `json:"token,omitempty" yaml:"token,omitempty"`
     Url *Url `json:"url,omitempty" yaml:"url,omitempty"`
     Username *string `json:"username,omitempty" yaml:"username,omitempty"`
 }
