@@ -36,12 +36,10 @@ builds:
         goarch: 386
 archives:
   - id: metactl
-    builds:
-      - metactl
+    builds: [metactl]
     name_template: "metactl_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}"
   - id: metamate
-    builds:
-      - metamate
+    builds: [metamate]
     name_template: "metamate_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}"
 checksum:
   name_template: 'checksums.txt'
@@ -56,8 +54,8 @@ changelog:
       - Merge pull request
       - Merge branch
 brews:
-  - id: metactl
-    name: metactl
+  - name: metactl
+    ids: [metactl]
     github:
       owner: metamatex
       name: homebrew-taps
@@ -66,8 +64,8 @@ brews:
       email: metamate+metamatexbot@metamate.com
     homepage: "https://metamate.io"
     install: bin.install "metactl"
-  - id: metamate
-    name: metamate
+  - name: metamate
+    ids: [metamate]
     github:
       owner: metamatex
       name: homebrew-taps
