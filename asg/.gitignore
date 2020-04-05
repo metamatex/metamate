@@ -1,3 +1,5 @@
 .DS_Store
 .idea
 main
+
+pkg/v0/asg/graph/*_.go
