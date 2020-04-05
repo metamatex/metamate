@@ -19,7 +19,6 @@ var v0Cmd = &cobra.Command{
 }
 
 func AddV0(cmd *cobra.Command, prefix bool, v types.Version) {
-	//d = boot.GetDependencies(0, v)
 	fs = afero.NewOsFs()
 
 	parentCmd := cmd
@@ -33,6 +32,7 @@ func AddV0(cmd *cobra.Command, prefix bool, v types.Version) {
 
 	addInit(parentCmd)
 	addServe(parentCmd)
+	addUpdate(parentCmd)
 	addVersion(parentCmd)
 
 	parentCmd.PersistentFlags().StringVarP(&gArgs.ConfigPath, "config", "c", config.ConfigFile, "config file")

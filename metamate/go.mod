@@ -18,6 +18,7 @@ replace github.com/metamatex/metamate/gen => ../gen
 
 require (
 	github.com/asaskevich/govalidator v0.0.0-20200108200545-475eaeb16496 // indirect
+	github.com/blang/semver v3.5.1+incompatible
 	github.com/davecgh/go-spew v1.1.1
 	github.com/go-chi/chi v4.0.3+incompatible
 	github.com/go-ozzo/ozzo-validation v3.6.0+incompatible
@@ -31,10 +32,9 @@ require (
 	github.com/metamatex/metamate/hackernews-svc v0.0.0-00010101000000-000000000000
 	github.com/metamatex/metamate/kubernetes-svc v0.0.0-00010101000000-000000000000
 	github.com/metamatex/metamate/mastodon-svc v0.0.0-00010101000000-000000000000
-	github.com/metamatex/metamate/spec v0.0.0-00010101000000-000000000000
 	github.com/pkg/errors v0.8.1
 	github.com/prometheus/client_golang v1.5.0
-	github.com/prometheus/common v0.9.1
+	github.com/rhysd/go-github-selfupdate v1.2.1
 	github.com/rs/cors v1.7.0
 	github.com/spf13/afero v1.1.2
 	github.com/spf13/cobra v0.0.6
