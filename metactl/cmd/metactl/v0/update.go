@@ -9,8 +9,7 @@ import (
 	"github.com/rhysd/go-github-selfupdate/selfupdate"
 	"github.com/spf13/cobra"
 	"os"
-
-	//"log"
+	"strings"
 )
 
 var updateCmd = &cobra.Command{
@@ -24,6 +23,10 @@ var updateCmd = &cobra.Command{
 				err = errors.New(fmt.Sprintf("error occurred while detecting version: %v", err.Error()))
 
 				return
+			}
+
+			if strings.Contains(latest.AssetURL, "metamate") {
+				latest.AssetURL = strings.Replace(latest.AssetURL, "metamate", "metactl", -1)
 			}
 
 			vString := version.Version

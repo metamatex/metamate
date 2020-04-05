@@ -8,6 +8,7 @@ import (
 	"github.com/rhysd/go-github-selfupdate/selfupdate"
 	"github.com/spf13/cobra"
 	"os"
+	"strings"
 )
 
 var updateCmd = &cobra.Command{
@@ -23,6 +24,10 @@ var updateCmd = &cobra.Command{
 				return
 			}
 
+			if strings.Contains(latest.AssetURL, "metactl") {
+				latest.AssetURL = strings.Replace(latest.AssetURL, "metactl", "metamate", -1)
+			}
+
 			vString := version.Version
 			if vString == "dev-0.0.0" {
 				vString = "0.0.0"
@@ -34,7 +39,6 @@ var updateCmd = &cobra.Command{
 
 				return
 			}
-
 
 			fmt.Printf("do you want to update to v%v ? (y/n): ", latest.Version)
 			input, err := bufio.NewReader(os.Stdin).ReadString('\n')

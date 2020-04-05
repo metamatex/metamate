@@ -56,7 +56,8 @@ changelog:
       - Merge pull request
       - Merge branch
 brews:
-  - name: metactl
+  - id: metactl
+    name: metactl
     github:
       owner: metamatex
       name: homebrew-taps
@@ -65,7 +66,8 @@ brews:
       email: metamate+metamatexbot@metamate.com
     homepage: "https://metamate.io"
     install: bin.install "metactl"
-  - name: metamate
+  - id: metamate
+    name: metamate
     github:
       owner: metamatex
       name: homebrew-taps
