@@ -1,0 +1,67 @@
+project_name: metamate
+builds:
+  - main: ./metactl/cmd/metactl/main.go
+    binary: metactl
+    id: metactl
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - 386
+      - amd64
+      - arm
+      - arm64
+    ignore:
+      - goos: darwin
+        goarch: 386
+  - main: ./metamate/cmd/metamate/main.go
+    binary: metamate
+    id: metamate
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - 386
+      - amd64
+      - arm
+      - arm64
+    ignore:
+      - goos: darwin
+        goarch: 386
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - Merge pull request
+      - Merge branch
+brews:
+  - name: metactl
+    github:
+      owner: metamatex
+      name: homebrew-taps
+    commit_author:
+      name: metamatexbot
+      email: metamate+metamatexbot@metamate.com
+    homepage: "https://metamate.io"
+    install: bin.install "metactl"
+  - name: metamate
+    github:
+      owner: metamatex
+      name: homebrew-taps
+    commit_author:
+      name: metamatexbot
+      email: metamate+metamatexbot@metamate.com
+    homepage: "https://metamate.io"
+    install: bin.install "metamate"
