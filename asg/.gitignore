@@ -1,5 +1,3 @@
 .DS_Store
 .idea
 main
-v2019_02
-pkg/v0/asg/graph/*_.go
