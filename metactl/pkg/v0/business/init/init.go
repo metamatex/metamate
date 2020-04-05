@@ -27,29 +27,31 @@ var metactlyaml = `# this file is used by metactl to generate client and service
 {{ .Config }} 
 `
 
-var initialConfig = types.V0Project{
-	Gen: types.Gen{
-		Sdks: []types.ProjectSdk{
-			{
-				Names: []string{_go.SdkHttpJsonService},
-				Data: map[string]interface{}{
-					"name": "socialservice",
-					"package": "github.com/somebody/socialservice",
-				},
-				Endpoints: &graph.Filter{
-					Names: &graph.NamesSubset{
-						Or: []string{"GetFeeds", "GetPeople", "PutPeople", "GetStatuses", "PostStatuses", "PutStatuses", "DeleteStatuses"},
+var initialConfig = types.ProjectConfig{
+	V0: types.V0Project{
+		Gen: types.Gen{
+			Sdks: []types.ProjectSdk{
+				{
+					Names: []string{_go.SdkHttpJsonService},
+					Data: map[string]interface{}{
+						"name": "socialservice",
+						"package": "github.com/somebody/socialservice",
+					},
+					Endpoints: &graph.Filter{
+						Names: &graph.NamesSubset{
+							Or: []string{"GetFeeds", "GetPeople", "GetStatuses"},
+						},
 					},
 				},
-			},
-			{
-				Names: []string{_go.SdkHttpJsonClient},
-				Data: map[string]interface{}{
-					"package": "github.com/somebody/socialclient",
-				},
-				Endpoints: &graph.Filter{
-					Names: &graph.NamesSubset{
-						Or: []string{"GetFeeds", "GetPeople", "PutPeople", "GetStatuses", "PostStatuses", "PutStatuses", "DeleteStatuses"},
+				{
+					Names: []string{_go.SdkHttpJsonClient},
+					Data: map[string]interface{}{
+						"package": "github.com/somebody/socialclient",
+					},
+					Endpoints: &graph.Filter{
+						Names: &graph.NamesSubset{
+							Or: []string{"GetFeeds", "GetPeople", "GetStatuses"},
+						},
 					},
 				},
 			},
