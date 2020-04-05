@@ -2,70 +2,6 @@
 package graph
 
 
-type EnumNodeEdges struct {
-	Type EnumToTypeEdges
-}
-
-func NewEnumNodeEdges(n *EnumNode) (EnumNodeEdges) {
-	return EnumNodeEdges{
-		Type: EnumToTypeEdges{
-			Resolver: NewEnumToTypeIdResolver(n),
-		},
-	}
-}
-
-type FieldNodeEdges struct {
-	BasicType FieldToBasicTypeEdges
-	Enum FieldToEnumEdges
-	Field FieldToFieldEdges
-	Relation FieldToRelationEdges
-	Type FieldToTypeEdges
-	Path FieldToPathEdges
-}
-
-func NewFieldNodeEdges(n *FieldNode) (FieldNodeEdges) {
-	return FieldNodeEdges{
-		BasicType: FieldToBasicTypeEdges{
-			Resolver: NewFieldToBasicTypeIdResolver(n),
-		},
-		Enum: FieldToEnumEdges{
-			Resolver: NewFieldToEnumIdResolver(n),
-		},
-		Field: FieldToFieldEdges{
-			Resolver: NewFieldToFieldIdResolver(n),
-		},
-		Relation: FieldToRelationEdges{
-			Resolver: NewFieldToRelationIdResolver(n),
-		},
-		Type: FieldToTypeEdges{
-			Resolver: NewFieldToTypeIdResolver(n),
-		},
-		Path: FieldToPathEdges{
-			Resolver: NewFieldToPathIdResolver(n),
-		},
-	}
-}
-
-type RelationNodeEdges struct {
-	Type RelationToTypeEdges
-	Path RelationToPathEdges
-	Fields RelationToFieldsEdges
-}
-
-func NewRelationNodeEdges(n *RelationNode) (RelationNodeEdges) {
-	return RelationNodeEdges{
-		Type: RelationToTypeEdges{
-			Resolver: NewRelationToTypeIdResolver(n),
-		},
-		Path: RelationToPathEdges{
-			Resolver: NewRelationToPathIdResolver(n),
-		},
-		Fields: RelationToFieldsEdges{
-			Resolver: NewRelationToFieldsIdResolver(n),
-		},
-	}
-}
-
 type TypeNodeEdges struct {
 	Endpoint TypeToEndpointEdges
 	Enum TypeToEnumEdges
@@ -134,6 +70,70 @@ func NewEndpointNodeEdges(n *EndpointNode) (EndpointNodeEdges) {
 		},
 		Types: EndpointToTypesEdges{
 			Resolver: NewEndpointToTypesIdResolver(n),
+		},
+	}
+}
+
+type EnumNodeEdges struct {
+	Type EnumToTypeEdges
+}
+
+func NewEnumNodeEdges(n *EnumNode) (EnumNodeEdges) {
+	return EnumNodeEdges{
+		Type: EnumToTypeEdges{
+			Resolver: NewEnumToTypeIdResolver(n),
+		},
+	}
+}
+
+type FieldNodeEdges struct {
+	BasicType FieldToBasicTypeEdges
+	Enum FieldToEnumEdges
+	Field FieldToFieldEdges
+	Relation FieldToRelationEdges
+	Type FieldToTypeEdges
+	Path FieldToPathEdges
+}
+
+func NewFieldNodeEdges(n *FieldNode) (FieldNodeEdges) {
+	return FieldNodeEdges{
+		BasicType: FieldToBasicTypeEdges{
+			Resolver: NewFieldToBasicTypeIdResolver(n),
+		},
+		Enum: FieldToEnumEdges{
+			Resolver: NewFieldToEnumIdResolver(n),
+		},
+		Field: FieldToFieldEdges{
+			Resolver: NewFieldToFieldIdResolver(n),
+		},
+		Relation: FieldToRelationEdges{
+			Resolver: NewFieldToRelationIdResolver(n),
+		},
+		Type: FieldToTypeEdges{
+			Resolver: NewFieldToTypeIdResolver(n),
+		},
+		Path: FieldToPathEdges{
+			Resolver: NewFieldToPathIdResolver(n),
+		},
+	}
+}
+
+type RelationNodeEdges struct {
+	Type RelationToTypeEdges
+	Path RelationToPathEdges
+	Fields RelationToFieldsEdges
+}
+
+func NewRelationNodeEdges(n *RelationNode) (RelationNodeEdges) {
+	return RelationNodeEdges{
+		Type: RelationToTypeEdges{
+			Resolver: NewRelationToTypeIdResolver(n),
+		},
+		Path: RelationToPathEdges{
+			Resolver: NewRelationToPathIdResolver(n),
+		},
+		Fields: RelationToFieldsEdges{
+			Resolver: NewRelationToFieldsIdResolver(n),
 		},
 	}
 }
