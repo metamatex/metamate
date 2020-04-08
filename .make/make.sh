@@ -47,3 +47,9 @@ function x_build_and_serve {
 function x_serve {
     metamate/dist/metamate serve
 }
+
+function test {
+    (cd asg/pkg/v0/asg/graph && go run gen/edges.go && go run gen/nodemap.go && go run gen/nodeslice.go)
+    (cd generic && make test)
+    (cd metamate && make test)
+}
