@@ -71,14 +71,14 @@ const storeIsDarkState =
         ? window.localStorage.getItem(`graphiql:isDark`) !== `false`
         : false;
 
+let mounted = false;
+
 function App() {
     const [schema, setSchema] = useState(null);
     const [query, setQuery] = useState(null);
     const [explorerIsOpen, setExplorerIsOpen] = useState(storedExplorerPaneState);
     const [isDark, setIsDark] = useState(storeIsDarkState);
     const [graphiql, setGraphiql] = useState(null);
-
-    let mounted = false;
 
     useEffect(() => {
         graphQLFetcher({

@@ -26,57 +26,6 @@ roleRef:
   name: read-services
   apiGroup: rbac.authorization.k8s.io
 ---
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: metamate-config
-data:
-  metamate.yaml: |-
-    discoverySvc:
-      endpoints:
-        getServices: {}
-        lookupService: {}
-      id:
-        serviceName: metamate
-        value: discovery
-      isVirtual: true
-      transport: httpJson
-      url:
-        value: http://discovery
-    endpoints:
-      config:
-        "on": true
-      prometheus:
-        "on": true
-      debug:
-        "on": true
-      graphql:
-        "on": true
-      graphiqlExplorer:
-        "on": true
-      httpJson:
-        "on": true
-    host:
-      bind: 0.0.0.0
-      domain: metamate.one
-      httpsOn: false
-      allowedOrigins:
-        - '*'
-    log:
-      http: true
-      internal: {}
-    virtual:
-      services:
-      - id: mastodon
-        name: mastodon
-        opts:
-          mastodon:
-            host: https://mastodon.social
-            clientId: tac-RigLyTKxOJoadxRhkKz2qN4kkUal61G-UoFCGHg
-            clientSecret: hyx3PLEuTvy-NKFBPGcWutQlphOjAbZOfx6cWPlbBn4
-      - id: hackernews
-        name: hackernews
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -96,17 +45,13 @@ spec:
         - name: metamate
           image: metamatex/metamate:latest
           command: ["./metamate"]
-          args: ["serve", "-c", "/metamate.yaml"]
+          args: ["serve"]
           imagePullPolicy: Always
           volumeMounts:
             - name: config
               mountPath: /metamate.yaml
               subPath: metamate.yaml
       restartPolicy: Always
-      volumes:
-        - name: config
-          configMap:
-            name: metamate-config
 ---
 apiVersion: v1
 kind: Service
