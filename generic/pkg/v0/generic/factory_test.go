@@ -1,6 +1,7 @@
 package generic
 
 import (
+	"github.com/metamatex/metamate/asg/pkg/v0/asg"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/typenames"
 	"testing"
 
@@ -10,116 +11,119 @@ import (
 	"github.com/metamatex/metamate/gen/v0/sdk"
 )
 
-func TestFactory(t *testing.T, rn *graph.RootNode, f Factory) {
-	t.Parallel()
+func TestFactory(t *testing.T) {
+	var err error
+	rn, err = asg.New()
+	if err != nil {
+		panic(err)
+	}
 
+	f = NewFactory(rn)
+
+	FTestFactoryNew(t, rn, f)
+	FTestFactoryFromStruct(t, rn, f)
+	FTestFactoryFromStringInterfaceMap(t, rn, f)
+	FTestFactoryUnflatten(t, rn, f)
+}
+
+func FTestFactoryNew(t *testing.T, rn *graph.RootNode, f Factory) {
 	t.Run("TestFactoryNew", func(t *testing.T) {
 		t.Parallel()
+		tn := rn.Types.MustByName(typenames.Whatever)
 
-		TestFactoryNew(t, rn, f)
+		g := f.New(rn.Types.MustByName(typenames.Whatever))
+
+		assert.Equal(t, tn.Name(), g.Type().Name())
 	})
+}
 
+func FTestFactoryFromStruct(t *testing.T, rn *graph.RootNode, f Factory) {
 	t.Run("TestFactoryFromStruct", func(t *testing.T) {
 		t.Parallel()
+		err := func() (err error) {
+			g := f.MustFromStruct(w)
 
-		TestFactoryFromStruct(t, rn, f)
+			w0 := sdk.Whatever{}
+			g.MustToStruct(&w0)
+
+			assert.Equal(t, w, w0)
+
+			return
+		}()
+		if err != nil {
+			t.Error(err)
+		}
 	})
+}
 
-	t.Run("TestFactoryFromStringInterfaceMap", func(t *testing.T) {
+func FTestFactoryFromStringInterfaceMap(t *testing.T, rn *graph.RootNode, f Factory) {
+	t.Run("FTestFactoryFromStringInterfaceMap", func(t *testing.T) {
 		t.Parallel()
+		err := func() (err error) {
+			g, err := f.FromStruct(w)
+			if err != nil {
+				return
+			}
 
-		TestFactoryFromStringInterfaceMap(t, rn, f)
+			m := g.ToStringInterfaceMap()
+
+			g0, err := f.FromStringInterfaceMap(rn.Types.MustByName(typenames.Whatever), m)
+			if err != nil {
+				return
+			}
+
+			w0 := sdk.Whatever{}
+			err = g0.ToStruct(&w0)
+			if err != nil {
+				return
+			}
+
+			assert.Equal(t, w, w0)
+
+			return
+		}()
+		if err != nil {
+			t.Error(err)
+		}
+
+		return
 	})
 }
 
-func TestFactoryNew(t *testing.T, rn *graph.RootNode, f Factory) {
-	tn := rn.Types.MustByName(typenames.Whatever)
+func FTestFactoryUnflatten(t *testing.T, rn *graph.RootNode, f Factory) {
+	t.Run("FTestFactoryUnflatten", func(t *testing.T) {
+		t.Parallel()
+		err := func() (err error) {
+			g, err := f.FromStruct(w)
+			if err != nil {
+				return
+			}
 
-	g := f.New(rn.Types.MustByName(typenames.Whatever))
+			d := "."
+			m, err := g.Flatten(d)
+			if err != nil {
+				return
+			}
 
-	assert.Equal(t, tn.Name(), g.Type().Name())
-}
+			g0, err := f.Unflatten(rn.Types.MustByName(typenames.Whatever), d, m)
+			if err != nil {
+				return
+			}
 
-func TestFactoryFromStruct(t *testing.T, rn *graph.RootNode, f Factory) {
-	err := func() (err error) {
-		g := f.MustFromStruct(w)
+			w0 := sdk.Whatever{}
+			err = g0.ToStruct(&w0)
+			if err != nil {
+				return
+			}
 
-		w0 := sdk.Whatever{}
-		g.MustToStruct(&w0)
+			assert.Equal(t, w, w0)
 
-		assert.Equal(t, w, w0)
+			return
+		}()
+		if err != nil {
+			t.Error(err)
+		}
 
 		return
-	}()
-	if err != nil {
-	    t.Error(err)
-	}
+	})
 }
-
-func TestFactoryFromStringInterfaceMap(t *testing.T, rn *graph.RootNode, f Factory) {
-	err := func() (err error) {
-		g, err := f.FromStruct(w)
-		if err != nil {
-			return
-		}
-
-		m := g.ToStringInterfaceMap()
-
-		g0, err := f.FromStringInterfaceMap(rn.Types.MustByName(typenames.Whatever), m)
-		if err != nil {
-		    return
-		}
-
-		w0 := sdk.Whatever{}
-		err = g0.ToStruct(&w0)
-		if err != nil {
-			return
-		}
-
-		assert.Equal(t, w, w0)
-
-		return
-	}()
-	if err != nil {
-		t.Error(err)
-	}
-
-	return
-}
-
-func TestFactoryUnflatten(t *testing.T, rn *graph.RootNode, f Factory) {
-	err := func() (err error) {
-		g, err := f.FromStruct(w)
-		if err != nil {
-			return
-		}
-
-		d := "."
-		m, err := g.Flatten(d)
-		if err != nil {
-			return
-		}
-
-		g0, err := f.Unflatten(rn.Types.MustByName(typenames.Whatever), d, m)
-		if err != nil {
-			return
-		}
-
-		w0 := sdk.Whatever{}
-		err = g0.ToStruct(&w0)
-		if err != nil {
-			return
-		}
-
-		assert.Equal(t, w, w0)
-
-		return
-	}()
-	if err != nil {
-		t.Error(err)
-	}
-
-	return
-}
-
-//FromStructs(interface{}) (Generic, error)

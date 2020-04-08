@@ -71,8 +71,6 @@ const storeIsDarkState =
         ? window.localStorage.getItem(`graphiql:isDark`) !== `false`
         : false;
 
-let mounted = false;
-
 function App() {
     const [schema, setSchema] = useState(null);
     const [query, setQuery] = useState(null);
@@ -85,12 +83,10 @@ function App() {
             query: getIntrospectionQuery(),
         }).then(result => {
             setSchema(buildClientSchema(result.data));
-
-            mounted = true;
         });
 
         setQuery(parameters.query || (window.localStorage && window.localStorage.getItem(`graphiql:query`)) || window.defaultQuery);
-    }, [mounted]);
+    });
 
     const handleEditQuery = query => {
         parameters.query = query;
