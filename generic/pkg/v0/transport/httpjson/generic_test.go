@@ -3,7 +3,6 @@ package httpjson
 import (
 	"context"
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
-	"net/http"
 	"testing"
 
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/expansion"
@@ -84,38 +83,38 @@ func NewHandler(t *testing.T, f generic.Factory) (func(ctx context.Context, gReq
 	}
 }
 
-func TestGenericClientGenericServer(t *testing.T) {
-	t.Parallel()
-
-	err := func() (err error) {
-		addr := "127.0.0.1:57004"
-		s := NewServer(ServerOpts{Root: root, Factory: f, Handler: NewHandler(t, f)})
-
-		go func() {
-			err = http.ListenAndServe(addr, s)
-			if err != nil {
-				t.Error(err)
-			}
-		}()
-
-		c := NewClient(f, &http.Client{}, "http://"+addr, "")
-
-		gRsp, err := c.Send(f.MustFromStruct(req))
-		if err != nil {
-			return
-		}
-
-		var rsp0 sdk.GetWhateversResponse
-		err = gRsp.ToStruct(&rsp0)
-		if err != nil {
-			return
-		}
-
-		assert.Equal(t, rsp, rsp0)
-
-		return
-	}()
-	if err != nil {
-		t.Error(err)
-	}
-}
+//func TestGenericClientGenericServer(t *testing.T) {
+//	t.Parallel()
+//
+//	err := func() (err error) {
+//		addr := "127.0.0.1:57004"
+//		s := NewServer(ServerOpts{Root: root, Factory: f, Handler: NewHandler(t, f)})
+//
+//		go func() {
+//			err = http.ListenAndServe(addr, s)
+//			if err != nil {
+//				t.Error(err)
+//			}
+//		}()
+//
+//		c := NewClient(f, &http.Client{}, "http://"+addr, "")
+//
+//		gRsp, err := c.Send(f.MustFromStruct(req))
+//		if err != nil {
+//			return
+//		}
+//
+//		var rsp0 sdk.GetWhateversResponse
+//		err = gRsp.ToStruct(&rsp0)
+//		if err != nil {
+//			return
+//		}
+//
+//		assert.Equal(t, rsp, rsp0)
+//
+//		return
+//	}()
+//	if err != nil {
+//		t.Error(err)
+//	}
+//}
