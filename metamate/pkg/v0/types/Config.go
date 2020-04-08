@@ -56,7 +56,6 @@ type GraphiqlExplorerEndpointConfig struct {
 
 type GraphqlEndpointConfig struct {
 	On             bool     `yaml:"on,omitempty"`
-	PlaygroundPath string   `yaml:"playgroundPath,omitempty"`
 }
 
 type HttpJsonEndpoint struct {

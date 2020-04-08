@@ -6,6 +6,7 @@ import "graphiql/graphiql.css"
 import { getIntrospectionQuery, buildClientSchema } from "graphql"
 
 const parameters = {};
+
 window.location.search
     .substr(1)
     .split(`&`)
@@ -126,7 +127,6 @@ function App() {
     };
 
     return (
-
     <div className={"graphiql-container" + (isDark ? ' isDark' : '') + (parameters.isCompact ? ' isCompact' : '')}>
         {parameters.color ? <style dangerouslySetInnerHTML={{__html: `#root .execute-button { border: none; background: ` + parameters.color + ` }`}}></style>: null}
             <GraphiQLExplorer
