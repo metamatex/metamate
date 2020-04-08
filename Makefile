@@ -22,6 +22,9 @@ generate:
 deploy:
 	@${SOURCE_MAKE} && deploy
 
+test:
+	@${SOURCE_MAKE} && test
+
 x_build_and_serve:
 	@${SOURCE_MAKE} && x_build_and_serve
 
