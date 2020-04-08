@@ -86,7 +86,7 @@ function App() {
         });
 
         setQuery(parameters.query || (window.localStorage && window.localStorage.getItem(`graphiql:query`)) || window.defaultQuery);
-    });
+    }, [query]);
 
     const handleEditQuery = query => {
         parameters.query = query;
