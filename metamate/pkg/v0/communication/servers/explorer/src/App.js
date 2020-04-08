@@ -192,7 +192,7 @@ function App() {
                         title="Toggle Dark Mode"
                         onClick={handleToggleDark}
                     />}
-                    {parameters.isCompact ? <a style={{color: parameters.color}} href={"http://" + window.location.host + window.location.pathname + "?query=" +encodeURI(parameters.query)} target="_blank" className={"toolbar-button open-in-explorer-button"}>Open in explorer</a> : null}
+                    {parameters.isCompact ? <a style={{color: parameters.color}} href={"http://" + window.location.host + window.location.pathname + "?query=" +encodeURI(parameters.query)} target="_blank" rel="noopener noreferrer" className={"toolbar-button open-in-explorer-button"}>Open in explorer</a> : null}
                 </GraphiQL.Toolbar>
             </GraphiQL>
         </div>
