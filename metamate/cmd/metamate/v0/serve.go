@@ -39,7 +39,7 @@ var serveCmd = &cobra.Command{
 
 				for _, r := range d.Routes {
 					for _, m := range r.Methods {
-						fmt.Printf("%v: %v:%v\n", m, c.Host.Bind, r.Path)
+						fmt.Printf("%v: %v\n", m, r.Path)
 					}
 				}
 

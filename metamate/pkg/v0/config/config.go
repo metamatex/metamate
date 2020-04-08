@@ -20,8 +20,6 @@ const (
 
 var DefaultConfig = types.Config{
 	Host: types.HostConfig{
-		Bind:           "0.0.0.0",
-		HttpPort:       80,
 		AllowedOrigins: []string{"*"},
 	},
 	Log: types.LogConfig{

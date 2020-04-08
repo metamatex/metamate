@@ -2,8 +2,6 @@ package boot
 
 import (
 	"context"
-	"crypto/tls"
-	"fmt"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg"
@@ -23,7 +21,6 @@ import (
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/cors"
-	"golang.org/x/crypto/acme/autocert"
 	"log"
 	"net/http"
 	"net/http/pprof"
@@ -218,43 +215,6 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 		IdleTimeout:  120 * time.Second,
 		Handler:      router,
 		Addr:         ":80",
-	}
-
-	if c.Host.HttpsOn {
-		m := &autocert.Manager{
-			Prompt: autocert.AcceptTOS,
-			HostPolicy: func(ctx context.Context, host string) error {
-				if host == c.Host.Domain {
-					return nil
-				}
-
-				return fmt.Errorf("acme/autocert: only %s host is allowed", c.Host.Domain)
-			},
-			Cache: autocert.DirCache(c.Host.CertCacheDir),
-		}
-
-		httpServer = &http.Server{
-			ReadTimeout:  5 * time.Second,
-			WriteTimeout: 5 * time.Second,
-			IdleTimeout:  120 * time.Second,
-			Handler:      HttpsRedirectHandler{},
-			Addr:         ":80",
-		}
-
-		httpsServer := &http.Server{
-			ReadTimeout:  5 * time.Second,
-			WriteTimeout: 5 * time.Second,
-			IdleTimeout:  120 * time.Second,
-			Handler:      router,
-			Addr:         ":443",
-			TLSConfig:    &tls.Config{GetCertificate: m.GetCertificate},
-		}
-
-		httpServer.Handler = m.HTTPHandler(httpServer.Handler)
-
-		d.Run = append(d.Run, func() (err error) {
-			return httpsServer.ListenAndServeTLS("", "")
-		})
 	}
 
 	d.Run = append(d.Run, httpServer.ListenAndServe)
