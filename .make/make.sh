@@ -10,8 +10,12 @@ function build_metamate {
     (cd metamate && make build)
 }
 
+function prepare {
+    (cd asg && make prepare)
+    (cd metamate && make prepare)
+}
+
 function build {
-    (cd asg/pkg/v0/asg/graph && go run gen/edges.go && go run gen/nodemap.go && go run gen/nodeslice.go)
     (cd metactl && make build)
     generate
     (cd metactl && make build)
@@ -49,7 +53,6 @@ function x_serve {
 }
 
 function test {
-    (cd asg/pkg/v0/asg/graph && go run gen/edges.go && go run gen/nodemap.go && go run gen/nodeslice.go)
     (cd generic && make test)
     (cd metamate && make test)
 }

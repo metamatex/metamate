@@ -10,4 +10,5 @@ jobs:
       - uses: actions/setup-go@v1
         with:
           go-version: '1.13'
+      - run: make prepare
       - run: make test

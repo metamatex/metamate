@@ -3,15 +3,17 @@
 set -eox pipefail
 
 function build {
+    time go build -i -o dist/metamate cmd/metamate/main.go
+    ls -lah dist/metamate
+}
+
+function prepare {
     (cd pkg/v0/communication/servers/explorer && \
     yarn build && \
     esc -pkg explorer -o static.go -prefix build build)
 
     (cd pkg/v0/communication/servers/index && \
-        esc -pkg index -o static.go static)
-
-    time go build -i -o dist/metamate cmd/metamate/main.go
-    ls -lah dist/metamate
+    esc -pkg index -o static.go static)
 }
 
 function chore {

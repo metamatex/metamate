@@ -4,6 +4,9 @@ SHELL := /bin/bash
 build:
 	@${SOURCE_MAKE} && build
 
+prepare:
+	@${SOURCE_MAKE} && prepare
+
 chore:
 	@${SOURCE_MAKE} && chore
 
