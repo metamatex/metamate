@@ -7,13 +7,13 @@ builds:
       - CGO_ENABLED=0
     goos:
       - darwin
-#      - linux
-#      - windows
+      - linux
+      - windows
     goarch:
-#      - 386
+      - 386
       - amd64
-#      - arm
-#      - arm64
+      - arm
+      - arm64
     ignore:
       - goos: darwin
         goarch: 386
@@ -24,13 +24,13 @@ builds:
       - CGO_ENABLED=0
     goos:
       - darwin
-#      - linux
-#      - windows
+      - linux
+      - windows
     goarch:
-#      - 386
+      - 386
       - amd64
-#      - arm
-#      - arm64
+      - arm
+      - arm64
     ignore:
       - goos: darwin
         goarch: 386

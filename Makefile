@@ -21,3 +21,9 @@ generate:
 
 deploy:
 	@${SOURCE_MAKE} && deploy
+
+x_build_and_serve:
+	@${SOURCE_MAKE} && x_build_and_serve
+
+x_serve:
+	@${SOURCE_MAKE} && x_serve

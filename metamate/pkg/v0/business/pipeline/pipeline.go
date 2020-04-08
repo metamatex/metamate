@@ -11,7 +11,7 @@ import (
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 )
 
-func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Service, reqHs map[bool]map[string]types.RequestHandler, logTemplates types.InternalLogTemplates) *line.Line {
+func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Service, reqHs map[bool]map[string]types.RequestHandler, cachedReqHs map[bool]map[string]types.RequestHandler, logTemplates types.InternalLogTemplates) *line.Line {
 	resolveLine := line.Do()
 
 	cliReqErrL := getErrLine(f, types.GCliRsp)
@@ -31,13 +31,6 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 		).
 		Add(SetDefaults(f)).
 		Do(funcs.ValidateCliReq(f)).
-		If(
-			func(ctx types.ReqCtx) bool {
-				return true
-			},
-			//funcs.Isset(types.DoCliReqValidation, true),
-			line.Do(funcs.ValidateCliReq(f)),
-		).
 		Switch(
 			funcs.By(types.Method),
 			map[string]*line.Line{
@@ -95,11 +88,15 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 														funcs.Copy(types.GCliReq, types.GSvcReq),
 														funcs.Func(func(ctx types.ReqCtx) types.ReqCtx { ctx.GSvcReq.MustDelete(fieldnames.ServiceFilter); return ctx }),
 														funcs.Log(config.SvcReq, logTemplates),
-														funcs.HandleSvcReq(reqHs),
-														funcs.Log(config.SvcRsp, logTemplates),
+														funcs.HandleSvcReq(cachedReqHs),
 														funcs.AddSvcToSvcIds(),
+														funcs.Log(config.SvcRsp, logTemplates),
 													),
 												funcs.CollectSvcRsps,
+											).
+											Do(
+												funcs.ReduceSvcRspsToCliRsp(f),
+												funcs.ReduceSvcRspErrsToCliRspErrs(f),
 											),
 										sdk.GetModeKind.Search: line.
 											Parallel(
@@ -111,11 +108,15 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 														funcs.Copy(types.GCliReq, types.GSvcReq),
 														funcs.Func(func(ctx types.ReqCtx) types.ReqCtx { ctx.GSvcReq.MustDelete(fieldnames.ServiceFilter); return ctx }),
 														funcs.Log(config.SvcReq, logTemplates),
-														funcs.HandleSvcReq(reqHs),
-														funcs.Log(config.SvcRsp, logTemplates),
+														funcs.HandleSvcReq(cachedReqHs),
 														funcs.AddSvcToSvcIds(),
+														funcs.Log(config.SvcRsp, logTemplates),
 													),
 												funcs.CollectSvcRsps,
+											).
+											Do(
+												funcs.ReduceSvcRspsToCliRsp(f),
+												funcs.ReduceSvcRspErrsToCliRspErrs(f),
 											),
 										sdk.GetModeKind.Collection: line.
 											Parallel(
@@ -127,15 +128,19 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 														funcs.Copy(types.GCliReq, types.GSvcReq),
 														funcs.Func(func(ctx types.ReqCtx) types.ReqCtx { ctx.GSvcReq.MustDelete(fieldnames.ServiceFilter); return ctx }),
 														funcs.Log(config.SvcReq, logTemplates),
-														funcs.HandleSvcReq(reqHs),
-														funcs.Log(config.SvcRsp, logTemplates),
+														funcs.HandleSvcReq(cachedReqHs),
 														funcs.AddSvcToSvcIds(),
+														funcs.Log(config.SvcRsp, logTemplates),
 													).
 													If(
 														funcs.IsType(types.GSvcRsp, sdk.GetServicesResponseName, true),
 														FetchSvcDataFromSvcs(f, reqHs, logTemplates),
 													),
 												funcs.CollectSvcRsps,
+											).
+											Do(
+												funcs.ReduceSvcRspsToCliRsp(f),
+												funcs.ReduceSvcRspErrsToCliRspErrs(f),
 											),
 										sdk.GetModeKind.Relation: line.
 											Do(
@@ -144,17 +149,14 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 												funcs.Copy(types.GCliReq, types.GSvcReq),
 												funcs.Func(func(ctx types.ReqCtx) types.ReqCtx { ctx.GSvcReq.MustDelete(fieldnames.ServiceFilter); return ctx }),
 												funcs.Log(config.SvcReq, logTemplates),
-												funcs.HandleSvcReq(reqHs),
-												funcs.Log(config.SvcRsp, logTemplates),
+												funcs.HandleSvcReq(cachedReqHs),
 												funcs.AddSvcToSvcIds(),
+												funcs.Log(config.SvcRsp, logTemplates),
+												funcs.GSvcRspToGCliRsp(),
 											),
 									},
 								),
 						},
-					).
-					Do(
-						funcs.ReduceSvcRspsToCliRsp(f),
-						funcs.ReduceSvcRspErrsToCliRspErrs(f),
 					).
 					Parallel(
 						-1,

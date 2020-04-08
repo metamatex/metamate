@@ -43,16 +43,7 @@ data:
       transport: httpJson
       url:
         value: http://discovery
-    authSvcFilter:
-      id:
-        value:
-          is: auth
-    defaultClientAccount:
-      id:
-        value: default
     endpoints:
-      admin:
-        "on": true
       config:
         "on": true
       prometheus:
@@ -70,61 +61,12 @@ data:
       domain: metamate.one
       httpsOn: false
       allowedOrigins:
-      - '*'
+        - '*'
     log:
       http: true
-      internal:
-        ClientRequest:
-          "*": "{{ .Ctx.GCliReq.Type.Name }}"
-        ServiceRequest:
-          "*": "{{ .Ctx.Svc.Url.Value }} : \n{{ .Ctx.GSvcReq.Type.Name }}\n{{ .Ctx.GSvcReq.Sprint }}\n\n{{ .Ctx.GSvcRsp.Type.Name }}\n{{ .Ctx.GSvcRsp.Sprint }}"
-        ServiceResponse:
-          "*": "{{ .Ctx.Svc.Url.Value }} : \n{{ .Ctx.GSvcReq.Type.Name }}\n{{ .Ctx.GSvcReq.Sprint }}\n\n{{ .Ctx.GSvcRsp.Type.Name }}\n{{ .Ctx.GSvcRsp.Sprint }}"
+      internal: {}
     virtual:
       services:
-      - id: auth
-        name: auth
-        opts:
-          auth:
-            privateKey: |-
-              -----BEGIN RSA PRIVATE KEY-----
-              MIICXQIBAAKBgQDeY78Tls1xmM0QMNbddASMFOvyHkxTkiItSULcaLL4Q4Wr9SxT
-              5t79OMkj+0DtkKnzqu+aoqL/M09sImY26nMH/uTX3jRwEqx9tfP7j/H8PHPQHZKn
-              jQbRkNN8Mf6zS6lbWO6mfCaCqZ2D0SmG6T2h4sqmTynvVJGVxZeiLALcTwIDAQAB
-              AoGBAJIVX6zUgLvALeQW0O3DikEidSMkd+rlsYGiAEOcmwOuBx6//JBYtd4M8UOr
-              hikHwDwJ6z7e2sdcwy07I32rYEeE0PrOoGfPypRWjZHnpbuXrLTIylEF3czTmXWb
-              dY1+mLSCaYMsu9uz9CX91Q8YkMAkhoWExQOJZX34641Tup/hAkEA8RnIZyKxjPGe
-              y2zdZk/utvG7Fvd0DpPEnUehoTEHbyHfdtGQOuyk3EHSya80DfPro0h0oit8bwmL
-              HEW/VHgT1wJBAOwh9DhinXJFPCC8wNFmYKVwgFc2ImDs/KZARAE7/IstzZIVoeQJ
-              fpAfCWtQho7vUdzBfTaeR2y6Ai3cJHj97EkCQFfFHRF+rcgzha1kmkzOuIZdBdDc
-              kKFl5eOj2hFGOgCZAjLNI4Zv86xDQist3vNdYuD0VZFb51a80KmgMoDbnc0CQQCc
-              93Et7jf1VxrCNFcEm8aREzjtQFoYDlFgfoX2QBb/ueHWQzULrlgIm+kaAjyAVYwY
-              cDK5FPwrxXZfX+CK4VipAkBcwIKylFV+KKM/c9c85MfimGUGQBcWnfTuYcntaUpq
-              IGUaBYoax4+5UfqS8Mhk2U5Pr3YiJqY91pCQsys4CrJU
-              -----END RSA PRIVATE KEY-----
-            salt: abc
-      - id: sqlx-a
-        name: sqlx
-        opts:
-          sqlx:
-            driver: sqlite3
-            connection: ':memory:'
-            types:
-            - ClientAccount
-            - ServiceAccount
-            - BlueWhatever
-            - Whatever
-      - id: sqlx-b
-        name: sqlx
-        opts:
-          sqlx:
-            driver: sqlite3
-            connection: ':memory:'
-            types:
-            - ClientAccount
-            - ServiceAccount
-            - BlueWhatever
-            - Whatever
       - id: mastodon
         name: mastodon
         opts:

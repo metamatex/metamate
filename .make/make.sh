@@ -38,3 +38,12 @@ function generate {
 function deploy {
     (cd metamate && make deploy)
 }
+
+function x_build_and_serve {
+    go build -i -o metamate/dist/metamate metamate/cmd/metamate/main.go
+    metamate/dist/metamate serve
+}
+
+function x_serve {
+    metamate/dist/metamate serve
+}

@@ -95,8 +95,8 @@ func Map(from, to string) func(ctx types.ReqCtx) (ctxs []types.ReqCtx) {
 				gs := gSlice.Get()
 				for i, _ := range gs {
 					ctxs = append(ctxs, types.ReqCtx{
-						GSvcReq:       ctx.GSvcReq,
-						GEntity:       gs[i],
+						GSvcReq:       ctx.GSvcReq.Copy(),
+						GEntity:       gs[i].Copy(),
 						ForTypeNode:   ctx.ForTypeNode,
 					})
 				}

@@ -7,6 +7,7 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg"
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
 	"github.com/metamatex/metamate/gen/v0/sdk"
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/generic/pkg/v0/transport/httpjson"
@@ -18,6 +19,7 @@ import (
 	"github.com/metamatex/metamate/metamate/pkg/v0/communication/servers/graphql"
 	"github.com/metamatex/metamate/metamate/pkg/v0/communication/servers/index"
 	"github.com/metamatex/metamate/metamate/pkg/v0/config"
+	"github.com/metamatex/metamate/metamate/pkg/v0/persistence"
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rs/cors"
@@ -65,32 +67,49 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 		Transport: c0,
 	}
 
-	//cache := persistence.NewLruCache(256, 5 * time.Minute)
+	cache, err := persistence.NewLruCache(1024, 5 * time.Minute)
+	if err != nil {
+	    return
+	}
 
 	cacheHandlerF := func(h func(ctx context.Context, addr string, gSvcReq generic.Generic) (gSvcRsp generic.Generic, err error)) (func(ctx context.Context, addr string, gSvcReq generic.Generic) (gSvcRsp generic.Generic, err error)) {
 		return func(ctx context.Context, addr string, gSvcReq generic.Generic) (gSvcRsp generic.Generic, err error) {
-			//v, ok := cache.Get(gSvcReq.GetHash())
-			//if !ok {
-			//	gSvcRsp, err = h(ctx, addr, gSvcReq)
-			//    if err != nil {
-			//        return
-			//    }
-			//
-			//    cache.Add(gSvcReq.GetHash(), gSvcRsp)
-			//
-			//	return
-			//}
-			//
-			//gSvcRsp, ok = v.(generic.Generic)
-			//if !ok {
-			//    panic("expected generic")
-			//}
+			var key string
 
-			return h(ctx, addr, gSvcReq)
+			key = addr
+			key += gSvcReq.MustGeneric(fieldnames.Mode).GetHash()
+
+			v, ok := cache.Get(key)
+			switch ok {
+			case true:
+				gCachedSvcRsp, ok := v.(generic.Generic)
+				if !ok {
+					panic("expected generic")
+				}
+				gSvcRsp = gCachedSvcRsp.Copy()
+			case false:
+				gSvcRsp, err = h(ctx, addr, gSvcReq)
+				if err != nil {
+					return
+				}
+
+				cache.Add(key, gSvcRsp)
+			}
+
+			return
 		}
 	}
 
 	reqHs := map[bool]map[string]types.RequestHandler{
+		true: {
+			sdk.ServiceTransport.HttpJson: httpjsonHandler.GetRequestHandler(d.Factory, vclient),
+		},
+		false: {
+			sdk.ServiceTransport.HttpJson: httpjsonHandler.GetRequestHandler(d.Factory, client),
+		},
+	}
+
+	cachedReqHs := map[bool]map[string]types.RequestHandler{
 		true: {
 			sdk.ServiceTransport.HttpJson: cacheHandlerF(httpjsonHandler.GetRequestHandler(d.Factory, vclient)),
 		},
@@ -99,7 +118,7 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 		},
 	}
 
-	d.ResolveLine = pipeline.NewResolveLine(d.RootNode, d.Factory, c.DiscoverySvc, reqHs, d.InternalLogTemplates)
+	d.ResolveLine = pipeline.NewResolveLine(d.RootNode, d.Factory, c.DiscoverySvc, reqHs, cachedReqHs, d.InternalLogTemplates)
 
 	d.ServeFunc = func(ctx context.Context, gCliReq generic.Generic) generic.Generic {
 		gCliReq = gCliReq.Copy()

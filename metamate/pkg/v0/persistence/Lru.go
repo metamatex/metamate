@@ -1,25 +1,32 @@
 package persistence
 
 import (
-	"github.com/golang/groupcache/lru"
+	"github.com/hashicorp/golang-lru"
 	"time"
 )
 
 type item struct {
 	createdAt time.Time
-	value interface{}
+	value     interface{}
 }
 
 type LruCache struct {
-	c *lru.Cache
+	c           *lru.Cache
 	maxDuration time.Duration
 }
 
-func NewLruCache(maxEntries int, maxDuration time.Duration) LruCache {
-	return LruCache{
-		c: lru.New(maxEntries),
+func NewLruCache(maxEntries int, maxDuration time.Duration) (c LruCache, err error) {
+	c0, err := lru.New(maxEntries)
+	if err != nil {
+		return
+	}
+
+	c = LruCache{
+		c:           c0,
 		maxDuration: maxDuration,
 	}
+
+	return
 }
 
 func (c LruCache) Add(key string, value interface{}) {
@@ -29,7 +36,7 @@ func (c LruCache) Add(key string, value interface{}) {
 func (c LruCache) Get(key string) (interface{}, bool) {
 	v, ok := c.c.Get(key)
 	if !ok {
-	    return nil, false
+		return nil, false
 	}
 
 	i, ok := v.(item)

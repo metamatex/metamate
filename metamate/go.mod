@@ -26,6 +26,7 @@ require (
 	github.com/google/uuid v1.1.1
 	github.com/graphql-go/graphql v0.7.9
 	github.com/graphql-go/handler v0.2.3
+	github.com/hashicorp/golang-lru v0.5.4
 	github.com/metamatex/metamate/asg v0.0.0-00010101000000-000000000000
 	github.com/metamatex/metamate/gen v0.0.0-00010101000000-000000000000
 	github.com/metamatex/metamate/generic v0.0.0-00010101000000-000000000000
@@ -39,6 +40,7 @@ require (
 	github.com/spf13/afero v1.1.2
 	github.com/spf13/cobra v0.0.6
 	github.com/spf13/viper v1.6.2
+	github.com/stretchr/testify v1.5.1
 	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073
 	gopkg.in/yaml.v2 v2.2.8
 )
