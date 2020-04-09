@@ -28,7 +28,7 @@ func TestBoot(t *testing.T) {
 
 	c.Log.Internal = types.InternalLogConfig{
 		config.SvcRsp: map[string]string{
-			sdk.GetStatusesResponseName: "{{ .Ctx.Svc.Url.Value }} : \n{{ .Ctx.GSvcReq.Type.Name }}\n{{ .Ctx.GSvcReq.Sprint }}\n\n{{ .Ctx.GSvcRsp.Type.Name }}\n{{ .Ctx.GSvcRsp.Sprint }}",
+			sdk.GetPostsResponseName: "{{ .Ctx.Svc.Url.Value }} : \n{{ .Ctx.GSvcReq.Type.Name }}\n{{ .Ctx.GSvcReq.Sprint }}\n\n{{ .Ctx.GSvcRsp.Type.Name }}\n{{ .Ctx.GSvcRsp.Sprint }}",
 			"*": "{{ .Ctx.Svc.Url.Value }} : {{ .Ctx.GSvcRsp.Type.Name }}",
 		},
 	}
@@ -65,7 +65,7 @@ func TestBoot(t *testing.T) {
 
 	//spec.TestDiscovery(t, ctx, d.Factory, f)
 
-	//FTestHackernewsGetFeedContainsStatuses(t, ctx, d.Factory, f)
+	//FTestHackernewsGetPostFeedContainsPosts(t, ctx, d.Factory, f)
 
 	FTestHackernews(t, ctx, d.Factory, f)
 
@@ -105,11 +105,11 @@ func TestBoot(t *testing.T) {
 }
 
 func FTestHackernews(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error)) {
-	FTestHackernewsSocialAccount(t, ctx, f, h)
-	FTestHackernewsGetFeedContainsStatuses(t, ctx, f, h)
-	FTestHackernewsGetStatusesSearch(t, ctx, f, h)
-	FTestHackernewsGetSocialAccountAuthorsStatuses(t, ctx, f, h)
-	FTestHackernewsGetFeedsCollection(t, ctx, f, h)
+	//FTestHackernewsSocialAccount(t, ctx, f, h)
+	//FTestHackernewsGetPostFeedContainsPosts(t, ctx, f, h)
+	FTestHackernewsGetPostsSearch(t, ctx, f, h)
+	//FTestHackernewsGetSocialAccountAuthorsPosts(t, ctx, f, h)
+	//FTestHackernewsGetPostFeedsCollection(t, ctx, f, h)
 }
 
 func FTestHackernewsSocialAccount(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error)) {
@@ -140,7 +140,7 @@ func FTestHackernewsSocialAccount(t *testing.T, ctx context.Context, f generic.F
 					SocialAccounts: &sdk.SocialAccountSelect{
 						All: sdk.Bool(true),
 						Relations: &sdk.SocialAccountRelationsSelect{
-							AuthorsStatuses: &sdk.StatusesCollectionSelect{
+							AuthorsPosts: &sdk.PostsCollectionSelect{
 								Meta: &sdk.CollectionMetaSelect{
 									Errors: &sdk.ErrorSelect{
 										Message: &sdk.TextSelect{
@@ -148,7 +148,7 @@ func FTestHackernewsSocialAccount(t *testing.T, ctx context.Context, f generic.F
 										},
 									},
 								},
-								Statuses: &sdk.StatusSelect{
+								Posts: &sdk.PostSelect{
 									Id: &sdk.ServiceIdSelect{
 										Value:       sdk.Bool(true),
 										ServiceName: sdk.Bool(true),
@@ -159,8 +159,8 @@ func FTestHackernewsSocialAccount(t *testing.T, ctx context.Context, f generic.F
 					},
 				},
 				Relations: &sdk.GetSocialAccountsRelations{
-					AuthorsStatuses: &sdk.GetStatusesCollection{
-						Select: &sdk.StatusesCollectionSelect{
+					AuthorsPosts: &sdk.GetPostsCollection{
+						Select: &sdk.PostsCollectionSelect{
 							Meta: &sdk.CollectionMetaSelect{
 								Errors: &sdk.ErrorSelect{
 									Message: &sdk.TextSelect{
@@ -168,7 +168,7 @@ func FTestHackernewsSocialAccount(t *testing.T, ctx context.Context, f generic.F
 									},
 								},
 							},
-							Statuses: &sdk.StatusSelect{
+							Posts: &sdk.PostSelect{
 								Id: &sdk.ServiceIdSelect{
 									Value:       sdk.Bool(true),
 									ServiceName: sdk.Bool(true),
@@ -194,13 +194,13 @@ func FTestHackernewsSocialAccount(t *testing.T, ctx context.Context, f generic.F
 	})
 }
 
-func FTestHackernewsGetFeedContainsStatuses(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error)) {
-	name := "FTestHackernewsGetFeedContainsStatuses"
+func FTestHackernewsGetPostFeedContainsPosts(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error)) {
+	name := "FTestHackernewsGetPostFeedContainsPosts"
 	t.Run(name, func(t *testing.T) {
 		t.Parallel()
 
 		err := func() (err error) {
-			getReq := sdk.GetStatusesRequest{
+			getReq := sdk.GetPostsRequest{
 				Mode: &sdk.GetMode{
 					Kind: &sdk.GetModeKind.Relation,
 					Relation: &sdk.RelationGetMode{
@@ -208,7 +208,7 @@ func FTestHackernewsGetFeedContainsStatuses(t *testing.T, ctx context.Context, f
 							ServiceName: sdk.String("hackernews"),
 							Value: sdk.String("topstories"),
 						},
-						Relation: &sdk.FeedRelationName.FeedContainsStatuses,
+						Relation: &sdk.PostFeedRelationName.PostFeedContainsPosts,
 					},
 				},
 			}
@@ -220,10 +220,10 @@ func FTestHackernewsGetFeedContainsStatuses(t *testing.T, ctx context.Context, f
 
 			gGetRsp.Print()
 
-			getRsp := sdk.GetStatusesResponse{}
+			getRsp := sdk.GetPostsResponse{}
 			gGetRsp.MustToStruct(&getRsp)
 
-			assert.True(t, len(getRsp.Statuses) != 0)
+			assert.True(t, len(getRsp.Posts) != 0)
 
 			return
 		}()
@@ -233,17 +233,17 @@ func FTestHackernewsGetFeedContainsStatuses(t *testing.T, ctx context.Context, f
 	})
 }
 
-func FTestHackernewsGetStatusesSearch(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error)) {
-	name := "FTestHackernewsGetStatusesSearch"
+func FTestHackernewsGetPostsSearch(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error)) {
+	name := "FTestHackernewsGetPostsSearch"
 	t.Run(name, func(t *testing.T) {
 		t.Parallel()
 
 		err := func() (err error) {
-			getReq := sdk.GetStatusesRequest{
+			getReq := sdk.GetPostsRequest{
 				Mode: &sdk.GetMode{
 					Kind: &sdk.GetModeKind.Search,
 					Search: &sdk.SearchGetMode{
-						Term: sdk.String("graphql"),
+						Term: sdk.String("book recommendations"),
 					},
 				},
 			}
@@ -255,10 +255,10 @@ func FTestHackernewsGetStatusesSearch(t *testing.T, ctx context.Context, f gener
 
 			gGetRsp.Print()
 
-			getRsp := sdk.GetStatusesResponse{}
+			getRsp := sdk.GetPostsResponse{}
 			gGetRsp.MustToStruct(&getRsp)
 
-			assert.True(t, len(getRsp.Statuses) != 0)
+			assert.True(t, len(getRsp.Posts) != 0)
 
 			return
 		}()
@@ -268,13 +268,13 @@ func FTestHackernewsGetStatusesSearch(t *testing.T, ctx context.Context, f gener
 	})
 }
 
-func FTestHackernewsGetSocialAccountAuthorsStatuses(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error)) {
-	name := "FTestHackernewsGetSocialAccountAuthorsStatuses"
+func FTestHackernewsGetSocialAccountAuthorsPosts(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error)) {
+	name := "FTestHackernewsGetSocialAccountAuthorsPosts"
 	t.Run(name, func(t *testing.T) {
 		t.Parallel()
 
 		err := func() (err error) {
-			getReq := sdk.GetStatusesRequest{
+			getReq := sdk.GetPostsRequest{
 				Mode: &sdk.GetMode{
 					Kind: &sdk.GetModeKind.Relation,
 					Relation: &sdk.RelationGetMode{
@@ -282,7 +282,7 @@ func FTestHackernewsGetSocialAccountAuthorsStatuses(t *testing.T, ctx context.Co
 							ServiceName: sdk.String("hackernews"),
 							Value: sdk.String("21stio"),
 						},
-						Relation: &sdk.SocialAccountRelationName.SocialAccountAuthorsStatuses,
+						Relation: &sdk.SocialAccountRelationName.SocialAccountAuthorsPosts,
 					},
 				},
 			}
@@ -294,10 +294,10 @@ func FTestHackernewsGetSocialAccountAuthorsStatuses(t *testing.T, ctx context.Co
 
 			gGetRsp.Print()
 
-			getRsp := sdk.GetStatusesResponse{}
+			getRsp := sdk.GetPostsResponse{}
 			gGetRsp.MustToStruct(&getRsp)
 
-			assert.True(t, len(getRsp.Statuses) != 0)
+			assert.True(t, len(getRsp.Posts) != 0)
 
 			return
 		}()
@@ -307,14 +307,14 @@ func FTestHackernewsGetSocialAccountAuthorsStatuses(t *testing.T, ctx context.Co
 	})
 }
 
-func FTestHackernewsGetFeedsCollection(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error)) {
-	name := "FTestHackernewsGetFeedsCollection"
+func FTestHackernewsGetPostFeedsCollection(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error)) {
+	name := "FTestHackernewsGetPostFeedsCollection"
 	t.Run(name, func(t *testing.T) {
 		t.Parallel()
 
 		err := func() (err error) {
-			getReq := sdk.GetFeedsRequest{
-				Filter: &sdk.FeedFilter{
+			getReq := sdk.GetPostFeedsRequest{
+				Filter: &sdk.PostFeedFilter{
 					Id: &sdk.ServiceIdFilter{
 						Value: &sdk.StringFilter{
 							Contains: sdk.String("top"),
@@ -330,9 +330,9 @@ func FTestHackernewsGetFeedsCollection(t *testing.T, ctx context.Context, f gene
 
 			gGetRsp.Print()
 
-			getRsp := sdk.GetFeedsResponse{}
+			getRsp := sdk.GetPostFeedsResponse{}
 			gGetRsp.MustToStruct(&getRsp)
-			assert.True(t, len(getRsp.Feeds) != 0)
+			assert.True(t, len(getRsp.PostFeeds) != 0)
 
 			return
 		}()

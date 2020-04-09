@@ -28,7 +28,6 @@ function chore {
 }
 
 function release {
-    build
     goreleaser --rm-dist -f .make/.goreleaser.yml
     (cd metamate && make release)
 }

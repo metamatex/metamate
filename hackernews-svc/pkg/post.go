@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/metamatex/metamate/hackernews-svc/gen/v0/sdk"
+	"net/url"
 	"strconv"
 
 	"net/http"
@@ -283,14 +284,16 @@ func mapFirebaseStoryToPost(s firebaseStory) (sdk.Post) {
 
 func getPostsSearch(c *http.Client, req sdk.GetPostsRequest) (ss []sdk.Post, errs []error) {
 	err := func() (err error) {
-		var url string
+		var u string
 
-		url = fmt.Sprintf("http://hn.algolia.com/api/v1/search?query=%v", *req.Mode.Search.Term)
+		u = fmt.Sprintf("http://hn.algolia.com/api/v1/search?query=%v", url.QueryEscape(*req.Mode.Search.Term))
 
-		rsp, err := c.Get(url)
+		rsp, err := c.Get(u)
 		if err != nil {
 			return
 		}
+
+
 
 		var r struct {
 			Hits []searchHnStory
