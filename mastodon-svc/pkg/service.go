@@ -40,9 +40,9 @@ func (svc Service) getClient() (c *mastodon.Client) {
 	return c
 }
 
-func (svc Service) GetGetStatusesEndpoint() (sdk.GetStatusesEndpoint) {
-	return sdk.GetStatusesEndpoint{
-		Filter: &sdk.GetStatusesRequestFilter{
+func (svc Service) GetGetPostsEndpoint() (sdk.GetPostsEndpoint) {
+	return sdk.GetPostsEndpoint{
+		Filter: &sdk.GetPostsRequestFilter{
 			Mode: &sdk.GetModeFilter{
 				Or: []sdk.GetModeFilter{
 					{
@@ -67,10 +67,10 @@ func (svc Service) GetGetStatusesEndpoint() (sdk.GetStatusesEndpoint) {
 						Relation: &sdk.RelationGetModeFilter{
 							Relation: &sdk.StringFilter{
 								In: []string{
-									sdk.StatusRelationName.StatusWasRepliedToByStatuses,
-									sdk.SocialAccountRelationName.SocialAccountFavorsStatuses,
-									sdk.SocialAccountRelationName.SocialAccountAuthorsStatuses,
-									sdk.FeedRelationName.FeedContainsStatuses,
+									sdk.PostRelationName.PostWasRepliedToByPosts,
+									sdk.SocialAccountRelationName.SocialAccountFavorsPosts,
+									sdk.SocialAccountRelationName.SocialAccountAuthorsPosts,
+									sdk.PostFeedRelationName.PostFeedContainsPosts,
 								},
 							},
 						},
@@ -81,16 +81,16 @@ func (svc Service) GetGetStatusesEndpoint() (sdk.GetStatusesEndpoint) {
 	}
 }
 
-func (svc Service) GetStatuses(ctx context.Context, req sdk.GetStatusesRequest) (rsp sdk.GetStatusesResponse) {
+func (svc Service) GetPosts(ctx context.Context, req sdk.GetPostsRequest) (rsp sdk.GetPostsResponse) {
 	c := svc.getClient()
 
 	switch *req.Mode.Kind {
 	case sdk.GetModeKind.Id:
-		rsp = getStatusId(ctx, c, req)
+		rsp = getPostId(ctx, c, req)
 	case sdk.GetModeKind.Relation:
-		rsp = getStatusesRelation(ctx, c, req)
+		rsp = getPostsRelation(ctx, c, req)
 	case sdk.GetModeKind.Search:
-		rsp = getStatusesSearch(ctx, c, req)
+		rsp = getPostsSearch(ctx, c, req)
 	default:
 	}
 
@@ -136,7 +136,7 @@ func (svc Service) GetGetSocialAccountsEndpoint() (sdk.GetSocialAccountsEndpoint
 									sdk.SocialAccountRelationName.SocialAccountFollowsSocialAccounts,
 									sdk.SocialAccountRelationName.SocialAccountMutesSocialAccounts,
 									sdk.SocialAccountRelationName.SocialAccountRequestedToBeFollowedBySocialAccounts,
-									sdk.StatusRelationName.StatusFavoredBySocialAccounts,
+									sdk.PostRelationName.PostFavoredBySocialAccounts,
 								},
 							},
 						},
@@ -163,10 +163,10 @@ func (svc Service) GetSocialAccounts(ctx context.Context, req sdk.GetSocialAccou
 	return
 }
 
-func (svc Service) GetGetFeedsEndpoint() (sdk.GetFeedsEndpoint) {
-	return sdk.GetFeedsEndpoint{
-		Filter: &sdk.GetFeedsRequestFilter{
-			Or: []sdk.GetFeedsRequestFilter{
+func (svc Service) GetGetPostFeedsEndpoint() (sdk.GetPostFeedsEndpoint) {
+	return sdk.GetPostFeedsEndpoint{
+		Filter: &sdk.GetPostFeedsRequestFilter{
+			Or: []sdk.GetPostFeedsRequestFilter{
 				{
 					Mode: &sdk.GetModeFilter{
 						Kind: &sdk.EnumFilter{
@@ -179,10 +179,10 @@ func (svc Service) GetGetFeedsEndpoint() (sdk.GetFeedsEndpoint) {
 	}
 }
 
-func (svc Service) GetFeeds(ctx context.Context, req sdk.GetFeedsRequest) (rsp sdk.GetFeedsResponse) {
+func (svc Service) GetPostFeeds(ctx context.Context, req sdk.GetPostFeedsRequest) (rsp sdk.GetPostFeedsResponse) {
 	switch *req.Mode.Kind {
 	case sdk.GetModeKind.Collection:
-		rsp = getFeedsCollection(ctx, req)
+		rsp = getPostFeedsCollection(ctx, req)
 	default:
 	}
 

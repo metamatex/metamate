@@ -9,10 +9,10 @@ import (
 
 type Client interface {
 	GetBlueWhatevers(context.Context, sdk.GetBlueWhateversRequest) (*sdk.GetBlueWhateversResponse, error)
-	GetFeeds(context.Context, sdk.GetFeedsRequest) (*sdk.GetFeedsResponse, error)
+	GetPostFeeds(context.Context, sdk.GetPostFeedsRequest) (*sdk.GetPostFeedsResponse, error)
+	GetPosts(context.Context, sdk.GetPostsRequest) (*sdk.GetPostsResponse, error)
 	GetServices(context.Context, sdk.GetServicesRequest) (*sdk.GetServicesResponse, error)
 	GetSocialAccounts(context.Context, sdk.GetSocialAccountsRequest) (*sdk.GetSocialAccountsResponse, error)
-	GetStatuses(context.Context, sdk.GetStatusesRequest) (*sdk.GetStatusesResponse, error)
 	GetWhatevers(context.Context, sdk.GetWhateversRequest) (*sdk.GetWhateversResponse, error)
 	LookupService(context.Context, sdk.LookupServiceRequest) (*sdk.LookupServiceResponse, error)
 	PipeWhatevers(context.Context, sdk.PipeWhateversRequest) (*sdk.PipeWhateversResponse, error)

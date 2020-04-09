@@ -343,20 +343,20 @@ func addEntities(root *RootNode) () {
 		TypeField("purpose", typenames.Text),
 	})
 
-	root.AddEnumNode(typenames.FeedKind, []string{
+	root.AddEnumNode(typenames.PostFeedKind, []string{
 		"channel",
 		"privateChannel",
 		"conversation",
 	})
 
-	root.AddTypeNode(typenames.Feed, FieldNodeSlice{
+	root.AddTypeNode(typenames.PostFeed, FieldNodeSlice{
 		TypeField("info", typenames.Info),
-		EnumField("kind", typenames.FeedKind),
+		EnumField("kind", typenames.PostFeedKind),
 	}, Flags{
 		typeflags.GetEndpoints: true,
 	})
 
-	root.AddTypeNode(typenames.Status, FieldNodeSlice{
+	root.AddTypeNode(typenames.Post, FieldNodeSlice{
 		TypeField("content", typenames.Text),
 		TypeField("spoilerText", typenames.Text),
 		BoolField("sensitive"),
@@ -366,8 +366,8 @@ func addEntities(root *RootNode) () {
 	})
 
 	root.AddRelationNode(
-		RelationPath{typenames.SocialAccount, []string{present.Authors}, cardinality.Many, typenames.Status},
-		RelationPath{typenames.Status, []string{past.Authored, preposition.By}, cardinality.One, typenames.SocialAccount},
+		RelationPath{typenames.SocialAccount, []string{present.Authors}, cardinality.Many, typenames.Post},
+		RelationPath{typenames.Post, []string{past.Authored, preposition.By}, cardinality.One, typenames.SocialAccount},
 	)
 
 	root.AddRelationNode(
@@ -391,63 +391,63 @@ func addEntities(root *RootNode) () {
 	)
 
 	root.AddRelationNode(
-		RelationPath{typenames.Status, []string{present.Replies, preposition.To}, cardinality.One, typenames.SocialAccount},
-		RelationPath{typenames.SocialAccount, []string{past.Was, past.Replied, preposition.To, preposition.By}, cardinality.Many, typenames.Status},
+		RelationPath{typenames.Post, []string{present.Replies, preposition.To}, cardinality.One, typenames.SocialAccount},
+		RelationPath{typenames.SocialAccount, []string{past.Was, past.Replied, preposition.To, preposition.By}, cardinality.Many, typenames.Post},
 	)
 
 	root.AddRelationNode(
-		RelationPath{typenames.Status, []string{present.Replies, preposition.To}, cardinality.One, typenames.Status},
-		RelationPath{typenames.Status, []string{past.Was, past.Replied, preposition.To, preposition.By}, cardinality.Many, typenames.Status},
+		RelationPath{typenames.Post, []string{present.Replies, preposition.To}, cardinality.One, typenames.Post},
+		RelationPath{typenames.Post, []string{past.Was, past.Replied, preposition.To, preposition.By}, cardinality.Many, typenames.Post},
 	)
 
 	root.AddRelationNode(
-		RelationPath{typenames.Status, []string{present.Reblogs}, cardinality.One, typenames.Status},
-		RelationPath{typenames.Status, []string{past.Reblogged, preposition.By}, cardinality.Many, typenames.Status},
+		RelationPath{typenames.Post, []string{present.Reblogs}, cardinality.One, typenames.Post},
+		RelationPath{typenames.Post, []string{past.Reblogged, preposition.By}, cardinality.Many, typenames.Post},
 	)
 
 	root.AddRelationNode(
-		RelationPath{typenames.Status, []string{present.Mentions}, cardinality.Many, typenames.SocialAccount},
-		RelationPath{typenames.SocialAccount, []string{past.Mentioned, preposition.By}, cardinality.Many, typenames.Status},
+		RelationPath{typenames.Post, []string{present.Mentions}, cardinality.Many, typenames.SocialAccount},
+		RelationPath{typenames.SocialAccount, []string{past.Mentioned, preposition.By}, cardinality.Many, typenames.Post},
 	)
 
 	root.AddRelationNode(
-		RelationPath{typenames.SocialAccount, []string{present.Favors}, cardinality.Many, typenames.Status},
-		RelationPath{typenames.Status, []string{past.Favored, preposition.By}, cardinality.Many, typenames.SocialAccount},
+		RelationPath{typenames.SocialAccount, []string{present.Favors}, cardinality.Many, typenames.Post},
+		RelationPath{typenames.Post, []string{past.Favored, preposition.By}, cardinality.Many, typenames.SocialAccount},
 	)
 
 	root.AddRelationNode(
-		RelationPath{typenames.Status, []string{present.Attaches}, cardinality.Many, typenames.Attachment},
-		RelationPath{typenames.Attachment, []string{past.Attached, preposition.To}, cardinality.One, typenames.Status},
+		RelationPath{typenames.Post, []string{present.Attaches}, cardinality.Many, typenames.Attachment},
+		RelationPath{typenames.Attachment, []string{past.Attached, preposition.To}, cardinality.One, typenames.Post},
 	)
 
 	root.AddRelationNode(
-		RelationPath{typenames.Feed, []string{present.Contains}, cardinality.Many, typenames.Status},
-		RelationPath{typenames.Status, []string{past.Contained, preposition.By}, cardinality.Many, typenames.Feed},
+		RelationPath{typenames.PostFeed, []string{present.Contains}, cardinality.Many, typenames.Post},
+		RelationPath{typenames.Post, []string{past.Contained, preposition.By}, cardinality.Many, typenames.PostFeed},
 	)
 
 	root.AddRelationNode(
-		RelationPath{typenames.SocialAccount, []string{present.Participates}, cardinality.Many, typenames.Feed},
-		RelationPath{typenames.Feed, []string{past.Participated, preposition.By}, cardinality.Many, typenames.SocialAccount},
+		RelationPath{typenames.SocialAccount, []string{present.Participates}, cardinality.Many, typenames.PostFeed},
+		RelationPath{typenames.PostFeed, []string{past.Participated, preposition.By}, cardinality.Many, typenames.SocialAccount},
 	)
 
 	root.AddRelationNode(
-		RelationPath{typenames.SocialAccount, []string{past.Read}, cardinality.Many, typenames.Status},
-		RelationPath{typenames.Status, []string{past.Read, preposition.By}, cardinality.Many, typenames.SocialAccount},
+		RelationPath{typenames.SocialAccount, []string{past.Read}, cardinality.Many, typenames.Post},
+		RelationPath{typenames.Post, []string{past.Read, preposition.By}, cardinality.Many, typenames.SocialAccount},
 	)
 
 	root.AddRelationNode(
-		RelationPath{typenames.SocialAccount, []string{preposition.Not, past.Read}, cardinality.Many, typenames.Status},
-		RelationPath{typenames.Status, []string{preposition.Not, past.Read, preposition.By}, cardinality.Many, typenames.SocialAccount},
+		RelationPath{typenames.SocialAccount, []string{preposition.Not, past.Read}, cardinality.Many, typenames.Post},
+		RelationPath{typenames.Post, []string{preposition.Not, past.Read, preposition.By}, cardinality.Many, typenames.SocialAccount},
 	)
 
 	root.AddRelationNode(
-		RelationPath{typenames.SocialAccount, []string{present.Reblogs}, cardinality.Many, typenames.Status},
-		RelationPath{typenames.Status, []string{past.Reblogged, preposition.By}, cardinality.Many, typenames.SocialAccount},
+		RelationPath{typenames.SocialAccount, []string{present.Reblogs}, cardinality.Many, typenames.Post},
+		RelationPath{typenames.Post, []string{past.Reblogged, preposition.By}, cardinality.Many, typenames.SocialAccount},
 	)
 
 	root.AddRelationNode(
-		RelationPath{typenames.SocialAccount, []string{present.Mutes}, cardinality.Many, typenames.Status},
-		RelationPath{typenames.Status, []string{past.Muted, preposition.By}, cardinality.Many, typenames.SocialAccount},
+		RelationPath{typenames.SocialAccount, []string{present.Mutes}, cardinality.Many, typenames.Post},
+		RelationPath{typenames.Post, []string{past.Muted, preposition.By}, cardinality.Many, typenames.SocialAccount},
 	)
 
 	root.AddRelationNode(

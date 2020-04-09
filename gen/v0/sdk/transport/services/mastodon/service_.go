@@ -9,10 +9,10 @@ import (
 
 type Service interface {
 	Name() (string)
-	GetGetFeedsEndpoint() (sdk.GetFeedsEndpoint)
-    GetFeeds(ctx context.Context, req sdk.GetFeedsRequest) (rsp sdk.GetFeedsResponse)
+	GetGetPostFeedsEndpoint() (sdk.GetPostFeedsEndpoint)
+    GetPostFeeds(ctx context.Context, req sdk.GetPostFeedsRequest) (rsp sdk.GetPostFeedsResponse)
+	GetGetPostsEndpoint() (sdk.GetPostsEndpoint)
+    GetPosts(ctx context.Context, req sdk.GetPostsRequest) (rsp sdk.GetPostsResponse)
 	GetGetSocialAccountsEndpoint() (sdk.GetSocialAccountsEndpoint)
     GetSocialAccounts(ctx context.Context, req sdk.GetSocialAccountsRequest) (rsp sdk.GetSocialAccountsResponse)
-	GetGetStatusesEndpoint() (sdk.GetStatusesEndpoint)
-    GetStatuses(ctx context.Context, req sdk.GetStatusesRequest) (rsp sdk.GetStatusesResponse)
 }

@@ -38,9 +38,9 @@ const (
 
 	Info          = "Info"
 	SocialAccount = "SocialAccount"
-	Status        = "Status"
-	Feed          = "Feed"
-	FeedKind      = "FeedKind"
+	Post          = "Post"
+	PostFeed      = "PostFeed"
+	PostFeedKind  = "PostFeedKind"
 	Attachment    = "Attachment"
 
 	DurationScalar = "DurationScalar"

@@ -8,17 +8,17 @@ const (
 type Endpoints struct {
     GetAttachments *GetAttachmentsEndpoint `json:"getAttachments,omitempty" yaml:"getAttachments,omitempty"`
     GetBlueWhatevers *GetBlueWhateversEndpoint `json:"getBlueWhatevers,omitempty" yaml:"getBlueWhatevers,omitempty"`
-    GetFeeds *GetFeedsEndpoint `json:"getFeeds,omitempty" yaml:"getFeeds,omitempty"`
+    GetPostFeeds *GetPostFeedsEndpoint `json:"getPostFeeds,omitempty" yaml:"getPostFeeds,omitempty"`
+    GetPosts *GetPostsEndpoint `json:"getPosts,omitempty" yaml:"getPosts,omitempty"`
     GetServices *GetServicesEndpoint `json:"getServices,omitempty" yaml:"getServices,omitempty"`
     GetSocialAccounts *GetSocialAccountsEndpoint `json:"getSocialAccounts,omitempty" yaml:"getSocialAccounts,omitempty"`
-    GetStatuses *GetStatusesEndpoint `json:"getStatuses,omitempty" yaml:"getStatuses,omitempty"`
     GetWhatevers *GetWhateversEndpoint `json:"getWhatevers,omitempty" yaml:"getWhatevers,omitempty"`
     LookupService *LookupServiceEndpoint `json:"lookupService,omitempty" yaml:"lookupService,omitempty"`
     PipeAttachments *PipeAttachmentsEndpoint `json:"pipeAttachments,omitempty" yaml:"pipeAttachments,omitempty"`
     PipeBlueWhatevers *PipeBlueWhateversEndpoint `json:"pipeBlueWhatevers,omitempty" yaml:"pipeBlueWhatevers,omitempty"`
-    PipeFeeds *PipeFeedsEndpoint `json:"pipeFeeds,omitempty" yaml:"pipeFeeds,omitempty"`
+    PipePostFeeds *PipePostFeedsEndpoint `json:"pipePostFeeds,omitempty" yaml:"pipePostFeeds,omitempty"`
+    PipePosts *PipePostsEndpoint `json:"pipePosts,omitempty" yaml:"pipePosts,omitempty"`
     PipeServices *PipeServicesEndpoint `json:"pipeServices,omitempty" yaml:"pipeServices,omitempty"`
     PipeSocialAccounts *PipeSocialAccountsEndpoint `json:"pipeSocialAccounts,omitempty" yaml:"pipeSocialAccounts,omitempty"`
-    PipeStatuses *PipeStatusesEndpoint `json:"pipeStatuses,omitempty" yaml:"pipeStatuses,omitempty"`
     PipeWhatevers *PipeWhateversEndpoint `json:"pipeWhatevers,omitempty" yaml:"pipeWhatevers,omitempty"`
 }

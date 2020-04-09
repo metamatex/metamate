@@ -35,18 +35,18 @@ func (s HttpJsonServer) send(w http.ResponseWriter, rsp interface{}) (err error)
 }
 
 func (s HttpJsonServer) getService() (sdk.Service) {
-	getFeedsEndpoint := s.opts.Service.GetGetFeedsEndpoint()
+	getPostFeedsEndpoint := s.opts.Service.GetGetPostFeedsEndpoint()
+	getPostsEndpoint := s.opts.Service.GetGetPostsEndpoint()
 	getSocialAccountsEndpoint := s.opts.Service.GetGetSocialAccountsEndpoint()
-	getStatusesEndpoint := s.opts.Service.GetGetStatusesEndpoint()
 
 	return sdk.Service{
 		Name: sdk.String(s.opts.Service.Name()),
 		SdkVersion: sdk.String(sdk.Version),
 		Endpoints: &sdk.Endpoints{
 			LookupService: &sdk.LookupServiceEndpoint{},
-			GetFeeds: &getFeedsEndpoint,
+			GetPostFeeds: &getPostFeedsEndpoint,
+			GetPosts: &getPostsEndpoint,
 			GetSocialAccounts: &getSocialAccountsEndpoint,
-			GetStatuses: &getStatusesEndpoint,
 		},
 	}
 }
@@ -71,14 +71,27 @@ func (s HttpJsonServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				return
 			}
-    case sdk.GetFeedsRequestName:
-        var req sdk.GetFeedsRequest
+    case sdk.GetPostFeedsRequestName:
+        var req sdk.GetPostFeedsRequest
         err := json.NewDecoder(r.Body).Decode(&req)
         if err != nil {
             return
         }
 
-        rsp := s.opts.Service.GetFeeds(r.Context(), req)
+        rsp := s.opts.Service.GetPostFeeds(r.Context(), req)
+
+        err = s.send(w, rsp)
+        if err != nil {
+            return
+        }
+    case sdk.GetPostsRequestName:
+        var req sdk.GetPostsRequest
+        err := json.NewDecoder(r.Body).Decode(&req)
+        if err != nil {
+            return
+        }
+
+        rsp := s.opts.Service.GetPosts(r.Context(), req)
 
         err = s.send(w, rsp)
         if err != nil {
@@ -92,19 +105,6 @@ func (s HttpJsonServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         }
 
         rsp := s.opts.Service.GetSocialAccounts(r.Context(), req)
-
-        err = s.send(w, rsp)
-        if err != nil {
-            return
-        }
-    case sdk.GetStatusesRequestName:
-        var req sdk.GetStatusesRequest
-        err := json.NewDecoder(r.Body).Decode(&req)
-        if err != nil {
-            return
-        }
-
-        rsp := s.opts.Service.GetStatuses(r.Context(), req)
 
         err = s.send(w, rsp)
         if err != nil {

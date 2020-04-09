@@ -16,11 +16,11 @@ This monorepo hosts
 
 #### metamate
 
-osx `brew install metamatex/taps/metactl`
+osx `brew install metamatex/taps/metamate`
 
 docker `docker run metamatex/metamate:latest`
 
-For all other platforms, please see our [releases](https://github.com/metamatex/metamate/releases)
+For all other platforms, please see [releases](https://github.com/metamatex/metamate/releases)
 
 #### metactl
 
@@ -28,7 +28,7 @@ For all other platforms, please see our [releases](https://github.com/metamatex/
 
 osx `brew install metamatex/taps/metactl`
 
-For all other platforms, please see our [releases](https://github.com/metamatex/metamate/releases)
+For all other platforms, please see [releases](https://github.com/metamatex/metamate/releases)
 
 ## Development
 

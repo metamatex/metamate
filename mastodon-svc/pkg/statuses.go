@@ -4,10 +4,9 @@ import (
 	"context"
 	"github.com/mattn/go-mastodon"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	
 )
 
-func getStatusId(ctx context.Context, c *mastodon.Client, req sdk.GetStatusesRequest) (rsp sdk.GetStatusesResponse) {
+func getPostId(ctx context.Context, c *mastodon.Client, req sdk.GetPostsRequest) (rsp sdk.GetPostsResponse) {
 	rsp.Meta = &sdk.CollectionMeta{}
 
 	err := func() (err error) {
@@ -21,7 +20,7 @@ func getStatusId(ctx context.Context, c *mastodon.Client, req sdk.GetStatusesReq
 		default:
 		}
 
-		rsp.Statuses = []sdk.Status{MapStatusFromMastodonStatus(*status)}
+		rsp.Posts = []sdk.Post{MapPostFromStatus(*status)}
 
 		return
 	}()
@@ -37,7 +36,7 @@ func getStatusId(ctx context.Context, c *mastodon.Client, req sdk.GetStatusesReq
 	return
 }
 
-func getStatusesSearch(ctx context.Context, c *mastodon.Client, req sdk.GetStatusesRequest) (rsp sdk.GetStatusesResponse) {
+func getPostsSearch(ctx context.Context, c *mastodon.Client, req sdk.GetPostsRequest) (rsp sdk.GetPostsResponse) {
 	rsp.Meta = &sdk.CollectionMeta{}
 
 	err := func() (err error) {
@@ -46,7 +45,7 @@ func getStatusesSearch(ctx context.Context, c *mastodon.Client, req sdk.GetStatu
 			return
 		}
 
-		rsp.Statuses = MapStatusesFromMastodonStatuses(results.Statuses)
+		rsp.Posts = MapPostsFromStatuses(results.Statuses)
 
 		return
 	}()
@@ -62,7 +61,7 @@ func getStatusesSearch(ctx context.Context, c *mastodon.Client, req sdk.GetStatu
 	return
 }
 
-func getStatusesRelation(ctx context.Context, c *mastodon.Client, req sdk.GetStatusesRequest) (rsp sdk.GetStatusesResponse) {
+func getPostsRelation(ctx context.Context, c *mastodon.Client, req sdk.GetPostsRequest) (rsp sdk.GetPostsResponse) {
 	rsp.Meta = &sdk.CollectionMeta{}
 
 	var statuses []*mastodon.Status
@@ -87,7 +86,7 @@ func getStatusesRelation(ctx context.Context, c *mastodon.Client, req sdk.GetSta
 
 	err := func() (err error) {
 		switch *req.Mode.Relation.Relation {
-		case sdk.StatusRelationName.StatusWasRepliedToByStatuses:
+		case sdk.PostRelationName.PostWasRepliedToByPosts:
 			//var c *mastodon.Context
 			//c, err = c.GetStatusContext(ctx, mastodon.ID(*req.Mode.Relation.Id.Value))
 			//if err != nil {
@@ -96,12 +95,12 @@ func getStatusesRelation(ctx context.Context, c *mastodon.Client, req sdk.GetSta
 			//
 			//statuses = c.Descendants
 		// todo scope to me
-		case sdk.SocialAccountRelationName.SocialAccountFavorsStatuses:
+		case sdk.SocialAccountRelationName.SocialAccountFavorsPosts:
 			statuses, err = c.GetFavourites(ctx, pg)
 			if err != nil {
 				return
 			}
-		case sdk.SocialAccountRelationName.SocialAccountAuthorsStatuses:
+		case sdk.SocialAccountRelationName.SocialAccountAuthorsPosts:
 			// todo v1: support IdUnion
 			//var id mastodon.ID
 			//if *req.Mode.Relation.Id.Kind == sdk.ID_ME {
@@ -122,7 +121,7 @@ func getStatusesRelation(ctx context.Context, c *mastodon.Client, req sdk.GetSta
 			}
 
 			break
-		case sdk.FeedRelationName.FeedContainsStatuses:
+		case sdk.PostFeedRelationName.PostFeedContainsPosts:
 			switch *req.Mode.Relation.Id.Value {
 			case TIMELINE_PUBLIC:
 				statuses, err = c.GetTimelinePublic(ctx, false, pg)
@@ -197,7 +196,7 @@ func getStatusesRelation(ctx context.Context, c *mastodon.Client, req sdk.GetSta
 	//	rsp.Meta.Pagination = pagination
 	//}
 
-	rsp.Statuses = MapStatusesFromMastodonStatuses(statuses)
+	rsp.Posts = MapPostsFromStatuses(statuses)
 
 	return
 }

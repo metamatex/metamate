@@ -6,7 +6,7 @@ const (
 )
 
 var AttachmentRelationName = struct{
-    AttachmentAttachedToStatus string
+    AttachmentAttachedToPost string
 }{
-    AttachmentAttachedToStatus: "AttachmentAttachedToStatus",
+    AttachmentAttachedToPost: "AttachmentAttachedToPost",
 }

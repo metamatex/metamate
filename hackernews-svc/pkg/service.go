@@ -20,10 +20,10 @@ func (svc Service) Name() (string) {
 	return "hackernews"
 }
 
-func (svc Service) GetGetStatusesEndpoint() (sdk.GetStatusesEndpoint) {
-	return sdk.GetStatusesEndpoint{
-		Filter: &sdk.GetStatusesRequestFilter{
-			Or: []sdk.GetStatusesRequestFilter{
+func (svc Service) GetGetPostsEndpoint() (sdk.GetPostsEndpoint) {
+	return sdk.GetPostsEndpoint{
+		Filter: &sdk.GetPostsRequestFilter{
+			Or: []sdk.GetPostsRequestFilter{
 				{
 					Mode: &sdk.GetModeFilter{
 						Kind: &sdk.EnumFilter{
@@ -49,7 +49,7 @@ func (svc Service) GetGetStatusesEndpoint() (sdk.GetStatusesEndpoint) {
 						Relation: &sdk.RelationGetModeFilter{
 							Relation: &sdk.StringFilter{
 								In: []string{
-									sdk.SocialAccountRelationName.SocialAccountAuthorsStatuses,
+									sdk.SocialAccountRelationName.SocialAccountAuthorsPosts,
 								},
 							},
 						},
@@ -60,17 +60,17 @@ func (svc Service) GetGetStatusesEndpoint() (sdk.GetStatusesEndpoint) {
 	}
 }
 
-func (svc Service) GetStatuses(ctx context.Context, req sdk.GetStatusesRequest) (rsp sdk.GetStatusesResponse) {
-	var ss []sdk.Status
+func (svc Service) GetPosts(ctx context.Context, req sdk.GetPostsRequest) (rsp sdk.GetPostsResponse) {
+	var ss []sdk.Post
 	var errs []error
 
 	switch *req.Mode.Kind {
 	case sdk.GetModeKind.Id:
-		ss, errs = getStatusesId(svc.c, req)
+		ss, errs = getPostsId(svc.c, req)
 	case sdk.GetModeKind.Relation:
-		ss, errs = getStatusesRelation(svc.c, req)
+		ss, errs = getPostsRelation(svc.c, req)
 	case sdk.GetModeKind.Search:
-		ss, errs = getStatusesSearch(svc.c, req)
+		ss, errs = getPostsSearch(svc.c, req)
 	default:
 		errs = append(errs, errors.New(fmt.Sprintf("can't handle %v", req)))
 	}
@@ -84,14 +84,14 @@ func (svc Service) GetStatuses(ctx context.Context, req sdk.GetStatusesRequest) 
 		})
 	}
 
-	rsp.Statuses = ss
+	rsp.Posts = ss
 
 	return
 }
 
-func (svc Service) GetGetFeedsEndpoint() (sdk.GetFeedsEndpoint) {
-	return sdk.GetFeedsEndpoint{
-		Filter: &sdk.GetFeedsRequestFilter{
+func (svc Service) GetGetPostFeedsEndpoint() (sdk.GetPostFeedsEndpoint) {
+	return sdk.GetPostFeedsEndpoint{
+		Filter: &sdk.GetPostFeedsRequestFilter{
 			Mode: &sdk.GetModeFilter{
 				Kind: &sdk.EnumFilter{
 					In: []string{sdk.GetModeKind.Collection},
@@ -101,13 +101,13 @@ func (svc Service) GetGetFeedsEndpoint() (sdk.GetFeedsEndpoint) {
 	}
 }
 
-func (svc Service) GetFeeds(ctx context.Context, req sdk.GetFeedsRequest) (rsp sdk.GetFeedsResponse) {
-	var fs []sdk.Feed
+func (svc Service) GetPostFeeds(ctx context.Context, req sdk.GetPostFeedsRequest) (rsp sdk.GetPostFeedsResponse) {
+	var fs []sdk.PostFeed
 	var errs []error
 
 	switch *req.Mode.Kind {
 	case sdk.GetModeKind.Collection:
-		fs, errs = getFeedsCollection(svc.c, req)
+		fs, errs = getPostFeedsCollection(svc.c, req)
 	default:
 		errs = append(errs, errors.New(fmt.Sprintf("can't handle %v", req)))
 	}
@@ -121,7 +121,7 @@ func (svc Service) GetFeeds(ctx context.Context, req sdk.GetFeedsRequest) (rsp s
 		})
 	}
 
-	rsp.Feeds = fs
+	rsp.PostFeeds = fs
 
 	return
 }

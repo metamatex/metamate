@@ -94,13 +94,13 @@ func mapUserToSocialAccount(u user) (a sdk.SocialAccount) {
 			},
 		},
 		Relations: &sdk.SocialAccountRelations{
-			AuthorsStatuses: &sdk.StatusesCollection{
+			AuthorsPosts: &sdk.PostsCollection{
 				Meta: &sdk.CollectionMeta{
 					Count: sdk.Int32(int32(len(u.Submitted))),
 				},
-				Statuses: func() (ss []sdk.Status) {
+				Posts: func() (ss []sdk.Post) {
 					for _, s := range u.Submitted {
-						ss = append(ss, sdk.Status{
+						ss = append(ss, sdk.Post{
 							Id: &sdk.ServiceId{
 								Value: sdk.String(fmt.Sprintf("%v", s)),
 							},

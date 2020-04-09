@@ -19,6 +19,6 @@ v0:
         names:
           or:
           - GetSocialAccounts
-          - GetStatuses
-          - GetFeeds
+          - GetPosts
+          - GetPostFeeds
  

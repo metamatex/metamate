@@ -7,7 +7,7 @@ v0:
           package: github.com/metamatex/metamate
         endpoints:
           names:
-            or: [GetFeeds, GetSocialAccounts, GetStatuses]
+            or: [GetPostFeeds, GetSocialAccounts, GetPosts]
       - names: [go_httpjson_service]
         data:
           name: kubernetes
@@ -26,6 +26,6 @@ v0:
               - GetServices
               - GetSocialAccounts
               - LookupService
-              - GetFeeds
+              - GetPostFeeds
               - PipeWhatevers
-              - GetStatuses
+              - GetPosts

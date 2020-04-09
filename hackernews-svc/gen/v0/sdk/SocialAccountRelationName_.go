@@ -6,39 +6,39 @@ const (
 )
 
 var SocialAccountRelationName = struct{
-    SocialAccountAuthorsStatuses string
+    SocialAccountAuthorsPosts string
     SocialAccountBlockedBySocialAccounts string
     SocialAccountBlocksSocialAccounts string
-    SocialAccountFavorsStatuses string
+    SocialAccountFavorsPosts string
     SocialAccountFollowedBySocialAccounts string
     SocialAccountFollowsSocialAccounts string
-    SocialAccountMentionedByStatuses string
+    SocialAccountMentionedByPosts string
     SocialAccountMutedBySocialAccounts string
+    SocialAccountMutesPosts string
     SocialAccountMutesSocialAccounts string
-    SocialAccountMutesStatuses string
-    SocialAccountNotReadStatuses string
-    SocialAccountParticipatesFeeds string
-    SocialAccountReadStatuses string
-    SocialAccountReblogsStatuses string
+    SocialAccountNotReadPosts string
+    SocialAccountParticipatesPostFeeds string
+    SocialAccountReadPosts string
+    SocialAccountReblogsPosts string
     SocialAccountRequestedToBeFollowedBySocialAccounts string
     SocialAccountRequestsToFollowSocialAccounts string
-    SocialAccountWasRepliedToByStatuses string
+    SocialAccountWasRepliedToByPosts string
 }{
-    SocialAccountAuthorsStatuses: "SocialAccountAuthorsStatuses",
+    SocialAccountAuthorsPosts: "SocialAccountAuthorsPosts",
     SocialAccountBlockedBySocialAccounts: "SocialAccountBlockedBySocialAccounts",
     SocialAccountBlocksSocialAccounts: "SocialAccountBlocksSocialAccounts",
-    SocialAccountFavorsStatuses: "SocialAccountFavorsStatuses",
+    SocialAccountFavorsPosts: "SocialAccountFavorsPosts",
     SocialAccountFollowedBySocialAccounts: "SocialAccountFollowedBySocialAccounts",
     SocialAccountFollowsSocialAccounts: "SocialAccountFollowsSocialAccounts",
-    SocialAccountMentionedByStatuses: "SocialAccountMentionedByStatuses",
+    SocialAccountMentionedByPosts: "SocialAccountMentionedByPosts",
     SocialAccountMutedBySocialAccounts: "SocialAccountMutedBySocialAccounts",
+    SocialAccountMutesPosts: "SocialAccountMutesPosts",
     SocialAccountMutesSocialAccounts: "SocialAccountMutesSocialAccounts",
-    SocialAccountMutesStatuses: "SocialAccountMutesStatuses",
-    SocialAccountNotReadStatuses: "SocialAccountNotReadStatuses",
-    SocialAccountParticipatesFeeds: "SocialAccountParticipatesFeeds",
-    SocialAccountReadStatuses: "SocialAccountReadStatuses",
-    SocialAccountReblogsStatuses: "SocialAccountReblogsStatuses",
+    SocialAccountNotReadPosts: "SocialAccountNotReadPosts",
+    SocialAccountParticipatesPostFeeds: "SocialAccountParticipatesPostFeeds",
+    SocialAccountReadPosts: "SocialAccountReadPosts",
+    SocialAccountReblogsPosts: "SocialAccountReblogsPosts",
     SocialAccountRequestedToBeFollowedBySocialAccounts: "SocialAccountRequestedToBeFollowedBySocialAccounts",
     SocialAccountRequestsToFollowSocialAccounts: "SocialAccountRequestsToFollowSocialAccounts",
-    SocialAccountWasRepliedToByStatuses: "SocialAccountWasRepliedToByStatuses",
+    SocialAccountWasRepliedToByPosts: "SocialAccountWasRepliedToByPosts",
 }

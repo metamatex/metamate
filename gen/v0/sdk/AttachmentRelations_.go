@@ -6,5 +6,5 @@ const (
 )
 
 type AttachmentRelations struct {
-    AttachedToStatus *Status `json:"attachedToStatus,omitempty" yaml:"attachedToStatus,omitempty"`
+    AttachedToPost *Post `json:"attachedToPost,omitempty" yaml:"attachedToPost,omitempty"`
 }

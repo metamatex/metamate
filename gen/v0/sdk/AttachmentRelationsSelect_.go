@@ -7,5 +7,5 @@ const (
 
 type AttachmentRelationsSelect struct {
     All *bool `json:"all,omitempty" yaml:"all,omitempty"`
-    AttachedToStatus *StatusSelect `json:"attachedToStatus,omitempty" yaml:"attachedToStatus,omitempty"`
+    AttachedToPost *PostSelect `json:"attachedToPost,omitempty" yaml:"attachedToPost,omitempty"`
 }

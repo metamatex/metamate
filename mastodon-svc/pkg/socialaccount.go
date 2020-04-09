@@ -129,7 +129,7 @@ func getSocialAccountsRelation(ctx context.Context, c *mastodon.Client, req sdk.
 			if err != nil {
 				return
 			}
-		case sdk.StatusRelationName.StatusFavoredBySocialAccounts:
+		case sdk.PostRelationName.PostFavoredBySocialAccounts:
 			accounts, err = c.GetFavouritedBy(ctx, mastodon.ID(*req.Mode.Relation.Id.Value), pg)
 			if err != nil {
 				return

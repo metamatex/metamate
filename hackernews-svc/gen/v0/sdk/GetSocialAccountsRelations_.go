@@ -6,21 +6,21 @@ const (
 )
 
 type GetSocialAccountsRelations struct {
-    AuthorsStatuses *GetStatusesCollection `json:"authorsStatuses,omitempty" yaml:"authorsStatuses,omitempty"`
+    AuthorsPosts *GetPostsCollection `json:"authorsPosts,omitempty" yaml:"authorsPosts,omitempty"`
     BlockedBySocialAccounts *GetSocialAccountsCollection `json:"blockedBySocialAccounts,omitempty" yaml:"blockedBySocialAccounts,omitempty"`
     BlocksSocialAccounts *GetSocialAccountsCollection `json:"blocksSocialAccounts,omitempty" yaml:"blocksSocialAccounts,omitempty"`
-    FavorsStatuses *GetStatusesCollection `json:"favorsStatuses,omitempty" yaml:"favorsStatuses,omitempty"`
+    FavorsPosts *GetPostsCollection `json:"favorsPosts,omitempty" yaml:"favorsPosts,omitempty"`
     FollowedBySocialAccounts *GetSocialAccountsCollection `json:"followedBySocialAccounts,omitempty" yaml:"followedBySocialAccounts,omitempty"`
     FollowsSocialAccounts *GetSocialAccountsCollection `json:"followsSocialAccounts,omitempty" yaml:"followsSocialAccounts,omitempty"`
-    MentionedByStatuses *GetStatusesCollection `json:"mentionedByStatuses,omitempty" yaml:"mentionedByStatuses,omitempty"`
+    MentionedByPosts *GetPostsCollection `json:"mentionedByPosts,omitempty" yaml:"mentionedByPosts,omitempty"`
     MutedBySocialAccounts *GetSocialAccountsCollection `json:"mutedBySocialAccounts,omitempty" yaml:"mutedBySocialAccounts,omitempty"`
+    MutesPosts *GetPostsCollection `json:"mutesPosts,omitempty" yaml:"mutesPosts,omitempty"`
     MutesSocialAccounts *GetSocialAccountsCollection `json:"mutesSocialAccounts,omitempty" yaml:"mutesSocialAccounts,omitempty"`
-    MutesStatuses *GetStatusesCollection `json:"mutesStatuses,omitempty" yaml:"mutesStatuses,omitempty"`
-    NotReadStatuses *GetStatusesCollection `json:"notReadStatuses,omitempty" yaml:"notReadStatuses,omitempty"`
-    ParticipatesFeeds *GetFeedsCollection `json:"participatesFeeds,omitempty" yaml:"participatesFeeds,omitempty"`
-    ReadStatuses *GetStatusesCollection `json:"readStatuses,omitempty" yaml:"readStatuses,omitempty"`
-    ReblogsStatuses *GetStatusesCollection `json:"reblogsStatuses,omitempty" yaml:"reblogsStatuses,omitempty"`
+    NotReadPosts *GetPostsCollection `json:"notReadPosts,omitempty" yaml:"notReadPosts,omitempty"`
+    ParticipatesPostFeeds *GetPostFeedsCollection `json:"participatesPostFeeds,omitempty" yaml:"participatesPostFeeds,omitempty"`
+    ReadPosts *GetPostsCollection `json:"readPosts,omitempty" yaml:"readPosts,omitempty"`
+    ReblogsPosts *GetPostsCollection `json:"reblogsPosts,omitempty" yaml:"reblogsPosts,omitempty"`
     RequestedToBeFollowedBySocialAccounts *GetSocialAccountsCollection `json:"requestedToBeFollowedBySocialAccounts,omitempty" yaml:"requestedToBeFollowedBySocialAccounts,omitempty"`
     RequestsToFollowSocialAccounts *GetSocialAccountsCollection `json:"requestsToFollowSocialAccounts,omitempty" yaml:"requestsToFollowSocialAccounts,omitempty"`
-    WasRepliedToByStatuses *GetStatusesCollection `json:"wasRepliedToByStatuses,omitempty" yaml:"wasRepliedToByStatuses,omitempty"`
+    WasRepliedToByPosts *GetPostsCollection `json:"wasRepliedToByPosts,omitempty" yaml:"wasRepliedToByPosts,omitempty"`
 }

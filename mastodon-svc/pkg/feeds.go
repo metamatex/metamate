@@ -14,8 +14,8 @@ const (
 	TIMELINE_MEDIA_LOCAL  = "media_local"
 )
 
-func getFeedsCollection(ctx context.Context, req sdk.GetFeedsRequest) (rsp sdk.GetFeedsResponse) {
-	feeds := []sdk.Feed{
+func getPostFeedsCollection(ctx context.Context, req sdk.GetPostFeedsRequest) (rsp sdk.GetPostFeedsResponse) {
+	feeds := []sdk.PostFeed{
 		{
 			Id: &sdk.ServiceId{
 				Value: sdk.String(TIMELINE_PUBLIC),
@@ -43,7 +43,7 @@ func getFeedsCollection(ctx context.Context, req sdk.GetFeedsRequest) (rsp sdk.G
 		},
 	}
 
-	rsp.Feeds = feeds
+	rsp.PostFeeds = feeds
 
 	return
 }

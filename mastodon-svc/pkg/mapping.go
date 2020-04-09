@@ -6,15 +6,15 @@ import (
 
 )
 
-func MapStatusesFromMastodonStatuses(statuses []*mastodon.Status) (statuses0 []sdk.Status) {
+func MapPostsFromStatuses(statuses []*mastodon.Status) (posts []sdk.Post) {
 	for _, s := range statuses {
-		statuses0 = append(statuses0, MapStatusFromMastodonStatus(*s))
+		posts = append(posts, MapPostFromStatus(*s))
 	}
 
 	return
 }
 
-func MapStatusFromMastodonStatus(status mastodon.Status) (status0 sdk.Status) {
+func MapPostFromStatus(status mastodon.Status) (post sdk.Post) {
 	// ✔ status.ID
 	// ✔ status.URI
 	// ✔ status.URL
@@ -62,10 +62,10 @@ func MapStatusFromMastodonStatus(status mastodon.Status) (status0 sdk.Status) {
 		favourited = &favourited0
 	}
 
-	var repliesToStatusId *string
-	repliesToStatusId0, ok := status.InReplyToID.(string)
+	var repliesToPostId *string
+	repliesToPostId0, ok := status.InReplyToID.(string)
 	if ok {
-		repliesToStatusId = &repliesToStatusId0
+		repliesToPostId = &repliesToPostId0
 	}
 
 	var repliesToAccountId *string
@@ -74,7 +74,7 @@ func MapStatusFromMastodonStatus(status mastodon.Status) (status0 sdk.Status) {
 		repliesToAccountId = &repliesToAccountId0
 	}
 
-	status0 = sdk.Status{
+	post = sdk.Post{
 		Id: &sdk.ServiceId{
 			Value: sdk.String(string(status.ID)),
 		},
@@ -103,7 +103,7 @@ func MapStatusFromMastodonStatus(status mastodon.Status) (status0 sdk.Status) {
 			Value:      sdk.String(status.Content),
 			Language:   sdk.String(FromISO6391[status.Language]),
 		},
-		Relations: &sdk.StatusRelations{
+		Relations: &sdk.PostRelations{
 			MentionsSocialAccounts: &sdk.SocialAccountsCollection{
 				SocialAccounts: MapFromMastodonMentions(status.Mentions),
 			},
@@ -112,35 +112,35 @@ func MapStatusFromMastodonStatus(status mastodon.Status) (status0 sdk.Status) {
 					Count: sdk.Int32(int32(status.FavouritesCount)),
 				},
 			},
-			RebloggedByStatuses: &sdk.StatusesCollection{
+			RebloggedByPosts: &sdk.PostsCollection{
 				Meta: &sdk.CollectionMeta{
 					Count: sdk.Int32(int32(status.ReblogsCount)),
 				},
 			},
-			WasRepliedToByStatuses: &sdk.StatusesCollection{
+			WasRepliedToByPosts: &sdk.PostsCollection{
 				Meta: &sdk.CollectionMeta{
 					Count: sdk.Int32(int32(status.RepliesCount)),
 				},
 			},
 			AuthoredBySocialAccount: &author,
 		},
-		Relationships: &sdk.StatusRelationships{
+		Relationships: &sdk.PostRelationships{
 			FavoredByMe: favourited,
 			MutedByMe: muted,
 			RebloggedByMe: reblogged,
 		},
 	}
 
-	if repliesToStatusId != nil {
-		status0.Relations.RepliesToStatus = &sdk.Status{
+	if repliesToPostId != nil {
+		post.Relations.RepliesToPost = &sdk.Post{
 			Id: &sdk.ServiceId{
-				Value: repliesToStatusId,
+				Value: repliesToPostId,
 			},
 		}
 	}
 
 	if repliesToAccountId != nil {
-		status0.Relations.RepliesToSocialAccount = &sdk.SocialAccount{
+		post.Relations.RepliesToSocialAccount = &sdk.SocialAccount{
 			Id: &sdk.ServiceId{
 				Value: repliesToAccountId,
 			},
@@ -231,7 +231,7 @@ func MapSocialAccountFromMastodonAccount(account mastodon.Account) (person sdk.S
 	// m account.CreatedAt      time.Time
 	// ✔ account.FollowersCount int64
 	// ✔ account.FollowingCount int64
-	// ✔ account.StatusesCount  int64
+	// ✔ account.PostsCount  int64
 	// ✔ account.Note           string
 	// ✔ account.URL            string
 	// ✔ account.Avatar         string
@@ -288,7 +288,7 @@ func MapSocialAccountFromMastodonAccount(account mastodon.Account) (person sdk.S
 					Count: sdk.Int32(int32(account.FollowingCount)),
 				},
 			},
-			AuthorsStatuses: &sdk.StatusesCollection{
+			AuthorsPosts: &sdk.PostsCollection{
 				Meta: &sdk.CollectionMeta{
 					Count: sdk.Int32(int32(account.StatusesCount)),
 				},
@@ -338,7 +338,7 @@ func MapFromMastodonMention(mention mastodon.Mention) (person sdk.SocialAccount)
 	return
 }
 
-func MapStatusToMastodonToot(status sdk.Status) (toot *mastodon.Toot) {
+func MapPostToMastodonToot(status sdk.Post) (toot *mastodon.Toot) {
 	toot = &mastodon.Toot{}
 
 	if status.Content != nil && status.Content.Value != nil {
@@ -354,10 +354,10 @@ func MapStatusToMastodonToot(status sdk.Status) (toot *mastodon.Toot) {
 	}
 
 	if status.Relations != nil &&
-		status.Relations.RepliesToStatus != nil &&
-		status.Relations.RepliesToStatus.Id != nil &&
-		status.Relations.RepliesToStatus.Id.Value != nil {
-		toot.InReplyToID = mastodon.ID(*status.Relations.RepliesToStatus.Id.Value)
+		status.Relations.RepliesToPost != nil &&
+		status.Relations.RepliesToPost.Id != nil &&
+		status.Relations.RepliesToPost.Id.Value != nil {
+		toot.InReplyToID = mastodon.ID(*status.Relations.RepliesToPost.Id.Value)
 	}
 
 	return
