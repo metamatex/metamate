@@ -37,7 +37,6 @@ the `servers` package contains all the endpoints a MetaMate exposes
 
 visit [metamate.one](http://metamate.one/) to explorer all endpoints
 
-- `admin` exposes MetaMate's administration interface
 - `config` exposes the loaded configuration
 - `debug` exposes golang runtime information
 - `explorer` exposes MetaMate's graphql explorer

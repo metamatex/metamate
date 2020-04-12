@@ -1,4 +1,4 @@
-# MetaMate
+# MetaMate ![test](https://github.com/metamatex/metamate/workflows/test/badge.svg) ![build](https://github.com/metamatex/metamate/workflows/build/badge.svg)
 
 MetaMate is an open-source semantic service bus and provides you an api for everything.
 

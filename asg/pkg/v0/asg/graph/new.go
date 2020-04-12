@@ -134,7 +134,7 @@ func addExpansion(root *RootNode) () {
 
 	root.AddTypeNode(typenames.ResponseMeta, FieldNodeSlice{
 		EnumField("kind", enumnames.ResponseKind),
-		ListField(TypeField("errors", typenames.Error)),
+		ListField(TypeField(fieldnames.Errors, typenames.Error)),
 		ListField(TypeField("services", typenames.Service)),
 	})
 
