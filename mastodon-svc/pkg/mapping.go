@@ -97,7 +97,7 @@ func MapPostFromStatus(status mastodon.Status) (post sdk.Post) {
 			Value:      sdk.String(status.SpoilerText),
 			Language:   sdk.String(FromISO6391[status.Language]),
 		},
-		Sensitive: sdk.Bool(status.Sensitive),
+		IsSensitive: sdk.Bool(status.Sensitive),
 		Content: &sdk.Text{
 			Formatting: &sdk.FormattingKind.Plain,
 			Value:      sdk.String(status.Content),
@@ -333,8 +333,8 @@ func MapPostToMastodonToot(status sdk.Post) (toot *mastodon.Toot) {
 		toot.Status = *status.Content.Value
 	}
 
-	if status.Sensitive != nil {
-		toot.Sensitive = *status.Sensitive
+	if status.IsSensitive != nil {
+		toot.Sensitive = *status.IsSensitive
 	}
 
 	if status.SpoilerText != nil && status.SpoilerText.Value != nil {

@@ -299,7 +299,7 @@ func addEntities(root *RootNode) () {
 		TypeField("description", typenames.Text),
 	})
 
-	root.AddTypeNode("HyperLink", FieldNodeSlice{
+	root.AddTypeNode(typenames.HyperLink, FieldNodeSlice{
 		TypeField("url", typenames.Url),
 		StringField("label"),
 	})
@@ -341,10 +341,12 @@ func addEntities(root *RootNode) () {
 	})
 
 	root.AddTypeNode(typenames.Post, FieldNodeSlice{
+		TypeField("title", typenames.Text),
 		TypeField("content", typenames.Text),
 		TypeField("spoilerText", typenames.Text),
-		BoolField("sensitive"),
-		BoolField("pinned"),
+		BoolField("isSensitive"),
+		BoolField("isPinned"),
+		ListField(TypeField("links", typenames.HyperLink)),
 	}, Flags{
 		typeflags.GetEndpoints: true,
 	})

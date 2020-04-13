@@ -9,7 +9,8 @@ type PostSort struct {
     Content *TextSort `json:"content,omitempty" yaml:"content,omitempty"`
     CreatedAt *TimestampSort `json:"createdAt,omitempty" yaml:"createdAt,omitempty"`
     Id *ServiceIdSort `json:"id,omitempty" yaml:"id,omitempty"`
-    Pinned *string `json:"pinned,omitempty" yaml:"pinned,omitempty"`
-    Sensitive *string `json:"sensitive,omitempty" yaml:"sensitive,omitempty"`
+    IsPinned *string `json:"isPinned,omitempty" yaml:"isPinned,omitempty"`
+    IsSensitive *string `json:"isSensitive,omitempty" yaml:"isSensitive,omitempty"`
     SpoilerText *TextSort `json:"spoilerText,omitempty" yaml:"spoilerText,omitempty"`
+    Title *TextSort `json:"title,omitempty" yaml:"title,omitempty"`
 }

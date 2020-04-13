@@ -11,9 +11,11 @@ type PostSelect struct {
     Content *TextSelect `json:"content,omitempty" yaml:"content,omitempty"`
     CreatedAt *TimestampSelect `json:"createdAt,omitempty" yaml:"createdAt,omitempty"`
     Id *ServiceIdSelect `json:"id,omitempty" yaml:"id,omitempty"`
-    Pinned *bool `json:"pinned,omitempty" yaml:"pinned,omitempty"`
+    IsPinned *bool `json:"isPinned,omitempty" yaml:"isPinned,omitempty"`
+    IsSensitive *bool `json:"isSensitive,omitempty" yaml:"isSensitive,omitempty"`
+    Links *HyperLinkSelect `json:"links,omitempty" yaml:"links,omitempty"`
     Relations *PostRelationsSelect `json:"relations,omitempty" yaml:"relations,omitempty"`
     Relationships *PostRelationshipsSelect `json:"relationships,omitempty" yaml:"relationships,omitempty"`
-    Sensitive *bool `json:"sensitive,omitempty" yaml:"sensitive,omitempty"`
     SpoilerText *TextSelect `json:"spoilerText,omitempty" yaml:"spoilerText,omitempty"`
+    Title *TextSelect `json:"title,omitempty" yaml:"title,omitempty"`
 }
