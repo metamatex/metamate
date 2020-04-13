@@ -299,6 +299,11 @@ func addEntities(root *RootNode) () {
 		TypeField("description", typenames.Text),
 	})
 
+	root.AddTypeNode("HyperLink", FieldNodeSlice{
+		TypeField("url", typenames.Url),
+		StringField("label"),
+	})
+
 	root.AddTypeNode(typenames.SocialAccount, FieldNodeSlice{
 		TypeField("username", typenames.Text),
 		TypeField("displayName", typenames.Text),
