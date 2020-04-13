@@ -9,8 +9,8 @@ type PostSelect struct {
     All *bool `json:"all,omitempty" yaml:"all,omitempty"`
     AlternativeIds *IdSelect `json:"alternativeIds,omitempty" yaml:"alternativeIds,omitempty"`
     Content *TextSelect `json:"content,omitempty" yaml:"content,omitempty"`
+    CreatedAt *TimestampSelect `json:"createdAt,omitempty" yaml:"createdAt,omitempty"`
     Id *ServiceIdSelect `json:"id,omitempty" yaml:"id,omitempty"`
-    Meta *TypeMetaSelect `json:"meta,omitempty" yaml:"meta,omitempty"`
     Pinned *bool `json:"pinned,omitempty" yaml:"pinned,omitempty"`
     Relations *PostRelationsSelect `json:"relations,omitempty" yaml:"relations,omitempty"`
     Relationships *PostRelationshipsSelect `json:"relationships,omitempty" yaml:"relationships,omitempty"`

@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	
+
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/generic/pkg/v0/transport/httpjson"
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
@@ -35,12 +35,10 @@ func init() {
 					return f.MustFromStruct(sdk.GetWhateversResponse{
 						Errors: []sdk.Error{
 							{
-								Message: &sdk.Text{
-									Value: sdk.String("a"),
-								},
+								Message: sdk.String("a"),
 							},
 						},
-						Whatevers:[]sdk.Whatever{
+						Whatevers: []sdk.Whatever{
 							{
 								Id: &sdk.ServiceId{
 									Value: sdk.String("a"),

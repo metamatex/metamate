@@ -8,5 +8,5 @@ const (
 type TimestampSelect struct {
     All *bool `json:"all,omitempty" yaml:"all,omitempty"`
     Kind *bool `json:"kind,omitempty" yaml:"kind,omitempty"`
-    Value *DurationScalarSelect `json:"value,omitempty" yaml:"value,omitempty"`
+    Unix *DurationScalarSelect `json:"unix,omitempty" yaml:"unix,omitempty"`
 }

@@ -255,10 +255,7 @@ func getError(stage string, svc *sdk.Service, message string) sdk.Error {
 
 	return sdk.Error{
 		Kind: sdk.String(kind),
-		Message: &sdk.Text{
-			Formatting: &sdk.FormattingKind.Plain,
-			Value:      &message,
-		},
+		Message: &message,
 		Service: svc,
 	}
 }

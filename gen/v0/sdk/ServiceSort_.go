@@ -6,9 +6,9 @@ const (
 )
 
 type ServiceSort struct {
+    CreatedAt *TimestampSort `json:"createdAt,omitempty" yaml:"createdAt,omitempty"`
     Id *ServiceIdSort `json:"id,omitempty" yaml:"id,omitempty"`
     IsVirtual *string `json:"isVirtual,omitempty" yaml:"isVirtual,omitempty"`
-    Meta *TypeMetaSort `json:"meta,omitempty" yaml:"meta,omitempty"`
     Name *string `json:"name,omitempty" yaml:"name,omitempty"`
     Port *string `json:"port,omitempty" yaml:"port,omitempty"`
     SdkVersion *string `json:"sdkVersion,omitempty" yaml:"sdkVersion,omitempty"`

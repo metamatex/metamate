@@ -24,10 +24,7 @@ func getPostId(ctx context.Context, c *mastodon.Client, req sdk.GetPostsRequest)
 	}()
 	if err != nil {
 		rsp.Errors = append(rsp.Errors, sdk.Error{
-			Message: &sdk.Text{
-				Formatting: &sdk.FormattingKind.Plain,
-				Value:      sdk.String(err.Error()),
-			},
+			Message: sdk.String(err.Error()),
 		})
 	}
 
@@ -47,10 +44,7 @@ func getPostsSearch(ctx context.Context, c *mastodon.Client, req sdk.GetPostsReq
 	}()
 	if err != nil {
 		rsp.Errors = append(rsp.Errors, sdk.Error{
-			Message: &sdk.Text{
-				Formatting: &sdk.FormattingKind.Plain,
-				Value:      sdk.String(err.Error()),
-			},
+			Message: sdk.String(err.Error()),
 		})
 	}
 
@@ -162,10 +156,7 @@ func getPostsRelation(ctx context.Context, c *mastodon.Client, req sdk.GetPostsR
 	}()
 	if err != nil {
 		rsp.Errors = append(rsp.Errors, sdk.Error{
-			Message: &sdk.Text{
-				Formatting: &sdk.FormattingKind.Plain,
-				Value:      sdk.String(err.Error()),
-			},
+			Message: sdk.String(err.Error()),
 		})
 	}
 

@@ -6,5 +6,5 @@ const (
 )
 
 type TimestampSort struct {
-    Value *DurationScalarSort `json:"value,omitempty" yaml:"value,omitempty"`
+    Unix *DurationScalarSort `json:"unix,omitempty" yaml:"unix,omitempty"`
 }

@@ -7,5 +7,5 @@ const (
 
 type Timestamp struct {
     Kind *string `json:"kind,omitempty" yaml:"kind,omitempty"`
-    Value *DurationScalar `json:"value,omitempty" yaml:"value,omitempty"`
+    Unix *DurationScalar `json:"unix,omitempty" yaml:"unix,omitempty"`
 }

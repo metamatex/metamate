@@ -9,7 +9,7 @@ type ErrorFilter struct {
     And []ErrorFilter `json:"and,omitempty" yaml:"and,omitempty"`
     Id *IdFilter `json:"id,omitempty" yaml:"id,omitempty"`
     Kind *EnumFilter `json:"kind,omitempty" yaml:"kind,omitempty"`
-    Message *TextFilter `json:"message,omitempty" yaml:"message,omitempty"`
+    Message *StringFilter `json:"message,omitempty" yaml:"message,omitempty"`
     Not []ErrorFilter `json:"not,omitempty" yaml:"not,omitempty"`
     Or []ErrorFilter `json:"or,omitempty" yaml:"or,omitempty"`
     Service *ServiceFilter `json:"service,omitempty" yaml:"service,omitempty"`

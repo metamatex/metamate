@@ -9,13 +9,14 @@ type SocialAccountFilter struct {
     AlternativeIds *IdListFilter `json:"alternativeIds,omitempty" yaml:"alternativeIds,omitempty"`
     And []SocialAccountFilter `json:"and,omitempty" yaml:"and,omitempty"`
     Avatar *ImageFilter `json:"avatar,omitempty" yaml:"avatar,omitempty"`
+    CreatedAt *TimestampFilter `json:"createdAt,omitempty" yaml:"createdAt,omitempty"`
     DisplayName *TextFilter `json:"displayName,omitempty" yaml:"displayName,omitempty"`
     Header *ImageFilter `json:"header,omitempty" yaml:"header,omitempty"`
     Id *ServiceIdFilter `json:"id,omitempty" yaml:"id,omitempty"`
-    Meta *TypeMetaFilter `json:"meta,omitempty" yaml:"meta,omitempty"`
     Not []SocialAccountFilter `json:"not,omitempty" yaml:"not,omitempty"`
     Note *TextFilter `json:"note,omitempty" yaml:"note,omitempty"`
     Or []SocialAccountFilter `json:"or,omitempty" yaml:"or,omitempty"`
+    Points *Int32Filter `json:"points,omitempty" yaml:"points,omitempty"`
     Set *bool `json:"set,omitempty" yaml:"set,omitempty"`
     Username *TextFilter `json:"username,omitempty" yaml:"username,omitempty"`
 }

@@ -24,7 +24,7 @@ func Expand(verbosity int, root *graph.RootNode) (err error) {
 			tn.AddFieldNodes(
 				graph.TypeField(fieldnames.Id, typenames.ServiceId),
 				graph.ListField(graph.TypeField(fieldnames.AlternativeIds, typenames.Id)),
-				graph.TypeField(fieldnames.Meta, typenames.TypeMeta),
+				graph.TypeField(fieldnames.CreatedAt, typenames.Timestamp),
 			)
 			tn.Flags().Set(typeflags.HasTypeMeta, true)
 		})

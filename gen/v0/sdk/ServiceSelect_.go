@@ -8,9 +8,9 @@ const (
 type ServiceSelect struct {
     All *bool `json:"all,omitempty" yaml:"all,omitempty"`
     AlternativeIds *IdSelect `json:"alternativeIds,omitempty" yaml:"alternativeIds,omitempty"`
+    CreatedAt *TimestampSelect `json:"createdAt,omitempty" yaml:"createdAt,omitempty"`
     Id *ServiceIdSelect `json:"id,omitempty" yaml:"id,omitempty"`
     IsVirtual *bool `json:"isVirtual,omitempty" yaml:"isVirtual,omitempty"`
-    Meta *TypeMetaSelect `json:"meta,omitempty" yaml:"meta,omitempty"`
     Name *bool `json:"name,omitempty" yaml:"name,omitempty"`
     Port *bool `json:"port,omitempty" yaml:"port,omitempty"`
     SdkVersion *bool `json:"sdkVersion,omitempty" yaml:"sdkVersion,omitempty"`

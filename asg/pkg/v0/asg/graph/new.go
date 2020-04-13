@@ -117,7 +117,7 @@ func addExpansion(root *RootNode) () {
 
 	root.AddTypeNode(typenames.Error, FieldNodeSlice{
 		EnumField(fieldnames.Kind, enumnames.ErrorKind),
-		TypeField(fieldnames.Message, typenames.Text),
+		StringField(fieldnames.Message),
 		TypeField(fieldnames.Id, typenames.Id),
 		TypeField(fieldnames.Service, typenames.Service),
 		TypeField(fieldnames.Wraps, typenames.Error),
@@ -287,13 +287,8 @@ func addEntities(root *RootNode) () {
 		typenames.Email,
 	})
 
-	root.AddEnumNode(typenames.TimestampKind, []string{
-		"unix",
-	})
-
-	root.AddTypeNode(typenames.Timestamp, FieldNodeSlice{
-		EnumField("kind", typenames.TimestampKind),
-		TypeField("value", typenames.DurationScalar),
+	root.AddUnion(typenames.Timestamp, []interface{}{
+		TypeField("unix", typenames.DurationScalar),
 	})
 
 	root.AddTypeNode(typenames.Image, FieldNodeSlice{
@@ -308,6 +303,7 @@ func addEntities(root *RootNode) () {
 		TypeField("username", typenames.Text),
 		TypeField("displayName", typenames.Text),
 		TypeField("note", typenames.Text),
+		Int32Field("points"),
 		TypeField("avatar", typenames.Image),
 		TypeField("header", typenames.Image),
 	}, Flags{

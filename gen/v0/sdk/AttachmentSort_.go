@@ -6,7 +6,7 @@ const (
 )
 
 type AttachmentSort struct {
+    CreatedAt *TimestampSort `json:"createdAt,omitempty" yaml:"createdAt,omitempty"`
     Description *string `json:"description,omitempty" yaml:"description,omitempty"`
     Id *ServiceIdSort `json:"id,omitempty" yaml:"id,omitempty"`
-    Meta *TypeMetaSort `json:"meta,omitempty" yaml:"meta,omitempty"`
 }

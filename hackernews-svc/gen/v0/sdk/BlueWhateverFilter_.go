@@ -10,6 +10,7 @@ type BlueWhateverFilter struct {
     And []BlueWhateverFilter `json:"and,omitempty" yaml:"and,omitempty"`
     BoolField *BoolFilter `json:"boolField,omitempty" yaml:"boolField,omitempty"`
     BoolList *BoolListFilter `json:"boolList,omitempty" yaml:"boolList,omitempty"`
+    CreatedAt *TimestampFilter `json:"createdAt,omitempty" yaml:"createdAt,omitempty"`
     EnumField *EnumFilter `json:"enumField,omitempty" yaml:"enumField,omitempty"`
     EnumList *EnumListFilter `json:"enumList,omitempty" yaml:"enumList,omitempty"`
     Float64Field *Float64Filter `json:"float64Field,omitempty" yaml:"float64Field,omitempty"`
@@ -17,7 +18,6 @@ type BlueWhateverFilter struct {
     Id *ServiceIdFilter `json:"id,omitempty" yaml:"id,omitempty"`
     Int32Field *Int32Filter `json:"int32Field,omitempty" yaml:"int32Field,omitempty"`
     Int32List *Int32ListFilter `json:"int32List,omitempty" yaml:"int32List,omitempty"`
-    Meta *TypeMetaFilter `json:"meta,omitempty" yaml:"meta,omitempty"`
     Not []BlueWhateverFilter `json:"not,omitempty" yaml:"not,omitempty"`
     Or []BlueWhateverFilter `json:"or,omitempty" yaml:"or,omitempty"`
     Set *bool `json:"set,omitempty" yaml:"set,omitempty"`

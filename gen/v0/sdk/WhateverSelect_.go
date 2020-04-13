@@ -10,6 +10,7 @@ type WhateverSelect struct {
     AlternativeIds *IdSelect `json:"alternativeIds,omitempty" yaml:"alternativeIds,omitempty"`
     BoolField *bool `json:"boolField,omitempty" yaml:"boolField,omitempty"`
     BoolList *bool `json:"boolList,omitempty" yaml:"boolList,omitempty"`
+    CreatedAt *TimestampSelect `json:"createdAt,omitempty" yaml:"createdAt,omitempty"`
     EnumField *bool `json:"enumField,omitempty" yaml:"enumField,omitempty"`
     EnumList *bool `json:"enumList,omitempty" yaml:"enumList,omitempty"`
     Float64Field *bool `json:"float64Field,omitempty" yaml:"float64Field,omitempty"`
@@ -17,7 +18,6 @@ type WhateverSelect struct {
     Id *ServiceIdSelect `json:"id,omitempty" yaml:"id,omitempty"`
     Int32Field *bool `json:"int32Field,omitempty" yaml:"int32Field,omitempty"`
     Int32List *bool `json:"int32List,omitempty" yaml:"int32List,omitempty"`
-    Meta *TypeMetaSelect `json:"meta,omitempty" yaml:"meta,omitempty"`
     Relations *WhateverRelationsSelect `json:"relations,omitempty" yaml:"relations,omitempty"`
     StringField *bool `json:"stringField,omitempty" yaml:"stringField,omitempty"`
     StringList *bool `json:"stringList,omitempty" yaml:"stringList,omitempty"`
