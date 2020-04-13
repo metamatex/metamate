@@ -8,8 +8,10 @@ const (
 type GetBlueWhateversResponseFilter struct {
     And []GetBlueWhateversResponseFilter `json:"and,omitempty" yaml:"and,omitempty"`
     BlueWhatevers *BlueWhateverListFilter `json:"blueWhatevers,omitempty" yaml:"blueWhatevers,omitempty"`
-    Meta *CollectionMetaFilter `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Count *Int32Filter `json:"count,omitempty" yaml:"count,omitempty"`
+    Errors *ErrorListFilter `json:"errors,omitempty" yaml:"errors,omitempty"`
     Not []GetBlueWhateversResponseFilter `json:"not,omitempty" yaml:"not,omitempty"`
     Or []GetBlueWhateversResponseFilter `json:"or,omitempty" yaml:"or,omitempty"`
+    Pagination *PaginationFilter `json:"pagination,omitempty" yaml:"pagination,omitempty"`
     Set *bool `json:"set,omitempty" yaml:"set,omitempty"`
 }

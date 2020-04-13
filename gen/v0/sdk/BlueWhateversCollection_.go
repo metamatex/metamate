@@ -7,5 +7,7 @@ const (
 
 type BlueWhateversCollection struct {
     BlueWhatevers []BlueWhatever `json:"blueWhatevers,omitempty" yaml:"blueWhatevers,omitempty"`
-    Meta *CollectionMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Count *int32 `json:"count,omitempty" yaml:"count,omitempty"`
+    Errors []Error `json:"errors,omitempty" yaml:"errors,omitempty"`
+    Pagination *Pagination `json:"pagination,omitempty" yaml:"pagination,omitempty"`
 }

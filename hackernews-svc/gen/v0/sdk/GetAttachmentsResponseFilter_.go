@@ -8,8 +8,10 @@ const (
 type GetAttachmentsResponseFilter struct {
     And []GetAttachmentsResponseFilter `json:"and,omitempty" yaml:"and,omitempty"`
     Attachments *AttachmentListFilter `json:"attachments,omitempty" yaml:"attachments,omitempty"`
-    Meta *CollectionMetaFilter `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Count *Int32Filter `json:"count,omitempty" yaml:"count,omitempty"`
+    Errors *ErrorListFilter `json:"errors,omitempty" yaml:"errors,omitempty"`
     Not []GetAttachmentsResponseFilter `json:"not,omitempty" yaml:"not,omitempty"`
     Or []GetAttachmentsResponseFilter `json:"or,omitempty" yaml:"or,omitempty"`
+    Pagination *PaginationFilter `json:"pagination,omitempty" yaml:"pagination,omitempty"`
     Set *bool `json:"set,omitempty" yaml:"set,omitempty"`
 }

@@ -100,11 +100,10 @@ func (s Service) GetServices(ctx context.Context, req sdk.GetServicesRequest) (r
 	}
 
 	rsp.Services = svcs
-	rsp.Meta = &sdk.CollectionMeta{}
 
 	if len(errs) != 0 {
 		for _, err := range errs {
-			rsp.Meta.Errors = append(rsp.Meta.Errors, sdk.Error{
+			rsp.Errors = append(rsp.Errors, sdk.Error{
 				Message: &sdk.Text{
 					Value: sdk.String(err.Error()),
 				},

@@ -7,9 +7,11 @@ const (
 
 type GetWhateversResponseFilter struct {
     And []GetWhateversResponseFilter `json:"and,omitempty" yaml:"and,omitempty"`
-    Meta *CollectionMetaFilter `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Count *Int32Filter `json:"count,omitempty" yaml:"count,omitempty"`
+    Errors *ErrorListFilter `json:"errors,omitempty" yaml:"errors,omitempty"`
     Not []GetWhateversResponseFilter `json:"not,omitempty" yaml:"not,omitempty"`
     Or []GetWhateversResponseFilter `json:"or,omitempty" yaml:"or,omitempty"`
+    Pagination *PaginationFilter `json:"pagination,omitempty" yaml:"pagination,omitempty"`
     Set *bool `json:"set,omitempty" yaml:"set,omitempty"`
     Whatevers *WhateverListFilter `json:"whatevers,omitempty" yaml:"whatevers,omitempty"`
 }

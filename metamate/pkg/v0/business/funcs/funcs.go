@@ -68,20 +68,20 @@ func ReduceSvcRspErrsToCliRspErrs(f generic.Factory) types.FuncTransformer {
 		Func: func(ctx types.ReqCtx) types.ReqCtx {
 			gErrs := f.MustFromStructs([]sdk.Error{})
 
-			gCliRspErrs, ok := ctx.GCliRsp.GenericSlice(fieldnames.Meta, fieldnames.Errors)
+			gCliRspErrs, ok := ctx.GCliRsp.GenericSlice(fieldnames.Errors)
 			if ok {
 				gErrs.Append(gCliRspErrs.Get()...)
 			}
 
 			for _, gSvcRsp := range ctx.GSvcRsps {
-				gSvcRspErrs, ok := gSvcRsp.GenericSlice(fieldnames.Meta, fieldnames.Errors)
+				gSvcRspErrs, ok := gSvcRsp.GenericSlice(fieldnames.Errors)
 				if ok {
 					gErrs.Append(gSvcRspErrs.Get()...)
 				}
 			}
 
 			if len(gErrs.Get()) != 0 {
-				ctx.GCliRsp.MustSetGenericSlice([]string{fieldnames.Meta, fieldnames.Errors}, gErrs)
+				ctx.GCliRsp.MustSetGenericSlice([]string{fieldnames.Errors}, gErrs)
 			}
 
 			return ctx
@@ -199,7 +199,7 @@ func SetDefaultSelect() types.FuncTransformer {
 	return types.FuncTransformer{
 		Name0: "set default select",
 		Func: func(ctx types.ReqCtx) types.ReqCtx {
-			ctx.GCliReq.MustSetBool([]string{fieldnames.Select, fieldnames.Meta, fieldnames.Errors, fieldnames.All}, true)
+			ctx.GCliReq.MustSetBool([]string{fieldnames.Select, fieldnames.Errors, fieldnames.All}, true)
 			ctx.GCliReq.MustSetBool([]string{fieldnames.Select, ctx.ForTypeNode.PluralFieldName(), fieldnames.Id, fieldnames.ServiceName}, true)
 			ctx.GCliReq.MustSetBool([]string{fieldnames.Select, ctx.ForTypeNode.PluralFieldName(), fieldnames.Id, fieldnames.Value}, true)
 
@@ -289,32 +289,6 @@ func New(f generic.Factory, subject string) types.FuncTransformer {
 			Name0: name,
 			Func: func(ctx types.ReqCtx) types.ReqCtx {
 				ctx.GCliRsp = f.New(ctx.GCliReq.Type().Edges.Type.Response())
-
-				return ctx
-			},
-		}
-	}
-
-	panic(fmt.Sprintf("subject %v not supported", subject))
-}
-
-func AddMeta(f generic.Factory, subject string) types.FuncTransformer {
-	name := ""
-	switch subject {
-	case types.GSvcRsp:
-		return types.FuncTransformer{
-			Name0: name,
-			Func: func(ctx types.ReqCtx) types.ReqCtx {
-				ctx.GSvcRsp.MustSetGeneric([]string{fieldnames.Meta}, f.MustFromStruct(sdk.ResponseMeta{}))
-
-				return ctx
-			},
-		}
-	case types.GCliRsp:
-		return types.FuncTransformer{
-			Name0: name,
-			Func: func(ctx types.ReqCtx) types.ReqCtx {
-				ctx.GCliRsp.MustSetGeneric([]string{fieldnames.Meta}, f.MustFromStruct(sdk.ResponseMeta{}))
 
 				return ctx
 			},
@@ -479,7 +453,7 @@ func Move(f generic.Factory, from, to string) types.FuncTransformer {
 						return ctx
 					}
 
-					ctx.GSvcRsp.MustSetGenericSlice([]string{fieldnames.Meta, fieldnames.Errors}, f.MustFromStructs(ctx.Errs))
+					ctx.GSvcRsp.MustSetGenericSlice([]string{fieldnames.Errors}, f.MustFromStructs(ctx.Errs))
 
 					ctx.Errs = nil
 
@@ -494,7 +468,7 @@ func Move(f generic.Factory, from, to string) types.FuncTransformer {
 						return ctx
 					}
 
-					ctx.GCliRsp.MustSetGenericSlice([]string{fieldnames.Meta, fieldnames.Errors}, f.MustFromStructs(ctx.Errs))
+					ctx.GCliRsp.MustSetGenericSlice([]string{fieldnames.Errors}, f.MustFromStructs(ctx.Errs))
 
 					ctx.Errs = nil
 
@@ -792,9 +766,7 @@ func GetSvcs(resolve *line.Line, f generic.Factory, discoverySvc sdk.Service) ty
 				},
 				Filter: ctx.SvcFilter,
 				Select: &sdk.GetServicesResponseSelect{
-					Meta: &sdk.CollectionMetaSelect{
-						All: sdk.Bool(true),
-					},
+					All: sdk.Bool(true),
 					Services: &sdk.ServiceSelect{
 						All: sdk.Bool(true),
 					},
@@ -805,7 +777,7 @@ func GetSvcs(resolve *line.Line, f generic.Factory, discoverySvc sdk.Service) ty
 				GCliReq: f.MustFromStruct(req),
 			})
 
-			gSvcErrs, ok := ctx0.GCliRsp.GenericSlice(fieldnames.Meta, fieldnames.Errors)
+			gSvcErrs, ok := ctx0.GCliRsp.GenericSlice(fieldnames.Errors)
 			if ok {
 				var errs []sdk.Error
 				gSvcErrs.MustToStructs(&errs)

@@ -191,10 +191,6 @@ func getErrLine(f generic.Factory, to string) *line.Line {
 			funcs.Isset(to, nil, false),
 			line.Do(funcs.New(f, to)),
 		).
-		If(
-			funcs.Isset(to, []string{fieldnames.Meta}, false),
-			line.Do(funcs.AddMeta(f, to)),
-		).
 		Do(
 			funcs.Copy(types.Svc, types.Errs),
 			funcs.Move(f, types.Errs, to),

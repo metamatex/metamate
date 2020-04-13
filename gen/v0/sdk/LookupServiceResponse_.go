@@ -6,6 +6,6 @@ const (
 )
 
 type LookupServiceResponse struct {
-    Meta *ResponseMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Errors []Error `json:"errors,omitempty" yaml:"errors,omitempty"`
     Output *LookupServiceOutput `json:"output,omitempty" yaml:"output,omitempty"`
 }

@@ -47,7 +47,9 @@ func generateGetRequest(root *graph.RootNode, tn *graph.TypeNode) {
 
 func generateGetResponse(root *graph.RootNode, tn *graph.TypeNode) {
 	response := root.AddTypeNode(typenames.GetResponse(tn.Name()), graph.FieldNodeSlice{
-		graph.TypeField(fieldnames.Meta, typenames.CollectionMeta),
+		graph.ListField(graph.TypeField(fieldnames.Errors, typenames.Error)),
+		graph.TypeField(fieldnames.Pagination, typenames.Pagination),
+		graph.Int32Field(fieldnames.Count),
 		graph.ListField(graph.TypeField(tn.PluralFieldName(), tn.Name())),
 	}, graph.Flags{
 		typeflags.IsResponse: true,
@@ -96,7 +98,9 @@ func generateGetCollectionNode(root *graph.RootNode, tn *graph.TypeNode) {
 
 func generateCollection(root *graph.RootNode, tn *graph.TypeNode) {
 	collection := root.AddTypeNode(typenames.Collection(tn.Name()), graph.FieldNodeSlice{
-		graph.TypeField(fieldnames.Meta, typenames.CollectionMeta),
+		graph.ListField(graph.TypeField(fieldnames.Errors, typenames.Error)),
+		graph.TypeField(fieldnames.Pagination, typenames.Pagination),
+		graph.Int32Field(fieldnames.Count),
 		graph.ListField(graph.TypeField(tn.PluralFieldName(), tn.Name())),
 	}, graph.Flags{
 		typeflags.IsCollection: true,

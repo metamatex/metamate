@@ -343,7 +343,7 @@ func (rn *RootNode) AddActionEndpoint(name string, inputFns FieldNodeSlice, outp
 	rn.AddTypeNode(typenames.Output(name), outputFns)
 
 	actionRsp := rn.AddTypeNode(typenames.Response(name), FieldNodeSlice{
-		TypeField(fieldnames.Meta, typenames.ResponseMeta),
+		ListField(TypeField(fieldnames.Errors, typenames.Error)),
 		TypeField(fieldnames.Output, typenames.Output(name)),
 	}, Flags{
 		typeflags.IsResponse: true,

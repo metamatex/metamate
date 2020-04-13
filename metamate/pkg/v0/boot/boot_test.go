@@ -7,6 +7,7 @@ import (
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/metamate/pkg/v0/boot"
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/line"
+	"github.com/metamatex/metamate/metamate/pkg/v0/business/virtual"
 	"github.com/metamatex/metamate/metamate/pkg/v0/config"
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 	"github.com/stretchr/testify/assert"
@@ -21,7 +22,10 @@ const (
 	ReqFilter = "request-filter"
 	SqlxA     = "sqlx-a"
 	SqlxB     = "sqlx-b"
+	ErrorA     = "error-a"
+	ErrorB     = "error-b"
 )
+
 
 func TestBoot(t *testing.T) {
 	c := config.DefaultConfig
@@ -32,6 +36,17 @@ func TestBoot(t *testing.T) {
 			"*": "{{ .Ctx.Svc.Url.Value }} : {{ .Ctx.GSvcRsp.Type.Name }}",
 		},
 	}
+
+	c.Virtual.Services = append(c.Virtual.Services, []types.VirtualSvc{
+		{
+			Id: ErrorA,
+			Name: virtual.Error,
+		},
+		{
+			Id: ErrorB,
+			Name: virtual.Error,
+		},
+	}...)
 
 	d, err := boot.NewDependencies(c, types.Version{})
 	if err != nil {
@@ -46,11 +61,9 @@ func TestBoot(t *testing.T) {
 	println(suffix)
 
 	f := func(ctx context.Context, gCliReq generic.Generic) (gCliRsp generic.Generic, err error) {
-		gCliReq.MustSetGeneric([]string{fieldnames.Select, fieldnames.Meta}, d.Factory.MustFromStruct(sdk.CollectionMetaSelect{
-			Errors: &sdk.ErrorSelect{
-				Message: &sdk.TextSelect{
-					Value: sdk.Bool(true),
-				},
+		gCliReq.MustSetGeneric([]string{fieldnames.Select, fieldnames.Errors}, d.Factory.MustFromStruct(sdk.ErrorSelect{
+			Message: &sdk.TextSelect{
+				Value: sdk.Bool(true),
 			},
 		}))
 
@@ -67,7 +80,9 @@ func TestBoot(t *testing.T) {
 
 	//FTestHackernewsGetPostFeedContainsPosts(t, ctx, d.Factory, f)
 
-	FTestHackernews(t, ctx, d.Factory, f)
+	FTestError(t, ctx, d.Factory, f)
+
+	//FTestHackernews(t, ctx, d.Factory, f)
 
 	//FTestHackernewsSocialAccount(t, ctx, d.Factory, f)
 
@@ -102,6 +117,44 @@ func TestBoot(t *testing.T) {
 	//spec.TestGetModeIdWithSelfReferencingRelation(t, ctx, d.Factory, f, suffix, SqlxA)
 	//
 	//spec.TestGetModeIdWithRelation(t, ctx, d.Factory, f, suffix, SqlxA)
+}
+
+func FTestError(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error)) {
+	name := "FTestError"
+	t.Run(name, func(t *testing.T) {
+		t.Parallel()
+
+		err := func() (err error) {
+			getReq := sdk.GetWhateversRequest{
+				ServiceFilter: &sdk.ServiceFilter{
+					Id: &sdk.ServiceIdFilter{
+						Value: &sdk.StringFilter{
+							In: []string{ErrorA, ErrorB},
+						},
+					},
+				},
+				Select: &sdk.GetWhateversResponseSelect{
+					Errors: &sdk.ErrorSelect{
+						Message: &sdk.TextSelect{
+							Value: sdk.Bool(true),
+						},
+					},
+				},
+			}
+
+			gGetRsp, err := h(ctx, f.MustFromStruct(getReq))
+			if err != nil {
+				return
+			}
+
+			gGetRsp.Print()
+
+			return
+		}()
+		if err != nil {
+			t.Error(err)
+		}
+	})
 }
 
 func FTestHackernews(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error)) {
@@ -141,11 +194,9 @@ func FTestHackernewsSocialAccount(t *testing.T, ctx context.Context, f generic.F
 						All: sdk.Bool(true),
 						Relations: &sdk.SocialAccountRelationsSelect{
 							AuthorsPosts: &sdk.PostsCollectionSelect{
-								Meta: &sdk.CollectionMetaSelect{
-									Errors: &sdk.ErrorSelect{
-										Message: &sdk.TextSelect{
-											Value: sdk.Bool(true),
-										},
+								Errors: &sdk.ErrorSelect{
+									Message: &sdk.TextSelect{
+										Value: sdk.Bool(true),
 									},
 								},
 								Posts: &sdk.PostSelect{
@@ -161,11 +212,9 @@ func FTestHackernewsSocialAccount(t *testing.T, ctx context.Context, f generic.F
 				Relations: &sdk.GetSocialAccountsRelations{
 					AuthorsPosts: &sdk.GetPostsCollection{
 						Select: &sdk.PostsCollectionSelect{
-							Meta: &sdk.CollectionMetaSelect{
-								Errors: &sdk.ErrorSelect{
-									Message: &sdk.TextSelect{
-										Value: sdk.Bool(true),
-									},
+							Errors: &sdk.ErrorSelect{
+								Message: &sdk.TextSelect{
+									Value: sdk.Bool(true),
 								},
 							},
 							Posts: &sdk.PostSelect{

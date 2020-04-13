@@ -75,9 +75,8 @@ func (svc Service) GetPosts(ctx context.Context, req sdk.GetPostsRequest) (rsp s
 		errs = append(errs, errors.New(fmt.Sprintf("can't handle %v", req)))
 	}
 
-	rsp.Meta = &sdk.CollectionMeta{}
 	for _, err := range errs {
-		rsp.Meta.Errors = append(rsp.Meta.Errors, sdk.Error{
+		rsp.Errors = append(rsp.Errors, sdk.Error{
 			Message: &sdk.Text{
 				Value: sdk.String(err.Error()),
 			},
@@ -112,9 +111,8 @@ func (svc Service) GetPostFeeds(ctx context.Context, req sdk.GetPostFeedsRequest
 		errs = append(errs, errors.New(fmt.Sprintf("can't handle %v", req)))
 	}
 
-	rsp.Meta = &sdk.CollectionMeta{}
 	for _, err := range errs {
-		rsp.Meta.Errors = append(rsp.Meta.Errors, sdk.Error{
+		rsp.Errors = append(rsp.Errors, sdk.Error{
 			Message: &sdk.Text{
 				Value: sdk.String(err.Error()),
 			},
@@ -161,9 +159,8 @@ func (svc Service) GetSocialAccounts(ctx context.Context, req sdk.GetSocialAccou
 		errs = append(errs, errors.New(fmt.Sprintf("can't handle %v", req)))
 	}
 
-	rsp.Meta = &sdk.CollectionMeta{}
 	for _, err := range errs {
-		rsp.Meta.Errors = append(rsp.Meta.Errors, sdk.Error{
+		rsp.Errors = append(rsp.Errors, sdk.Error{
 			Message: &sdk.Text{
 				Value: sdk.String(err.Error()),
 			},

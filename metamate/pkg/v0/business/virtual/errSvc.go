@@ -12,7 +12,7 @@ import (
 )
 
 func init() {
-	handler[ReqFilter] = func(f generic.Factory, rn *graph.RootNode, c *http.Client, vSvc types.VirtualSvc) (h http.Handler, t string, err error) {
+	handler[Error] = func(f generic.Factory, rn *graph.RootNode, c *http.Client, vSvc types.VirtualSvc) (h http.Handler, t string, err error) {
 		h = httpjson.NewServer(httpjson.ServerOpts{
 			Root:    rn,
 			Factory: f,
@@ -32,9 +32,23 @@ func init() {
 						},
 					})
 				case sdk.GetWhateversRequestName:
-					println("RequestFilterService.GetWhatevers called")
-
-					return f.MustFromStruct(sdk.GetWhateversResponse{})
+					return f.MustFromStruct(sdk.GetWhateversResponse{
+						Errors: []sdk.Error{
+							{
+								Message: &sdk.Text{
+									Value: sdk.String("a"),
+								},
+							},
+						},
+						Whatevers:[]sdk.Whatever{
+							{
+								Id: &sdk.ServiceId{
+									Value: sdk.String("a"),
+								},
+								StringField: sdk.String("a"),
+							},
+						},
+					})
 				}
 
 				return

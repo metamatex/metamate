@@ -7,5 +7,5 @@ const (
 
 type PipeWhateversResponse struct {
     Context *PipeWhateversContext `json:"context,omitempty" yaml:"context,omitempty"`
-    Meta *ResponseMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Errors []Error `json:"errors,omitempty" yaml:"errors,omitempty"`
 }

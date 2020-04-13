@@ -30,8 +30,6 @@ const (
 	TimestampKind     = "TimestampKind"
 	Timestamp         = "Timestamp"
 	RequestMeta       = "RequestMeta"
-	ResponseMeta      = "ResponseMeta"
-	CollectionMeta    = "CollectionMeta"
 	TypeMeta          = "TypeMeta"
 
 	Text        = "Text"
