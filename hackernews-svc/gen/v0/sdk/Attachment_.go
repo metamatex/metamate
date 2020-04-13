@@ -7,8 +7,8 @@ const (
 
 type Attachment struct {
     AlternativeIds []Id `json:"alternativeIds,omitempty" yaml:"alternativeIds,omitempty"`
+    CreatedAt *Timestamp `json:"createdAt,omitempty" yaml:"createdAt,omitempty"`
     Description *string `json:"description,omitempty" yaml:"description,omitempty"`
     Id *ServiceId `json:"id,omitempty" yaml:"id,omitempty"`
-    Meta *TypeMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
     Relations *AttachmentRelations `json:"relations,omitempty" yaml:"relations,omitempty"`
 }

@@ -43,9 +43,7 @@ func getSocialAccountId(ctx context.Context, c *mastodon.Client, req sdk.GetSoci
 	}()
 	if err != nil {
 		rsp.Errors = append(rsp.Errors, sdk.Error{
-			Message: &sdk.Text{
-				Value: sdk.String(err.Error()),
-			},
+			Message: sdk.String(err.Error()),
 		})
 	}
 
@@ -65,9 +63,7 @@ func getSocialAccountsSearch(ctx context.Context, c *mastodon.Client, req sdk.Ge
 	}()
 	if err != nil {
 		rsp.Errors = append(rsp.Errors, sdk.Error{
-			Message: &sdk.Text{
-				Value: sdk.String(err.Error()),
-			},
+			Message: sdk.String(err.Error()),
 		})
 	}
 
@@ -134,9 +130,7 @@ func getSocialAccountsRelation(ctx context.Context, c *mastodon.Client, req sdk.
 	}()
 	if err != nil {
 		rsp.Errors = append(rsp.Errors, sdk.Error{
-			Message: &sdk.Text{
-				Value: sdk.String(err.Error()),
-			},
+			Message: sdk.String(err.Error()),
 		})
 	}
 

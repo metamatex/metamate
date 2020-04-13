@@ -84,13 +84,11 @@ func mapUserToSocialAccount(u user) (a sdk.SocialAccount) {
 			Formatting: &sdk.FormattingKind.Html,
 			Value:      u.About,
 		},
-		Meta: &sdk.TypeMeta{
-			CreatedAt: &sdk.Timestamp{
-				Kind: &sdk.TimestampKind.Unix,
-				Value: &sdk.DurationScalar{
-					Unit: &sdk.DurationUnit.S,
-					Value: sdk.Float64(float64(*u.Created)),
-				},
+		CreatedAt: &sdk.Timestamp{
+			Kind: &sdk.TimestampKind.Unix,
+			Unix: &sdk.DurationScalar{
+				Unit: &sdk.DurationUnit.S,
+				Value: sdk.Float64(float64(*u.Created)),
 			},
 		},
 		Relations: &sdk.SocialAccountRelations{

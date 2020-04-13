@@ -7,8 +7,8 @@ const (
 
 type PostSort struct {
     Content *TextSort `json:"content,omitempty" yaml:"content,omitempty"`
+    CreatedAt *TimestampSort `json:"createdAt,omitempty" yaml:"createdAt,omitempty"`
     Id *ServiceIdSort `json:"id,omitempty" yaml:"id,omitempty"`
-    Meta *TypeMetaSort `json:"meta,omitempty" yaml:"meta,omitempty"`
     Pinned *string `json:"pinned,omitempty" yaml:"pinned,omitempty"`
     Sensitive *string `json:"sensitive,omitempty" yaml:"sensitive,omitempty"`
     SpoilerText *TextSort `json:"spoilerText,omitempty" yaml:"spoilerText,omitempty"`

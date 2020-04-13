@@ -219,13 +219,11 @@ func mapFirebaseStoryToPost(s firebaseStory) (sdk.Post) {
 				return &v
 			}(),
 		},
-		Meta: &sdk.TypeMeta{
-			CreatedAt: &sdk.Timestamp{
-				Kind: &sdk.TimestampKind.Unix,
-				Value: &sdk.DurationScalar{
-					Unit:  &sdk.DurationUnit.S,
-					Value: sdk.Float64(float64(*s.Time)),
-				},
+		CreatedAt: &sdk.Timestamp{
+			Kind: &sdk.TimestampKind.Unix,
+			Unix: &sdk.DurationScalar{
+				Unit:  &sdk.DurationUnit.S,
+				Value: sdk.Float64(float64(*s.Time)),
 			},
 		},
 		Relations: &sdk.PostRelations{

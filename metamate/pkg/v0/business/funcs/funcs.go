@@ -851,10 +851,7 @@ func Inspect() types.FuncTransformer {
 func NewError(svc *sdk.Service, kind, message string) sdk.Error {
 	return sdk.Error{
 		Kind: sdk.String(kind),
-		Message: &sdk.Text{
-			Formatting: &sdk.FormattingKind.Plain,
-			Value:      sdk.String(message),
-		},
+		Message: &message,
 		Service: svc,
 	}
 }

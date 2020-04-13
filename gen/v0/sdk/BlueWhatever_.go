@@ -9,6 +9,7 @@ type BlueWhatever struct {
     AlternativeIds []Id `json:"alternativeIds,omitempty" yaml:"alternativeIds,omitempty"`
     BoolField *bool `json:"boolField,omitempty" yaml:"boolField,omitempty"`
     BoolList []bool `json:"boolList,omitempty" yaml:"boolList,omitempty"`
+    CreatedAt *Timestamp `json:"createdAt,omitempty" yaml:"createdAt,omitempty"`
     EnumField *string `json:"enumField,omitempty" yaml:"enumField,omitempty"`
     EnumList []string `json:"enumList,omitempty" yaml:"enumList,omitempty"`
     Float64Field *float64 `json:"float64Field,omitempty" yaml:"float64Field,omitempty"`
@@ -16,7 +17,6 @@ type BlueWhatever struct {
     Id *ServiceId `json:"id,omitempty" yaml:"id,omitempty"`
     Int32Field *int32 `json:"int32Field,omitempty" yaml:"int32Field,omitempty"`
     Int32List []int32 `json:"int32List,omitempty" yaml:"int32List,omitempty"`
-    Meta *TypeMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
     Relations *BlueWhateverRelations `json:"relations,omitempty" yaml:"relations,omitempty"`
     StringField *string `json:"stringField,omitempty" yaml:"stringField,omitempty"`
     StringList []string `json:"stringList,omitempty" yaml:"stringList,omitempty"`

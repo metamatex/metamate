@@ -77,9 +77,7 @@ func (svc Service) GetPosts(ctx context.Context, req sdk.GetPostsRequest) (rsp s
 
 	for _, err := range errs {
 		rsp.Errors = append(rsp.Errors, sdk.Error{
-			Message: &sdk.Text{
-				Value: sdk.String(err.Error()),
-			},
+			Message: sdk.String(err.Error()),
 		})
 	}
 
@@ -113,9 +111,7 @@ func (svc Service) GetPostFeeds(ctx context.Context, req sdk.GetPostFeedsRequest
 
 	for _, err := range errs {
 		rsp.Errors = append(rsp.Errors, sdk.Error{
-			Message: &sdk.Text{
-				Value: sdk.String(err.Error()),
-			},
+			Message: sdk.String(err.Error()),
 		})
 	}
 
@@ -161,9 +157,7 @@ func (svc Service) GetSocialAccounts(ctx context.Context, req sdk.GetSocialAccou
 
 	for _, err := range errs {
 		rsp.Errors = append(rsp.Errors, sdk.Error{
-			Message: &sdk.Text{
-				Value: sdk.String(err.Error()),
-			},
+			Message: sdk.String(err.Error()),
 		})
 	}
 

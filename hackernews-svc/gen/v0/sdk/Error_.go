@@ -8,7 +8,7 @@ const (
 type Error struct {
     Id *Id `json:"id,omitempty" yaml:"id,omitempty"`
     Kind *string `json:"kind,omitempty" yaml:"kind,omitempty"`
-    Message *Text `json:"message,omitempty" yaml:"message,omitempty"`
+    Message *string `json:"message,omitempty" yaml:"message,omitempty"`
     Service *Service `json:"service,omitempty" yaml:"service,omitempty"`
     Wraps *Error `json:"wraps,omitempty" yaml:"wraps,omitempty"`
 }

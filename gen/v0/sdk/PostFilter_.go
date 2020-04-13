@@ -9,8 +9,8 @@ type PostFilter struct {
     AlternativeIds *IdListFilter `json:"alternativeIds,omitempty" yaml:"alternativeIds,omitempty"`
     And []PostFilter `json:"and,omitempty" yaml:"and,omitempty"`
     Content *TextFilter `json:"content,omitempty" yaml:"content,omitempty"`
+    CreatedAt *TimestampFilter `json:"createdAt,omitempty" yaml:"createdAt,omitempty"`
     Id *ServiceIdFilter `json:"id,omitempty" yaml:"id,omitempty"`
-    Meta *TypeMetaFilter `json:"meta,omitempty" yaml:"meta,omitempty"`
     Not []PostFilter `json:"not,omitempty" yaml:"not,omitempty"`
     Or []PostFilter `json:"or,omitempty" yaml:"or,omitempty"`
     Pinned *BoolFilter `json:"pinned,omitempty" yaml:"pinned,omitempty"`

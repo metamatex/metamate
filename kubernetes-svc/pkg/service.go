@@ -104,9 +104,7 @@ func (s Service) GetServices(ctx context.Context, req sdk.GetServicesRequest) (r
 	if len(errs) != 0 {
 		for _, err := range errs {
 			rsp.Errors = append(rsp.Errors, sdk.Error{
-				Message: &sdk.Text{
-					Value: sdk.String(err.Error()),
-				},
+				Message: sdk.String(err.Error()),
 			})
 		}
 	}

@@ -8,8 +8,8 @@ const (
 type Post struct {
     AlternativeIds []Id `json:"alternativeIds,omitempty" yaml:"alternativeIds,omitempty"`
     Content *Text `json:"content,omitempty" yaml:"content,omitempty"`
+    CreatedAt *Timestamp `json:"createdAt,omitempty" yaml:"createdAt,omitempty"`
     Id *ServiceId `json:"id,omitempty" yaml:"id,omitempty"`
-    Meta *TypeMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
     Pinned *bool `json:"pinned,omitempty" yaml:"pinned,omitempty"`
     Relations *PostRelations `json:"relations,omitempty" yaml:"relations,omitempty"`
     Relationships *PostRelationships `json:"relationships,omitempty" yaml:"relationships,omitempty"`

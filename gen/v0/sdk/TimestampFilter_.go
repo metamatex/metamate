@@ -11,5 +11,5 @@ type TimestampFilter struct {
     Not []TimestampFilter `json:"not,omitempty" yaml:"not,omitempty"`
     Or []TimestampFilter `json:"or,omitempty" yaml:"or,omitempty"`
     Set *bool `json:"set,omitempty" yaml:"set,omitempty"`
-    Value *DurationScalarFilter `json:"value,omitempty" yaml:"value,omitempty"`
+    Unix *DurationScalarFilter `json:"unix,omitempty" yaml:"unix,omitempty"`
 }

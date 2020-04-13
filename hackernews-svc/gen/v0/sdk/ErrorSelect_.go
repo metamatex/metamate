@@ -9,7 +9,7 @@ type ErrorSelect struct {
     All *bool `json:"all,omitempty" yaml:"all,omitempty"`
     Id *IdSelect `json:"id,omitempty" yaml:"id,omitempty"`
     Kind *bool `json:"kind,omitempty" yaml:"kind,omitempty"`
-    Message *TextSelect `json:"message,omitempty" yaml:"message,omitempty"`
+    Message *bool `json:"message,omitempty" yaml:"message,omitempty"`
     Service *ServiceSelect `json:"service,omitempty" yaml:"service,omitempty"`
     Wraps *ErrorSelect `json:"wraps,omitempty" yaml:"wraps,omitempty"`
 }
