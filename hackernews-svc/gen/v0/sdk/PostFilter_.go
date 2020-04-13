@@ -11,10 +11,12 @@ type PostFilter struct {
     Content *TextFilter `json:"content,omitempty" yaml:"content,omitempty"`
     CreatedAt *TimestampFilter `json:"createdAt,omitempty" yaml:"createdAt,omitempty"`
     Id *ServiceIdFilter `json:"id,omitempty" yaml:"id,omitempty"`
+    IsPinned *BoolFilter `json:"isPinned,omitempty" yaml:"isPinned,omitempty"`
+    IsSensitive *BoolFilter `json:"isSensitive,omitempty" yaml:"isSensitive,omitempty"`
+    Links *HyperLinkListFilter `json:"links,omitempty" yaml:"links,omitempty"`
     Not []PostFilter `json:"not,omitempty" yaml:"not,omitempty"`
     Or []PostFilter `json:"or,omitempty" yaml:"or,omitempty"`
-    Pinned *BoolFilter `json:"pinned,omitempty" yaml:"pinned,omitempty"`
-    Sensitive *BoolFilter `json:"sensitive,omitempty" yaml:"sensitive,omitempty"`
     Set *bool `json:"set,omitempty" yaml:"set,omitempty"`
     SpoilerText *TextFilter `json:"spoilerText,omitempty" yaml:"spoilerText,omitempty"`
+    Title *TextFilter `json:"title,omitempty" yaml:"title,omitempty"`
 }

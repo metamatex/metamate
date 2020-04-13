@@ -23,6 +23,7 @@ const (
 	Service           = "Service"
 	Error             = "Error"
 	Url               = "Url"
+	HyperLink         = "HyperLink"
 	Email             = "Email"
 	ServiceId         = "ServiceId"
 	Id                = "Id"
@@ -32,7 +33,7 @@ const (
 	RequestMeta       = "RequestMeta"
 	TypeMeta          = "TypeMeta"
 
-	Text        = "Text"
+	Text = "Text"
 
 	Info          = "Info"
 	SocialAccount = "SocialAccount"
