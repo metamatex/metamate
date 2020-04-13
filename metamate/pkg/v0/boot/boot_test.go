@@ -62,9 +62,7 @@ func TestBoot(t *testing.T) {
 
 	f := func(ctx context.Context, gCliReq generic.Generic) (gCliRsp generic.Generic, err error) {
 		gCliReq.MustSetGeneric([]string{fieldnames.Select, fieldnames.Errors}, d.Factory.MustFromStruct(sdk.ErrorSelect{
-			Message: &sdk.TextSelect{
-				Value: sdk.Bool(true),
-			},
+			Message: sdk.Bool(true),
 		}))
 
 		gCliRsp = d.ServeFunc(ctx, gCliReq)
@@ -135,9 +133,7 @@ func FTestError(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx
 				},
 				Select: &sdk.GetWhateversResponseSelect{
 					Errors: &sdk.ErrorSelect{
-						Message: &sdk.TextSelect{
-							Value: sdk.Bool(true),
-						},
+						Message: sdk.Bool(true),
 					},
 				},
 			}
@@ -195,9 +191,7 @@ func FTestHackernewsSocialAccount(t *testing.T, ctx context.Context, f generic.F
 						Relations: &sdk.SocialAccountRelationsSelect{
 							AuthorsPosts: &sdk.PostsCollectionSelect{
 								Errors: &sdk.ErrorSelect{
-									Message: &sdk.TextSelect{
-										Value: sdk.Bool(true),
-									},
+									Message: sdk.Bool(true),
 								},
 								Posts: &sdk.PostSelect{
 									Id: &sdk.ServiceIdSelect{
@@ -213,9 +207,7 @@ func FTestHackernewsSocialAccount(t *testing.T, ctx context.Context, f generic.F
 					AuthorsPosts: &sdk.GetPostsCollection{
 						Select: &sdk.PostsCollectionSelect{
 							Errors: &sdk.ErrorSelect{
-								Message: &sdk.TextSelect{
-									Value: sdk.Bool(true),
-								},
+								Message: sdk.Bool(true),
 							},
 							Posts: &sdk.PostSelect{
 								Id: &sdk.ServiceIdSelect{
