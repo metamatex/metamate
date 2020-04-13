@@ -7,6 +7,6 @@ const (
 
 type LookupServiceResponseSelect struct {
     All *bool `json:"all,omitempty" yaml:"all,omitempty"`
-    Meta *ResponseMetaSelect `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Errors *ErrorSelect `json:"errors,omitempty" yaml:"errors,omitempty"`
     Output *LookupServiceOutputSelect `json:"output,omitempty" yaml:"output,omitempty"`
 }

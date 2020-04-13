@@ -10,6 +10,7 @@ import (
 const (
 	Pipe       = "pipe"
 	ReqFilter  = "reqFilter"
+	Error      = "error"
 	Mastodon   = "mastodon"
 	Hackernews = "hackernews"
 	Kubernetes = "kubernetes"

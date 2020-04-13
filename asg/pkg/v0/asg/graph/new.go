@@ -127,23 +127,6 @@ func addExpansion(root *RootNode) () {
 		TypeField("createdAt", typenames.Timestamp),
 	})
 
-	root.AddEnumNode(enumnames.ResponseKind, []string{
-		"service",
-		"bus",
-	})
-
-	root.AddTypeNode(typenames.ResponseMeta, FieldNodeSlice{
-		EnumField("kind", enumnames.ResponseKind),
-		ListField(TypeField(fieldnames.Errors, typenames.Error)),
-		ListField(TypeField("services", typenames.Service)),
-	})
-
-	root.AddTypeNode(typenames.CollectionMeta, FieldNodeSlice{
-		ListField(TypeField(fieldnames.Errors, typenames.Error)),
-		TypeField(fieldnames.Pagination, typenames.Pagination),
-		Int32Field(fieldnames.Count),
-	})
-
 	root.AddTypeNode(typenames.IndexPage, FieldNodeSlice{
 		Int32Field("page"),
 	})

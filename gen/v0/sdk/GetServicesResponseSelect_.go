@@ -7,6 +7,8 @@ const (
 
 type GetServicesResponseSelect struct {
     All *bool `json:"all,omitempty" yaml:"all,omitempty"`
-    Meta *CollectionMetaSelect `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Count *bool `json:"count,omitempty" yaml:"count,omitempty"`
+    Errors *ErrorSelect `json:"errors,omitempty" yaml:"errors,omitempty"`
+    Pagination *PaginationSelect `json:"pagination,omitempty" yaml:"pagination,omitempty"`
     Services *ServiceSelect `json:"services,omitempty" yaml:"services,omitempty"`
 }

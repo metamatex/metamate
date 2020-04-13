@@ -95,9 +95,7 @@ func mapUserToSocialAccount(u user) (a sdk.SocialAccount) {
 		},
 		Relations: &sdk.SocialAccountRelations{
 			AuthorsPosts: &sdk.PostsCollection{
-				Meta: &sdk.CollectionMeta{
-					Count: sdk.Int32(int32(len(u.Submitted))),
-				},
+				Count: sdk.Int32(int32(len(u.Submitted))),
 				Posts: func() (ss []sdk.Post) {
 					for _, s := range u.Submitted {
 						ss = append(ss, sdk.Post{

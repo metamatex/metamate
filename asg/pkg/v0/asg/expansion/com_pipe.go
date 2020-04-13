@@ -31,7 +31,7 @@ func generatePipeRequest(root *graph.RootNode, tn *graph.TypeNode) {
 
 func generatePipeResponse(root *graph.RootNode, tn *graph.TypeNode) {
 	responseNode := root.AddTypeNode(typenames.PipeResponse(tn.Name()), graph.FieldNodeSlice{
-		graph.TypeField(fieldnames.Meta, typenames.ResponseMeta),
+		graph.ListField(graph.TypeField(fieldnames.Errors, typenames.Error)),
 		graph.TypeField(fieldnames.Context, typenames.PipeContext(tn.Name())),
 	}, graph.Flags{
 		typeflags.IsResponse: true,

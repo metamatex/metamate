@@ -8,8 +8,6 @@ import (
 )
 
 func getSocialAccountId(ctx context.Context, c *mastodon.Client, req sdk.GetSocialAccountsRequest) (rsp sdk.GetSocialAccountsResponse) {
-	rsp.Meta = &sdk.CollectionMeta{}
-
 	err := func() (err error) {
 		var account *mastodon.Account
 		switch *req.Mode.Id.Kind {
@@ -44,7 +42,7 @@ func getSocialAccountId(ctx context.Context, c *mastodon.Client, req sdk.GetSoci
 		return
 	}()
 	if err != nil {
-		rsp.Meta.Errors = append(rsp.Meta.Errors, sdk.Error{
+		rsp.Errors = append(rsp.Errors, sdk.Error{
 			Message: &sdk.Text{
 				Value: sdk.String(err.Error()),
 			},
@@ -55,8 +53,6 @@ func getSocialAccountId(ctx context.Context, c *mastodon.Client, req sdk.GetSoci
 }
 
 func getSocialAccountsSearch(ctx context.Context, c *mastodon.Client, req sdk.GetSocialAccountsRequest) (rsp sdk.GetSocialAccountsResponse) {
-	rsp.Meta = &sdk.CollectionMeta{}
-
 	err := func() (err error) {
 		accounts, err := c.AccountsSearch(ctx, *req.Mode.Search.Term, 100)
 		if err != nil {
@@ -68,7 +64,7 @@ func getSocialAccountsSearch(ctx context.Context, c *mastodon.Client, req sdk.Ge
 		return
 	}()
 	if err != nil {
-		rsp.Meta.Errors = append(rsp.Meta.Errors, sdk.Error{
+		rsp.Errors = append(rsp.Errors, sdk.Error{
 			Message: &sdk.Text{
 				Value: sdk.String(err.Error()),
 			},
@@ -79,8 +75,6 @@ func getSocialAccountsSearch(ctx context.Context, c *mastodon.Client, req sdk.Ge
 }
 
 func getSocialAccountsRelation(ctx context.Context, c *mastodon.Client, req sdk.GetSocialAccountsRequest) (rsp sdk.GetSocialAccountsResponse) {
-	rsp.Meta = &sdk.CollectionMeta{}
-
 	var accounts []*mastodon.Account
 
 	//var pagination *sdk.Pagination
@@ -139,7 +133,7 @@ func getSocialAccountsRelation(ctx context.Context, c *mastodon.Client, req sdk.
 		return
 	}()
 	if err != nil {
-		rsp.Meta.Errors = append(rsp.Meta.Errors, sdk.Error{
+		rsp.Errors = append(rsp.Errors, sdk.Error{
 			Message: &sdk.Text{
 				Value: sdk.String(err.Error()),
 			},
@@ -166,7 +160,7 @@ func getSocialAccountsRelation(ctx context.Context, c *mastodon.Client, req sdk.
 	//		pagination.Current = pagination
 	//	}
 	//
-	//	rsp.Meta.Pagination = pagination
+	//	rsp.Pagination = pagination
 	//}
 
 	rsp.SocialAccounts = MapSocialAccountsFromMastodonAccounts(accounts)

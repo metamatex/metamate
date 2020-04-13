@@ -111,7 +111,7 @@ func Expand(verbosity int, root *graph.RootNode) (err error) {
 			generateSelectRecursive(root, tn)
 		})
 
-		root.Types.ByNames(typenames.Pagination, typenames.ResponseMeta, typenames.CollectionMeta).Each(func(tn *graph.TypeNode) {
+		root.Types.ByNames(typenames.Pagination).Each(func(tn *graph.TypeNode) {
 			generateSelectRecursive(root, tn)
 		})
 	})

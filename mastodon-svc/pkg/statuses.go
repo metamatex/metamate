@@ -7,8 +7,6 @@ import (
 )
 
 func getPostId(ctx context.Context, c *mastodon.Client, req sdk.GetPostsRequest) (rsp sdk.GetPostsResponse) {
-	rsp.Meta = &sdk.CollectionMeta{}
-
 	err := func() (err error) {
 		var status *mastodon.Status
 		switch *req.Mode.Id.Kind {
@@ -25,7 +23,7 @@ func getPostId(ctx context.Context, c *mastodon.Client, req sdk.GetPostsRequest)
 		return
 	}()
 	if err != nil {
-		rsp.Meta.Errors = append(rsp.Meta.Errors, sdk.Error{
+		rsp.Errors = append(rsp.Errors, sdk.Error{
 			Message: &sdk.Text{
 				Formatting: &sdk.FormattingKind.Plain,
 				Value:      sdk.String(err.Error()),
@@ -37,8 +35,6 @@ func getPostId(ctx context.Context, c *mastodon.Client, req sdk.GetPostsRequest)
 }
 
 func getPostsSearch(ctx context.Context, c *mastodon.Client, req sdk.GetPostsRequest) (rsp sdk.GetPostsResponse) {
-	rsp.Meta = &sdk.CollectionMeta{}
-
 	err := func() (err error) {
 		results, err := c.Search(ctx, *req.Mode.Search.Term, false)
 		if err != nil {
@@ -50,7 +46,7 @@ func getPostsSearch(ctx context.Context, c *mastodon.Client, req sdk.GetPostsReq
 		return
 	}()
 	if err != nil {
-		rsp.Meta.Errors = append(rsp.Meta.Errors, sdk.Error{
+		rsp.Errors = append(rsp.Errors, sdk.Error{
 			Message: &sdk.Text{
 				Formatting: &sdk.FormattingKind.Plain,
 				Value:      sdk.String(err.Error()),
@@ -62,8 +58,6 @@ func getPostsSearch(ctx context.Context, c *mastodon.Client, req sdk.GetPostsReq
 }
 
 func getPostsRelation(ctx context.Context, c *mastodon.Client, req sdk.GetPostsRequest) (rsp sdk.GetPostsResponse) {
-	rsp.Meta = &sdk.CollectionMeta{}
-
 	var statuses []*mastodon.Status
 
 	//var page *sdk.Page
@@ -167,7 +161,7 @@ func getPostsRelation(ctx context.Context, c *mastodon.Client, req sdk.GetPostsR
 		return
 	}()
 	if err != nil {
-		rsp.Meta.Errors = append(rsp.Meta.Errors, sdk.Error{
+		rsp.Errors = append(rsp.Errors, sdk.Error{
 			Message: &sdk.Text{
 				Formatting: &sdk.FormattingKind.Plain,
 				Value:      sdk.String(err.Error()),
@@ -193,7 +187,7 @@ func getPostsRelation(ctx context.Context, c *mastodon.Client, req sdk.GetPostsR
 	//		pagination.Current = page
 	//	}
 	//
-	//	rsp.Meta.Pagination = pagination
+	//	rsp.Pagination = pagination
 	//}
 
 	rsp.Posts = MapPostsFromStatuses(statuses)

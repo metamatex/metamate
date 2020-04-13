@@ -6,6 +6,8 @@ const (
 )
 
 type WhateversCollection struct {
-    Meta *CollectionMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Count *int32 `json:"count,omitempty" yaml:"count,omitempty"`
+    Errors []Error `json:"errors,omitempty" yaml:"errors,omitempty"`
+    Pagination *Pagination `json:"pagination,omitempty" yaml:"pagination,omitempty"`
     Whatevers []Whatever `json:"whatevers,omitempty" yaml:"whatevers,omitempty"`
 }

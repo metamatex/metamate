@@ -108,19 +108,13 @@ func MapPostFromStatus(status mastodon.Status) (post sdk.Post) {
 				SocialAccounts: MapFromMastodonMentions(status.Mentions),
 			},
 			FavoredBySocialAccounts: &sdk.SocialAccountsCollection{
-				Meta: &sdk.CollectionMeta{
-					Count: sdk.Int32(int32(status.FavouritesCount)),
-				},
+				Count: sdk.Int32(int32(status.FavouritesCount)),
 			},
 			RebloggedByPosts: &sdk.PostsCollection{
-				Meta: &sdk.CollectionMeta{
-					Count: sdk.Int32(int32(status.ReblogsCount)),
-				},
+				Count: sdk.Int32(int32(status.ReblogsCount)),
 			},
 			WasRepliedToByPosts: &sdk.PostsCollection{
-				Meta: &sdk.CollectionMeta{
-					Count: sdk.Int32(int32(status.RepliesCount)),
-				},
+				Count: sdk.Int32(int32(status.RepliesCount)),
 			},
 			AuthoredBySocialAccount: &author,
 		},
@@ -279,19 +273,13 @@ func MapSocialAccountFromMastodonAccount(account mastodon.Account) (person sdk.S
 		},
 		Relations: &sdk.SocialAccountRelations{
 			FollowedBySocialAccounts: &sdk.SocialAccountsCollection{
-				Meta: &sdk.CollectionMeta{
-					Count: sdk.Int32(int32(account.FollowersCount)),
-				},
+				Count: sdk.Int32(int32(account.FollowersCount)),
 			},
 			FollowsSocialAccounts: &sdk.SocialAccountsCollection{
-				Meta: &sdk.CollectionMeta{
-					Count: sdk.Int32(int32(account.FollowingCount)),
-				},
+				Count: sdk.Int32(int32(account.FollowingCount)),
 			},
 			AuthorsPosts: &sdk.PostsCollection{
-				Meta: &sdk.CollectionMeta{
-					Count: sdk.Int32(int32(account.StatusesCount)),
-				},
+				Count: sdk.Int32(int32(account.StatusesCount)),
 			},
 		},
 	}

@@ -240,9 +240,7 @@ func mapFirebaseStoryToPost(s firebaseStory) (sdk.Post) {
 				}
 
 				return &sdk.PostsCollection{
-					Meta: &sdk.CollectionMeta{
-						Count: s.Descandants,
-					},
+					Count: s.Descandants,
 					Posts: func() (ss []sdk.Post) {
 						for _, k := range s.Kids {
 							ss = append(ss, sdk.Post{
@@ -273,9 +271,7 @@ func mapFirebaseStoryToPost(s firebaseStory) (sdk.Post) {
 				}
 
 				return &sdk.SocialAccountsCollection{
-					Meta: &sdk.CollectionMeta{
-						Count: s.Score,
-					},
+					Count: s.Score,
 				}
 			}(),
 		},

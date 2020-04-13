@@ -7,6 +7,8 @@ const (
 
 type GetPostsResponseSelect struct {
     All *bool `json:"all,omitempty" yaml:"all,omitempty"`
-    Meta *CollectionMetaSelect `json:"meta,omitempty" yaml:"meta,omitempty"`
+    Count *bool `json:"count,omitempty" yaml:"count,omitempty"`
+    Errors *ErrorSelect `json:"errors,omitempty" yaml:"errors,omitempty"`
+    Pagination *PaginationSelect `json:"pagination,omitempty" yaml:"pagination,omitempty"`
     Posts *PostSelect `json:"posts,omitempty" yaml:"posts,omitempty"`
 }
