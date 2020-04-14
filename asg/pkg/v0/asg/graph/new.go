@@ -41,7 +41,7 @@ func NewRoot() (root *RootNode) {
 	return
 }
 
-func addActionEndpoints(root *RootNode) () {
+func addActionEndpoints(root *RootNode) {
 	root.AddActionEndpoint(endpointnames.LookupService,
 		FieldNodeSlice{},
 		FieldNodeSlice{
@@ -50,7 +50,7 @@ func addActionEndpoints(root *RootNode) () {
 	)
 }
 
-func addExpansion(root *RootNode) () {
+func addExpansion(root *RootNode) {
 	root.AddTypeNode(typenames.IdGetMode, FieldNodeSlice{
 		TypeField(fieldnames.Id, typenames.Id),
 	})
@@ -128,11 +128,11 @@ func addExpansion(root *RootNode) () {
 	})
 
 	root.AddTypeNode(typenames.IndexPage, FieldNodeSlice{
-		Int32Field("page"),
+		Int32Field(fieldnames.Value),
 	})
 
 	root.AddTypeNode(typenames.CursorPage, FieldNodeSlice{
-		StringField("value"),
+		StringField(fieldnames.Value),
 	})
 
 	root.AddTypeNode(typenames.OffsetPage, FieldNodeSlice{
@@ -165,7 +165,7 @@ func addExpansion(root *RootNode) () {
 	return
 }
 
-func addEntities(root *RootNode) () {
+func addEntities(root *RootNode) {
 	root.AddTypeNode(typenames.TypeMeta, FieldNodeSlice{
 		TypeField(fieldnames.Service, typenames.Service),
 		BoolField("archived"),
@@ -232,12 +232,12 @@ func addEntities(root *RootNode) () {
 	root.AddTypeNode(typenames.Text, FieldNodeSlice{
 		EnumField("language", enumnames.Language),
 		EnumField("formatting", enumnames.FormattingKind),
-		StringField("value"),
+		StringField(fieldnames.Value),
 		//ListField(TypeField("translations", Translation)),
 	})
 
 	root.AddEnumNode(enumnames.ValueKind, []string{
-		"value",
+		fieldnames.Value,
 		"range",
 	})
 
@@ -262,17 +262,17 @@ func addEntities(root *RootNode) () {
 	})
 
 	root.AddTypeNode(typenames.Url, FieldNodeSlice{
-		StringField("value", Flags{fieldflags.ValidateUrl: true}),
+		StringField(fieldnames.Value, Flags{fieldflags.ValidateUrl: true}),
 	}, Flags{
 		typeflags.GetPassEndpoint: true,
 	})
 
 	root.AddTypeNode(typenames.Email, FieldNodeSlice{
-		StringField("value", Flags{fieldflags.ValidateEmail: true, fieldflags.ValidateIsSet: true}),
+		StringField(fieldnames.Value, Flags{fieldflags.ValidateEmail: true, fieldflags.ValidateIsSet: true}),
 	})
 
 	root.AddTypeNode(typenames.ServiceId, FieldNodeSlice{
-		StringField("value", Flags{fieldflags.ValidateIsSet: true}),
+		StringField(fieldnames.Value, Flags{fieldflags.ValidateIsSet: true}),
 		StringField(fieldnames.ServiceName),
 	})
 
