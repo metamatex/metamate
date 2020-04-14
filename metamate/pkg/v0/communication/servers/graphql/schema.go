@@ -94,8 +94,17 @@ func getEndpointField(f generic.Factory, serveFunc types.ServeFunc, en *graph.En
 		case fieldnames.Relations:
 		case fieldnames.Select:
 		default:
-			args[fn.Name()] = &graphql.ArgumentConfig{
-				Type: sCtx.MustGetInputObject(fn.Edges.Type.Holds().Name() + "Input"),
+			if fn.Name() == "pages" {
+				println("a")
+			}
+			if fn.IsTypeList() {
+				args[fn.Name()] = &graphql.ArgumentConfig{
+					Type: graphql.NewList(sCtx.MustGetInputObject(fn.Edges.Type.Holds().Name() + "Input")),
+				}
+			} else {
+				args[fn.Name()] = &graphql.ArgumentConfig{
+					Type: sCtx.MustGetInputObject(fn.Edges.Type.Holds().Name() + "Input"),
+				}
 			}
 		}
 	}
