@@ -89,6 +89,33 @@ func ReduceSvcRspErrsToCliRspErrs(f generic.Factory) types.FuncTransformer {
 	}
 }
 
+func ReduceSvcRspPaginationsToCliRspPagination(f generic.Factory) types.FuncTransformer {
+	return types.FuncTransformer{
+		Name0: FuncName,
+		Func: func(ctx types.ReqCtx) types.ReqCtx {
+			p := sdk.Pagination{}
+
+			for _, gSvcRsp := range ctx.GSvcRsps {
+				gPagination, ok := gSvcRsp.Generic(fieldnames.Pagination)
+				if !ok {
+				    continue
+				}
+
+				var p0 sdk.Pagination
+				gPagination.MustToStruct(&p0)
+
+				p.Previous = append(p.Previous, p0.Previous...)
+				p.Current = append(p.Current, p0.Current...)
+				p.Next = append(p.Next, p0.Next...)
+			}
+
+			ctx.GCliRsp.MustSetGeneric([]string{fieldnames.Pagination}, f.MustFromStruct(p))
+
+			return ctx
+		},
+	}
+}
+
 func HardFilterGCliRsp() types.FuncTransformer {
 	return types.FuncTransformer{
 		Name0: FuncName,
@@ -736,6 +763,66 @@ func AddSvcToSvcIds() types.FuncTransformer {
 			}
 
 			gSlice.Set(gs)
+
+			return ctx
+		},
+	}
+}
+
+func AddSvcIdToSvcPages(f generic.Factory) types.FuncTransformer {
+	return types.FuncTransformer{
+		Name0: AddSvcToEntitiesName,
+		Func: func(ctx types.ReqCtx) types.ReqCtx {
+			gPagination, ok := ctx.GSvcRsp.Generic(fieldnames.Pagination)
+			if !ok {
+				return ctx
+			}
+
+			var p sdk.Pagination
+			gPagination.MustToStruct(&p)
+
+			for i, _ := range p.Previous {
+				p.Previous[i].Id = ctx.Svc.Id
+			}
+
+			for i, _ := range p.Current {
+				p.Current[i].Id = ctx.Svc.Id
+			}
+
+			for i, _ := range p.Next {
+				p.Next[i].Id = ctx.Svc.Id
+			}
+
+			ctx.GSvcRsp.MustSetGeneric([]string{fieldnames.Pagination}, f.MustFromStruct(p))
+
+			return ctx
+		},
+	}
+}
+
+func FilterSvcPages(f generic.Factory) types.FuncTransformer {
+	return types.FuncTransformer{
+		Name0: AddSvcToEntitiesName,
+		Func: func(ctx types.ReqCtx) types.ReqCtx {
+			gPages, ok := ctx.GSvcReq.GenericSlice(fieldnames.Pages)
+			if !ok {
+				return ctx
+			}
+
+			filter := sdk.ServicePageFilter{
+				Id: &sdk.ServiceIdFilter{
+					ServiceName: &sdk.StringFilter{
+						Is: ctx.Svc.Id.ServiceName,
+					},
+					Value: &sdk.StringFilter{
+						Is: ctx.Svc.Id.Value,
+					},
+				},
+			}
+
+			gPages = gPages.Filter(false, f.MustFromStruct(filter))
+
+			ctx.GSvcReq.MustSetGenericSlice([]string{fieldnames.Pages}, gPages)
 
 			return ctx
 		},

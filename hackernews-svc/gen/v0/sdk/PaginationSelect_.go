@@ -7,7 +7,7 @@ const (
 
 type PaginationSelect struct {
     All *bool `json:"all,omitempty" yaml:"all,omitempty"`
-    Current *PageSelect `json:"current,omitempty" yaml:"current,omitempty"`
-    Next *PageSelect `json:"next,omitempty" yaml:"next,omitempty"`
-    Previous *PageSelect `json:"previous,omitempty" yaml:"previous,omitempty"`
+    Current *ServicePageSelect `json:"current,omitempty" yaml:"current,omitempty"`
+    Next *ServicePageSelect `json:"next,omitempty" yaml:"next,omitempty"`
+    Previous *ServicePageSelect `json:"previous,omitempty" yaml:"previous,omitempty"`
 }

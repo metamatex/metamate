@@ -9,6 +9,7 @@ var SocialAccountRelationName = struct{
     SocialAccountAuthorsPosts string
     SocialAccountBlockedBySocialAccounts string
     SocialAccountBlocksSocialAccounts string
+    SocialAccountBookmarksPosts string
     SocialAccountFavorsPosts string
     SocialAccountFollowedBySocialAccounts string
     SocialAccountFollowsSocialAccounts string
@@ -27,6 +28,7 @@ var SocialAccountRelationName = struct{
     SocialAccountAuthorsPosts: "SocialAccountAuthorsPosts",
     SocialAccountBlockedBySocialAccounts: "SocialAccountBlockedBySocialAccounts",
     SocialAccountBlocksSocialAccounts: "SocialAccountBlocksSocialAccounts",
+    SocialAccountBookmarksPosts: "SocialAccountBookmarksPosts",
     SocialAccountFavorsPosts: "SocialAccountFavorsPosts",
     SocialAccountFollowedBySocialAccounts: "SocialAccountFollowedBySocialAccounts",
     SocialAccountFollowsSocialAccounts: "SocialAccountFollowsSocialAccounts",

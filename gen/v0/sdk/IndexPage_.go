@@ -6,5 +6,5 @@ const (
 )
 
 type IndexPage struct {
-    Page *int32 `json:"page,omitempty" yaml:"page,omitempty"`
+    Value *int32 `json:"value,omitempty" yaml:"value,omitempty"`
 }

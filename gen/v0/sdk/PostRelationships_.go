@@ -7,6 +7,7 @@ const (
 
 type PostRelationships struct {
     AuthoredByMe *bool `json:"authoredByMe,omitempty" yaml:"authoredByMe,omitempty"`
+    BookmarkedByMe *bool `json:"bookmarkedByMe,omitempty" yaml:"bookmarkedByMe,omitempty"`
     FavoredByMe *bool `json:"favoredByMe,omitempty" yaml:"favoredByMe,omitempty"`
     MentionsMe *bool `json:"mentionsMe,omitempty" yaml:"mentionsMe,omitempty"`
     MutedByMe *bool `json:"mutedByMe,omitempty" yaml:"mutedByMe,omitempty"`

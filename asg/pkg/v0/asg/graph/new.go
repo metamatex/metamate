@@ -147,14 +147,14 @@ func addExpansion(root *RootNode) {
 	})
 
 	root.AddTypeNode(typenames.ServicePage, FieldNodeSlice{
-		TypeField(fieldnames.Service, typenames.Service),
+		TypeField(fieldnames.Id, typenames.ServiceId),
 		TypeField("page", typenames.Page),
 	})
 
 	root.AddTypeNode(typenames.Pagination, FieldNodeSlice{
-		TypeField("previous", typenames.Page),
-		TypeField("current", typenames.Page),
-		TypeField("next", typenames.Page),
+		ListField(TypeField("previous", typenames.ServicePage)),
+		ListField(TypeField("current", typenames.ServicePage)),
+		ListField(TypeField("next", typenames.ServicePage)),
 	})
 
 	root.AddEnumNode(enumnames.SortKind, []string{
@@ -434,6 +434,11 @@ func addEntities(root *RootNode) {
 	root.AddRelationNode(
 		RelationPath{typenames.SocialAccount, []string{present.Mutes}, cardinality.Many, typenames.Post},
 		RelationPath{typenames.Post, []string{past.Muted, preposition.By}, cardinality.Many, typenames.SocialAccount},
+	)
+
+	root.AddRelationNode(
+		RelationPath{typenames.SocialAccount, []string{present.Bookmarks}, cardinality.Many, typenames.Post},
+		RelationPath{typenames.Post, []string{past.Bookmarked, preposition.By}, cardinality.Many, typenames.SocialAccount},
 	)
 
 	root.AddRelationNode(

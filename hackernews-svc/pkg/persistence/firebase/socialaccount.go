@@ -1,4 +1,4 @@
-package pkg
+package firebase
 
 import (
 	"encoding/json"
@@ -17,7 +17,7 @@ type user struct {
 	Submitted []int
 }
 
-func getSocialAccountId(c *http.Client, req sdk.GetSocialAccountsRequest) (as []sdk.SocialAccount, errs []error) {
+func GetSocialAccountId(c *http.Client, req sdk.GetSocialAccountsRequest) (as []sdk.SocialAccount, errs []error) {
 	err := func() (err error) {
 		var url string
 
@@ -36,6 +36,7 @@ func getSocialAccountId(c *http.Client, req sdk.GetSocialAccountsRequest) (as []
 		if err != nil {
 			return
 		}
+		defer rsp.Body.Close()
 
 		u := user{}
 		err = json.NewDecoder(rsp.Body).Decode(&u)
@@ -80,6 +81,7 @@ func mapUserToSocialAccount(u user) (a sdk.SocialAccount) {
 				},
 			},
 		},
+		Points: sdk.Int32(int32(*u.Karma)),
 		Note: &sdk.Text{
 			Formatting: &sdk.FormattingKind.Html,
 			Value:      u.About,

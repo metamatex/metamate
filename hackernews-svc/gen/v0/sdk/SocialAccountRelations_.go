@@ -9,6 +9,7 @@ type SocialAccountRelations struct {
     AuthorsPosts *PostsCollection `json:"authorsPosts,omitempty" yaml:"authorsPosts,omitempty"`
     BlockedBySocialAccounts *SocialAccountsCollection `json:"blockedBySocialAccounts,omitempty" yaml:"blockedBySocialAccounts,omitempty"`
     BlocksSocialAccounts *SocialAccountsCollection `json:"blocksSocialAccounts,omitempty" yaml:"blocksSocialAccounts,omitempty"`
+    BookmarksPosts *PostsCollection `json:"bookmarksPosts,omitempty" yaml:"bookmarksPosts,omitempty"`
     FavorsPosts *PostsCollection `json:"favorsPosts,omitempty" yaml:"favorsPosts,omitempty"`
     FollowedBySocialAccounts *SocialAccountsCollection `json:"followedBySocialAccounts,omitempty" yaml:"followedBySocialAccounts,omitempty"`
     FollowsSocialAccounts *SocialAccountsCollection `json:"followsSocialAccounts,omitempty" yaml:"followsSocialAccounts,omitempty"`

@@ -8,6 +8,7 @@ const (
 type PostRelations struct {
     AttachesAttachments *AttachmentsCollection `json:"attachesAttachments,omitempty" yaml:"attachesAttachments,omitempty"`
     AuthoredBySocialAccount *SocialAccount `json:"authoredBySocialAccount,omitempty" yaml:"authoredBySocialAccount,omitempty"`
+    BookmarkedBySocialAccounts *SocialAccountsCollection `json:"bookmarkedBySocialAccounts,omitempty" yaml:"bookmarkedBySocialAccounts,omitempty"`
     ContainedByPostFeeds *PostFeedsCollection `json:"containedByPostFeeds,omitempty" yaml:"containedByPostFeeds,omitempty"`
     FavoredBySocialAccounts *SocialAccountsCollection `json:"favoredBySocialAccounts,omitempty" yaml:"favoredBySocialAccounts,omitempty"`
     MentionsSocialAccounts *SocialAccountsCollection `json:"mentionsSocialAccounts,omitempty" yaml:"mentionsSocialAccounts,omitempty"`

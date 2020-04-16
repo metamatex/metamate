@@ -90,6 +90,7 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 														funcs.Log(config.SvcReq, logTemplates),
 														funcs.HandleSvcReq(cachedReqHs),
 														funcs.AddSvcToSvcIds(),
+														funcs.AddSvcIdToSvcPages(f),
 														funcs.Log(config.SvcRsp, logTemplates),
 													),
 												funcs.CollectSvcRsps,
@@ -97,6 +98,7 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 											Do(
 												funcs.ReduceSvcRspsToCliRsp(f),
 												funcs.ReduceSvcRspErrsToCliRspErrs(f),
+												funcs.ReduceSvcRspPaginationsToCliRspPagination(f),
 											),
 										sdk.GetModeKind.Search: line.
 											Parallel(
@@ -106,10 +108,12 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 													Error(svcReqErrL, true).
 													Do(
 														funcs.Copy(types.GCliReq, types.GSvcReq),
+														funcs.FilterSvcPages(f),
 														funcs.Func(func(ctx types.ReqCtx) types.ReqCtx { ctx.GSvcReq.MustDelete(fieldnames.ServiceFilter); return ctx }),
 														funcs.Log(config.SvcReq, logTemplates),
 														funcs.HandleSvcReq(cachedReqHs),
 														funcs.AddSvcToSvcIds(),
+														funcs.AddSvcIdToSvcPages(f),
 														funcs.Log(config.SvcRsp, logTemplates),
 													),
 												funcs.CollectSvcRsps,
@@ -117,6 +121,7 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 											Do(
 												funcs.ReduceSvcRspsToCliRsp(f),
 												funcs.ReduceSvcRspErrsToCliRspErrs(f),
+												funcs.ReduceSvcRspPaginationsToCliRspPagination(f),
 											),
 										sdk.GetModeKind.Collection: line.
 											Parallel(
@@ -126,10 +131,12 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 													Error(svcReqErrL, true).
 													Do(
 														funcs.Copy(types.GCliReq, types.GSvcReq),
+														funcs.FilterSvcPages(f),
 														funcs.Func(func(ctx types.ReqCtx) types.ReqCtx { ctx.GSvcReq.MustDelete(fieldnames.ServiceFilter); return ctx }),
 														funcs.Log(config.SvcReq, logTemplates),
 														funcs.HandleSvcReq(cachedReqHs),
 														funcs.AddSvcToSvcIds(),
+														funcs.AddSvcIdToSvcPages(f),
 														funcs.Log(config.SvcRsp, logTemplates),
 													).
 													If(
@@ -141,6 +148,7 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 											Do(
 												funcs.ReduceSvcRspsToCliRsp(f),
 												funcs.ReduceSvcRspErrsToCliRspErrs(f),
+												funcs.ReduceSvcRspPaginationsToCliRspPagination(f),
 											),
 										sdk.GetModeKind.Relation: line.
 											Do(
@@ -151,6 +159,7 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 												funcs.Log(config.SvcReq, logTemplates),
 												funcs.HandleSvcReq(cachedReqHs),
 												funcs.AddSvcToSvcIds(),
+												funcs.AddSvcIdToSvcPages(f),
 												funcs.Log(config.SvcRsp, logTemplates),
 												funcs.GSvcRspToGCliRsp(),
 											),

@@ -9,6 +9,7 @@ type PostRelationsSelect struct {
     All *bool `json:"all,omitempty" yaml:"all,omitempty"`
     AttachesAttachments *AttachmentsCollectionSelect `json:"attachesAttachments,omitempty" yaml:"attachesAttachments,omitempty"`
     AuthoredBySocialAccount *SocialAccountSelect `json:"authoredBySocialAccount,omitempty" yaml:"authoredBySocialAccount,omitempty"`
+    BookmarkedBySocialAccounts *SocialAccountsCollectionSelect `json:"bookmarkedBySocialAccounts,omitempty" yaml:"bookmarkedBySocialAccounts,omitempty"`
     ContainedByPostFeeds *PostFeedsCollectionSelect `json:"containedByPostFeeds,omitempty" yaml:"containedByPostFeeds,omitempty"`
     FavoredBySocialAccounts *SocialAccountsCollectionSelect `json:"favoredBySocialAccounts,omitempty" yaml:"favoredBySocialAccounts,omitempty"`
     MentionsSocialAccounts *SocialAccountsCollectionSelect `json:"mentionsSocialAccounts,omitempty" yaml:"mentionsSocialAccounts,omitempty"`
