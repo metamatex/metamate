@@ -345,6 +345,7 @@ const (
 	Bombarded = "bombarded"
 	Bonded = "bonded"
 	Booked = "booked"
+	Bookmarked = "bookmarked"
 	Boomed = "boomed"
 	Boosted = "boosted"
 	Booted = "booted"

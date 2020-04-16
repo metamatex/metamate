@@ -5,6 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"github.com/metamatex/metamate/hackernews-svc/gen/v0/sdk"
+	"github.com/metamatex/metamate/hackernews-svc/pkg/persistence/angolia"
+	"github.com/metamatex/metamate/hackernews-svc/pkg/persistence/firebase"
+	"github.com/metamatex/metamate/hackernews-svc/pkg/persistence/static"
+	"github.com/metamatex/metamate/hackernews-svc/pkg/persistence/website"
 	"net/http"
 )
 
@@ -50,6 +54,8 @@ func (svc Service) GetGetPostsEndpoint() (sdk.GetPostsEndpoint) {
 							Relation: &sdk.StringFilter{
 								In: []string{
 									sdk.SocialAccountRelationName.SocialAccountAuthorsPosts,
+									sdk.SocialAccountRelationName.SocialAccountBookmarksPosts,
+									sdk.PostFeedRelationName.PostFeedContainsPosts,
 								},
 							},
 						},
@@ -61,18 +67,28 @@ func (svc Service) GetGetPostsEndpoint() (sdk.GetPostsEndpoint) {
 }
 
 func (svc Service) GetPosts(ctx context.Context, req sdk.GetPostsRequest) (rsp sdk.GetPostsResponse) {
-	var ss []sdk.Post
+	var ps []sdk.Post
+	var pagination *sdk.Pagination
 	var errs []error
 
 	switch *req.Mode.Kind {
 	case sdk.GetModeKind.Id:
-		ss, errs = getPostsId(svc.c, req)
+		ps, errs = firebase.GetPostsId(svc.c, req)
 	case sdk.GetModeKind.Relation:
-		ss, errs = getPostsRelation(svc.c, req)
+		switch *req.Mode.Relation.Relation {
+		case sdk.SocialAccountRelationName.SocialAccountAuthorsPosts:
+			ps, errs = firebase.GetSocialAccountAuthorsPosts(svc.c, req)
+		case sdk.SocialAccountRelationName.SocialAccountBookmarksPosts:
+			ps, pagination, errs = website.GetSocialAccountBookmarksPosts(svc.c, *req.Mode.Relation.Id.Value, nil)
+		case sdk.PostFeedRelationName.PostFeedContainsPosts:
+			ps, errs = firebase.GetPostFeedContainsPosts(svc.c, *req.Mode.Relation.Id.Value)
+		default:
+			errs = append(errs, errors.New(fmt.Sprintf("can't handle relation %v", *req.Mode.Relation.Relation)))
+		}
 	case sdk.GetModeKind.Search:
-		ss, errs = getPostsSearch(svc.c, req)
+		ps, errs = angolia.GetPostsSearch(svc.c, req)
 	default:
-		errs = append(errs, errors.New(fmt.Sprintf("can't handle %v", req)))
+		errs = append(errs, errors.New(fmt.Sprintf("can't handle mode %v", req.Mode.Kind)))
 	}
 
 	for _, err := range errs {
@@ -81,7 +97,8 @@ func (svc Service) GetPosts(ctx context.Context, req sdk.GetPostsRequest) (rsp s
 		})
 	}
 
-	rsp.Posts = ss
+	rsp.Posts = ps
+	rsp.Pagination = pagination
 
 	return
 }
@@ -104,7 +121,7 @@ func (svc Service) GetPostFeeds(ctx context.Context, req sdk.GetPostFeedsRequest
 
 	switch *req.Mode.Kind {
 	case sdk.GetModeKind.Collection:
-		fs, errs = getPostFeedsCollection(svc.c, req)
+		fs, errs = static.GetPostFeedsCollection()
 	default:
 		errs = append(errs, errors.New(fmt.Sprintf("can't handle %v", req)))
 	}
@@ -150,7 +167,7 @@ func (svc Service) GetSocialAccounts(ctx context.Context, req sdk.GetSocialAccou
 
 	switch *req.Mode.Kind {
 	case sdk.GetModeKind.Id:
-		as, errs = getSocialAccountId(svc.c, req)
+		as, errs = firebase.GetSocialAccountId(svc.c, req)
 	default:
 		errs = append(errs, errors.New(fmt.Sprintf("can't handle %v", req)))
 	}

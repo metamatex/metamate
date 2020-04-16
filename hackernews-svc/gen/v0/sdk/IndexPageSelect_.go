@@ -7,5 +7,5 @@ const (
 
 type IndexPageSelect struct {
     All *bool `json:"all,omitempty" yaml:"all,omitempty"`
-    Page *bool `json:"page,omitempty" yaml:"page,omitempty"`
+    Value *bool `json:"value,omitempty" yaml:"value,omitempty"`
 }

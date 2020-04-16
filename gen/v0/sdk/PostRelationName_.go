@@ -8,6 +8,7 @@ const (
 var PostRelationName = struct{
     PostAttachesAttachments string
     PostAuthoredBySocialAccount string
+    PostBookmarkedBySocialAccounts string
     PostContainedByPostFeeds string
     PostFavoredBySocialAccounts string
     PostMentionsSocialAccounts string
@@ -23,6 +24,7 @@ var PostRelationName = struct{
 }{
     PostAttachesAttachments: "PostAttachesAttachments",
     PostAuthoredBySocialAccount: "PostAuthoredBySocialAccount",
+    PostBookmarkedBySocialAccounts: "PostBookmarkedBySocialAccounts",
     PostContainedByPostFeeds: "PostContainedByPostFeeds",
     PostFavoredBySocialAccounts: "PostFavoredBySocialAccounts",
     PostMentionsSocialAccounts: "PostMentionsSocialAccounts",

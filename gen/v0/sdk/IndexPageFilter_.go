@@ -9,6 +9,6 @@ type IndexPageFilter struct {
     And []IndexPageFilter `json:"and,omitempty" yaml:"and,omitempty"`
     Not []IndexPageFilter `json:"not,omitempty" yaml:"not,omitempty"`
     Or []IndexPageFilter `json:"or,omitempty" yaml:"or,omitempty"`
-    Page *Int32Filter `json:"page,omitempty" yaml:"page,omitempty"`
     Set *bool `json:"set,omitempty" yaml:"set,omitempty"`
+    Value *Int32Filter `json:"value,omitempty" yaml:"value,omitempty"`
 }

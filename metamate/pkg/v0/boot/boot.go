@@ -71,10 +71,9 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 
 	cacheHandlerF := func(h func(ctx context.Context, addr string, gSvcReq generic.Generic) (gSvcRsp generic.Generic, err error)) (func(ctx context.Context, addr string, gSvcReq generic.Generic) (gSvcRsp generic.Generic, err error)) {
 		return func(ctx context.Context, addr string, gSvcReq generic.Generic) (gSvcRsp generic.Generic, err error) {
-			var key string
-
-			key = addr
-			key += gSvcReq.MustGeneric(fieldnames.Mode).GetHash()
+			gSvcReq0 := gSvcReq.Copy()
+			gSvcReq0.Delete(fieldnames.Select)
+			key := gSvcReq0.GetHash()
 
 			v, ok := cache.Get(key)
 			switch ok {

@@ -1,25 +1,15 @@
-package pkg
+package static
 
 import (
 	"github.com/metamatex/metamate/hackernews-svc/gen/v0/sdk"
-
-	"net/http"
+	"github.com/metamatex/metamate/hackernews-svc/pkg/types"
 )
 
-const (
-	TopStories = "topstories"
-	NewStories = "newstories"
-	BestStories = "beststories"
-	AskStories = "askstories"
-	ShowStories = "showstories"
-	JobStories = "jobstories"
-)
-
-func getPostFeedsCollection(c *http.Client, req sdk.GetPostFeedsRequest) (fs []sdk.PostFeed, errs []error) {
+func GetPostFeedsCollection() (fs []sdk.PostFeed, errs []error) {
 	fs = []sdk.PostFeed{
 		{
 			Id: &sdk.ServiceId{
-				Value: sdk.String(TopStories),
+				Value: sdk.String(types.TopStories),
 			},
 			Info: &sdk.Info{
 				Name: &sdk.Text{
@@ -30,7 +20,7 @@ func getPostFeedsCollection(c *http.Client, req sdk.GetPostFeedsRequest) (fs []s
 		},
 		{
 			Id: &sdk.ServiceId{
-				Value: sdk.String(NewStories),
+				Value: sdk.String(types.NewStories),
 			},
 			Info: &sdk.Info{
 				Name: &sdk.Text{
@@ -41,7 +31,7 @@ func getPostFeedsCollection(c *http.Client, req sdk.GetPostFeedsRequest) (fs []s
 		},
 		{
 			Id: &sdk.ServiceId{
-				Value: sdk.String(BestStories),
+				Value: sdk.String(types.BestStories),
 			},
 			Info: &sdk.Info{
 				Name: &sdk.Text{
@@ -52,7 +42,7 @@ func getPostFeedsCollection(c *http.Client, req sdk.GetPostFeedsRequest) (fs []s
 		},
 		{
 			Id: &sdk.ServiceId{
-				Value: sdk.String(AskStories),
+				Value: sdk.String(types.AskStories),
 			},
 			Info: &sdk.Info{
 				Name: &sdk.Text{
@@ -63,7 +53,7 @@ func getPostFeedsCollection(c *http.Client, req sdk.GetPostFeedsRequest) (fs []s
 		},
 		{
 			Id: &sdk.ServiceId{
-				Value: sdk.String(ShowStories),
+				Value: sdk.String(types.ShowStories),
 			},
 			Info: &sdk.Info{
 				Name: &sdk.Text{
@@ -74,7 +64,7 @@ func getPostFeedsCollection(c *http.Client, req sdk.GetPostFeedsRequest) (fs []s
 		},
 		{
 			Id: &sdk.ServiceId{
-				Value: sdk.String(JobStories),
+				Value: sdk.String(types.JobStories),
 			},
 			Info: &sdk.Info{
 				Name: &sdk.Text{

@@ -11,6 +11,7 @@ const (
 	Pipe       = "pipe"
 	ReqFilter  = "reqFilter"
 	Error      = "error"
+	Pagination = "pagination"
 	Mastodon   = "mastodon"
 	Hackernews = "hackernews"
 	Kubernetes = "kubernetes"

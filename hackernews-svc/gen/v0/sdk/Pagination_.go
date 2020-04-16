@@ -6,7 +6,7 @@ const (
 )
 
 type Pagination struct {
-    Current *Page `json:"current,omitempty" yaml:"current,omitempty"`
-    Next *Page `json:"next,omitempty" yaml:"next,omitempty"`
-    Previous *Page `json:"previous,omitempty" yaml:"previous,omitempty"`
+    Current []ServicePage `json:"current,omitempty" yaml:"current,omitempty"`
+    Next []ServicePage `json:"next,omitempty" yaml:"next,omitempty"`
+    Previous []ServicePage `json:"previous,omitempty" yaml:"previous,omitempty"`
 }

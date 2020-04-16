@@ -345,6 +345,7 @@ const (
 	Bombards = "bombards"
 	Bonds = "bonds"
 	Books = "books"
+	Bookmarks = "bookmarks"
 	Booms = "booms"
 	Boosts = "boosts"
 	Boots = "boots"

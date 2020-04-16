@@ -6,6 +6,6 @@ const (
 )
 
 type ServicePage struct {
+    Id *ServiceId `json:"id,omitempty" yaml:"id,omitempty"`
     Page *Page `json:"page,omitempty" yaml:"page,omitempty"`
-    Service *Service `json:"service,omitempty" yaml:"service,omitempty"`
 }
