@@ -8,7 +8,7 @@ This monorepo hosts
 - `generic` generic representation of types, powers everything that needs to handle a lot of different entities
 - `hackernews-svc` hackernews gateway service
 - `kubernetes-svc` discovery service for services running on kubernetes
-- `mastodon-svc` gateway service for mastodon
+- `mastodon-svc` mastodon gateway service
 - `metactl` MetaMate's cli
 - `metamate` semantic service bus
 
