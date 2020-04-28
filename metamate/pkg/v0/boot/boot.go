@@ -73,7 +73,7 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 		return func(ctx context.Context, addr string, gSvcReq generic.Generic) (gSvcRsp generic.Generic, err error) {
 			gSvcReq0 := gSvcReq.Copy()
 			gSvcReq0.Delete(fieldnames.Select)
-			key := gSvcReq0.GetHash()
+			key := addr + gSvcReq0.GetHash()
 
 			v, ok := cache.Get(key)
 			switch ok {
