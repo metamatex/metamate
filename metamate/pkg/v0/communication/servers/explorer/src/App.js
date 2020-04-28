@@ -145,7 +145,7 @@ function App() {
                     // ArgumentName and ObjectFieldName
                     attribute: '#ed06ff',
                     number: '#2882F9',
-                    string: '#35ff00',
+                    string: '#333',
                     // Boolean
                     builtin: '#D47509',
                     // Enum
