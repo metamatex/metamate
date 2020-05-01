@@ -8,10 +8,10 @@ const (
 type SocialAccountSort struct {
     Avatar *ImageSort `json:"avatar,omitempty" yaml:"avatar,omitempty"`
     CreatedAt *TimestampSort `json:"createdAt,omitempty" yaml:"createdAt,omitempty"`
-    DisplayName *TextSort `json:"displayName,omitempty" yaml:"displayName,omitempty"`
+    DisplayName *string `json:"displayName,omitempty" yaml:"displayName,omitempty"`
     Header *ImageSort `json:"header,omitempty" yaml:"header,omitempty"`
     Id *ServiceIdSort `json:"id,omitempty" yaml:"id,omitempty"`
     Note *TextSort `json:"note,omitempty" yaml:"note,omitempty"`
     Points *string `json:"points,omitempty" yaml:"points,omitempty"`
-    Username *TextSort `json:"username,omitempty" yaml:"username,omitempty"`
+    Username *string `json:"username,omitempty" yaml:"username,omitempty"`
 }

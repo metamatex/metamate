@@ -10,12 +10,12 @@ type SocialAccountSelect struct {
     AlternativeIds *IdSelect `json:"alternativeIds,omitempty" yaml:"alternativeIds,omitempty"`
     Avatar *ImageSelect `json:"avatar,omitempty" yaml:"avatar,omitempty"`
     CreatedAt *TimestampSelect `json:"createdAt,omitempty" yaml:"createdAt,omitempty"`
-    DisplayName *TextSelect `json:"displayName,omitempty" yaml:"displayName,omitempty"`
+    DisplayName *bool `json:"displayName,omitempty" yaml:"displayName,omitempty"`
     Header *ImageSelect `json:"header,omitempty" yaml:"header,omitempty"`
     Id *ServiceIdSelect `json:"id,omitempty" yaml:"id,omitempty"`
     Note *TextSelect `json:"note,omitempty" yaml:"note,omitempty"`
     Points *bool `json:"points,omitempty" yaml:"points,omitempty"`
     Relations *SocialAccountRelationsSelect `json:"relations,omitempty" yaml:"relations,omitempty"`
     Relationships *SocialAccountRelationshipsSelect `json:"relationships,omitempty" yaml:"relationships,omitempty"`
-    Username *TextSelect `json:"username,omitempty" yaml:"username,omitempty"`
+    Username *bool `json:"username,omitempty" yaml:"username,omitempty"`
 }

@@ -305,8 +305,8 @@ func addEntities(root *RootNode) {
 	})
 
 	root.AddTypeNode(typenames.SocialAccount, FieldNodeSlice{
-		TypeField("username", typenames.Text),
-		TypeField("displayName", typenames.Text),
+		StringField("username"),
+		StringField("displayName"),
 		TypeField("note", typenames.Text),
 		Int32Field("points"),
 		TypeField("avatar", typenames.Image),

@@ -93,6 +93,7 @@ func mapUserToSocialAccount(u user) (a sdk.SocialAccount) {
 				Value: sdk.Float64(float64(*u.Created)),
 			},
 		},
+		Username: u.Id,
 		Relations: &sdk.SocialAccountRelations{
 			AuthorsPosts: &sdk.PostsCollection{
 				Count: sdk.Int32(int32(len(u.Submitted))),
