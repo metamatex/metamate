@@ -32,7 +32,7 @@ func (svc Service) getClient() (c *mastodon.Client) {
 		ClientSecret: svc.opts.ClientSecret,
 	})
 
-	err := c.Authenticate(context.Background(), "ph.woerdehoff@gmail.com", "]9T)8VB6Em")
+	err := c.Authenticate(context.Background(), "", "")
 	if err != nil {
 		log.Fatal(err)
 	}
