@@ -22,11 +22,11 @@ function chore {
     golint ./...
 }
 
-function release {
+function build_image {
     TAG=$(git describe --exact-match --tags $(git log -n1 --pretty='%h'))
-    REV=$(git rev-parse HEAD)
-    DATE=$(date "+%Y-%m-%d")
-    VERSION=${TAG//v}
+        REV=$(git rev-parse HEAD)
+        DATE=$(date "+%Y-%m-%d")
+        VERSION=${TAG//v}
 
     docker run -i --rm \
         -v $(pwd)/..:/go/src/github.com/metamatex/metamate \
@@ -50,9 +50,17 @@ function release {
         --tag metamatex/metamate:latest \
         --tag metamatex/metamate:$TAG \
         .
+}
+
+function release {
+    build_image
 
     docker push metamatex/metamate:latest
     docker push metamatex/metamate:$TAG
+}
+
+function test_release {
+    build_image
 }
 
 function deploy {

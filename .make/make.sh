@@ -32,6 +32,11 @@ function release {
     (cd metamate && make release)
 }
 
+function test_release {
+    goreleaser  --snapshot --skip-publish --rm-dist -f .make/.goreleaser.yml
+    (cd metamate && make test_release)
+}
+
 function generate {
     ./metactl/dist/metactl gen
     (cd gen && go mod init github.com/metamatex/metamate/gen)
