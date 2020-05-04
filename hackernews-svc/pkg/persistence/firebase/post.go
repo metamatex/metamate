@@ -25,10 +25,10 @@ type firebaseStory struct {
 	Score       *int32
 	Title       *string
 	Parts       []int32
-	Descandants *int32
+	Descendants *int32
 }
 
-func GetPostsId(c *http.Client, req sdk.GetPostsRequest) (ss []sdk.Post, errs []error) {
+func GetPostsId(c *http.Client, req sdk.GetPostsRequest) (ss []sdk.Post, errs []sdk.Error) {
 	err := func() (err error) {
 		var url string
 
@@ -58,13 +58,15 @@ func GetPostsId(c *http.Client, req sdk.GetPostsRequest) (ss []sdk.Post, errs []
 		return
 	}()
 	if err != nil {
-		errs = append(errs, err)
+		errs = append(errs, sdk.Error{
+			Message: sdk.String(err.Error()),
+		})
 	}
 
 	return
 }
 
-func GetPostFeedContainsPosts(c *http.Client, feed string) (ss []sdk.Post, errs []error) {
+func GetPostFeedContainsPosts(c *http.Client, feed string) (ss []sdk.Post, errs []sdk.Error) {
 	err := func() (err error) {
 		m := map[string]string{
 			types.TopStories:  "https://hacker-news.firebaseio.com/v0/topstories.json",
@@ -98,13 +100,15 @@ func GetPostFeedContainsPosts(c *http.Client, feed string) (ss []sdk.Post, errs 
 		return
 	}()
 	if err != nil {
-		errs = append(errs, err)
+		errs = append(errs, sdk.Error{
+			Message: sdk.String(err.Error()),
+		})
 	}
 
 	return
 }
 
-func mapFirebaseStoryToPost(s firebaseStory) (sdk.Post) {
+func mapFirebaseStoryToPost(s firebaseStory) sdk.Post {
 	//type firebaseStory struct {
 	//	Id          int32          x
 	//	Deleted     bool
@@ -120,13 +124,20 @@ func mapFirebaseStoryToPost(s firebaseStory) (sdk.Post) {
 	//	Score       int32        x
 	//	Title       string       x-
 	//	Parts       []int32
-	//	Descandants int32        x
+	//	Descendants int32        x
 	//}
 
 	return sdk.Post{
 		Id: &sdk.ServiceId{
 			Value: sdk.String(fmt.Sprintf("%v", *s.Id)),
 		},
+		Kind: func() *string {
+			if s.Parent == nil {
+				return &sdk.PostKind.Post
+			} else {
+				return &sdk.PostKind.Reply
+			}
+		}(),
 		AlternativeIds: []sdk.Id{
 			{
 				Kind: &sdk.IdKind.Url,
@@ -169,13 +180,19 @@ func mapFirebaseStoryToPost(s firebaseStory) (sdk.Post) {
 				},
 			}
 		}(),
-		CreatedAt: &sdk.Timestamp{
-			Kind: &sdk.TimestampKind.Unix,
-			Unix: &sdk.DurationScalar{
-				Unit:  &sdk.DurationUnit.S,
-				Value: sdk.Float64(float64(*s.Time)),
-			},
-		},
+		CreatedAt: func() (ts *sdk.Timestamp) {
+			if s.Time == nil {
+				return
+			}
+
+			return &sdk.Timestamp{
+				Kind: &sdk.TimestampKind.Unix,
+				Unix: &sdk.DurationScalar{
+					Unit:  &sdk.DurationUnit.S,
+					Value: sdk.Float64(float64(*s.Time)),
+				},
+			}
+		}(),
 		Relations: &sdk.PostRelations{
 			AuthoredBySocialAccount: &sdk.SocialAccount{
 				Id: &sdk.ServiceId{
@@ -183,12 +200,12 @@ func mapFirebaseStoryToPost(s firebaseStory) (sdk.Post) {
 				},
 			},
 			WasRepliedToByPosts: func() (c *sdk.PostsCollection) {
-				if s.Descandants == nil && s.Kids == nil {
+				if s.Descendants == nil && s.Kids == nil {
 					return
 				}
 
 				return &sdk.PostsCollection{
-					Count: s.Descandants,
+					Count: s.Descendants,
 					Posts: func() (ss []sdk.Post) {
 						for _, k := range s.Kids {
 							ss = append(ss, sdk.Post{
@@ -226,7 +243,7 @@ func mapFirebaseStoryToPost(s firebaseStory) (sdk.Post) {
 	}
 }
 
-func GetSocialAccountAuthorsPosts(c *http.Client, req sdk.GetPostsRequest) (ss []sdk.Post, errs []error) {
+func GetSocialAccountAuthorsPosts(c *http.Client, req sdk.GetPostsRequest) (ss []sdk.Post, errs []sdk.Error) {
 	var as []sdk.SocialAccount
 	as, errs = GetSocialAccountId(c, sdk.GetSocialAccountsRequest{
 		Mode: &sdk.GetMode{

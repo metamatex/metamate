@@ -110,8 +110,8 @@ func addExpansion(root *RootNode) {
 		"internal",
 		"requestValidation",
 		"responseValidation",
-		"serviceIdNotPresent",
-		"serviceIdAlreadyPresent",
+		"idNotPresent",
+		"idAlreadyPresent",
 		"noServiceMatch",
 	})
 
@@ -327,7 +327,7 @@ func addEntities(root *RootNode) {
 		TypeField("purpose", typenames.Text),
 	})
 
-	root.AddEnumNode(typenames.PostFeedKind, []string{
+	root.AddEnumNode(enumnames.PostFeedKind, []string{
 		"channel",
 		"privateChannel",
 		"conversation",
@@ -335,15 +335,22 @@ func addEntities(root *RootNode) {
 
 	root.AddTypeNode(typenames.PostFeed, FieldNodeSlice{
 		TypeField("info", typenames.Info),
-		EnumField("kind", typenames.PostFeedKind),
+		EnumField("kind", enumnames.PostFeedKind),
 	}, Flags{
 		typeflags.GetEndpoints: true,
 	})
 
+	root.AddEnumNode(enumnames.PostKind, []string{
+		"post",
+		"reply",
+	})
+
 	root.AddTypeNode(typenames.Post, FieldNodeSlice{
+		EnumField("kind", enumnames.PostKind),
 		TypeField("title", typenames.Text),
 		TypeField("content", typenames.Text),
 		TypeField("spoilerText", typenames.Text),
+		Int32Field("totalRepliesCount"),
 		BoolField("isSensitive"),
 		BoolField("isPinned"),
 		ListField(TypeField("links", typenames.HyperLink)),

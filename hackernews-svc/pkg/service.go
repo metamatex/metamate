@@ -2,7 +2,6 @@ package pkg
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/metamatex/metamate/hackernews-svc/gen/v0/sdk"
 	"github.com/metamatex/metamate/hackernews-svc/pkg/persistence/angolia"
@@ -20,11 +19,11 @@ func NewService(c *http.Client) (svc Service) {
 	return Service{c: c}
 }
 
-func (svc Service) Name() (string) {
+func (svc Service) Name() string {
 	return "hackernews"
 }
 
-func (svc Service) GetGetPostsEndpoint() (sdk.GetPostsEndpoint) {
+func (svc Service) GetGetPostsEndpoint() sdk.GetPostsEndpoint {
 	return sdk.GetPostsEndpoint{
 		Filter: &sdk.GetPostsRequestFilter{
 			Or: []sdk.GetPostsRequestFilter{
@@ -69,7 +68,7 @@ func (svc Service) GetGetPostsEndpoint() (sdk.GetPostsEndpoint) {
 func (svc Service) GetPosts(ctx context.Context, req sdk.GetPostsRequest) (rsp sdk.GetPostsResponse) {
 	var ps []sdk.Post
 	var pagination *sdk.Pagination
-	var errs []error
+	var errs []sdk.Error
 
 	switch *req.Mode.Kind {
 	case sdk.GetModeKind.Id:
@@ -83,27 +82,26 @@ func (svc Service) GetPosts(ctx context.Context, req sdk.GetPostsRequest) (rsp s
 		case sdk.PostFeedRelationName.PostFeedContainsPosts:
 			ps, errs = firebase.GetPostFeedContainsPosts(svc.c, *req.Mode.Relation.Id.Value)
 		default:
-			errs = append(errs, errors.New(fmt.Sprintf("can't handle relation %v", *req.Mode.Relation.Relation)))
+			errs = append(errs, sdk.Error{
+				Message: sdk.String(fmt.Sprintf("can't handle relation %v", *req.Mode.Relation.Relation)),
+			})
 		}
 	case sdk.GetModeKind.Search:
 		ps, errs = angolia.GetPostsSearch(svc.c, req)
 	default:
-		errs = append(errs, errors.New(fmt.Sprintf("can't handle mode %v", req.Mode.Kind)))
-	}
-
-	for _, err := range errs {
-		rsp.Errors = append(rsp.Errors, sdk.Error{
-			Message: sdk.String(err.Error()),
+		errs = append(errs, sdk.Error{
+			Message: sdk.String(fmt.Sprintf("can't handle mode %v", req.Mode.Kind)),
 		})
 	}
 
 	rsp.Posts = ps
 	rsp.Pagination = pagination
+	rsp.Errors = errs
 
 	return
 }
 
-func (svc Service) GetGetPostFeedsEndpoint() (sdk.GetPostFeedsEndpoint) {
+func (svc Service) GetGetPostFeedsEndpoint() sdk.GetPostFeedsEndpoint {
 	return sdk.GetPostFeedsEndpoint{
 		Filter: &sdk.GetPostFeedsRequestFilter{
 			Mode: &sdk.GetModeFilter{
@@ -117,27 +115,24 @@ func (svc Service) GetGetPostFeedsEndpoint() (sdk.GetPostFeedsEndpoint) {
 
 func (svc Service) GetPostFeeds(ctx context.Context, req sdk.GetPostFeedsRequest) (rsp sdk.GetPostFeedsResponse) {
 	var fs []sdk.PostFeed
-	var errs []error
+	var errs []sdk.Error
 
 	switch *req.Mode.Kind {
 	case sdk.GetModeKind.Collection:
 		fs, errs = static.GetPostFeedsCollection()
 	default:
-		errs = append(errs, errors.New(fmt.Sprintf("can't handle %v", req)))
-	}
-
-	for _, err := range errs {
-		rsp.Errors = append(rsp.Errors, sdk.Error{
-			Message: sdk.String(err.Error()),
+		errs = append(errs, sdk.Error{
+			Message: sdk.String(fmt.Sprintf("can't handle %v", req)),
 		})
 	}
 
 	rsp.PostFeeds = fs
+	rsp.Errors = errs
 
 	return
 }
 
-func (svc Service) GetGetSocialAccountsEndpoint() (sdk.GetSocialAccountsEndpoint) {
+func (svc Service) GetGetSocialAccountsEndpoint() sdk.GetSocialAccountsEndpoint {
 	return sdk.GetSocialAccountsEndpoint{
 		Filter: &sdk.GetSocialAccountsRequestFilter{
 			Or: []sdk.GetSocialAccountsRequestFilter{
@@ -163,22 +158,19 @@ func (svc Service) GetGetSocialAccountsEndpoint() (sdk.GetSocialAccountsEndpoint
 
 func (svc Service) GetSocialAccounts(ctx context.Context, req sdk.GetSocialAccountsRequest) (rsp sdk.GetSocialAccountsResponse) {
 	var as []sdk.SocialAccount
-	var errs []error
+	var errs []sdk.Error
 
 	switch *req.Mode.Kind {
 	case sdk.GetModeKind.Id:
 		as, errs = firebase.GetSocialAccountId(svc.c, req)
 	default:
-		errs = append(errs, errors.New(fmt.Sprintf("can't handle %v", req)))
-	}
-
-	for _, err := range errs {
-		rsp.Errors = append(rsp.Errors, sdk.Error{
-			Message: sdk.String(err.Error()),
+		errs = append(errs, sdk.Error{
+			Message: sdk.String(fmt.Sprintf("can't handle %v", req)),
 		})
 	}
 
 	rsp.SocialAccounts = as
+	rsp.Errors = errs
 
 	return
 }
