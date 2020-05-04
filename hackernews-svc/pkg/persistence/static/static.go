@@ -5,7 +5,7 @@ import (
 	"github.com/metamatex/metamate/hackernews-svc/pkg/types"
 )
 
-func GetPostFeedsCollection() (fs []sdk.PostFeed, errs []error) {
+func GetPostFeedsCollection() (fs []sdk.PostFeed, errs []sdk.Error) {
 	fs = []sdk.PostFeed{
 		{
 			Id: &sdk.ServiceId{

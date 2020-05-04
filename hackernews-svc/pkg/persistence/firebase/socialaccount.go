@@ -15,9 +15,10 @@ type user struct {
 	Karma     *int
 	About     *string
 	Submitted []int
+	Error     *string
 }
 
-func GetSocialAccountId(c *http.Client, req sdk.GetSocialAccountsRequest) (as []sdk.SocialAccount, errs []error) {
+func GetSocialAccountId(c *http.Client, req sdk.GetSocialAccountsRequest) (as []sdk.SocialAccount, errs []sdk.Error) {
 	err := func() (err error) {
 		var url string
 
@@ -38,18 +39,27 @@ func GetSocialAccountId(c *http.Client, req sdk.GetSocialAccountsRequest) (as []
 		}
 		defer rsp.Body.Close()
 
-		u := user{}
+		u := &user{}
 		err = json.NewDecoder(rsp.Body).Decode(&u)
 		if err != nil {
 			return
 		}
 
-		as = append(as, mapUserToSocialAccount(u))
+		if u == nil || u.Error != nil {
+			errs = append(errs, sdk.Error{
+				Kind: &sdk.ErrorKind.IdNotPresent,
+				Id:   req.Mode.Id,
+			})
+		} else {
+			as = append(as, mapUserToSocialAccount(*u))
+		}
 
 		return
 	}()
 	if err != nil {
-		errs = append(errs, err)
+		errs = append(errs, sdk.Error{
+			Message: sdk.String(err.Error()),
+		})
 	}
 
 	return
@@ -89,7 +99,7 @@ func mapUserToSocialAccount(u user) (a sdk.SocialAccount) {
 		CreatedAt: &sdk.Timestamp{
 			Kind: &sdk.TimestampKind.Unix,
 			Unix: &sdk.DurationScalar{
-				Unit: &sdk.DurationUnit.S,
+				Unit:  &sdk.DurationUnit.S,
 				Value: sdk.Float64(float64(*u.Created)),
 			},
 		},

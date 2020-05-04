@@ -8,7 +8,7 @@ import (
 	"net/url"
 )
 
-func GetPostsSearch(c *http.Client, req sdk.GetPostsRequest) (ss []sdk.Post, errs []error) {
+func GetPostsSearch(c *http.Client, req sdk.GetPostsRequest) (ss []sdk.Post, errs []sdk.Error) {
 	err := func() (err error) {
 		var u string
 
@@ -35,7 +35,9 @@ func GetPostsSearch(c *http.Client, req sdk.GetPostsRequest) (ss []sdk.Post, err
 		return
 	}()
 	if err != nil {
-		errs = append(errs, err)
+		errs = append(errs, sdk.Error{
+			Message: sdk.String(err.Error()),
+		})
 	}
 
 	return
