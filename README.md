@@ -59,3 +59,6 @@ Building requires a couple dependencies
 
 `esc` is required to add static assets to the `metamate` binary [Installation](https://github.com/mjibson/esc)
 
+To build `metamate` and `metactl` run `make build`
+
+To test `metamate` and `metactl` run `make test`
