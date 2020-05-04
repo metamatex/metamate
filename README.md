@@ -30,7 +30,7 @@ osx `brew install metamatex/taps/metactl`
 
 For all other platforms, please see [releases](https://github.com/metamatex/metamate/releases)
 
-## Development
+## Roadmap
 
 MetaMate aims to provide an abstraction layer for all network connected datastores, which can be databases, websites, apis etc. The challenge here is to derive an api and internal concepts that cover all major use-cases. MetaMate needs to be able to handle different kinds of pagination, entity representations, authentication methods etc.
 
@@ -50,3 +50,12 @@ Breaking changes will occur whenever we remove or rename an identifier or change
 #### v1.x
 
 The community intends to provide a stability guarantee from `v1.x` onwards
+
+## Development
+
+Building requires a couple dependencies
+
+`yarn` is required to build the graphql explorer [Installation](https://classic.yarnpkg.com/en/docs/install/#mac-stable)
+
+`esc` is required to add static assets to the `metamate` binary [Installation](https://github.com/mjibson/esc)
+
