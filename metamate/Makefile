@@ -18,3 +18,6 @@ deploy:
 
 test:
 	@${SOURCE_MAKE} && test
+
+test_release:
+	@${SOURCE_MAKE} && test_release
