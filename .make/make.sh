@@ -33,7 +33,8 @@ function release {
 }
 
 function test_release {
-    goreleaser  --snapshot --skip-publish --rm-dist -f .make/.goreleaser.yml
+    git tag v0.0.0
+    goreleaser --skip-publish --rm-dist -f .make/.goreleaser.yml && git tag -d v0.0.0 || git tag -d v0.0.0 && exit 1
     (cd metamate && make test_release)
 }
 
