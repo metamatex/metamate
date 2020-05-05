@@ -138,6 +138,7 @@ func mapFirebaseStoryToPost(s firebaseStory) sdk.Post {
 				return &sdk.PostKind.Reply
 			}
 		}(),
+		TotalWasRepliedToByPostsCount: s.Descendants,
 		AlternativeIds: []sdk.Id{
 			{
 				Kind: &sdk.IdKind.Url,
@@ -200,12 +201,12 @@ func mapFirebaseStoryToPost(s firebaseStory) sdk.Post {
 				},
 			},
 			WasRepliedToByPosts: func() (c *sdk.PostsCollection) {
-				if s.Descendants == nil && s.Kids == nil {
+				if s.Kids == nil {
 					return
 				}
 
 				return &sdk.PostsCollection{
-					Count: s.Descendants,
+					Count: sdk.Int32(int32(len(s.Kids))),
 					Posts: func() (ss []sdk.Post) {
 						for _, k := range s.Kids {
 							ss = append(ss, sdk.Post{

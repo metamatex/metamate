@@ -350,7 +350,7 @@ func addEntities(root *RootNode) {
 		TypeField("title", typenames.Text),
 		TypeField("content", typenames.Text),
 		TypeField("spoilerText", typenames.Text),
-		Int32Field("totalRepliesCount"),
+		Int32Field("totalWasRepliedToByPostsCount"),
 		BoolField("isSensitive"),
 		BoolField("isPinned"),
 		ListField(TypeField("links", typenames.HyperLink)),

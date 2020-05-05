@@ -18,5 +18,5 @@ type Post struct {
     Relationships *PostRelationships `json:"relationships,omitempty" yaml:"relationships,omitempty"`
     SpoilerText *Text `json:"spoilerText,omitempty" yaml:"spoilerText,omitempty"`
     Title *Text `json:"title,omitempty" yaml:"title,omitempty"`
-    TotalRepliesCount *int32 `json:"totalRepliesCount,omitempty" yaml:"totalRepliesCount,omitempty"`
+    TotalWasRepliedToByPostsCount *int32 `json:"totalWasRepliedToByPostsCount,omitempty" yaml:"totalWasRepliedToByPostsCount,omitempty"`
 }

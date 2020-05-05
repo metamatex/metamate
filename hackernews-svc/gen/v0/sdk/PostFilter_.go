@@ -20,5 +20,5 @@ type PostFilter struct {
     Set *bool `json:"set,omitempty" yaml:"set,omitempty"`
     SpoilerText *TextFilter `json:"spoilerText,omitempty" yaml:"spoilerText,omitempty"`
     Title *TextFilter `json:"title,omitempty" yaml:"title,omitempty"`
-    TotalRepliesCount *Int32Filter `json:"totalRepliesCount,omitempty" yaml:"totalRepliesCount,omitempty"`
+    TotalWasRepliedToByPostsCount *Int32Filter `json:"totalWasRepliedToByPostsCount,omitempty" yaml:"totalWasRepliedToByPostsCount,omitempty"`
 }

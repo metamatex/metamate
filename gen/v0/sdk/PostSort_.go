@@ -13,5 +13,5 @@ type PostSort struct {
     IsSensitive *string `json:"isSensitive,omitempty" yaml:"isSensitive,omitempty"`
     SpoilerText *TextSort `json:"spoilerText,omitempty" yaml:"spoilerText,omitempty"`
     Title *TextSort `json:"title,omitempty" yaml:"title,omitempty"`
-    TotalRepliesCount *string `json:"totalRepliesCount,omitempty" yaml:"totalRepliesCount,omitempty"`
+    TotalWasRepliedToByPostsCount *string `json:"totalWasRepliedToByPostsCount,omitempty" yaml:"totalWasRepliedToByPostsCount,omitempty"`
 }

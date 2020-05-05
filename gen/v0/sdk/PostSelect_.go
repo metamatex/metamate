@@ -19,5 +19,5 @@ type PostSelect struct {
     Relationships *PostRelationshipsSelect `json:"relationships,omitempty" yaml:"relationships,omitempty"`
     SpoilerText *TextSelect `json:"spoilerText,omitempty" yaml:"spoilerText,omitempty"`
     Title *TextSelect `json:"title,omitempty" yaml:"title,omitempty"`
-    TotalRepliesCount *bool `json:"totalRepliesCount,omitempty" yaml:"totalRepliesCount,omitempty"`
+    TotalWasRepliedToByPostsCount *bool `json:"totalWasRepliedToByPostsCount,omitempty" yaml:"totalWasRepliedToByPostsCount,omitempty"`
 }
