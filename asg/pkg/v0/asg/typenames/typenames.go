@@ -22,6 +22,7 @@ const (
 	ServiceTransport  = "ServiceTransport"
 	Service           = "Service"
 	Error             = "Error"
+	Warning           = "Warning"
 	Url               = "Url"
 	HyperLink         = "HyperLink"
 	Email             = "Email"

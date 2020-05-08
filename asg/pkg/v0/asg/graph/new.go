@@ -123,6 +123,10 @@ func addExpansion(root *RootNode) {
 		TypeField(fieldnames.Wraps, typenames.Error),
 	})
 
+	root.AddTypeNode(typenames.Warning, FieldNodeSlice{
+		StringField(fieldnames.Message),
+	})
+
 	root.AddTypeNode(typenames.RequestMeta, FieldNodeSlice{
 		TypeField("createdAt", typenames.Timestamp),
 	})

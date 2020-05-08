@@ -12,6 +12,7 @@ const (
 	Wraps           = "wraps"
 	Services        = "services"
 	Errors          = "errors"
+	Warnings        = "warnings"
 	Message         = "message"
 	Pages           = "pages"
 	Id              = "id"
