@@ -5,19 +5,33 @@ import (
 )
 
 type Config struct {
-	DiscoverySvc         sdk.Service       `yaml:"discoverySvc,omitempty"`
-	Endpoints            EndpointsConfig   `yaml:"endpoints,omitempty"`
-	Host                 HostConfig        `yaml:"host,omitempty"`
-	Log                  LogConfig         `yaml:"log,omitempty"`
-	Virtual              VirtualConfig     `yaml:"virtual,omitempty"`
+	DiscoverySvc sdk.Service     `yaml:"discoverySvc,omitempty"`
+	Endpoints    EndpointsConfig `yaml:"endpoints,omitempty"`
+	Host         HostConfig      `yaml:"host,omitempty"`
+	Log          LogConfig       `yaml:"log,omitempty"`
+	Virtual      VirtualConfig   `yaml:"virtual,omitempty"`
+	Internal     InternalConfig  `yaml:"internal,omitempty"`
 }
 
 type VirtualConfig struct {
 	Services []VirtualSvc
 }
 
+type GetConfig struct {
+	MaxResults  int
+	ResolveById ResolveByIdConfig
+}
+
+type InternalConfig struct {
+	Get GetConfig
+}
+
+type ResolveByIdConfig struct {
+	Concurrency int
+}
+
 type LogConfig struct {
-	Http bool
+	Http     bool
 	Internal InternalLogConfig
 }
 
@@ -38,7 +52,7 @@ type ConfigEndpointConfig struct {
 }
 
 type PrometheusEndpointConfig struct {
-	On   bool   `yaml:"on,omitempty"`
+	On bool `yaml:"on,omitempty"`
 }
 
 type DebugEndpointConfig struct {
@@ -55,9 +69,9 @@ type GraphiqlExplorerEndpointConfig struct {
 }
 
 type GraphqlEndpointConfig struct {
-	On             bool     `yaml:"on,omitempty"`
+	On bool `yaml:"on,omitempty"`
 }
 
 type HttpJsonEndpoint struct {
-	On   bool   `yaml:"on,omitempty"`
+	On bool `yaml:"on,omitempty"`
 }

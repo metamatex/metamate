@@ -173,8 +173,10 @@ func (l *Line) Name() string {
 func (l *Line) Parallel(c int, mapF func(ctx types.ReqCtx) (ctxs []types.ReqCtx), to *Line, reduceF func(ctx types.ReqCtx, ctxs []types.ReqCtx) types.ReqCtx) *Line {
 	l.parallel = getFirst(to)
 
+	var f func(ctx types.ReqCtx) types.ReqCtx
+
 	if c < 0 {
-		f := func(ctx types.ReqCtx) types.ReqCtx {
+		f = func(ctx types.ReqCtx) types.ReqCtx {
 			ctxs := mapF(ctx)
 
 			w := sync.WaitGroup{}
@@ -191,9 +193,41 @@ func (l *Line) Parallel(c int, mapF func(ctx types.ReqCtx) (ctxs []types.ReqCtx)
 
 			return reduceF(ctx, ctxs)
 		}
+	} else {
+		f = func(ctx types.ReqCtx) types.ReqCtx {
+			ctxs := mapF(ctx)
 
-		l.pipes = append(l.pipes, Pipe{Name: "parallel", Func: f})
+			indicesCh := make(chan int, 100)
+
+			go func() {
+				for i, _ := range ctxs {
+					indicesCh <- i
+				}
+			}()
+
+			w := sync.WaitGroup{}
+			for i := 0; i < c; i++ {
+				w.Add(1)
+				go func() {
+					for true {
+						select {
+						case i0 := <-indicesCh:
+							ctxs[i0] = l.parallel.Transform(ctxs[i0])
+						default:
+							w.Add(-1)
+							return
+						}
+					}
+				}()
+			}
+
+			w.Wait()
+
+			return reduceF(ctx, ctxs)
+		}
 	}
+
+	l.pipes = append(l.pipes, Pipe{Name: "parallel", Func: f})
 
 	l.next = l.getNext()
 

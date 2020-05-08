@@ -64,12 +64,12 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 		Transport: c0,
 	}
 
-	cache, err := persistence.NewLruCache(1024, 5 * time.Minute)
+	cache, err := persistence.NewLruCache(10, 5*time.Minute)
 	if err != nil {
-	    return
+		return
 	}
 
-	cacheHandlerF := func(h func(ctx context.Context, addr string, gSvcReq generic.Generic) (gSvcRsp generic.Generic, err error)) (func(ctx context.Context, addr string, gSvcReq generic.Generic) (gSvcRsp generic.Generic, err error)) {
+	cacheHandlerF := func(h func(ctx context.Context, addr string, gSvcReq generic.Generic) (gSvcRsp generic.Generic, err error)) func(ctx context.Context, addr string, gSvcReq generic.Generic) (gSvcRsp generic.Generic, err error) {
 		return func(ctx context.Context, addr string, gSvcReq generic.Generic) (gSvcRsp generic.Generic, err error) {
 			gSvcReq0 := gSvcReq.Copy()
 			gSvcReq0.Delete(fieldnames.Select)
@@ -89,7 +89,7 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 					return
 				}
 
-				cache.Add(key, gSvcRsp)
+				cache.Add(key, gSvcRsp.Copy())
 			}
 
 			return
@@ -114,7 +114,7 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 		},
 	}
 
-	d.ResolveLine = pipeline.NewResolveLine(d.RootNode, d.Factory, c.DiscoverySvc, reqHs, cachedReqHs, d.InternalLogTemplates)
+	d.ResolveLine = pipeline.NewResolveLine(d.RootNode, d.Factory, c.DiscoverySvc, reqHs, cachedReqHs, d.InternalLogTemplates, c.Internal.Get)
 
 	d.ServeFunc = func(ctx context.Context, gCliReq generic.Generic) generic.Generic {
 		gCliReq = gCliReq.Copy()

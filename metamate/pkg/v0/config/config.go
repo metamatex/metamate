@@ -7,15 +7,15 @@ import (
 )
 
 const (
-	CliReq = "ClientRequest"
-	SvcReq = "ServiceRequest"
-	SvcRsp = "ServiceResponse"
-	CliRsp = "ClientResponse"
+	CliReq               = "ClientRequest"
+	SvcReq               = "ServiceRequest"
+	SvcRsp               = "ServiceResponse"
+	CliRsp               = "ClientResponse"
 	GraphiqlExplorerPath = "/explorer"
-	GraphqlPath = "/graphql"
-	ConfigFileName = "metamate"
-	ConfigFileExtension = "yaml"
-	ConfigFile = ConfigFileName +  "." + ConfigFileExtension
+	GraphqlPath          = "/graphql"
+	ConfigFileName       = "metamate"
+	ConfigFileExtension  = "yaml"
+	ConfigFile           = ConfigFileName + "." + ConfigFileExtension
 )
 
 var DefaultConfig = types.Config{
@@ -24,6 +24,14 @@ var DefaultConfig = types.Config{
 	},
 	Log: types.LogConfig{
 		Http: true,
+	},
+	Internal: types.InternalConfig{
+		Get: types.GetConfig{
+			MaxResults: 1000,
+			ResolveById: types.ResolveByIdConfig{
+				Concurrency: 100,
+			},
+		},
 	},
 	DiscoverySvc: sdk.Service{
 		Id: &sdk.ServiceId{

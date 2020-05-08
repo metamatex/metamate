@@ -98,7 +98,7 @@ func ReduceSvcRspPaginationsToCliRspPagination(f generic.Factory) types.FuncTran
 			for _, gSvcRsp := range ctx.GSvcRsps {
 				gPagination, ok := gSvcRsp.Generic(fieldnames.Pagination)
 				if !ok {
-				    continue
+					continue
 				}
 
 				var p0 sdk.Pagination
@@ -579,7 +579,7 @@ func Log(stage string, stages types.InternalLogTemplates) types.FuncTransformer 
 			var b bytes.Buffer
 			err := t.Execute(&b, types.InternalLogData{
 				Subject: s,
-				Ctx: ctx,
+				Ctx:     ctx,
 			})
 			if err != nil {
 				ctx.Errs = append(ctx.Errs, NewError(nil, sdk.ErrorKind.Internal, err.Error()))
@@ -640,7 +640,7 @@ func ResolveRelations(resolvePl *line.Line, f generic.Factory) types.FuncTransfo
 				}
 
 				ctx0 := resolvePl.Transform(types.ReqCtx{
-					GCliReq:            gGetReq,
+					GCliReq: gGetReq,
 				})
 
 				gCollection := f.New(gGetCollection.Type().Edges.Type.For().Edges.Type.Collection())
@@ -650,7 +650,15 @@ func ResolveRelations(resolvePl *line.Line, f generic.Factory) types.FuncTransfo
 					gCollection.MustSetGenericSlice([]string{gCollection.Type().Edges.Type.For().PluralFieldName()}, gSlice)
 				}
 
-				//gCollection.Print()
+				gErrors, ok := ctx0.GCliRsp.GenericSlice(fieldnames.Errors)
+				if ok {
+					gCollection.MustSetGenericSlice([]string{fieldnames.Errors}, gErrors)
+				}
+
+				gWarnings, ok := ctx0.GCliRsp.GenericSlice(fieldnames.Warnings)
+				if ok {
+					gCollection.MustSetGenericSlice([]string{fieldnames.Warnings}, gWarnings)
+				}
 
 				ctx.GEntity.MustSetGeneric([]string{fieldnames.Relations, fn.Name()}, gCollection)
 
@@ -674,7 +682,7 @@ func GetEntityById(f generic.Factory, resolvePl *line.Line) types.FuncTransforme
 			getMode := sdk.GetMode{
 				Kind: &sdk.GetModeKind.Id,
 				Id: &sdk.Id{
-					Kind: &sdk.IdKind.ServiceId,
+					Kind:      &sdk.IdKind.ServiceId,
 					ServiceId: &id,
 				},
 			}
@@ -682,7 +690,7 @@ func GetEntityById(f generic.Factory, resolvePl *line.Line) types.FuncTransforme
 			gGetReq.MustSetGeneric([]string{fieldnames.Mode}, f.MustFromStruct(getMode))
 
 			ctx0 := resolvePl.Transform(types.ReqCtx{
-				GCliReq:            gGetReq,
+				GCliReq: gGetReq,
 			})
 
 			gSlice, ok := ctx0.GCliRsp.GenericSlice(ctx.GEntity.Type().PluralFieldName())
@@ -937,7 +945,7 @@ func Inspect() types.FuncTransformer {
 
 func NewError(svc *sdk.Service, kind, message string) sdk.Error {
 	return sdk.Error{
-		Kind: sdk.String(kind),
+		Kind:    sdk.String(kind),
 		Message: &message,
 		Service: svc,
 	}

@@ -1,6 +1,7 @@
 package pipeline
 
 import (
+	"fmt"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/metamatex/metamate/gen/v0/sdk"
@@ -11,7 +12,7 @@ import (
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 )
 
-func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Service, reqHs map[bool]map[string]types.RequestHandler, cachedReqHs map[bool]map[string]types.RequestHandler, logTemplates types.InternalLogTemplates) *line.Line {
+func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Service, reqHs map[bool]map[string]types.RequestHandler, cachedReqHs map[bool]map[string]types.RequestHandler, logTemplates types.InternalLogTemplates, getConfig types.GetConfig) *line.Line {
 	resolveLine := line.Do()
 
 	cliReqErrL := getErrLine(f, types.GCliRsp)
@@ -34,7 +35,7 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 		Switch(
 			funcs.By(types.Method),
 			map[string]*line.Line{
-				sdk.Methods.Get:    line.Do(funcs.Copy(types.GCliReq, types.Mode)),
+				sdk.Methods.Get: line.Do(funcs.Copy(types.GCliReq, types.Mode)),
 			},
 		).
 		Add(NarrowSvcFilterToModeId).
@@ -167,8 +168,46 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 								),
 						},
 					).
+					If(
+						func(ctx types.ReqCtx) bool {
+							gSlice, ok := ctx.GCliRsp.GenericSlice(ctx.ForTypeNode.PluralFieldName())
+							if !ok {
+								return false
+							}
+
+							return len(gSlice.Get()) > getConfig.MaxResults
+						},
+						line.Do(
+							funcs.Func(func(ctx types.ReqCtx) types.ReqCtx {
+								gSlice := ctx.GCliRsp.MustGenericSlice(ctx.ForTypeNode.PluralFieldName())
+
+								preLen := len(gSlice.Get())
+
+								gSlice.Set(gSlice.Get()[:getConfig.MaxResults])
+
+								postLen := len(gSlice.Get())
+
+								ctx.GCliRsp.MustSetGenericSlice([]string{ctx.ForTypeNode.PluralFieldName()}, gSlice)
+
+								gWarnings := f.MustFromStructs([]sdk.Warning{
+									{
+										Message: sdk.String(fmt.Sprintf("trimmed from %v to %v", preLen, postLen)),
+									},
+								})
+
+								gCliRspWarnings, ok := ctx.GCliRsp.GenericSlice(fieldnames.Warnings)
+								if ok {
+									gWarnings.Append(gCliRspWarnings.Get()...)
+								}
+
+								ctx.GCliRsp.MustSetGenericSlice([]string{fieldnames.Warnings}, gWarnings)
+
+								return ctx
+							}),
+						),
+					).
 					Parallel(
-						-1,
+						getConfig.ResolveById.Concurrency,
 						funcs.Map(types.GCliRsp, types.GEntity),
 						line.If(funcs.EntityOnlyContainsServiceId, line.Do(funcs.GetEntityById(f, resolveLine))),
 						funcs.Collect(types.GEntity, types.GCliRsp),
@@ -235,7 +274,7 @@ func SetDefaults(f generic.Factory) func(l *line.Line) *line.Line {
 			Switch(
 				funcs.By(types.Method),
 				map[string]*line.Line{
-					sdk.Methods.Get:  line.Do(funcs.SetDefaultSelect()),
+					sdk.Methods.Get: line.Do(funcs.SetDefaultSelect()),
 				},
 			).
 			If(
