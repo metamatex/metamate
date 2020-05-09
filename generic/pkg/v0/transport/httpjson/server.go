@@ -10,7 +10,7 @@ import (
 )
 
 type Server struct {
-	opts   ServerOpts
+	opts ServerOpts
 }
 
 type ServerOpts struct {
@@ -20,7 +20,7 @@ type ServerOpts struct {
 	LogErr  func(err error)
 }
 
-func NewServer(c ServerOpts) (Server) {
+func NewServer(c ServerOpts) Server {
 	return Server{
 		opts: c,
 	}
@@ -57,7 +57,5 @@ func (s Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		if s.opts.LogErr != nil {
 			s.opts.LogErr(err)
 		}
-
-		w.WriteHeader(200)
 	}
 }
