@@ -60,7 +60,9 @@ type DebugEndpointConfig struct {
 }
 
 type HostConfig struct {
-	AllowedOrigins []string `yaml:"allowedOrigins,omitempty"`
+	AllowedOrigins      []string `yaml:"allowedOrigins,omitempty"`
+	ReadTimeoutSeconds  int
+	WriteTimeoutSeconds int
 }
 
 type GraphiqlExplorerEndpointConfig struct {

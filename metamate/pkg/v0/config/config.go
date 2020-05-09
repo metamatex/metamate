@@ -20,14 +20,16 @@ const (
 
 var DefaultConfig = types.Config{
 	Host: types.HostConfig{
-		AllowedOrigins: []string{"*"},
+		AllowedOrigins:      []string{"*"},
+		ReadTimeoutSeconds:  30,
+		WriteTimeoutSeconds: 30,
 	},
 	Log: types.LogConfig{
 		Http: true,
 	},
 	Internal: types.InternalConfig{
 		Get: types.GetConfig{
-			MaxResults: 1000,
+			MaxResults: 10000,
 			ResolveById: types.ResolveByIdConfig{
 				Concurrency: 100,
 			},

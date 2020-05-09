@@ -209,8 +209,8 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 	d.Router = router
 
 	httpServer := &http.Server{
-		ReadTimeout:  5 * time.Second,
-		WriteTimeout: 5 * time.Second,
+		ReadTimeout:  time.Duration(c.Host.ReadTimeoutSeconds) * time.Second,
+		WriteTimeout: time.Duration(c.Host.WriteTimeoutSeconds) * time.Second,
 		IdleTimeout:  120 * time.Second,
 		Handler:      router,
 		Addr:         ":80",
