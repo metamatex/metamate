@@ -29,7 +29,7 @@ var DefaultConfig = types.Config{
 	},
 	Internal: types.InternalConfig{
 		Get: types.GetConfig{
-			MaxResults: 3000,
+			MaxResults: 1500,
 			ResolveById: types.ResolveByIdConfig{
 				Concurrency: 100,
 			},
