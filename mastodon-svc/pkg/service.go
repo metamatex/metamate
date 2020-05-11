@@ -4,16 +4,15 @@ import (
 	"context"
 	"github.com/mattn/go-mastodon"
 	"github.com/metamatex/metamate/gen/v0/sdk"
-	"log"
 )
 
-type Service struct{
+type Service struct {
 	opts ServiceOpts
 }
 
 type ServiceOpts struct {
-	Host string
-	ClientId string
+	Host         string
+	ClientId     string
 	ClientSecret string
 }
 
@@ -21,26 +20,23 @@ func NewService(opts ServiceOpts) Service {
 	return Service{opts: opts}
 }
 
-func (svc Service) Name() (string) {
+func (svc Service) Name() string {
 	return "mastodon-svc"
 }
 
-func (svc Service) getClient() (c *mastodon.Client) {
+func (svc Service) getClient() (c *mastodon.Client, err error) {
 	c = mastodon.NewClient(&mastodon.Config{
 		Server:       svc.opts.Host,
 		ClientID:     svc.opts.ClientId,
 		ClientSecret: svc.opts.ClientSecret,
 	})
 
-	err := c.Authenticate(context.Background(), "", "")
-	if err != nil {
-		log.Fatal(err)
-	}
+	err = c.Authenticate(context.Background(), "", "")
 
-	return c
+	return
 }
 
-func (svc Service) GetGetPostsEndpoint() (sdk.GetPostsEndpoint) {
+func (svc Service) GetGetPostsEndpoint() sdk.GetPostsEndpoint {
 	return sdk.GetPostsEndpoint{
 		Filter: &sdk.GetPostsRequestFilter{
 			Mode: &sdk.GetModeFilter{
@@ -82,7 +78,18 @@ func (svc Service) GetGetPostsEndpoint() (sdk.GetPostsEndpoint) {
 }
 
 func (svc Service) GetPosts(ctx context.Context, req sdk.GetPostsRequest) (rsp sdk.GetPostsResponse) {
-	c := svc.getClient()
+	c, err := svc.getClient()
+	if err != nil {
+		rsp = sdk.GetPostsResponse{
+			Errors: []sdk.Error{
+				{
+					Message: sdk.String(err.Error()),
+				},
+			},
+		}
+
+		return
+	}
 
 	switch *req.Mode.Kind {
 	case sdk.GetModeKind.Id:
@@ -97,7 +104,7 @@ func (svc Service) GetPosts(ctx context.Context, req sdk.GetPostsRequest) (rsp s
 	return
 }
 
-func (svc Service) GetGetSocialAccountsEndpoint() (sdk.GetSocialAccountsEndpoint) {
+func (svc Service) GetGetSocialAccountsEndpoint() sdk.GetSocialAccountsEndpoint {
 	return sdk.GetSocialAccountsEndpoint{
 		Filter: &sdk.GetSocialAccountsRequestFilter{
 			Or: []sdk.GetSocialAccountsRequestFilter{
@@ -148,7 +155,18 @@ func (svc Service) GetGetSocialAccountsEndpoint() (sdk.GetSocialAccountsEndpoint
 }
 
 func (svc Service) GetSocialAccounts(ctx context.Context, req sdk.GetSocialAccountsRequest) (rsp sdk.GetSocialAccountsResponse) {
-	c := svc.getClient()
+	c, err := svc.getClient()
+	if err != nil {
+		rsp = sdk.GetSocialAccountsResponse{
+			Errors: []sdk.Error{
+				{
+					Message: sdk.String(err.Error()),
+				},
+			},
+		}
+
+		return
+	}
 
 	switch *req.Mode.Kind {
 	case sdk.GetModeKind.Search:
@@ -163,7 +181,7 @@ func (svc Service) GetSocialAccounts(ctx context.Context, req sdk.GetSocialAccou
 	return
 }
 
-func (svc Service) GetGetPostFeedsEndpoint() (sdk.GetPostFeedsEndpoint) {
+func (svc Service) GetGetPostFeedsEndpoint() sdk.GetPostFeedsEndpoint {
 	return sdk.GetPostFeedsEndpoint{
 		Filter: &sdk.GetPostFeedsRequestFilter{
 			Or: []sdk.GetPostFeedsRequestFilter{
