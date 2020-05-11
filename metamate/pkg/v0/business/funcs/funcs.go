@@ -534,6 +534,14 @@ func HandleSvcReq(hs map[bool]map[string]types.RequestHandler) types.FuncTransfo
 					return ctx
 				}
 
+				gErrs, ok := ctx.GSvcRsp.GenericSlice(fieldnames.Errors)
+				if ok {
+					var errs []sdk.Error
+					gErrs.MustToStructs(&errs)
+
+					ctx.Errs = append(ctx.Errs, errs...)
+				}
+
 				return ctx
 			}(ctx)
 
