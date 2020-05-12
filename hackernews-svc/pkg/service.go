@@ -87,7 +87,7 @@ func (svc Service) GetPosts(ctx context.Context, req sdk.GetPostsRequest) (rsp s
 			})
 		}
 	case sdk.GetModeKind.Search:
-		ps, errs = angolia.GetPostsSearch(svc.c, req)
+		ps, errs, pagination = angolia.GetPostsSearch(svc.c, req)
 	default:
 		errs = append(errs, sdk.Error{
 			Message: sdk.String(fmt.Sprintf("can't handle mode %v", req.Mode.Kind)),
