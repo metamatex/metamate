@@ -64,7 +64,7 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 		Transport: c0,
 	}
 
-	cache, err := persistence.NewLruCache(10, 5*time.Minute)
+	cache, err := persistence.NewLruCache(100, 30*time.Minute)
 	if err != nil {
 		return
 	}
