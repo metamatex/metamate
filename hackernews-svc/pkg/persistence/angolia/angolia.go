@@ -34,32 +34,7 @@ func GetPostsSearch(c *http.Client, req sdk.GetPostsRequest) (ss []sdk.Post, err
 			pageIndex = *page.Page.IndexPage.Value
 		}
 
-		pagination = &sdk.Pagination{
-			Current: []sdk.ServicePage{
-				{
-					Page: &sdk.Page{
-						Kind: &sdk.PageKind.IndexPage,
-						IndexPage: &sdk.IndexPage{
-							Value: sdk.Int32(pageIndex),
-						},
-					},
-				},
-			},
-		}
-
-		if pageIndex > 0 {
-			pagination.Previous = []sdk.ServicePage{
-				{
-					Page: &sdk.Page{
-						Kind: &sdk.PageKind.IndexPage,
-						IndexPage: &sdk.IndexPage{
-							Value: sdk.Int32(pageIndex - 1),
-						},
-					},
-				},
-			}
-		}
-		hitsPerPage := 101
+		hitsPerPage := 1000
 
 		u = fmt.Sprintf("http://hn.algolia.com/api/v1/search?query=%v&hitsPerPage=%v&page=%v", url.QueryEscape(*req.Mode.Search.Term), hitsPerPage, pageIndex)
 
@@ -79,19 +54,6 @@ func GetPostsSearch(c *http.Client, req sdk.GetPostsRequest) (ss []sdk.Post, err
 
 		for _, s := range r.Hits {
 			ss = append(ss, mapSearchHNStoryToPost(s))
-		}
-
-		if len(ss) == hitsPerPage {
-			pagination.Next = []sdk.ServicePage{
-				{
-					Page: &sdk.Page{
-						Kind: &sdk.PageKind.IndexPage,
-						IndexPage: &sdk.IndexPage{
-							Value: sdk.Int32(pageIndex + 1),
-						},
-					},
-				},
-			}
 		}
 
 		return
