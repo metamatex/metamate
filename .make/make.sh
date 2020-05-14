@@ -48,16 +48,20 @@ function deploy {
     (cd metamate && make deploy)
 }
 
-function x_build_and_serve {
+function test {
+    (cd generic && make test)
+    (cd metamate && make test)
+}
+
+function dev_build_and_serve {
     go build -i -o metamate/dist/metamate metamate/cmd/metamate/main.go
     metamate/dist/metamate serve
 }
 
-function x_serve {
+function dev_serve {
     metamate/dist/metamate serve
 }
 
-function test {
-    (cd generic && make test)
-    (cd metamate && make test)
+function dev_copy_metactl {
+    cp metactl/dist/metactl $(which metactl)
 }
