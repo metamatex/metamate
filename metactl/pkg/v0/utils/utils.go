@@ -156,12 +156,12 @@ func printData(outputFormat string, messageReport types.MessageReport, o types.O
 
 	var b []byte
 	switch outputFormat {
-	case types.FORMAT_JSON:
+	case types.FormatJson:
 		b, err = json.Marshal(dataReport)
 		if err != nil {
 			return
 		}
-	case types.FORMAT_YAML:
+	case types.FormatYaml:
 		b, err = yaml.Marshal(dataReport)
 		if err != nil {
 			return

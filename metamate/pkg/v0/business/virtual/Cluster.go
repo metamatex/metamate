@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
-	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/mql"
 
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/generic/pkg/v0/transport/httpjson"
@@ -15,7 +15,7 @@ import (
 )
 
 type Cluster struct {
-	svcs     map[string]sdk.Service
+	svcs     map[string]mql.Service
 	hs       map[string]http.Handler
 	f        generic.Factory
 	rn       *graph.RootNode
@@ -79,7 +79,7 @@ func validateVirtualSvcOpts(opts types.VirtualSvcOpts) (err error) {
 
 func NewCluster(rn *graph.RootNode, f generic.Factory, logErr func(err error)) (n *Cluster) {
 	n = &Cluster{
-		svcs:   map[string]sdk.Service{},
+		svcs:   map[string]mql.Service{},
 		hs:     map[string]http.Handler{},
 		f:      f,
 		rn:     rn,
@@ -109,15 +109,15 @@ func (c *Cluster) HostSvc(svc types.VirtualSvc) (err error) {
 
 	c.hs[svc.Id] = f
 
-	c.svcs[svc.Id] = sdk.Service{
-		Id: &sdk.ServiceId{
-			Value: sdk.String(svc.Id),
+	c.svcs[svc.Id] = mql.Service{
+		Id: &mql.ServiceId{
+			Value: mql.String(svc.Id),
 		},
-		IsVirtual: sdk.Bool(true),
+		IsVirtual: mql.Bool(true),
 		Transport: &t,
-		Port:      sdk.Int32(80),
-		Url: &sdk.Url{
-			Value: sdk.String("http://" + svc.Id),
+		Port:      mql.Int32(80),
+		Url: &mql.Url{
+			Value: mql.String("http://" + svc.Id),
 		},
 	}
 
@@ -134,15 +134,15 @@ func (c *Cluster) Host(id, transport string, h http.Handler) (err error) {
 
 	c.hs[id] = h
 
-	c.svcs[id] = sdk.Service{
-		Id: &sdk.ServiceId{
-			Value: sdk.String(id),
+	c.svcs[id] = mql.Service{
+		Id: &mql.ServiceId{
+			Value: mql.String(id),
 		},
-		IsVirtual: sdk.Bool(true),
-		Transport: sdk.String(transport),
-		Port:      sdk.Int32(80),
-		Url: &sdk.Url{
-			Value: sdk.String("http://" + id),
+		IsVirtual: mql.Bool(true),
+		Transport: mql.String(transport),
+		Port:      mql.Int32(80),
+		Url: &mql.Url{
+			Value: mql.String("http://" + id),
 		},
 	}
 
@@ -157,7 +157,7 @@ func (c *Cluster) HostHttpJsonFunc(id string, f func(context.Context, generic.Ge
 		LogErr:  c.logErr,
 	})
 
-	return c.Host(id, sdk.ServiceTransport.HttpJson, h)
+	return c.Host(id, mql.ServiceTransport.HttpJson, h)
 }
 
 func (c *Cluster) HostBus(id string, f func(context.Context, generic.Generic) generic.Generic) (err error) {
@@ -199,25 +199,25 @@ func (c *Cluster) RoundTrip(req *http.Request) (rsp *http.Response, err error) {
 
 func (c *Cluster) serveDiscovery(ctx context.Context, gRequest generic.Generic) (gResponse generic.Generic) {
 	switch gRequest.Type().Name() {
-	case sdk.LookupServiceRequestName:
-		return c.f.MustFromStruct(sdk.LookupServiceResponse{
-			Output: &sdk.LookupServiceOutput{
-				Service: &sdk.Service{
-					Endpoints: &sdk.Endpoints{
-						LookupService: &sdk.LookupServiceEndpoint{},
-						GetServices:   &sdk.GetServicesEndpoint{},
+	case mql.LookupServiceRequestName:
+		return c.f.MustFromStruct(mql.LookupServiceResponse{
+			Output: &mql.LookupServiceOutput{
+				Service: &mql.Service{
+					Endpoints: &mql.Endpoints{
+						LookupService: &mql.LookupServiceEndpoint{},
+						GetServices:   &mql.GetServicesEndpoint{},
 					},
 				},
 			},
 		})
-	case sdk.GetServicesRequestName:
-		var svcs []sdk.Service
+	case mql.GetServicesRequestName:
+		var svcs []mql.Service
 
 		for _, svc := range c.svcs {
 			svcs = append(svcs, svc)
 		}
 
-		return c.f.MustFromStruct(sdk.GetServicesResponse{
+		return c.f.MustFromStruct(mql.GetServicesResponse{
 			Services: svcs,
 		})
 	}

@@ -1,0 +1,9 @@
+v0:
+  gen:
+    sdks:
+    - name: typescript_httpjson_client
+      args:
+        path: .
+      endpoints:
+        - GetPosts
+ 

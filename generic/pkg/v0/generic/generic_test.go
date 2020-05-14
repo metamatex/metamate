@@ -9,7 +9,7 @@ import (
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/mql"
 )
 
 var w = sdk.Whatever{
@@ -64,7 +64,7 @@ func SetGet(t *testing.T, rn *graph.RootNode, factory Factory) {
 	t.Run(name, func(t *testing.T) {
 		t.Parallel()
 
-		g := factory.New(rn.Types.MustByName(typenames.Whatever))
+		g := factory.New(rn.Types.MustByName(typenames.Dummy))
 
 		s := "a"
 		err := g.SetString([]string{fieldnames.StringField}, s)
@@ -110,7 +110,7 @@ func NestedSetGet(t *testing.T, rn *graph.RootNode, factory Factory) {
 	t.Run(name, func(t *testing.T) {
 		t.Parallel()
 
-		g := factory.New(rn.Types.MustByName(typenames.Whatever))
+		g := factory.New(rn.Types.MustByName(typenames.Dummy))
 
 		s := "a"
 		err := g.SetString([]string{fieldnames.UnionField, fieldnames.StringField}, s)
@@ -120,7 +120,7 @@ func NestedSetGet(t *testing.T, rn *graph.RootNode, factory Factory) {
 
 		g0, ok := g.Generic(fieldnames.UnionField)
 		if assert.Equal(t, true, ok) {
-			assert.Equal(t, typenames.WhateverUnion, g0.Type().Name())
+			assert.Equal(t, typenames.DummyUnion, g0.Type().Name())
 		}
 
 		s0, ok := g.String(fieldnames.UnionField, fieldnames.StringField)

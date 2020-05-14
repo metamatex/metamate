@@ -34,20 +34,18 @@ func Format(sdks []types.SdkGenerator) (s string) {
 
 func Reset(cs []types.SdkConfig) (errs []error) {
 	for _, c := range cs {
-		for _, n := range c.Names {
-			g, err := getSdkGenerator(n)
-			if err != nil {
-				errs = append(errs, err)
+		g, err := getSdkGenerator(c.Name)
+		if err != nil {
+			errs = append(errs, err)
 
-				return
-			}
+			return
+		}
 
-			err = g.Reset(c)
-			if err != nil {
-				errs = append(errs, err)
+		err = g.Reset(c)
+		if err != nil {
+			errs = append(errs, err)
 
-				return
-			}
+			return
 		}
 	}
 
@@ -75,7 +73,11 @@ func Gen(report *types.MessageReport, fs afero.Fs, version types.Version, rn *gr
 				sdk.Tasks[i].Dependencies = &types.RenderTaskDependencies{}
 			}
 
-			sdk.Tasks[i].Dependencies.Endpoints = c.Endpoints
+			sdk.Tasks[i].Dependencies.Endpoints = &graph.Filter{
+				Names: &graph.NamesSubset{
+					Or: c.Endpoints,
+				},
+			}
 		}
 	}
 

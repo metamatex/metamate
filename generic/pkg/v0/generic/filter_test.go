@@ -3,7 +3,7 @@ package generic
 import (
 	"github.com/metamatex/metamate/asg/pkg/v0/asg"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
-	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/mql"
 
 	"github.com/stretchr/testify/assert"
 	"testing"

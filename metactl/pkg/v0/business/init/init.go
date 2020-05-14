@@ -1,7 +1,6 @@
 package init
 
 import (
-	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/metamatex/metamate/metactl/pkg/v0/business/sdk"
 	_go "github.com/metamatex/metamate/metactl/pkg/v0/business/sdk/go"
 	"github.com/metamatex/metamate/metactl/pkg/v0/business/sdk/typescript"
@@ -33,38 +32,26 @@ var initialConfig = types.ProjectConfig{
 		Gen: types.Gen{
 			Sdks: []types.SdkConfig{
 				{
-					Names: []string{_go.SdkHttpJsonService},
-					Data: map[string]interface{}{
+					Name: _go.SdkHttpJsonService,
+					Args: map[string]interface{}{
 						"name":    "socialservice",
 						"package": "github.com/somebody/socialservice",
 					},
-					Endpoints: &graph.Filter{
-						Names: &graph.NamesSubset{
-							Or: []string{"GetPostFeeds", "GetSocialAccounts", "GetPosts"},
-						},
-					},
+					Endpoints: []string{"GetPostFeeds", "GetSocialAccounts", "GetPosts"},
 				},
 				{
-					Names: []string{_go.SdkHttpJsonClient},
-					Data: map[string]interface{}{
+					Name: _go.SdkHttpJsonClient,
+					Args: map[string]interface{}{
 						"package": "github.com/somebody/socialclient",
 					},
-					Endpoints: &graph.Filter{
-						Names: &graph.NamesSubset{
-							Or: []string{"GetPostFeeds", "GetSocialAccounts", "GetPosts"},
-						},
-					},
+					Endpoints: []string{"GetPostFeeds", "GetSocialAccounts", "GetPosts"},
 				},
 				{
-					Names: []string{typescript.SdkHttpJsonClient},
-					Data: map[string]interface{}{
+					Name: typescript.SdkHttpJsonClient,
+					Args: map[string]interface{}{
 						"path": "src",
 					},
-					Endpoints: &graph.Filter{
-						Names: &graph.NamesSubset{
-							Or: []string{"GetPostFeeds", "GetSocialAccounts", "GetPosts"},
-						},
-					},
+					Endpoints: []string{"GetPostFeeds", "GetSocialAccounts", "GetPosts"},
 				},
 			},
 		},

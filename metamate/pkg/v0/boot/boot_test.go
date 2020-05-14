@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
-	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/utils"
+	"github.com/metamatex/metamate/gen/v0/mql"
+	"github.com/metamatex/metamate/gen/v0/mql/utils"
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/metamate/pkg/v0/boot"
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/line"
@@ -35,7 +35,7 @@ func TestBoot(t *testing.T) {
 
 	c.Log.Internal = types.InternalLogConfig{
 		config.SvcRsp: map[string]string{
-			//sdk.GetPostsResponseName: "{{ .Ctx.Svc.Url.Value }} : \n{{ .Ctx.GSvcReq.Type.Name }}\n{{ .Ctx.GSvcReq.Sprint }}\n\n{{ .Ctx.GSvcRsp.Type.Name }}\n{{ .Ctx.GSvcRsp.Sprint }}",
+			//mql.GetPostsResponseName: "{{ .Ctx.Svc.Url.Value }} : \n{{ .Ctx.GSvcReq.Type.Name }}\n{{ .Ctx.GSvcReq.Sprint }}\n\n{{ .Ctx.GSvcRsp.Type.Name }}\n{{ .Ctx.GSvcRsp.Sprint }}",
 			//"*": "{{ .Ctx.Svc.Url.Value }} : {{ .Ctx.GSvcRsp.Type.Name }}",
 		},
 	}
@@ -72,8 +72,8 @@ func TestBoot(t *testing.T) {
 	println(suffix)
 
 	f := func(ctx context.Context, gCliReq generic.Generic) (gCliRsp generic.Generic, err error) {
-		gCliReq.MustSetGeneric([]string{fieldnames.Select, fieldnames.Errors}, d.Factory.MustFromStruct(sdk.ErrorSelect{
-			Message: sdk.Bool(true),
+		gCliReq.MustSetGeneric([]string{fieldnames.Select, fieldnames.Errors}, d.Factory.MustFromStruct(mql.ErrorSelect{
+			Message: mql.Bool(true),
 		}))
 
 		gCliRsp = d.ServeFunc(ctx, gCliReq)
@@ -143,24 +143,24 @@ func FTestPagination(t *testing.T, ctx context.Context, f generic.Factory, h fun
 			t.Parallel()
 
 			tcs := []struct {
-				mode *sdk.GetMode
+				mode *mql.GetMode
 			}{
 				{
-					mode: &sdk.GetMode{
-						Kind:       &sdk.GetModeKind.Collection,
-						Collection: &sdk.CollectionGetMode{},
+					mode: &mql.GetMode{
+						Kind:       &mql.GetModeKind.Collection,
+						Collection: &mql.CollectionGetMode{},
 					},
 				},
 				{
-					mode: &sdk.GetMode{
-						Kind:     &sdk.GetModeKind.Relation,
-						Relation: &sdk.RelationGetMode{},
+					mode: &mql.GetMode{
+						Kind:     &mql.GetModeKind.Relation,
+						Relation: &mql.RelationGetMode{},
 					},
 				},
 				{
-					mode: &sdk.GetMode{
-						Kind:   &sdk.GetModeKind.Search,
-						Search: &sdk.SearchGetMode{},
+					mode: &mql.GetMode{
+						Kind:   &mql.GetModeKind.Search,
+						Search: &mql.SearchGetMode{},
 					},
 				},
 			}
@@ -168,10 +168,10 @@ func FTestPagination(t *testing.T, ctx context.Context, f generic.Factory, h fun
 			for _, tc := range tcs {
 				t.Run(*tc.mode.Kind, func(t *testing.T) {
 					err := func() (err error) {
-						getReq := sdk.GetWhateversRequest{
-							ServiceFilter: &sdk.ServiceFilter{
-								Id: &sdk.ServiceIdFilter{
-									Value: &sdk.StringFilter{
+						getReq := mql.GetWhateversRequest{
+							ServiceFilter: &mql.ServiceFilter{
+								Id: &mql.ServiceIdFilter{
+									Value: &mql.StringFilter{
 										In: []string{PaginationA},
 									},
 								},
@@ -200,24 +200,24 @@ func FTestPagination(t *testing.T, ctx context.Context, f generic.Factory, h fun
 			t.Parallel()
 
 			tcs := []struct {
-				mode *sdk.GetMode
+				mode *mql.GetMode
 			}{
 				{
-					mode: &sdk.GetMode{
-						Kind:       &sdk.GetModeKind.Collection,
-						Collection: &sdk.CollectionGetMode{},
+					mode: &mql.GetMode{
+						Kind:       &mql.GetModeKind.Collection,
+						Collection: &mql.CollectionGetMode{},
 					},
 				},
 				{
-					mode: &sdk.GetMode{
-						Kind:     &sdk.GetModeKind.Relation,
-						Relation: &sdk.RelationGetMode{},
+					mode: &mql.GetMode{
+						Kind:     &mql.GetModeKind.Relation,
+						Relation: &mql.RelationGetMode{},
 					},
 				},
 				{
-					mode: &sdk.GetMode{
-						Kind:   &sdk.GetModeKind.Search,
-						Search: &sdk.SearchGetMode{},
+					mode: &mql.GetMode{
+						Kind:   &mql.GetModeKind.Search,
+						Search: &mql.SearchGetMode{},
 					},
 				},
 			}
@@ -225,10 +225,10 @@ func FTestPagination(t *testing.T, ctx context.Context, f generic.Factory, h fun
 			for _, tc := range tcs {
 				t.Run(*tc.mode.Kind, func(t *testing.T) {
 					err := func() (err error) {
-						getReq := sdk.GetWhateversRequest{
-							ServiceFilter: &sdk.ServiceFilter{
-								Id: &sdk.ServiceIdFilter{
-									Value: &sdk.StringFilter{
+						getReq := mql.GetWhateversRequest{
+							ServiceFilter: &mql.ServiceFilter{
+								Id: &mql.ServiceIdFilter{
+									Value: &mql.StringFilter{
 										In: []string{PaginationA},
 									},
 								},
@@ -244,7 +244,7 @@ func FTestPagination(t *testing.T, ctx context.Context, f generic.Factory, h fun
 						gPagination, ok := gGetRsp.Generic(fieldnames.Pagination)
 						assert.True(t, ok)
 
-						var p sdk.Pagination
+						var p mql.Pagination
 						gPagination.MustToStruct(&p)
 
 						for _, sp := range append(p.Previous, append(p.Current, p.Next...)...) {
@@ -264,18 +264,18 @@ func FTestPagination(t *testing.T, ctx context.Context, f generic.Factory, h fun
 			t.Parallel()
 
 			tcs := []struct {
-				mode *sdk.GetMode
+				mode *mql.GetMode
 			}{
 				{
-					mode: &sdk.GetMode{
-						Kind:       &sdk.GetModeKind.Collection,
-						Collection: &sdk.CollectionGetMode{},
+					mode: &mql.GetMode{
+						Kind:       &mql.GetModeKind.Collection,
+						Collection: &mql.CollectionGetMode{},
 					},
 				},
 				{
-					mode: &sdk.GetMode{
-						Kind:   &sdk.GetModeKind.Search,
-						Search: &sdk.SearchGetMode{},
+					mode: &mql.GetMode{
+						Kind:   &mql.GetModeKind.Search,
+						Search: &mql.SearchGetMode{},
 					},
 				},
 			}
@@ -283,10 +283,10 @@ func FTestPagination(t *testing.T, ctx context.Context, f generic.Factory, h fun
 			for _, tc := range tcs {
 				t.Run(*tc.mode.Kind, func(t *testing.T) {
 					err := func() (err error) {
-						getReq := sdk.GetWhateversRequest{
-							ServiceFilter: &sdk.ServiceFilter{
-								Id: &sdk.ServiceIdFilter{
-									Value: &sdk.StringFilter{
+						getReq := mql.GetWhateversRequest{
+							ServiceFilter: &mql.ServiceFilter{
+								Id: &mql.ServiceIdFilter{
+									Value: &mql.StringFilter{
 										In: []string{PaginationA, PaginationB},
 									},
 								},
@@ -304,7 +304,7 @@ func FTestPagination(t *testing.T, ctx context.Context, f generic.Factory, h fun
 						gPagination, ok := gGetRsp.Generic(fieldnames.Pagination)
 						assert.True(t, ok)
 
-						var p sdk.Pagination
+						var p mql.Pagination
 						gPagination.MustToStruct(&p)
 
 						assert.Len(t, p.Previous, 0, fmt.Sprintf("%v:\n%v\n%v:\n%v", gGetReq.Type().Name(), gGetReq.Sprint(), gGetRsp.Type().Name(), gGetRsp.Sprint()))
@@ -322,18 +322,18 @@ func FTestPagination(t *testing.T, ctx context.Context, f generic.Factory, h fun
 
 		t.Run("distributesPages", func(t *testing.T) {
 			tcs := []struct {
-				mode *sdk.GetMode
+				mode *mql.GetMode
 			}{
 				{
-					mode: &sdk.GetMode{
-						Kind:       &sdk.GetModeKind.Collection,
-						Collection: &sdk.CollectionGetMode{},
+					mode: &mql.GetMode{
+						Kind:       &mql.GetModeKind.Collection,
+						Collection: &mql.CollectionGetMode{},
 					},
 				},
 				{
-					mode: &sdk.GetMode{
-						Kind:   &sdk.GetModeKind.Search,
-						Search: &sdk.SearchGetMode{},
+					mode: &mql.GetMode{
+						Kind:   &mql.GetModeKind.Search,
+						Search: &mql.SearchGetMode{},
 					},
 				},
 			}
@@ -341,37 +341,37 @@ func FTestPagination(t *testing.T, ctx context.Context, f generic.Factory, h fun
 			for _, tc := range tcs {
 				t.Run(*tc.mode.Kind, func(t *testing.T) {
 					err := func() (err error) {
-						getReq := sdk.GetWhateversRequest{
-							ServiceFilter: &sdk.ServiceFilter{
-								Id: &sdk.ServiceIdFilter{
-									Value: &sdk.StringFilter{
+						getReq := mql.GetWhateversRequest{
+							ServiceFilter: &mql.ServiceFilter{
+								Id: &mql.ServiceIdFilter{
+									Value: &mql.StringFilter{
 										In: []string{PaginationA, PaginationB},
 									},
 								},
 							},
 							Mode: tc.mode,
-							Pages: []sdk.ServicePage{
+							Pages: []mql.ServicePage{
 								{
-									Id: &sdk.ServiceId{
-										ServiceName: sdk.String("discovery"),
-										Value:       sdk.String(PaginationA),
+									Id: &mql.ServiceId{
+										ServiceName: mql.String("discovery"),
+										Value:       mql.String(PaginationA),
 									},
-									Page: &sdk.Page{
-										Kind: &sdk.PageKind.IndexPage,
-										IndexPage: &sdk.IndexPage{
-											Value: sdk.Int32(0),
+									Page: &mql.Page{
+										Kind: &mql.PageKind.IndexPage,
+										IndexPage: &mql.IndexPage{
+											Value: mql.Int32(0),
 										},
 									},
 								},
 								{
-									Id: &sdk.ServiceId{
-										ServiceName: sdk.String("discovery"),
-										Value:       sdk.String(PaginationB),
+									Id: &mql.ServiceId{
+										ServiceName: mql.String("discovery"),
+										Value:       mql.String(PaginationB),
 									},
-									Page: &sdk.Page{
-										Kind: &sdk.PageKind.IndexPage,
-										IndexPage: &sdk.IndexPage{
-											Value: sdk.Int32(1),
+									Page: &mql.Page{
+										Kind: &mql.PageKind.IndexPage,
+										IndexPage: &mql.IndexPage{
+											Value: mql.Int32(1),
 										},
 									},
 								},
@@ -388,7 +388,7 @@ func FTestPagination(t *testing.T, ctx context.Context, f generic.Factory, h fun
 						gPagination, ok := gGetRsp.Generic(fieldnames.Pagination)
 						assert.True(t, ok)
 
-						var p sdk.Pagination
+						var p mql.Pagination
 						gPagination.MustToStruct(&p)
 
 						assert.ElementsMatch(t, p.Current, getReq.Pages, fmt.Sprintf("%v:\n%v\n%v:\n%v", gGetReq.Type().Name(), gGetReq.Sprint(), gGetRsp.Type().Name(), gGetRsp.Sprint()))
@@ -414,17 +414,17 @@ func FTestError(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx
 		t.Parallel()
 
 		err := func() (err error) {
-			getReq := sdk.GetWhateversRequest{
-				ServiceFilter: &sdk.ServiceFilter{
-					Id: &sdk.ServiceIdFilter{
-						Value: &sdk.StringFilter{
+			getReq := mql.GetWhateversRequest{
+				ServiceFilter: &mql.ServiceFilter{
+					Id: &mql.ServiceIdFilter{
+						Value: &mql.StringFilter{
 							In: []string{ErrorA, ErrorB},
 						},
 					},
 				},
-				Select: &sdk.GetWhateversResponseSelect{
-					Errors: &sdk.ErrorSelect{
-						Message: sdk.Bool(true),
+				Select: &mql.GetWhateversResponseSelect{
+					Errors: &mql.ErrorSelect{
+						Message: mql.Bool(true),
 					},
 				},
 			}
@@ -448,14 +448,14 @@ func FTestHackernews(t *testing.T, ctx context.Context, f generic.Factory, h fun
 	t.Run("GetSocialAccounts", func(t *testing.T) {
 		t.Run("id", func(t *testing.T) {
 			err := func() (err error) {
-				getReq := sdk.GetSocialAccountsRequest{
-					Mode: &sdk.GetMode{
-						Kind: &sdk.GetModeKind.Id,
-						Id: &sdk.Id{
-							Kind: &sdk.IdKind.ServiceId,
-							ServiceId: &sdk.ServiceId{
-								Value:       sdk.String("21stio"),
-								ServiceName: sdk.String("hackernews"),
+				getReq := mql.GetSocialAccountsRequest{
+					Mode: &mql.GetMode{
+						Kind: &mql.GetModeKind.Id,
+						Id: &mql.Id{
+							Kind: &mql.IdKind.ServiceId,
+							ServiceId: &mql.ServiceId{
+								Value:       mql.String("21stio"),
+								ServiceName: mql.String("hackernews"),
 							},
 						},
 					},
@@ -468,7 +468,7 @@ func FTestHackernews(t *testing.T, ctx context.Context, f generic.Factory, h fun
 					return
 				}
 
-				var getRsp sdk.GetSocialAccountsResponse
+				var getRsp mql.GetSocialAccountsResponse
 				gGetRsp.MustToStruct(&getRsp)
 
 				assert.Len(t, getRsp.SocialAccounts, 1)
@@ -495,52 +495,52 @@ func FTestHackernewsSocialAccount(t *testing.T, ctx context.Context, f generic.F
 		t.Parallel()
 
 		err := func() (err error) {
-			getReq := sdk.GetSocialAccountsRequest{
-				ServiceFilter: &sdk.ServiceFilter{
-					Id: &sdk.ServiceIdFilter{
-						Value: &sdk.StringFilter{
-							Is: sdk.String("hackernews"),
+			getReq := mql.GetSocialAccountsRequest{
+				ServiceFilter: &mql.ServiceFilter{
+					Id: &mql.ServiceIdFilter{
+						Value: &mql.StringFilter{
+							Is: mql.String("hackernews"),
 						},
 					},
 				},
-				Mode: &sdk.GetMode{
-					Kind: &sdk.GetModeKind.Id,
-					Id: &sdk.Id{
-						Kind: &sdk.IdKind.ServiceId,
-						ServiceId: &sdk.ServiceId{
-							Value:       sdk.String("21stio"),
-							ServiceName: sdk.String("hackernews"),
+				Mode: &mql.GetMode{
+					Kind: &mql.GetModeKind.Id,
+					Id: &mql.Id{
+						Kind: &mql.IdKind.ServiceId,
+						ServiceId: &mql.ServiceId{
+							Value:       mql.String("21stio"),
+							ServiceName: mql.String("hackernews"),
 						},
 					},
 				},
-				Select: &sdk.GetSocialAccountsResponseSelect{
-					SocialAccounts: &sdk.SocialAccountSelect{
-						All: sdk.Bool(true),
-						Relations: &sdk.SocialAccountRelationsSelect{
-							AuthorsPosts: &sdk.PostsCollectionSelect{
-								Errors: &sdk.ErrorSelect{
-									Message: sdk.Bool(true),
+				Select: &mql.GetSocialAccountsResponseSelect{
+					SocialAccounts: &mql.SocialAccountSelect{
+						All: mql.Bool(true),
+						Relations: &mql.SocialAccountRelationsSelect{
+							AuthorsPosts: &mql.PostsCollectionSelect{
+								Errors: &mql.ErrorSelect{
+									Message: mql.Bool(true),
 								},
-								Posts: &sdk.PostSelect{
-									Id: &sdk.ServiceIdSelect{
-										Value:       sdk.Bool(true),
-										ServiceName: sdk.Bool(true),
+								Posts: &mql.PostSelect{
+									Id: &mql.ServiceIdSelect{
+										Value:       mql.Bool(true),
+										ServiceName: mql.Bool(true),
 									},
 								},
 							},
 						},
 					},
 				},
-				Relations: &sdk.GetSocialAccountsRelations{
-					AuthorsPosts: &sdk.GetPostsCollection{
-						Select: &sdk.PostsCollectionSelect{
-							Errors: &sdk.ErrorSelect{
-								Message: sdk.Bool(true),
+				Relations: &mql.GetSocialAccountsRelations{
+					AuthorsPosts: &mql.GetPostsCollection{
+						Select: &mql.PostsCollectionSelect{
+							Errors: &mql.ErrorSelect{
+								Message: mql.Bool(true),
 							},
-							Posts: &sdk.PostSelect{
-								Id: &sdk.ServiceIdSelect{
-									Value:       sdk.Bool(true),
-									ServiceName: sdk.Bool(true),
+							Posts: &mql.PostSelect{
+								Id: &mql.ServiceIdSelect{
+									Value:       mql.Bool(true),
+									ServiceName: mql.Bool(true),
 								},
 							},
 						},
@@ -569,15 +569,15 @@ func FTestHackernewsGetPostFeedContainsPosts(t *testing.T, ctx context.Context, 
 		t.Parallel()
 
 		err := func() (err error) {
-			getReq := sdk.GetPostsRequest{
-				Mode: &sdk.GetMode{
-					Kind: &sdk.GetModeKind.Relation,
-					Relation: &sdk.RelationGetMode{
-						Id: &sdk.ServiceId{
-							ServiceName: sdk.String("hackernews"),
-							Value:       sdk.String("topstories"),
+			getReq := mql.GetPostsRequest{
+				Mode: &mql.GetMode{
+					Kind: &mql.GetModeKind.Relation,
+					Relation: &mql.RelationGetMode{
+						Id: &mql.ServiceId{
+							ServiceName: mql.String("hackernews"),
+							Value:       mql.String("topstories"),
 						},
-						Relation: &sdk.PostFeedRelationName.PostFeedContainsPosts,
+						Relation: &mql.PostFeedRelationName.PostFeedContainsPosts,
 					},
 				},
 			}
@@ -589,7 +589,7 @@ func FTestHackernewsGetPostFeedContainsPosts(t *testing.T, ctx context.Context, 
 
 			gGetRsp.Print()
 
-			getRsp := sdk.GetPostsResponse{}
+			getRsp := mql.GetPostsResponse{}
 			gGetRsp.MustToStruct(&getRsp)
 
 			assert.True(t, len(getRsp.Posts) != 0)
@@ -608,11 +608,11 @@ func FTestHackernewsGetPostsSearch(t *testing.T, ctx context.Context, f generic.
 		t.Parallel()
 
 		err := func() (err error) {
-			getReq := sdk.GetPostsRequest{
-				Mode: &sdk.GetMode{
-					Kind: &sdk.GetModeKind.Search,
-					Search: &sdk.SearchGetMode{
-						Term: sdk.String("book recommendations"),
+			getReq := mql.GetPostsRequest{
+				Mode: &mql.GetMode{
+					Kind: &mql.GetModeKind.Search,
+					Search: &mql.SearchGetMode{
+						Term: mql.String("book recommendations"),
 					},
 				},
 			}
@@ -624,7 +624,7 @@ func FTestHackernewsGetPostsSearch(t *testing.T, ctx context.Context, f generic.
 
 			gGetRsp.Print()
 
-			getRsp := sdk.GetPostsResponse{}
+			getRsp := mql.GetPostsResponse{}
 			gGetRsp.MustToStruct(&getRsp)
 
 			assert.True(t, len(getRsp.Posts) != 0)
@@ -643,15 +643,15 @@ func FTestHackernewsGetSocialAccountAuthorsPosts(t *testing.T, ctx context.Conte
 		t.Parallel()
 
 		err := func() (err error) {
-			getReq := sdk.GetPostsRequest{
-				Mode: &sdk.GetMode{
-					Kind: &sdk.GetModeKind.Relation,
-					Relation: &sdk.RelationGetMode{
-						Id: &sdk.ServiceId{
-							ServiceName: sdk.String("hackernews"),
-							Value:       sdk.String("21stio"),
+			getReq := mql.GetPostsRequest{
+				Mode: &mql.GetMode{
+					Kind: &mql.GetModeKind.Relation,
+					Relation: &mql.RelationGetMode{
+						Id: &mql.ServiceId{
+							ServiceName: mql.String("hackernews"),
+							Value:       mql.String("21stio"),
 						},
-						Relation: &sdk.SocialAccountRelationName.SocialAccountAuthorsPosts,
+						Relation: &mql.SocialAccountRelationName.SocialAccountAuthorsPosts,
 					},
 				},
 			}
@@ -663,7 +663,7 @@ func FTestHackernewsGetSocialAccountAuthorsPosts(t *testing.T, ctx context.Conte
 
 			gGetRsp.Print()
 
-			getRsp := sdk.GetPostsResponse{}
+			getRsp := mql.GetPostsResponse{}
 			gGetRsp.MustToStruct(&getRsp)
 
 			assert.True(t, len(getRsp.Posts) != 0)
@@ -682,11 +682,11 @@ func FTestHackernewsGetPostFeedsCollection(t *testing.T, ctx context.Context, f 
 		t.Parallel()
 
 		err := func() (err error) {
-			getReq := sdk.GetPostFeedsRequest{
-				Filter: &sdk.PostFeedFilter{
-					Id: &sdk.ServiceIdFilter{
-						Value: &sdk.StringFilter{
-							Contains: sdk.String("top"),
+			getReq := mql.GetPostFeedsRequest{
+				Filter: &mql.PostFeedFilter{
+					Id: &mql.ServiceIdFilter{
+						Value: &mql.StringFilter{
+							Contains: mql.String("top"),
 						},
 					},
 				},
@@ -699,7 +699,7 @@ func FTestHackernewsGetPostFeedsCollection(t *testing.T, ctx context.Context, f 
 
 			gGetRsp.Print()
 
-			getRsp := sdk.GetPostFeedsResponse{}
+			getRsp := mql.GetPostFeedsResponse{}
 			gGetRsp.MustToStruct(&getRsp)
 			assert.True(t, len(getRsp.PostFeeds) != 0)
 
@@ -717,15 +717,15 @@ func FTestHackernewsGetSocialAccountBookmarksPosts(t *testing.T, ctx context.Con
 		t.Parallel()
 
 		err := func() (err error) {
-			getReq := sdk.GetPostsRequest{
-				Mode: &sdk.GetMode{
-					Kind: &sdk.GetModeKind.Relation,
-					Relation: &sdk.RelationGetMode{
-						Id: &sdk.ServiceId{
-							ServiceName: sdk.String("hackernews"),
-							Value:       sdk.String("peter_d_sherman"),
+			getReq := mql.GetPostsRequest{
+				Mode: &mql.GetMode{
+					Kind: &mql.GetModeKind.Relation,
+					Relation: &mql.RelationGetMode{
+						Id: &mql.ServiceId{
+							ServiceName: mql.String("hackernews"),
+							Value:       mql.String("peter_d_sherman"),
 						},
-						Relation: &sdk.SocialAccountRelationName.SocialAccountBookmarksPosts,
+						Relation: &mql.SocialAccountRelationName.SocialAccountBookmarksPosts,
 					},
 				},
 			}
@@ -737,7 +737,7 @@ func FTestHackernewsGetSocialAccountBookmarksPosts(t *testing.T, ctx context.Con
 
 			//gGetRsp.Print()
 
-			getRsp := sdk.GetPostsResponse{}
+			getRsp := mql.GetPostsResponse{}
 			gGetRsp.MustToStruct(&getRsp)
 
 			utils.Print(getRsp.Pagination)

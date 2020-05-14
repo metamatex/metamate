@@ -3,14 +3,14 @@ package pkg
 import (
 	"context"
 	"github.com/mattn/go-mastodon"
-	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/mql"
 )
 
-func getPostId(ctx context.Context, c *mastodon.Client, req sdk.GetPostsRequest) (rsp sdk.GetPostsResponse) {
+func getPostId(ctx context.Context, c *mastodon.Client, req mql.GetPostsRequest) (rsp mql.GetPostsResponse) {
 	err := func() (err error) {
 		var status *mastodon.Status
 		switch *req.Mode.Id.Kind {
-		case sdk.IdKind.ServiceId:
+		case mql.IdKind.ServiceId:
 			status, err = c.GetStatus(ctx, mastodon.ID(*req.Mode.Id.ServiceId.Value))
 			if err != nil {
 				return
@@ -18,20 +18,20 @@ func getPostId(ctx context.Context, c *mastodon.Client, req sdk.GetPostsRequest)
 		default:
 		}
 
-		rsp.Posts = []sdk.Post{MapPostFromStatus(*status)}
+		rsp.Posts = []mql.Post{MapPostFromStatus(*status)}
 
 		return
 	}()
 	if err != nil {
-		rsp.Errors = append(rsp.Errors, sdk.Error{
-			Message: sdk.String(err.Error()),
+		rsp.Errors = append(rsp.Errors, mql.Error{
+			Message: mql.String(err.Error()),
 		})
 	}
 
 	return
 }
 
-func getPostsSearch(ctx context.Context, c *mastodon.Client, req sdk.GetPostsRequest) (rsp sdk.GetPostsResponse) {
+func getPostsSearch(ctx context.Context, c *mastodon.Client, req mql.GetPostsRequest) (rsp mql.GetPostsResponse) {
 	err := func() (err error) {
 		results, err := c.Search(ctx, *req.Mode.Search.Term, false)
 		if err != nil {
@@ -43,18 +43,18 @@ func getPostsSearch(ctx context.Context, c *mastodon.Client, req sdk.GetPostsReq
 		return
 	}()
 	if err != nil {
-		rsp.Errors = append(rsp.Errors, sdk.Error{
-			Message: sdk.String(err.Error()),
+		rsp.Errors = append(rsp.Errors, mql.Error{
+			Message: mql.String(err.Error()),
 		})
 	}
 
 	return
 }
 
-func getPostsRelation(ctx context.Context, c *mastodon.Client, req sdk.GetPostsRequest) (rsp sdk.GetPostsResponse) {
+func getPostsRelation(ctx context.Context, c *mastodon.Client, req mql.GetPostsRequest) (rsp mql.GetPostsResponse) {
 	var statuses []*mastodon.Status
 
-	//var page *sdk.Page
+	//var page *mql.Page
 	pg := &mastodon.Pagination{}
 
 	//if len(req.Mode.Relation.Pages) > 0 {
@@ -74,7 +74,7 @@ func getPostsRelation(ctx context.Context, c *mastodon.Client, req sdk.GetPostsR
 
 	err := func() (err error) {
 		switch *req.Mode.Relation.Relation {
-		case sdk.PostRelationName.PostWasRepliedToByPosts:
+		case mql.PostRelationName.PostWasRepliedToByPosts:
 			//var c *mastodon.Context
 			//c, err = c.GetStatusContext(ctx, mastodon.ID(*req.Mode.Relation.Id.Value))
 			//if err != nil {
@@ -83,15 +83,15 @@ func getPostsRelation(ctx context.Context, c *mastodon.Client, req sdk.GetPostsR
 			//
 			//statuses = c.Descendants
 		// todo scope to me
-		case sdk.SocialAccountRelationName.SocialAccountFavorsPosts:
+		case mql.SocialAccountRelationName.SocialAccountFavorsPosts:
 			statuses, err = c.GetFavourites(ctx, pg)
 			if err != nil {
 				return
 			}
-		case sdk.SocialAccountRelationName.SocialAccountAuthorsPosts:
+		case mql.SocialAccountRelationName.SocialAccountAuthorsPosts:
 			// todo v1: support IdUnion
 			//var id mastodon.ID
-			//if *req.Mode.Relation.Id.Kind == sdk.ID_ME {
+			//if *req.Mode.Relation.Id.Kind == mql.ID_ME {
 			//	var acc *mastodon.Account
 			//	acc, err = c.GetAccountCurrentUser(ctx)
 			//	if err != nil {
@@ -109,16 +109,16 @@ func getPostsRelation(ctx context.Context, c *mastodon.Client, req sdk.GetPostsR
 			}
 
 			break
-		case sdk.PostFeedRelationName.PostFeedContainsPosts:
+		case mql.PostFeedRelationName.PostFeedContainsPosts:
 			switch *req.Mode.Relation.Id.Value {
-			case TIMELINE_PUBLIC:
+			case TimelinePublic:
 				statuses, err = c.GetTimelinePublic(ctx, false, pg)
 				if err != nil {
 					return
 				}
 
 				break
-			case TIMELINE_PUBLIC_LOCAL:
+			case TimelinePublicLocal:
 				statuses, err = c.GetTimelinePublic(ctx, true, pg)
 				if err != nil {
 					return
@@ -126,7 +126,7 @@ func getPostsRelation(ctx context.Context, c *mastodon.Client, req sdk.GetPostsR
 
 				break
 			// todo scope to me
-			case TIMELINE_HOME:
+			case TimelineHome:
 				statuses, err = c.GetTimelineHome(ctx, pg)
 				if err != nil {
 					return
@@ -134,7 +134,7 @@ func getPostsRelation(ctx context.Context, c *mastodon.Client, req sdk.GetPostsR
 
 				break
 			// todo scope to me?
-			case TIMELINE_MEDIA:
+			case TimelineMedia:
 				statuses, err = c.GetTimelineMedia(ctx, false, pg)
 				if err != nil {
 					return
@@ -142,7 +142,7 @@ func getPostsRelation(ctx context.Context, c *mastodon.Client, req sdk.GetPostsR
 
 				break
 			// todo scope to me?
-			case TIMELINE_MEDIA_LOCAL:
+			case TimelineMediaLocal:
 				statuses, err = c.GetTimelineMedia(ctx, true, pg)
 				if err != nil {
 					return
@@ -155,21 +155,21 @@ func getPostsRelation(ctx context.Context, c *mastodon.Client, req sdk.GetPostsR
 		return
 	}()
 	if err != nil {
-		rsp.Errors = append(rsp.Errors, sdk.Error{
-			Message: sdk.String(err.Error()),
+		rsp.Errors = append(rsp.Errors, mql.Error{
+			Message: mql.String(err.Error()),
 		})
 	}
 
 	//if pg != nil {
-	//	pagination := &sdk.Pagination{
-	//		Previous: &sdk.Page{
-	//			CursorPage: &sdk.CursorPage{
-	//				Value: sdk.String(string(pg.SinceID)),
+	//	pagination := &mql.Pagination{
+	//		Previous: &mql.Page{
+	//			CursorPage: &mql.CursorPage{
+	//				Value: mql.String(string(pg.SinceID)),
 	//			},
 	//		},
-	//		Next: &sdk.Page{
-	//			CursorPage: &sdk.CursorPage{
-	//				Value: sdk.String(string(pg.MaxID)),
+	//		Next: &mql.Page{
+	//			CursorPage: &mql.CursorPage{
+	//				Value: mql.String(string(pg.MaxID)),
 	//			},
 	//		},
 	//	}

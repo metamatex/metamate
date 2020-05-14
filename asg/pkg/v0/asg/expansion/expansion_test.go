@@ -37,7 +37,7 @@ func Test(t *testing.T) {
 	}
 
 	//root.Endpoints.Filter(graph.Filter{
-	//	Names: &graph.NamesSubset{
+	//	Name: &graph.NamesSubset{
 	//		Or: []string{"CreateWhatevers"},
 	//	},
 	//}).BroadcastPrint()

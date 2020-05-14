@@ -453,13 +453,13 @@ func addEntities(root *RootNode) {
 	)
 
 	root.AddRelationNode(
-		RelationPath{typenames.Whatever, []string{present.Knows}, cardinality.Many, typenames.Whatever},
-		RelationPath{typenames.Whatever, []string{past.Knew, preposition.By}, cardinality.Many, typenames.Whatever},
+		RelationPath{typenames.Dummy, []string{present.Knows}, cardinality.Many, typenames.Dummy},
+		RelationPath{typenames.Dummy, []string{past.Knew, preposition.By}, cardinality.Many, typenames.Dummy},
 	)
 
 	root.AddRelationNode(
-		RelationPath{typenames.Whatever, []string{present.Knows}, cardinality.Many, typenames.BlueWhatever},
-		RelationPath{typenames.BlueWhatever, []string{past.Knew, preposition.By}, cardinality.Many, typenames.Whatever},
+		RelationPath{typenames.Dummy, []string{present.Knows}, cardinality.Many, typenames.BlueDummy},
+		RelationPath{typenames.BlueDummy, []string{past.Knew, preposition.By}, cardinality.Many, typenames.Dummy},
 	)
 
 	root.AddEnumNode(enumnames.WhateverKind, []string{
@@ -468,43 +468,43 @@ func addEntities(root *RootNode) {
 		"green",
 	})
 
-	root.AddTypeNode(typenames.Whatever, FieldNodeSlice{
+	root.AddTypeNode(typenames.Dummy, FieldNodeSlice{
 		EnumField("enumField", enumnames.WhateverKind),
 		StringField("stringField"),
 		Int32Field("int32Field"),
 		Float64Field("float64Field"),
 		BoolField("boolField"),
-		TypeField("unionField", typenames.WhateverUnion),
+		TypeField("unionField", typenames.DummyUnion),
 		ListField(EnumField("enumList", enumnames.WhateverKind)),
 		ListField(StringField("stringList")),
 		ListField(Int32Field("int32List")),
 		ListField(Float64Field("float64List")),
 		ListField(BoolField("boolList")),
-		//ListField(TypeField("typeList", Whatever)),
-		ListField(TypeField("unionList", typenames.WhateverUnion)),
+		//ListField(TypeField("typeList", Dummy)),
+		ListField(TypeField("unionList", typenames.DummyUnion)),
 	}, Flags{
 		typeflags.GetEndpoints: true,
 	})
 
-	root.AddTypeNode(typenames.BlueWhatever, FieldNodeSlice{
+	root.AddTypeNode(typenames.BlueDummy, FieldNodeSlice{
 		EnumField("enumField", enumnames.WhateverKind),
 		StringField("stringField"),
 		Int32Field("int32Field"),
 		Float64Field("float64Field"),
 		BoolField("boolField"),
-		TypeField("unionField", typenames.WhateverUnion),
+		TypeField("unionField", typenames.DummyUnion),
 		ListField(EnumField("enumList", enumnames.WhateverKind)),
 		ListField(StringField("stringList")),
 		ListField(Int32Field("int32List")),
 		ListField(Float64Field("float64List")),
 		ListField(BoolField("boolList")),
-		//ListField(TypeField("typeList", Whatever)),
-		ListField(TypeField("unionList", typenames.WhateverUnion)),
+		//ListField(TypeField("typeList", Dummy)),
+		ListField(TypeField("unionList", typenames.DummyUnion)),
 	}, Flags{
 		typeflags.GetEndpoints: true,
 	})
 
-	root.AddUnion(typenames.WhateverUnion, []interface{}{
+	root.AddUnion(typenames.DummyUnion, []interface{}{
 		StringField("stringField"),
 		Int32Field("int32Field"),
 		Float64Field("float64Field"),

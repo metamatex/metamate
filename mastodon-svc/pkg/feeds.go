@@ -2,43 +2,42 @@ package pkg
 
 import (
 	"context"
-	"github.com/metamatex/metamate/gen/v0/sdk"
-	
+	"github.com/metamatex/metamate/gen/v0/mql"
 )
 
 const (
-	TIMELINE_PUBLIC       = "public"
-	TIMELINE_PUBLIC_LOCAL = "public_local"
-	TIMELINE_HOME         = "home"
-	TIMELINE_MEDIA        = "media"
-	TIMELINE_MEDIA_LOCAL  = "media_local"
+	TimelinePublic      = "public"
+	TimelinePublicLocal = "public_local"
+	TimelineHome        = "home"
+	TimelineMedia       = "media"
+	TimelineMediaLocal  = "media_local"
 )
 
-func getPostFeedsCollection(ctx context.Context, req sdk.GetPostFeedsRequest) (rsp sdk.GetPostFeedsResponse) {
-	feeds := []sdk.PostFeed{
+func getPostFeedsCollection(ctx context.Context, req mql.GetPostFeedsRequest) (rsp mql.GetPostFeedsResponse) {
+	feeds := []mql.PostFeed{
 		{
-			Id: &sdk.ServiceId{
-				Value: sdk.String(TIMELINE_PUBLIC),
+			Id: &mql.ServiceId{
+				Value: mql.String(TimelinePublic),
 			},
 		},
 		{
-			Id: &sdk.ServiceId{
-				Value: sdk.String(TIMELINE_PUBLIC_LOCAL),
+			Id: &mql.ServiceId{
+				Value: mql.String(TimelinePublicLocal),
 			},
 		},
 		{
-			Id: &sdk.ServiceId{
-				Value: sdk.String(TIMELINE_HOME),
+			Id: &mql.ServiceId{
+				Value: mql.String(TimelineHome),
 			},
 		},
 		{
-			Id: &sdk.ServiceId{
-				Value: sdk.String(TIMELINE_MEDIA),
+			Id: &mql.ServiceId{
+				Value: mql.String(TimelineMedia),
 			},
 		},
 		{
-			Id: &sdk.ServiceId{
-				Value: sdk.String(TIMELINE_MEDIA_LOCAL),
+			Id: &mql.ServiceId{
+				Value: mql.String(TimelineMediaLocal),
 			},
 		},
 	}

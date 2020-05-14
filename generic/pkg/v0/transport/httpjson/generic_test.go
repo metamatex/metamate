@@ -9,7 +9,7 @@ import (
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/mql"
 )
 
 var root *graph.RootNode

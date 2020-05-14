@@ -16,7 +16,7 @@ func init() {
 	}
 }
 
-var versionTpl = `package sdk
+var versionTpl = `package mql
 
 const Version = "{{ .Version.Version }}"
 `

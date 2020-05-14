@@ -3,7 +3,7 @@ package pkg
 import (
 	"context"
 	"fmt"
-	"github.com/metamatex/metamate/hackernews-svc/gen/v0/sdk"
+	"github.com/metamatex/metamate/hackernews-svc/gen/v0/mql"
 	"github.com/metamatex/metamate/hackernews-svc/pkg/persistence/angolia"
 	"github.com/metamatex/metamate/hackernews-svc/pkg/persistence/firebase"
 	"github.com/metamatex/metamate/hackernews-svc/pkg/persistence/static"
@@ -23,38 +23,38 @@ func (svc Service) Name() string {
 	return "hackernews"
 }
 
-func (svc Service) GetGetPostsEndpoint() sdk.GetPostsEndpoint {
-	return sdk.GetPostsEndpoint{
-		Filter: &sdk.GetPostsRequestFilter{
-			Or: []sdk.GetPostsRequestFilter{
+func (svc Service) GetGetPostsEndpoint() mql.GetPostsEndpoint {
+	return mql.GetPostsEndpoint{
+		Filter: &mql.GetPostsRequestFilter{
+			Or: []mql.GetPostsRequestFilter{
 				{
-					Mode: &sdk.GetModeFilter{
-						Kind: &sdk.EnumFilter{
-							In: []string{sdk.GetModeKind.Id},
+					Mode: &mql.GetModeFilter{
+						Kind: &mql.EnumFilter{
+							In: []string{mql.GetModeKind.Id},
 						},
-						Id: &sdk.IdFilter{
-							Kind: &sdk.EnumFilter{
-								Is: &sdk.IdKind.ServiceId,
+						Id: &mql.IdFilter{
+							Kind: &mql.EnumFilter{
+								Is: &mql.IdKind.ServiceId,
 							},
 						},
 					},
 				},
 				{
-					Mode: &sdk.GetModeFilter{
-						Kind: &sdk.EnumFilter{
-							In: []string{sdk.GetModeKind.Relation},
+					Mode: &mql.GetModeFilter{
+						Kind: &mql.EnumFilter{
+							In: []string{mql.GetModeKind.Relation},
 						},
-						Id: &sdk.IdFilter{
-							Kind: &sdk.EnumFilter{
-								Is: &sdk.IdKind.ServiceId,
+						Id: &mql.IdFilter{
+							Kind: &mql.EnumFilter{
+								Is: &mql.IdKind.ServiceId,
 							},
 						},
-						Relation: &sdk.RelationGetModeFilter{
-							Relation: &sdk.StringFilter{
+						Relation: &mql.RelationGetModeFilter{
+							Relation: &mql.StringFilter{
 								In: []string{
-									sdk.SocialAccountRelationName.SocialAccountAuthorsPosts,
-									sdk.SocialAccountRelationName.SocialAccountBookmarksPosts,
-									sdk.PostFeedRelationName.PostFeedContainsPosts,
+									mql.SocialAccountRelationName.SocialAccountAuthorsPosts,
+									mql.SocialAccountRelationName.SocialAccountBookmarksPosts,
+									mql.PostFeedRelationName.PostFeedContainsPosts,
 								},
 							},
 						},
@@ -65,32 +65,32 @@ func (svc Service) GetGetPostsEndpoint() sdk.GetPostsEndpoint {
 	}
 }
 
-func (svc Service) GetPosts(ctx context.Context, req sdk.GetPostsRequest) (rsp sdk.GetPostsResponse) {
-	var ps []sdk.Post
-	var pagination *sdk.Pagination
-	var errs []sdk.Error
+func (svc Service) GetPosts(ctx context.Context, req mql.GetPostsRequest) (rsp mql.GetPostsResponse) {
+	var ps []mql.Post
+	var pagination *mql.Pagination
+	var errs []mql.Error
 
 	switch *req.Mode.Kind {
-	case sdk.GetModeKind.Id:
+	case mql.GetModeKind.Id:
 		ps, errs = firebase.GetPostsId(svc.c, req)
-	case sdk.GetModeKind.Relation:
+	case mql.GetModeKind.Relation:
 		switch *req.Mode.Relation.Relation {
-		case sdk.SocialAccountRelationName.SocialAccountAuthorsPosts:
+		case mql.SocialAccountRelationName.SocialAccountAuthorsPosts:
 			ps, errs = firebase.GetSocialAccountAuthorsPosts(svc.c, req)
-		case sdk.SocialAccountRelationName.SocialAccountBookmarksPosts:
+		case mql.SocialAccountRelationName.SocialAccountBookmarksPosts:
 			ps, pagination, errs = website.GetSocialAccountBookmarksPosts(svc.c, *req.Mode.Relation.Id.Value, nil)
-		case sdk.PostFeedRelationName.PostFeedContainsPosts:
+		case mql.PostFeedRelationName.PostFeedContainsPosts:
 			ps, errs = firebase.GetPostFeedContainsPosts(svc.c, *req.Mode.Relation.Id.Value)
 		default:
-			errs = append(errs, sdk.Error{
-				Message: sdk.String(fmt.Sprintf("can't handle relation %v", *req.Mode.Relation.Relation)),
+			errs = append(errs, mql.Error{
+				Message: mql.String(fmt.Sprintf("can't handle relation %v", *req.Mode.Relation.Relation)),
 			})
 		}
-	case sdk.GetModeKind.Search:
+	case mql.GetModeKind.Search:
 		ps, errs, pagination = angolia.GetPostsSearch(svc.c, req)
 	default:
-		errs = append(errs, sdk.Error{
-			Message: sdk.String(fmt.Sprintf("can't handle mode %v", req.Mode.Kind)),
+		errs = append(errs, mql.Error{
+			Message: mql.String(fmt.Sprintf("can't handle mode %v", req.Mode.Kind)),
 		})
 	}
 
@@ -101,28 +101,28 @@ func (svc Service) GetPosts(ctx context.Context, req sdk.GetPostsRequest) (rsp s
 	return
 }
 
-func (svc Service) GetGetPostFeedsEndpoint() sdk.GetPostFeedsEndpoint {
-	return sdk.GetPostFeedsEndpoint{
-		Filter: &sdk.GetPostFeedsRequestFilter{
-			Mode: &sdk.GetModeFilter{
-				Kind: &sdk.EnumFilter{
-					In: []string{sdk.GetModeKind.Collection},
+func (svc Service) GetGetPostFeedsEndpoint() mql.GetPostFeedsEndpoint {
+	return mql.GetPostFeedsEndpoint{
+		Filter: &mql.GetPostFeedsRequestFilter{
+			Mode: &mql.GetModeFilter{
+				Kind: &mql.EnumFilter{
+					In: []string{mql.GetModeKind.Collection},
 				},
 			},
 		},
 	}
 }
 
-func (svc Service) GetPostFeeds(ctx context.Context, req sdk.GetPostFeedsRequest) (rsp sdk.GetPostFeedsResponse) {
-	var fs []sdk.PostFeed
-	var errs []sdk.Error
+func (svc Service) GetPostFeeds(ctx context.Context, req mql.GetPostFeedsRequest) (rsp mql.GetPostFeedsResponse) {
+	var fs []mql.PostFeed
+	var errs []mql.Error
 
 	switch *req.Mode.Kind {
-	case sdk.GetModeKind.Collection:
+	case mql.GetModeKind.Collection:
 		fs, errs = static.GetPostFeedsCollection()
 	default:
-		errs = append(errs, sdk.Error{
-			Message: sdk.String(fmt.Sprintf("can't handle %v", req)),
+		errs = append(errs, mql.Error{
+			Message: mql.String(fmt.Sprintf("can't handle %v", req)),
 		})
 	}
 
@@ -132,20 +132,20 @@ func (svc Service) GetPostFeeds(ctx context.Context, req sdk.GetPostFeedsRequest
 	return
 }
 
-func (svc Service) GetGetSocialAccountsEndpoint() sdk.GetSocialAccountsEndpoint {
-	return sdk.GetSocialAccountsEndpoint{
-		Filter: &sdk.GetSocialAccountsRequestFilter{
-			Or: []sdk.GetSocialAccountsRequestFilter{
+func (svc Service) GetGetSocialAccountsEndpoint() mql.GetSocialAccountsEndpoint {
+	return mql.GetSocialAccountsEndpoint{
+		Filter: &mql.GetSocialAccountsRequestFilter{
+			Or: []mql.GetSocialAccountsRequestFilter{
 				{
-					Mode: &sdk.GetModeFilter{
-						Kind: &sdk.EnumFilter{
-							In: []string{sdk.GetModeKind.Id},
+					Mode: &mql.GetModeFilter{
+						Kind: &mql.EnumFilter{
+							In: []string{mql.GetModeKind.Id},
 						},
-						Id: &sdk.IdFilter{
-							Kind: &sdk.EnumFilter{
+						Id: &mql.IdFilter{
+							Kind: &mql.EnumFilter{
 								In: []string{
-									sdk.IdKind.ServiceId,
-									sdk.IdKind.Username,
+									mql.IdKind.ServiceId,
+									mql.IdKind.Username,
 								},
 							},
 						},
@@ -156,16 +156,16 @@ func (svc Service) GetGetSocialAccountsEndpoint() sdk.GetSocialAccountsEndpoint 
 	}
 }
 
-func (svc Service) GetSocialAccounts(ctx context.Context, req sdk.GetSocialAccountsRequest) (rsp sdk.GetSocialAccountsResponse) {
-	var as []sdk.SocialAccount
-	var errs []sdk.Error
+func (svc Service) GetSocialAccounts(ctx context.Context, req mql.GetSocialAccountsRequest) (rsp mql.GetSocialAccountsResponse) {
+	var as []mql.SocialAccount
+	var errs []mql.Error
 
 	switch *req.Mode.Kind {
-	case sdk.GetModeKind.Id:
+	case mql.GetModeKind.Id:
 		as, errs = firebase.GetSocialAccountId(svc.c, req)
 	default:
-		errs = append(errs, sdk.Error{
-			Message: sdk.String(fmt.Sprintf("can't handle %v", req)),
+		errs = append(errs, mql.Error{
+			Message: mql.String(fmt.Sprintf("can't handle %v", req)),
 		})
 	}
 

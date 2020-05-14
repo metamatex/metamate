@@ -1,31 +1,25 @@
 v0:
   gen:
     sdks:
-      - names: [go_httpjson_service]
-        data:
+      - name: go_httpjson_service
+        args:
           name: mastodon
           package: github.com/metamatex/metamate
-        endpoints:
-          names:
-            or: [GetPostFeeds, GetSocialAccounts, GetPosts]
-      - names: [go_httpjson_service]
-        data:
+        endpoints: [GetPostFeeds, GetSocialAccounts, GetPosts]
+      - name: go_httpjson_service
+        args:
           name: kubernetes
           package: github.com/metamatex/metamate
-        endpoints:
-          names:
-            or: [GetServices]
-      - names: [go_httpjson_client]
-        data:
+        endpoints: [GetServices]
+      - name: go_httpjson_client
+        args:
           package: github.com/metamatex/metamate
         endpoints:
-          names:
-            or:
-              - GetWhatevers
-              - GetBlueWhatevers
-              - GetServices
-              - GetSocialAccounts
-              - LookupService
-              - GetPostFeeds
-              - PipeWhatevers
-              - GetPosts
+          - GetDummies
+          - GetBlueDummies
+          - GetServices
+          - GetSocialAccounts
+          - LookupService
+          - GetPostFeeds
+          - PipeDummies
+          - GetPosts

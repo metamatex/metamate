@@ -6,7 +6,7 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
-	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/mql"
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/generic/pkg/v0/transport/httpjson"
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/pipeline"
@@ -35,15 +35,15 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 	}
 
 	if c.DiscoverySvc.Endpoints == nil {
-		c.DiscoverySvc.Endpoints = &sdk.Endpoints{}
+		c.DiscoverySvc.Endpoints = &mql.Endpoints{}
 	}
 
 	if c.DiscoverySvc.Endpoints.GetServices == nil {
-		c.DiscoverySvc.Endpoints.GetServices = &sdk.GetServicesEndpoint{}
+		c.DiscoverySvc.Endpoints.GetServices = &mql.GetServicesEndpoint{}
 	}
 
 	if c.DiscoverySvc.Endpoints.LookupService == nil {
-		c.DiscoverySvc.Endpoints.LookupService = &sdk.LookupServiceEndpoint{}
+		c.DiscoverySvc.Endpoints.LookupService = &mql.LookupServiceEndpoint{}
 	}
 
 	d.Factory = generic.NewFactory(d.RootNode)
@@ -98,19 +98,19 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 
 	reqHs := map[bool]map[string]types.RequestHandler{
 		true: {
-			sdk.ServiceTransport.HttpJson: httpjsonHandler.GetRequestHandler(d.Factory, vclient),
+			mql.ServiceTransport.HttpJson: httpjsonHandler.GetRequestHandler(d.Factory, vclient),
 		},
 		false: {
-			sdk.ServiceTransport.HttpJson: httpjsonHandler.GetRequestHandler(d.Factory, client),
+			mql.ServiceTransport.HttpJson: httpjsonHandler.GetRequestHandler(d.Factory, client),
 		},
 	}
 
 	cachedReqHs := map[bool]map[string]types.RequestHandler{
 		true: {
-			sdk.ServiceTransport.HttpJson: cacheHandlerF(httpjsonHandler.GetRequestHandler(d.Factory, vclient)),
+			mql.ServiceTransport.HttpJson: cacheHandlerF(httpjsonHandler.GetRequestHandler(d.Factory, vclient)),
 		},
 		false: {
-			sdk.ServiceTransport.HttpJson: cacheHandlerF(httpjsonHandler.GetRequestHandler(d.Factory, client)),
+			mql.ServiceTransport.HttpJson: cacheHandlerF(httpjsonHandler.GetRequestHandler(d.Factory, client)),
 		},
 	}
 

@@ -9,23 +9,23 @@ import (
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/fieldflags"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph/typeflags"
-	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/mql"
 	
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 )
 
-var validators = map[string][]func(stage string, svc *sdk.Service, g generic.Generic) (errs []sdk.Error){}
-var sliceValidators = map[string][]func(stage string, svc *sdk.Service, g generic.Slice) (errs []sdk.Error){}
+var validators = map[string][]func(stage string, svc *mql.Service, g generic.Generic) (errs []mql.Error){}
+var sliceValidators = map[string][]func(stage string, svc *mql.Service, g generic.Slice) (errs []mql.Error){}
 
 func init() {
-	sliceValidators[sdk.IdName] = append(sliceValidators[sdk.IdName], func(stage string, svc *sdk.Service, ids generic.Slice) (errs []sdk.Error) {
+	sliceValidators[mql.IdName] = append(sliceValidators[mql.IdName], func(stage string, svc *mql.Service, ids generic.Slice) (errs []mql.Error) {
 		serviceNameCounter := map[string]int{}
 
 		for _, gId := range ids.Get() {
 			kind, _ := gId.String(fieldnames.Kind)
 
-			if kind != sdk.IdKind.ServiceId {
+			if kind != mql.IdKind.ServiceId {
 				continue
 			}
 
@@ -54,7 +54,7 @@ func init() {
 	})
 }
 
-func Validate(stage string, svc *sdk.Service, g generic.Generic) (errs []sdk.Error) {
+func Validate(stage string, svc *mql.Service, g generic.Generic) (errs []mql.Error) {
 	g.EachGeneric(func(fn *graph.FieldNode, g0 generic.Generic) {
 		errs = append(errs, Validate(stage, svc, g0)...)
 	})
@@ -83,7 +83,7 @@ func Validate(stage string, svc *sdk.Service, g generic.Generic) (errs []sdk.Err
 	return
 }
 
-func ValidateSlice(stage string, svc *sdk.Service, gs generic.Slice) (errs []sdk.Error) {
+func ValidateSlice(stage string, svc *mql.Service, gs generic.Slice) (errs []mql.Error) {
 	for _, g := range gs.Get() {
 		errs = append(errs, Validate(stage, svc, g)...)
 	}
@@ -95,7 +95,7 @@ func ValidateSlice(stage string, svc *sdk.Service, gs generic.Slice) (errs []sdk
 	return
 }
 
-func ValidateSort(stage string, svc *sdk.Service, g generic.Generic) (errs []sdk.Error) {
+func ValidateSort(stage string, svc *mql.Service, g generic.Generic) (errs []mql.Error) {
 	c := 0
 
 	g.EachString(func(_ *graph.FieldNode, _ string) {
@@ -109,7 +109,7 @@ func ValidateSort(stage string, svc *sdk.Service, g generic.Generic) (errs []sdk
 	return
 }
 
-func ValidateFields(stage string, svc *sdk.Service, g generic.Generic) (errs []sdk.Error) {
+func ValidateFields(stage string, svc *mql.Service, g generic.Generic) (errs []mql.Error) {
 	g.Type().Edges.Fields.Holds().Each(func(fn *graph.FieldNode) {
 		if fn.Flags().Is(fieldflags.ValidateIsSet, true) {
 			err := validateIsSet(g, fn)
@@ -213,7 +213,7 @@ func validateEmail(g generic.Generic, name string) (err error) {
 	return
 }
 
-func ValidateUnion(stage string, svc *sdk.Service, g generic.Generic) (errs []sdk.Error) {
+func ValidateUnion(stage string, svc *mql.Service, g generic.Generic) (errs []mql.Error) {
 	var set []string
 
 	kind, ok := g.String(fieldnames.Kind)
@@ -243,18 +243,18 @@ func ValidateUnion(stage string, svc *sdk.Service, g generic.Generic) (errs []sd
 	return
 }
 
-func getError(stage string, svc *sdk.Service, message string) sdk.Error {
+func getError(stage string, svc *mql.Service, message string) mql.Error {
 	var kind string
 
 	switch stage {
 	case types.SvcRsp:
-		kind = sdk.ErrorKind.ResponseValidation
+		kind = mql.ErrorKind.ResponseValidation
 	case types.CliReq:
-		kind = sdk.ErrorKind.RequestValidation
+		kind = mql.ErrorKind.RequestValidation
 	}
 
-	return sdk.Error{
-		Kind: sdk.String(kind),
+	return mql.Error{
+		Kind: mql.String(kind),
 		Message: &message,
 		Service: svc,
 	}

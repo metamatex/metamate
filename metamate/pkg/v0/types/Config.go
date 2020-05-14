@@ -1,11 +1,11 @@
 package types
 
 import (
-	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/mql"
 )
 
 type Config struct {
-	DiscoverySvc sdk.Service     `yaml:"discoverySvc,omitempty"`
+	DiscoverySvc mql.Service     `yaml:"discoverySvc,omitempty"`
 	Endpoints    EndpointsConfig `yaml:"endpoints,omitempty"`
 	Host         HostConfig      `yaml:"host,omitempty"`
 	Log          LogConfig       `yaml:"log,omitempty"`

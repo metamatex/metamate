@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
-	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/mql"
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/funcs"
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/line"
@@ -12,7 +12,7 @@ import (
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 )
 
-func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Service, reqHs map[bool]map[string]types.RequestHandler, cachedReqHs map[bool]map[string]types.RequestHandler, logTemplates types.InternalLogTemplates, getConfig types.GetConfig) *line.Line {
+func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc mql.Service, reqHs map[bool]map[string]types.RequestHandler, cachedReqHs map[bool]map[string]types.RequestHandler, logTemplates types.InternalLogTemplates, getConfig types.GetConfig) *line.Line {
 	resolveLine := line.Do()
 
 	cliReqErrL := getErrLine(f, types.GCliRsp)
@@ -35,7 +35,7 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 		Switch(
 			funcs.By(types.Method),
 			map[string]*line.Line{
-				sdk.Methods.Get: line.Do(funcs.Copy(types.GCliReq, types.Mode)),
+				mql.Methods.Get: line.Do(funcs.Copy(types.GCliReq, types.Mode)),
 			},
 		).
 		Add(NarrowSvcFilterToModeId).
@@ -50,7 +50,7 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 			line.
 				Do(
 					funcs.Func(func(ctx types.ReqCtx) types.ReqCtx {
-						ctx.Errs = append(ctx.Errs, funcs.NewError(nil, sdk.ErrorKind.NoServiceMatch, "no services matches"))
+						ctx.Errs = append(ctx.Errs, funcs.NewError(nil, mql.ErrorKind.NoServiceMatch, "no services matches"))
 
 						return ctx
 					}),
@@ -60,7 +60,7 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 		Switch(
 			funcs.By(types.Method),
 			map[string]*line.Line{
-				sdk.Methods.Action: line.
+				mql.Methods.Action: line.
 					Do(
 						funcs.RequireOneGSvc(),
 						funcs.SetFirstGSvc(),
@@ -75,11 +75,11 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 					Switch(
 						funcs.By(types.Method),
 						map[string]*line.Line{
-							sdk.Methods.Get: line.New(config.SvcReq).
+							mql.Methods.Get: line.New(config.SvcReq).
 								Switch(
 									funcs.By(types.Mode),
 									map[string]*line.Line{
-										sdk.GetModeKind.Id: line.
+										mql.GetModeKind.Id: line.
 											Parallel(
 												-1,
 												funcs.Map(types.Svcs, types.Svc),
@@ -101,7 +101,7 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 												funcs.ReduceSvcRspErrsToCliRspErrs(f),
 												funcs.ReduceSvcRspPaginationsToCliRspPagination(f),
 											),
-										sdk.GetModeKind.Search: line.
+										mql.GetModeKind.Search: line.
 											Parallel(
 												-1,
 												funcs.Map(types.Svcs, types.Svc),
@@ -124,7 +124,7 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 												funcs.ReduceSvcRspErrsToCliRspErrs(f),
 												funcs.ReduceSvcRspPaginationsToCliRspPagination(f),
 											),
-										sdk.GetModeKind.Collection: line.
+										mql.GetModeKind.Collection: line.
 											Parallel(
 												-1,
 												funcs.Map(types.Svcs, types.Svc),
@@ -141,7 +141,7 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 														funcs.Log(config.SvcRsp, logTemplates),
 													).
 													If(
-														funcs.IsType(types.GSvcRsp, sdk.GetServicesResponseName, true),
+														funcs.IsType(types.GSvcRsp, mql.GetServicesResponseName, true),
 														FetchSvcDataFromSvcs(f, reqHs, logTemplates),
 													),
 												funcs.CollectSvcRsps,
@@ -151,7 +151,7 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 												funcs.ReduceSvcRspErrsToCliRspErrs(f),
 												funcs.ReduceSvcRspPaginationsToCliRspPagination(f),
 											),
-										sdk.GetModeKind.Relation: line.
+										mql.GetModeKind.Relation: line.
 											Do(
 												funcs.RequireOneGSvc(),
 												funcs.SetFirstGSvc(),
@@ -189,9 +189,9 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc sdk.Serv
 
 								ctx.GCliRsp.MustSetGenericSlice([]string{ctx.ForTypeNode.PluralFieldName()}, gSlice)
 
-								gWarnings := f.MustFromStructs([]sdk.Warning{
+								gWarnings := f.MustFromStructs([]mql.Warning{
 									{
-										Message: sdk.String(fmt.Sprintf("trimmed from %v to %v", preLen, postLen)),
+										Message: mql.String(fmt.Sprintf("trimmed from %v to %v", preLen, postLen)),
 									},
 								})
 
@@ -251,12 +251,12 @@ func NarrowSvcFilterToModeId(l *line.Line) *line.Line {
 	return l.
 		Switch(funcs.By(types.Method),
 			map[string]*line.Line{
-				sdk.Methods.Get: line.
+				mql.Methods.Get: line.
 					Switch(
 						funcs.By(types.Mode),
 						map[string]*line.Line{
-							sdk.GetModeKind.Id:       line.Do(funcs.SetSvcFilterToGetModeIdSvcIdFunc()),
-							sdk.GetModeKind.Relation: line.Do(funcs.SetSvcFilterToGetModeRelationIdFunc()),
+							mql.GetModeKind.Id:       line.Do(funcs.SetSvcFilterToGetModeIdSvcIdFunc()),
+							mql.GetModeKind.Relation: line.Do(funcs.SetSvcFilterToGetModeRelationIdFunc()),
 						},
 					),
 			},
@@ -264,9 +264,9 @@ func NarrowSvcFilterToModeId(l *line.Line) *line.Line {
 }
 
 func SetDefaults(f generic.Factory) func(l *line.Line) *line.Line {
-	gGetMode := f.MustFromStruct(sdk.GetMode{
-		Kind:       &sdk.GetModeKind.Collection,
-		Collection: &sdk.CollectionGetMode{},
+	gGetMode := f.MustFromStruct(mql.GetMode{
+		Kind:       &mql.GetModeKind.Collection,
+		Collection: &mql.CollectionGetMode{},
 	})
 
 	return func(l *line.Line) *line.Line {
@@ -274,7 +274,7 @@ func SetDefaults(f generic.Factory) func(l *line.Line) *line.Line {
 			Switch(
 				funcs.By(types.Method),
 				map[string]*line.Line{
-					sdk.Methods.Get: line.Do(funcs.SetDefaultSelect()),
+					mql.Methods.Get: line.Do(funcs.SetDefaultSelect()),
 				},
 			).
 			If(
@@ -282,7 +282,7 @@ func SetDefaults(f generic.Factory) func(l *line.Line) *line.Line {
 				line.Switch(
 					funcs.By(types.Method),
 					map[string]*line.Line{
-						sdk.Methods.Get: line.Do(
+						mql.Methods.Get: line.Do(
 							funcs.Func(func(ctx types.ReqCtx) types.ReqCtx {
 								ctx.GCliReq.MustSetGeneric([]string{fieldnames.Mode}, gGetMode)
 
@@ -301,7 +301,7 @@ func FetchSvcDataFromSvcs(f generic.Factory, hs map[bool]map[string]types.Reques
 		funcs.Map(types.GSvcRsp, types.GEntity),
 		line.
 			Do(
-				funcs.Set(f, types.GSvcReq, sdk.LookupServiceRequest{}),
+				funcs.Set(f, types.GSvcReq, mql.LookupServiceRequest{}),
 				funcs.Copy(types.GEntity, types.Svc),
 				funcs.Log(config.SvcReq, logTemplates),
 				funcs.HandleSvcReq(hs),

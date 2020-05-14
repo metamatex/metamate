@@ -3,7 +3,7 @@ package pkg
 import (
 	"context"
 	"github.com/mattn/go-mastodon"
-	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/mql"
 )
 
 type Service struct {
@@ -36,37 +36,37 @@ func (svc Service) getClient() (c *mastodon.Client, err error) {
 	return
 }
 
-func (svc Service) GetGetPostsEndpoint() sdk.GetPostsEndpoint {
-	return sdk.GetPostsEndpoint{
-		Filter: &sdk.GetPostsRequestFilter{
-			Mode: &sdk.GetModeFilter{
-				Or: []sdk.GetModeFilter{
+func (svc Service) GetGetPostsEndpoint() mql.GetPostsEndpoint {
+	return mql.GetPostsEndpoint{
+		Filter: &mql.GetPostsRequestFilter{
+			Mode: &mql.GetModeFilter{
+				Or: []mql.GetModeFilter{
 					{
-						Kind: &sdk.EnumFilter{
-							Is: &sdk.GetModeKind.Id,
+						Kind: &mql.EnumFilter{
+							Is: &mql.GetModeKind.Id,
 						},
-						Id: &sdk.IdFilter{
-							Kind: &sdk.EnumFilter{
-								Is: &sdk.IdKind.ServiceId,
+						Id: &mql.IdFilter{
+							Kind: &mql.EnumFilter{
+								Is: &mql.IdKind.ServiceId,
 							},
 						},
 					},
 					{
-						Kind: &sdk.EnumFilter{
-							Is: &sdk.GetModeKind.Search,
+						Kind: &mql.EnumFilter{
+							Is: &mql.GetModeKind.Search,
 						},
 					},
 					{
-						Kind: &sdk.EnumFilter{
-							Is: &sdk.GetModeKind.Relation,
+						Kind: &mql.EnumFilter{
+							Is: &mql.GetModeKind.Relation,
 						},
-						Relation: &sdk.RelationGetModeFilter{
-							Relation: &sdk.StringFilter{
+						Relation: &mql.RelationGetModeFilter{
+							Relation: &mql.StringFilter{
 								In: []string{
-									sdk.PostRelationName.PostWasRepliedToByPosts,
-									sdk.SocialAccountRelationName.SocialAccountFavorsPosts,
-									sdk.SocialAccountRelationName.SocialAccountAuthorsPosts,
-									sdk.PostFeedRelationName.PostFeedContainsPosts,
+									mql.PostRelationName.PostWasRepliedToByPosts,
+									mql.SocialAccountRelationName.SocialAccountFavorsPosts,
+									mql.SocialAccountRelationName.SocialAccountAuthorsPosts,
+									mql.PostFeedRelationName.PostFeedContainsPosts,
 								},
 							},
 						},
@@ -77,13 +77,13 @@ func (svc Service) GetGetPostsEndpoint() sdk.GetPostsEndpoint {
 	}
 }
 
-func (svc Service) GetPosts(ctx context.Context, req sdk.GetPostsRequest) (rsp sdk.GetPostsResponse) {
+func (svc Service) GetPosts(ctx context.Context, req mql.GetPostsRequest) (rsp mql.GetPostsResponse) {
 	c, err := svc.getClient()
 	if err != nil {
-		rsp = sdk.GetPostsResponse{
-			Errors: []sdk.Error{
+		rsp = mql.GetPostsResponse{
+			Errors: []mql.Error{
 				{
-					Message: sdk.String(err.Error()),
+					Message: mql.String(err.Error()),
 				},
 			},
 		}
@@ -92,11 +92,11 @@ func (svc Service) GetPosts(ctx context.Context, req sdk.GetPostsRequest) (rsp s
 	}
 
 	switch *req.Mode.Kind {
-	case sdk.GetModeKind.Id:
+	case mql.GetModeKind.Id:
 		rsp = getPostId(ctx, c, req)
-	case sdk.GetModeKind.Relation:
+	case mql.GetModeKind.Relation:
 		rsp = getPostsRelation(ctx, c, req)
-	case sdk.GetModeKind.Search:
+	case mql.GetModeKind.Search:
 		rsp = getPostsSearch(ctx, c, req)
 	default:
 	}
@@ -104,46 +104,46 @@ func (svc Service) GetPosts(ctx context.Context, req sdk.GetPostsRequest) (rsp s
 	return
 }
 
-func (svc Service) GetGetSocialAccountsEndpoint() sdk.GetSocialAccountsEndpoint {
-	return sdk.GetSocialAccountsEndpoint{
-		Filter: &sdk.GetSocialAccountsRequestFilter{
-			Or: []sdk.GetSocialAccountsRequestFilter{
+func (svc Service) GetGetSocialAccountsEndpoint() mql.GetSocialAccountsEndpoint {
+	return mql.GetSocialAccountsEndpoint{
+		Filter: &mql.GetSocialAccountsRequestFilter{
+			Or: []mql.GetSocialAccountsRequestFilter{
 				{
-					Mode: &sdk.GetModeFilter{
-						Kind: &sdk.EnumFilter{
-							Is: &sdk.GetModeKind.Id,
+					Mode: &mql.GetModeFilter{
+						Kind: &mql.EnumFilter{
+							Is: &mql.GetModeKind.Id,
 						},
-						Id: &sdk.IdFilter{
-							Kind: &sdk.EnumFilter{
+						Id: &mql.IdFilter{
+							Kind: &mql.EnumFilter{
 								In: []string{
-									sdk.IdKind.ServiceId,
-									sdk.IdKind.Me,
+									mql.IdKind.ServiceId,
+									mql.IdKind.Me,
 								},
 							},
 						},
 					},
 				},
 				{
-					Mode: &sdk.GetModeFilter{
-						Kind: &sdk.EnumFilter{
-							Is: &sdk.GetModeKind.Search,
+					Mode: &mql.GetModeFilter{
+						Kind: &mql.EnumFilter{
+							Is: &mql.GetModeKind.Search,
 						},
 					},
 				},
 				{
-					Mode: &sdk.GetModeFilter{
-						Kind: &sdk.EnumFilter{
-							Is: &sdk.GetModeKind.Relation,
+					Mode: &mql.GetModeFilter{
+						Kind: &mql.EnumFilter{
+							Is: &mql.GetModeKind.Relation,
 						},
-						Relation: &sdk.RelationGetModeFilter{
-							Relation: &sdk.StringFilter{
+						Relation: &mql.RelationGetModeFilter{
+							Relation: &mql.StringFilter{
 								In: []string{
-									sdk.SocialAccountRelationName.SocialAccountBlocksSocialAccounts,
-									sdk.SocialAccountRelationName.SocialAccountFollowedBySocialAccounts,
-									sdk.SocialAccountRelationName.SocialAccountFollowsSocialAccounts,
-									sdk.SocialAccountRelationName.SocialAccountMutesSocialAccounts,
-									sdk.SocialAccountRelationName.SocialAccountRequestedToBeFollowedBySocialAccounts,
-									sdk.PostRelationName.PostFavoredBySocialAccounts,
+									mql.SocialAccountRelationName.SocialAccountBlocksSocialAccounts,
+									mql.SocialAccountRelationName.SocialAccountFollowedBySocialAccounts,
+									mql.SocialAccountRelationName.SocialAccountFollowsSocialAccounts,
+									mql.SocialAccountRelationName.SocialAccountMutesSocialAccounts,
+									mql.SocialAccountRelationName.SocialAccountRequestedToBeFollowedBySocialAccounts,
+									mql.PostRelationName.PostFavoredBySocialAccounts,
 								},
 							},
 						},
@@ -154,13 +154,13 @@ func (svc Service) GetGetSocialAccountsEndpoint() sdk.GetSocialAccountsEndpoint 
 	}
 }
 
-func (svc Service) GetSocialAccounts(ctx context.Context, req sdk.GetSocialAccountsRequest) (rsp sdk.GetSocialAccountsResponse) {
+func (svc Service) GetSocialAccounts(ctx context.Context, req mql.GetSocialAccountsRequest) (rsp mql.GetSocialAccountsResponse) {
 	c, err := svc.getClient()
 	if err != nil {
-		rsp = sdk.GetSocialAccountsResponse{
-			Errors: []sdk.Error{
+		rsp = mql.GetSocialAccountsResponse{
+			Errors: []mql.Error{
 				{
-					Message: sdk.String(err.Error()),
+					Message: mql.String(err.Error()),
 				},
 			},
 		}
@@ -169,11 +169,11 @@ func (svc Service) GetSocialAccounts(ctx context.Context, req sdk.GetSocialAccou
 	}
 
 	switch *req.Mode.Kind {
-	case sdk.GetModeKind.Search:
+	case mql.GetModeKind.Search:
 		rsp = getSocialAccountsSearch(ctx, c, req)
-	case sdk.GetModeKind.Id:
+	case mql.GetModeKind.Id:
 		rsp = getSocialAccountId(ctx, c, req)
-	case sdk.GetModeKind.Relation:
+	case mql.GetModeKind.Relation:
 		rsp = getSocialAccountsRelation(ctx, c, req)
 	default:
 	}
@@ -181,14 +181,14 @@ func (svc Service) GetSocialAccounts(ctx context.Context, req sdk.GetSocialAccou
 	return
 }
 
-func (svc Service) GetGetPostFeedsEndpoint() sdk.GetPostFeedsEndpoint {
-	return sdk.GetPostFeedsEndpoint{
-		Filter: &sdk.GetPostFeedsRequestFilter{
-			Or: []sdk.GetPostFeedsRequestFilter{
+func (svc Service) GetGetPostFeedsEndpoint() mql.GetPostFeedsEndpoint {
+	return mql.GetPostFeedsEndpoint{
+		Filter: &mql.GetPostFeedsRequestFilter{
+			Or: []mql.GetPostFeedsRequestFilter{
 				{
-					Mode: &sdk.GetModeFilter{
-						Kind: &sdk.EnumFilter{
-							Is: &sdk.GetModeKind.Collection,
+					Mode: &mql.GetModeFilter{
+						Kind: &mql.EnumFilter{
+							Is: &mql.GetModeKind.Collection,
 						},
 					},
 				},
@@ -197,9 +197,9 @@ func (svc Service) GetGetPostFeedsEndpoint() sdk.GetPostFeedsEndpoint {
 	}
 }
 
-func (svc Service) GetPostFeeds(ctx context.Context, req sdk.GetPostFeedsRequest) (rsp sdk.GetPostFeedsResponse) {
+func (svc Service) GetPostFeeds(ctx context.Context, req mql.GetPostFeedsRequest) (rsp mql.GetPostFeedsResponse) {
 	switch *req.Mode.Kind {
-	case sdk.GetModeKind.Collection:
+	case mql.GetModeKind.Collection:
 		rsp = getPostFeedsCollection(ctx, req)
 	default:
 	}

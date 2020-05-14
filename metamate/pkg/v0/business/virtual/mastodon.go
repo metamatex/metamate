@@ -3,8 +3,7 @@ package virtual
 import (
 	"errors"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
-	"github.com/metamatex/metamate/gen/v0/sdk"
-	"github.com/metamatex/metamate/gen/v0/sdk/transport/services/mastodon"
+	"github.com/metamatex/metamate/gen/v0/mql"
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/mastodon-svc/pkg"
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
@@ -24,9 +23,9 @@ func init() {
 			ClientSecret: vSvc.Opts.Mastodon.ClientSecret,
 		})
 
-		h = mastodon.NewHttpJsonServer(mastodon.HttpJsonServerOpts{Service: svc})
+		h = mql.NewMastodonHttpJsonServer(mql.MastodonHttpJsonServerOpts{Service: svc})
 
-		t = sdk.ServiceTransport.HttpJson
+		t = mql.ServiceTransport.HttpJson
 
 		return
 	}

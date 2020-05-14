@@ -8,7 +8,7 @@ import (
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/mql"
 )
 
 func TestFactory(t *testing.T) {
@@ -29,9 +29,9 @@ func TestFactory(t *testing.T) {
 func FTestFactoryNew(t *testing.T, rn *graph.RootNode, f Factory) {
 	t.Run("TestFactoryNew", func(t *testing.T) {
 		t.Parallel()
-		tn := rn.Types.MustByName(typenames.Whatever)
+		tn := rn.Types.MustByName(typenames.Dummy)
 
-		g := f.New(rn.Types.MustByName(typenames.Whatever))
+		g := f.New(rn.Types.MustByName(typenames.Dummy))
 
 		assert.Equal(t, tn.Name(), g.Type().Name())
 	})
@@ -67,7 +67,7 @@ func FTestFactoryFromStringInterfaceMap(t *testing.T, rn *graph.RootNode, f Fact
 
 			m := g.ToStringInterfaceMap()
 
-			g0, err := f.FromStringInterfaceMap(rn.Types.MustByName(typenames.Whatever), m)
+			g0, err := f.FromStringInterfaceMap(rn.Types.MustByName(typenames.Dummy), m)
 			if err != nil {
 				return
 			}
@@ -105,7 +105,7 @@ func FTestFactoryUnflatten(t *testing.T, rn *graph.RootNode, f Factory) {
 				return
 			}
 
-			g0, err := f.Unflatten(rn.Types.MustByName(typenames.Whatever), d, m)
+			g0, err := f.Unflatten(rn.Types.MustByName(typenames.Dummy), d, m)
 			if err != nil {
 				return
 			}

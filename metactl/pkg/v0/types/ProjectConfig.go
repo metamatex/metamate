@@ -1,9 +1,5 @@
 package types
 
-import (
-	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
-)
-
 type ProjectConfig struct {
 	V0 V0Project `json:"v0,omitempty" yaml:"v0,omitempty"`
 }
@@ -18,7 +14,7 @@ type Gen struct {
 }
 
 type SdkConfig struct {
-	Names     []string               `json:"names,omitempty" yaml:"names,omitempty"`
-	Data      map[string]interface{} `json:"data,omitempty" yaml:"data,omitempty"`
-	Endpoints *graph.Filter          `json:"endpoints,omitempty" yaml:"endpoints,omitempty"`
+	Name      string                 `json:"name,omitempty" yaml:"name,omitempty"`
+	Args      map[string]interface{} `json:"args,omitempty" yaml:"args,omitempty"`
+	Endpoints []string               `json:"endpoints,omitempty" yaml:"endpoints,omitempty"`
 }

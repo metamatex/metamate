@@ -31,11 +31,9 @@ var genCmd = &cobra.Command{
 			}
 
 			for _, c := range c.V0.Gen.Sdks {
-				for _, name := range c.Names {
-					errs = sdk.Gen(d.MessageReport, d.FileSystem, d.Version, d.RootNode, name, c, nil)
-					if len(errs) != 0 {
-						return
-					}
+				errs = sdk.Gen(d.MessageReport, d.FileSystem, d.Version, d.RootNode, c.Name, c, nil)
+				if len(errs) != 0 {
+					return
 				}
 			}
 

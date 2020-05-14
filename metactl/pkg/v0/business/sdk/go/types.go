@@ -16,13 +16,13 @@ const (
 func init() {
 	tasks[TaskClientInterface] = types.RenderTask{
 		TemplateData: &goClientInterfaceTpl,
-		Out:          ptr.String("transport/client_.go"),
+		Out:          ptr.String("client_.go"),
 	}
 
 	tasks[TaskServiceInterface] = types.RenderTask{
 		Name:         ptr.String(TaskServiceInterface),
 		TemplateData: &goServiceInterfaceTpl,
-		Out:          ptr.String("transport/services/{{ index .Data \"name\" }}/service_.go"),
+		Out:          ptr.String("{{ index .Data \"name\" }}_service_.go"),
 	}
 
 	tasks[TaskTypes] = types.RenderTask{
@@ -38,37 +38,33 @@ func init() {
 	}
 }
 
-var goClientInterfaceTpl = `package transport
-{{ $package := index .Data "package" }}
+var goClientInterfaceTpl = `package mql
+
 import (
     "context"
-
-    "{{ $package }}/gen/v0/sdk"
 )
 
 type Client interface {
 {{- range $i, $endpoint := .Endpoints.Slice.Sort }}
-	{{ $endpoint.Name }}(context.Context, sdk.{{ $endpoint.Edges.Type.Request.Name }}) (*sdk.{{ $endpoint.Edges.Type.Response.Name }}, error)
+	{{ $endpoint.Name }}(context.Context, {{ $endpoint.Edges.Type.Request.Name }}) (*{{ $endpoint.Edges.Type.Response.Name }}, error)
 {{- end }}
 }`
 
-var goServiceInterfaceTpl = `package {{ index .Data "name" }}
-{{ $package := index .Data "package" }}
+var goServiceInterfaceTpl = `package mql
+
 import (
     "context"
-
-    "{{ $package }}/gen/v0/sdk"
 )
 
-type Service interface {
+type {{ index .Data "name" | title }}Service interface {
 	Name() (string)
 {{- range $i, $endpoint := .Endpoints.Slice.Sort }}
-	Get{{ $endpoint.Name }}Endpoint() (sdk.{{ $endpoint.Name }}Endpoint)
-    {{ $endpoint.Name }}(ctx context.Context, req sdk.{{ $endpoint.Edges.Type.Request.Name }}) (rsp sdk.{{ $endpoint.Edges.Type.Response.Name }})
+	Get{{ $endpoint.Name }}Endpoint() ({{ $endpoint.Name }}Endpoint)
+    {{ $endpoint.Name }}(ctx context.Context, req {{ $endpoint.Edges.Type.Request.Name }}) (rsp {{ $endpoint.Edges.Type.Response.Name }})
 {{- end }}
 }`
 
-var goTypesTpl = `package sdk
+var goTypesTpl = `package mql
 {{ define "fields" }}
 {{- range $fi, $field := . }}
 {{- if $field.IsBool }}
@@ -117,7 +113,7 @@ type {{ .Type.Name }} struct {
 {{- template "fields" .Type.Edges.Fields.Holds.Slice.Sort }}
 }`
 
-var goEnumsTpl = `package sdk
+var goEnumsTpl = `package mql
 {{ $enum := .Enum }}
 const (
 	{{ $enum.Name }}EnumName = "{{ $enum.Name }}"

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
-	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/mql"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
 	
 	"errors"

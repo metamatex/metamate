@@ -3,7 +3,7 @@ package types
 import (
 	"context"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
-	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/mql"
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"gopkg.in/yaml.v2"
 	"regexp"
@@ -49,16 +49,16 @@ type ReqCtx struct {
 	GSvcReq            generic.Generic
 	GSvcRsp            generic.Generic
 	GSvcRsps           []generic.Generic
-	SvcFilter          *sdk.ServiceFilter
+	SvcFilter          *mql.ServiceFilter
 	GRspSelect         generic.Generic
 	EndpointNode       *graph.EndpointNode
-	Svcs               []sdk.Service
-	Svc                *sdk.Service
-	Errs               []sdk.Error
+	Svcs               []mql.Service
+	Svc                *mql.Service
+	Errs               []mql.Error
 	GEntity            generic.Generic
 	GEntities          generic.Slice
-	SvcId              *sdk.ServiceId
-	SvcIds             []sdk.ServiceId
+	SvcId              *mql.ServiceId
+	SvcIds             []mql.ServiceId
 	DoCliReqValidation bool
 	DoCliReqProcessing bool
 	DoSetClientAccount bool
@@ -102,7 +102,7 @@ func (c ReqCtx) Copy() (ctx ReqCtx, err error) {
 	}
 
 	if c.SvcFilter != nil {
-		ctx.SvcFilter = &sdk.ServiceFilter{}
+		ctx.SvcFilter = &mql.ServiceFilter{}
 		*ctx.SvcFilter = *c.SvcFilter
 	}
 
@@ -113,7 +113,7 @@ func (c ReqCtx) Copy() (ctx ReqCtx, err error) {
 	}
 
 	if c.Svc != nil {
-		ctx.Svc = &sdk.Service{}
+		ctx.Svc = &mql.Service{}
 		*ctx.Svc = *c.Svc
 	}
 
@@ -219,7 +219,7 @@ type ContextInspect struct {
 	GSvcReq   string
 	GSvcRsp   string
 	GCliRsp   string
-	SvcFilter sdk.ServiceFilter
+	SvcFilter mql.ServiceFilter
 	Svc       string
 	Svcs      []string
 }

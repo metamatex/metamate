@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/metamatex/metamate/hackernews-svc/gen/v0/sdk"
+	"github.com/metamatex/metamate/hackernews-svc/gen/v0/mql"
 	"net/http"
 )
 
@@ -18,14 +18,14 @@ type user struct {
 	Error     *string
 }
 
-func GetSocialAccountId(c *http.Client, req sdk.GetSocialAccountsRequest) (as []sdk.SocialAccount, errs []sdk.Error) {
+func GetSocialAccountId(c *http.Client, req mql.GetSocialAccountsRequest) (as []mql.SocialAccount, errs []mql.Error) {
 	err := func() (err error) {
 		var url string
 
 		switch *req.Mode.Id.Kind {
-		case sdk.IdKind.ServiceId:
+		case mql.IdKind.ServiceId:
 			url = fmt.Sprintf("https://hacker-news.firebaseio.com/v0/user/%v.json", *req.Mode.Id.ServiceId.Value)
-		case sdk.IdKind.Username:
+		case mql.IdKind.Username:
 			url = fmt.Sprintf("https://hacker-news.firebaseio.com/v0/user/%v.json", *req.Mode.Id.Username)
 		default:
 			err = errors.New(fmt.Sprintf("can't handle id %v", req.Mode.Id))
@@ -46,8 +46,8 @@ func GetSocialAccountId(c *http.Client, req sdk.GetSocialAccountsRequest) (as []
 		}
 
 		if u == nil || u.Error != nil {
-			errs = append(errs, sdk.Error{
-				Kind: &sdk.ErrorKind.IdNotPresent,
+			errs = append(errs, mql.Error{
+				Kind: &mql.ErrorKind.IdNotPresent,
 				Id:   req.Mode.Id,
 			})
 		} else {
@@ -57,15 +57,15 @@ func GetSocialAccountId(c *http.Client, req sdk.GetSocialAccountsRequest) (as []
 		return
 	}()
 	if err != nil {
-		errs = append(errs, sdk.Error{
-			Message: sdk.String(err.Error()),
+		errs = append(errs, mql.Error{
+			Message: mql.String(err.Error()),
 		})
 	}
 
 	return
 }
 
-func mapUserToSocialAccount(u user) (a sdk.SocialAccount) {
+func mapUserToSocialAccount(u user) (a mql.SocialAccount) {
 	//type user struct {
 	//	Id        string    x
 	//	Created   int       x
@@ -75,43 +75,43 @@ func mapUserToSocialAccount(u user) (a sdk.SocialAccount) {
 	//	Submitted []int     x
 	//}
 
-	a = sdk.SocialAccount{
-		Id: &sdk.ServiceId{
+	a = mql.SocialAccount{
+		Id: &mql.ServiceId{
 			Value: u.Id,
 		},
-		AlternativeIds: []sdk.Id{
+		AlternativeIds: []mql.Id{
 			{
-				Kind:     &sdk.IdKind.Username,
+				Kind:     &mql.IdKind.Username,
 				Username: u.Id,
 			},
 			{
-				Kind: &sdk.IdKind.Url,
-				Url: &sdk.Url{
-					Value: sdk.String(fmt.Sprintf("https://news.ycombinator.com/user?id=%v", *u.Id)),
+				Kind: &mql.IdKind.Url,
+				Url: &mql.Url{
+					Value: mql.String(fmt.Sprintf("https://news.ycombinator.com/user?id=%v", *u.Id)),
 				},
 			},
 		},
-		Points: sdk.Int32(int32(*u.Karma)),
-		Note: &sdk.Text{
-			Formatting: &sdk.FormattingKind.Html,
+		Points: mql.Int32(int32(*u.Karma)),
+		Note: &mql.Text{
+			Formatting: &mql.FormattingKind.Html,
 			Value:      u.About,
 		},
-		CreatedAt: &sdk.Timestamp{
-			Kind: &sdk.TimestampKind.Unix,
-			Unix: &sdk.DurationScalar{
-				Unit:  &sdk.DurationUnit.S,
-				Value: sdk.Float64(float64(*u.Created)),
+		CreatedAt: &mql.Timestamp{
+			Kind: &mql.TimestampKind.Unix,
+			Unix: &mql.DurationScalar{
+				Unit:  &mql.DurationUnit.S,
+				Value: mql.Float64(float64(*u.Created)),
 			},
 		},
 		Username: u.Id,
-		Relations: &sdk.SocialAccountRelations{
-			AuthorsPosts: &sdk.PostsCollection{
-				Count: sdk.Int32(int32(len(u.Submitted))),
-				Posts: func() (ss []sdk.Post) {
+		Relations: &mql.SocialAccountRelations{
+			AuthorsPosts: &mql.PostsCollection{
+				Count: mql.Int32(int32(len(u.Submitted))),
+				Posts: func() (ss []mql.Post) {
 					for _, s := range u.Submitted {
-						ss = append(ss, sdk.Post{
-							Id: &sdk.ServiceId{
-								Value: sdk.String(fmt.Sprintf("%v", s)),
+						ss = append(ss, mql.Post{
+							Id: &mql.ServiceId{
+								Value: mql.String(fmt.Sprintf("%v", s)),
 							},
 						})
 					}

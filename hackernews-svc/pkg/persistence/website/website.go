@@ -3,18 +3,18 @@ package website
 import (
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
-	"github.com/metamatex/metamate/hackernews-svc/gen/v0/sdk"
+	"github.com/metamatex/metamate/hackernews-svc/gen/v0/mql"
 	"net/http"
 )
 
-func GetSocialAccountBookmarksPosts(c *http.Client, username string, sp *sdk.ServicePage) (ss []sdk.Post, pagination *sdk.Pagination, errs []sdk.Error) {
+func GetSocialAccountBookmarksPosts(c *http.Client, username string, sp *mql.ServicePage) (ss []mql.Post, pagination *mql.Pagination, errs []mql.Error) {
 	err := func() (err error) {
 		if sp == nil {
-			sp = &sdk.ServicePage{
-				Page: &sdk.Page{
-					Kind: &sdk.PageKind.IndexPage,
-					IndexPage: &sdk.IndexPage{
-						Value: sdk.Int32(0),
+			sp = &mql.ServicePage{
+				Page: &mql.Page{
+					Kind: &mql.PageKind.IndexPage,
+					IndexPage: &mql.IndexPage{
+						Value: mql.Int32(0),
 					},
 				},
 			}
@@ -39,23 +39,23 @@ func GetSocialAccountBookmarksPosts(c *http.Client, username string, sp *sdk.Ser
 				return
 			}
 
-			ss = append(ss, sdk.Post{
-				Id: &sdk.ServiceId{
+			ss = append(ss, mql.Post{
+				Id: &mql.ServiceId{
 					Value: &v,
 				},
 			})
 		})
 
-		pagination = &sdk.Pagination{}
-		pagination.Current = []sdk.ServicePage{*sp}
+		pagination = &mql.Pagination{}
+		pagination.Current = []mql.ServicePage{*sp}
 
 		if doc.Find("table.itemlist a.morelink").Length() == 1 {
-			pagination.Next = []sdk.ServicePage{
+			pagination.Next = []mql.ServicePage{
 				{
-					Page: &sdk.Page{
-						Kind: &sdk.PageKind.IndexPage,
-						IndexPage: &sdk.IndexPage{
-							Value: sdk.Int32(*sp.Page.IndexPage.Value + 1),
+					Page: &mql.Page{
+						Kind: &mql.PageKind.IndexPage,
+						IndexPage: &mql.IndexPage{
+							Value: mql.Int32(*sp.Page.IndexPage.Value + 1),
 						},
 					},
 				},
@@ -63,12 +63,12 @@ func GetSocialAccountBookmarksPosts(c *http.Client, username string, sp *sdk.Ser
 		}
 
 		if *sp.Page.IndexPage.Value != 0 {
-			pagination.Previous = []sdk.ServicePage{
+			pagination.Previous = []mql.ServicePage{
 				{
-					Page: &sdk.Page{
-						Kind: &sdk.PageKind.IndexPage,
-						IndexPage: &sdk.IndexPage{
-							Value: sdk.Int32(*sp.Page.IndexPage.Value - 1),
+					Page: &mql.Page{
+						Kind: &mql.PageKind.IndexPage,
+						IndexPage: &mql.IndexPage{
+							Value: mql.Int32(*sp.Page.IndexPage.Value - 1),
 						},
 					},
 				},
@@ -78,8 +78,8 @@ func GetSocialAccountBookmarksPosts(c *http.Client, username string, sp *sdk.Ser
 		return
 	}()
 	if err != nil {
-		errs = append(errs, sdk.Error{
-			Message: sdk.String(err.Error()),
+		errs = append(errs, mql.Error{
+			Message: mql.String(err.Error()),
 		})
 	}
 

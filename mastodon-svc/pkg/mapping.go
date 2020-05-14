@@ -2,11 +2,11 @@ package pkg
 
 import (
 	"github.com/mattn/go-mastodon"
-	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/mql"
 
 )
 
-func MapPostsFromStatuses(statuses []*mastodon.Status) (posts []sdk.Post) {
+func MapPostsFromStatuses(statuses []*mastodon.Status) (posts []mql.Post) {
 	for _, s := range statuses {
 		posts = append(posts, MapPostFromStatus(*s))
 	}
@@ -14,7 +14,7 @@ func MapPostsFromStatuses(statuses []*mastodon.Status) (posts []sdk.Post) {
 	return
 }
 
-func MapPostFromStatus(status mastodon.Status) (post sdk.Post) {
+func MapPostFromStatus(status mastodon.Status) (post mql.Post) {
 	// ✔ status.ID
 	// ✔ status.URI
 	// ✔ status.URL
@@ -74,51 +74,51 @@ func MapPostFromStatus(status mastodon.Status) (post sdk.Post) {
 		repliesToAccountId = &repliesToAccountId0
 	}
 
-	post = sdk.Post{
-		Id: &sdk.ServiceId{
-			Value: sdk.String(string(status.ID)),
+	post = mql.Post{
+		Id: &mql.ServiceId{
+			Value: mql.String(string(status.ID)),
 		},
-		AlternativeIds: []sdk.Id{
+		AlternativeIds: []mql.Id{
 			{
-				Kind: &sdk.IdKind.Url,
-				Url: &sdk.Url{
-					Value: sdk.String(string(status.URL)),
+				Kind: &mql.IdKind.Url,
+				Url: &mql.Url{
+					Value: mql.String(string(status.URL)),
 				},
 			},
 			{
-				Kind: &sdk.IdKind.Url,
-				Url: &sdk.Url{
-					Value: sdk.String(string(status.URI)),
+				Kind: &mql.IdKind.Url,
+				Url: &mql.Url{
+					Value: mql.String(string(status.URI)),
 				},
 			},
 		},
-		SpoilerText: &sdk.Text{
-			Formatting: &sdk.FormattingKind.Plain,
-			Value:      sdk.String(status.SpoilerText),
-			Language:   sdk.String(FromISO6391[status.Language]),
+		SpoilerText: &mql.Text{
+			Formatting: &mql.FormattingKind.Plain,
+			Value:      mql.String(status.SpoilerText),
+			Language:   mql.String(FromISO6391[status.Language]),
 		},
-		IsSensitive: sdk.Bool(status.Sensitive),
-		Content: &sdk.Text{
-			Formatting: &sdk.FormattingKind.Plain,
-			Value:      sdk.String(status.Content),
-			Language:   sdk.String(FromISO6391[status.Language]),
+		IsSensitive: mql.Bool(status.Sensitive),
+		Content: &mql.Text{
+			Formatting: &mql.FormattingKind.Plain,
+			Value:      mql.String(status.Content),
+			Language:   mql.String(FromISO6391[status.Language]),
 		},
-		Relations: &sdk.PostRelations{
-			MentionsSocialAccounts: &sdk.SocialAccountsCollection{
+		Relations: &mql.PostRelations{
+			MentionsSocialAccounts: &mql.SocialAccountsCollection{
 				SocialAccounts: MapFromMastodonMentions(status.Mentions),
 			},
-			FavoredBySocialAccounts: &sdk.SocialAccountsCollection{
-				Count: sdk.Int32(int32(status.FavouritesCount)),
+			FavoredBySocialAccounts: &mql.SocialAccountsCollection{
+				Count: mql.Int32(int32(status.FavouritesCount)),
 			},
-			RebloggedByPosts: &sdk.PostsCollection{
-				Count: sdk.Int32(int32(status.ReblogsCount)),
+			RebloggedByPosts: &mql.PostsCollection{
+				Count: mql.Int32(int32(status.ReblogsCount)),
 			},
-			WasRepliedToByPosts: &sdk.PostsCollection{
-				Count: sdk.Int32(int32(status.RepliesCount)),
+			WasRepliedToByPosts: &mql.PostsCollection{
+				Count: mql.Int32(int32(status.RepliesCount)),
 			},
 			AuthoredBySocialAccount: &author,
 		},
-		Relationships: &sdk.PostRelationships{
+		Relationships: &mql.PostRelationships{
 			FavoredByMe: favourited,
 			MutedByMe: muted,
 			RebloggedByMe: reblogged,
@@ -126,16 +126,16 @@ func MapPostFromStatus(status mastodon.Status) (post sdk.Post) {
 	}
 
 	if repliesToPostId != nil {
-		post.Relations.RepliesToPost = &sdk.Post{
-			Id: &sdk.ServiceId{
+		post.Relations.RepliesToPost = &mql.Post{
+			Id: &mql.ServiceId{
 				Value: repliesToPostId,
 			},
 		}
 	}
 
 	if repliesToAccountId != nil {
-		post.Relations.RepliesToSocialAccount = &sdk.SocialAccount{
-			Id: &sdk.ServiceId{
+		post.Relations.RepliesToSocialAccount = &mql.SocialAccount{
+			Id: &mql.ServiceId{
 				Value: repliesToAccountId,
 			},
 		}
@@ -144,7 +144,7 @@ func MapPostFromStatus(status mastodon.Status) (post sdk.Post) {
 	return
 }
 
-func MapAttachmentFromMastodonAttachment(attachment *mastodon.Attachment) (attachment0 sdk.Attachment) {
+func MapAttachmentFromMastodonAttachment(attachment *mastodon.Attachment) (attachment0 mql.Attachment) {
 	// https://docs.joinmastodon.org/api/entities/#attachment
 
 	// id: "7380901"
@@ -172,33 +172,33 @@ func MapAttachmentFromMastodonAttachment(attachment *mastodon.Attachment) (attac
 	// ✔ TextURL     string
 	// Description string
 
-	attachment0 = sdk.Attachment{
-		Id: &sdk.ServiceId{
-			Value: sdk.String(string(attachment.ID)),
+	attachment0 = mql.Attachment{
+		Id: &mql.ServiceId{
+			Value: mql.String(string(attachment.ID)),
 		},
-		AlternativeIds: []sdk.Id{
+		AlternativeIds: []mql.Id{
 			{
-				Kind: &sdk.IdKind.Url,
-				Url: &sdk.Url{
-					Value: sdk.String(string(attachment.URL)),
+				Kind: &mql.IdKind.Url,
+				Url: &mql.Url{
+					Value: mql.String(string(attachment.URL)),
 				},
 			},
 			{
-				Kind: &sdk.IdKind.Url,
-				Url: &sdk.Url{
-					Value: sdk.String(string(attachment.RemoteURL)),
+				Kind: &mql.IdKind.Url,
+				Url: &mql.Url{
+					Value: mql.String(string(attachment.RemoteURL)),
 				},
 			},
 			{
-				Kind: &sdk.IdKind.Url,
-				Url: &sdk.Url{
-					Value: sdk.String(string(attachment.PreviewURL)),
+				Kind: &mql.IdKind.Url,
+				Url: &mql.Url{
+					Value: mql.String(string(attachment.PreviewURL)),
 				},
 			},
 			{
-				Kind: &sdk.IdKind.Url,
-				Url: &sdk.Url{
-					Value: sdk.String(string(attachment.TextURL)),
+				Kind: &mql.IdKind.Url,
+				Url: &mql.Url{
+					Value: mql.String(string(attachment.TextURL)),
 				},
 			},
 		},
@@ -208,7 +208,7 @@ func MapAttachmentFromMastodonAttachment(attachment *mastodon.Attachment) (attac
 	return
 }
 
-func MapSocialAccountsFromMastodonAccounts(accounts []*mastodon.Account) (people []sdk.SocialAccount) {
+func MapSocialAccountsFromMastodonAccounts(accounts []*mastodon.Account) (people []mql.SocialAccount) {
 	for _, account := range accounts {
 		people = append(people, MapSocialAccountFromMastodonAccount(*account))
 	}
@@ -216,7 +216,7 @@ func MapSocialAccountsFromMastodonAccounts(accounts []*mastodon.Account) (people
 	return
 }
 
-func MapSocialAccountFromMastodonAccount(account mastodon.Account) (person sdk.SocialAccount) {
+func MapSocialAccountFromMastodonAccount(account mastodon.Account) (person mql.SocialAccount) {
 	// ✔ account.ID             ID
 	// ✔ account.Username       string
 	// ✔ account.Acct           string
@@ -237,49 +237,49 @@ func MapSocialAccountFromMastodonAccount(account mastodon.Account) (person sdk.S
 	// account.Fields         []Field
 	// account.Bot            bool
 
-	person = sdk.SocialAccount{
-		Id: &sdk.ServiceId{
-			Value: sdk.String(string(account.ID)),
+	person = mql.SocialAccount{
+		Id: &mql.ServiceId{
+			Value: mql.String(string(account.ID)),
 		},
-		AlternativeIds: []sdk.Id{
+		AlternativeIds: []mql.Id{
 			{
-				Kind: &sdk.IdKind.Url,
-				Url: &sdk.Url{
-					Value: sdk.String(string(account.URL)),
+				Kind: &mql.IdKind.Url,
+				Url: &mql.Url{
+					Value: mql.String(string(account.URL)),
 				},
 			},
 			{
-				Kind:     &sdk.IdKind.Username,
-				Username: sdk.String(account.Username),
+				Kind:     &mql.IdKind.Username,
+				Username: mql.String(account.Username),
 			},
 			{
-				Kind: &sdk.IdKind.Name,
-				Name: sdk.String(account.Acct),
+				Kind: &mql.IdKind.Name,
+				Name: mql.String(account.Acct),
 			},
 		},
-		Note: &sdk.Text{
-			Formatting: &sdk.FormattingKind.Html,
-			Value:      sdk.String(account.Note),
+		Note: &mql.Text{
+			Formatting: &mql.FormattingKind.Html,
+			Value:      mql.String(account.Note),
 		},
-		Avatar: &sdk.Image{
-			Url: &sdk.Url{
-				Value: sdk.String(account.Avatar),
-			},
-		},
-		Header: &sdk.Image{
-			Url: &sdk.Url{
-				Value: sdk.String(account.Header),
+		Avatar: &mql.Image{
+			Url: &mql.Url{
+				Value: mql.String(account.Avatar),
 			},
 		},
-		Relations: &sdk.SocialAccountRelations{
-			FollowedBySocialAccounts: &sdk.SocialAccountsCollection{
-				Count: sdk.Int32(int32(account.FollowersCount)),
+		Header: &mql.Image{
+			Url: &mql.Url{
+				Value: mql.String(account.Header),
 			},
-			FollowsSocialAccounts: &sdk.SocialAccountsCollection{
-				Count: sdk.Int32(int32(account.FollowingCount)),
+		},
+		Relations: &mql.SocialAccountRelations{
+			FollowedBySocialAccounts: &mql.SocialAccountsCollection{
+				Count: mql.Int32(int32(account.FollowersCount)),
 			},
-			AuthorsPosts: &sdk.PostsCollection{
-				Count: sdk.Int32(int32(account.StatusesCount)),
+			FollowsSocialAccounts: &mql.SocialAccountsCollection{
+				Count: mql.Int32(int32(account.FollowingCount)),
+			},
+			AuthorsPosts: &mql.PostsCollection{
+				Count: mql.Int32(int32(account.StatusesCount)),
 			},
 		},
 	}
@@ -287,7 +287,7 @@ func MapSocialAccountFromMastodonAccount(account mastodon.Account) (person sdk.S
 	return
 }
 
-func MapFromMastodonMentions(mentions []mastodon.Mention) (people []sdk.SocialAccount) {
+func MapFromMastodonMentions(mentions []mastodon.Mention) (people []mql.SocialAccount) {
 	for _, m := range mentions {
 		people = append(people, MapFromMastodonMention(m))
 	}
@@ -295,30 +295,30 @@ func MapFromMastodonMentions(mentions []mastodon.Mention) (people []sdk.SocialAc
 	return
 }
 
-func MapFromMastodonMention(mention mastodon.Mention) (person sdk.SocialAccount) {
+func MapFromMastodonMention(mention mastodon.Mention) (person mql.SocialAccount) {
 	// ✔ mention.URL      string
 	// ✔ mention.Username string
 	// ✔ mention.Acct     string
 	// ✔ mention.ID       mastodon.ID
 
-	person = sdk.SocialAccount{
-		Id: &sdk.ServiceId{
-			Value: sdk.String(string(mention.ID)),
+	person = mql.SocialAccount{
+		Id: &mql.ServiceId{
+			Value: mql.String(string(mention.ID)),
 		},
-		AlternativeIds: []sdk.Id{
+		AlternativeIds: []mql.Id{
 			{
-				Kind: &sdk.IdKind.Url,
-				Url: &sdk.Url{
-					Value: sdk.String(string(mention.URL)),
+				Kind: &mql.IdKind.Url,
+				Url: &mql.Url{
+					Value: mql.String(string(mention.URL)),
 				},
 			},
 			{
-				Kind:     &sdk.IdKind.Username,
-				Username: sdk.String(mention.Username),
+				Kind:     &mql.IdKind.Username,
+				Username: mql.String(mention.Username),
 			},
 			{
-				Kind: &sdk.IdKind.Name,
-				Name: sdk.String(mention.Acct),
+				Kind: &mql.IdKind.Name,
+				Name: mql.String(mention.Acct),
 			},
 		},
 	}
@@ -326,7 +326,7 @@ func MapFromMastodonMention(mention mastodon.Mention) (person sdk.SocialAccount)
 	return
 }
 
-func MapPostToMastodonToot(status sdk.Post) (toot *mastodon.Toot) {
+func MapPostToMastodonToot(status mql.Post) (toot *mastodon.Toot) {
 	toot = &mastodon.Toot{}
 
 	if status.Content != nil && status.Content.Value != nil {

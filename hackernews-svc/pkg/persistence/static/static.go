@@ -1,75 +1,75 @@
 package static
 
 import (
-	"github.com/metamatex/metamate/hackernews-svc/gen/v0/sdk"
+	"github.com/metamatex/metamate/hackernews-svc/gen/v0/mql"
 	"github.com/metamatex/metamate/hackernews-svc/pkg/types"
 )
 
-func GetPostFeedsCollection() (fs []sdk.PostFeed, errs []sdk.Error) {
-	fs = []sdk.PostFeed{
+func GetPostFeedsCollection() (fs []mql.PostFeed, errs []mql.Error) {
+	fs = []mql.PostFeed{
 		{
-			Id: &sdk.ServiceId{
-				Value: sdk.String(types.TopStories),
+			Id: &mql.ServiceId{
+				Value: mql.String(types.TopStories),
 			},
-			Info: &sdk.Info{
-				Name: &sdk.Text{
-					Value:      sdk.String("Top stories"),
-					Formatting: &sdk.FormattingKind.Plain,
+			Info: &mql.Info{
+				Name: &mql.Text{
+					Value:      mql.String("Top stories"),
+					Formatting: &mql.FormattingKind.Plain,
 				},
 			},
 		},
 		{
-			Id: &sdk.ServiceId{
-				Value: sdk.String(types.NewStories),
+			Id: &mql.ServiceId{
+				Value: mql.String(types.NewStories),
 			},
-			Info: &sdk.Info{
-				Name: &sdk.Text{
-					Value:      sdk.String("New stories"),
-					Formatting: &sdk.FormattingKind.Plain,
+			Info: &mql.Info{
+				Name: &mql.Text{
+					Value:      mql.String("New stories"),
+					Formatting: &mql.FormattingKind.Plain,
 				},
 			},
 		},
 		{
-			Id: &sdk.ServiceId{
-				Value: sdk.String(types.BestStories),
+			Id: &mql.ServiceId{
+				Value: mql.String(types.BestStories),
 			},
-			Info: &sdk.Info{
-				Name: &sdk.Text{
-					Value:      sdk.String("Best stories"),
-					Formatting: &sdk.FormattingKind.Plain,
+			Info: &mql.Info{
+				Name: &mql.Text{
+					Value:      mql.String("Best stories"),
+					Formatting: &mql.FormattingKind.Plain,
 				},
 			},
 		},
 		{
-			Id: &sdk.ServiceId{
-				Value: sdk.String(types.AskStories),
+			Id: &mql.ServiceId{
+				Value: mql.String(types.AskStories),
 			},
-			Info: &sdk.Info{
-				Name: &sdk.Text{
-					Value:      sdk.String("Ask stories"),
-					Formatting: &sdk.FormattingKind.Plain,
+			Info: &mql.Info{
+				Name: &mql.Text{
+					Value:      mql.String("Ask stories"),
+					Formatting: &mql.FormattingKind.Plain,
 				},
 			},
 		},
 		{
-			Id: &sdk.ServiceId{
-				Value: sdk.String(types.ShowStories),
+			Id: &mql.ServiceId{
+				Value: mql.String(types.ShowStories),
 			},
-			Info: &sdk.Info{
-				Name: &sdk.Text{
-					Value:      sdk.String("Show stories"),
-					Formatting: &sdk.FormattingKind.Plain,
+			Info: &mql.Info{
+				Name: &mql.Text{
+					Value:      mql.String("Show stories"),
+					Formatting: &mql.FormattingKind.Plain,
 				},
 			},
 		},
 		{
-			Id: &sdk.ServiceId{
-				Value: sdk.String(types.JobStories),
+			Id: &mql.ServiceId{
+				Value: mql.String(types.JobStories),
 			},
-			Info: &sdk.Info{
-				Name: &sdk.Text{
-					Value:      sdk.String("Job stories"),
-					Formatting: &sdk.FormattingKind.Plain,
+			Info: &mql.Info{
+				Name: &mql.Text{
+					Value:      mql.String("Job stories"),
+					Formatting: &mql.FormattingKind.Plain,
 				},
 			},
 		},

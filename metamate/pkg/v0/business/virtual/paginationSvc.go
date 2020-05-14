@@ -3,7 +3,7 @@ package virtual
 import (
 	"context"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
-	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/mql"
 
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/generic/pkg/v0/transport/httpjson"
@@ -13,24 +13,24 @@ import (
 
 func init() {
 	handler[Pagination] = func(f generic.Factory, rn *graph.RootNode, c *http.Client, vSvc types.VirtualSvc) (h http.Handler, t string, err error) {
-		ws := []sdk.Whatever{
+		ws := []mql.Dummy{
 			{
-				Id: &sdk.ServiceId{
-					Value: sdk.String("0"),
+				Id: &mql.ServiceId{
+					Value: mql.String("0"),
 				},
-				StringField: sdk.String("a"),
+				StringField: mql.String("a"),
 			},
 			{
-				Id: &sdk.ServiceId{
-					Value: sdk.String("1"),
+				Id: &mql.ServiceId{
+					Value: mql.String("1"),
 				},
-				StringField: sdk.String("b"),
+				StringField: mql.String("b"),
 			},
 			{
-				Id: &sdk.ServiceId{
-					Value: sdk.String("2"),
+				Id: &mql.ServiceId{
+					Value: mql.String("2"),
 				},
-				StringField: sdk.String("c"),
+				StringField: mql.String("c"),
 			},
 		}
 
@@ -39,32 +39,32 @@ func init() {
 			Factory: f,
 			Handler: func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic) {
 				switch gReq.Type().Name() {
-				case sdk.LookupServiceRequestName:
-					return f.MustFromStruct(sdk.LookupServiceResponse{
-						Output: &sdk.LookupServiceOutput{
-							Service: &sdk.Service{
-								Endpoints: &sdk.Endpoints{
-									GetWhatevers: &sdk.GetWhateversEndpoint{
-										Filter: &sdk.GetWhateversRequestFilter{},
+				case mql.LookupServiceRequestName:
+					return f.MustFromStruct(mql.LookupServiceResponse{
+						Output: &mql.LookupServiceOutput{
+							Service: &mql.Service{
+								Endpoints: &mql.Endpoints{
+									GetDummies: &mql.GetDummiesEndpoint{
+										Filter: &mql.GetDummiesRequestFilter{},
 									},
 								},
 							},
 						},
 					})
-				case sdk.GetWhateversRequestName:
-					var req = sdk.GetWhateversRequest{}
+				case mql.GetDummiesRequestName:
+					var req = mql.GetDummiesRequest{}
 					gReq.MustToStruct(&req)
 
-					var ws0 []sdk.Whatever
-					var pagination *sdk.Pagination
+					var ws0 []mql.Dummy
+					var pagination *mql.Pagination
 
 					switch *req.Mode.Kind {
-					case sdk.GetModeKind.Collection, sdk.GetModeKind.Relation, sdk.GetModeKind.Search:
-						ws0, pagination = getWhateversCollection(ws, req)
+					case mql.GetModeKind.Collection, mql.GetModeKind.Relation, mql.GetModeKind.Search:
+						ws0, pagination = getDummiesCollection(ws, req)
 					}
 
-					return f.MustFromStruct(sdk.GetWhateversResponse{
-						Whatevers: ws0,
+					return f.MustFromStruct(mql.GetDummiesResponse{
+						Dummies: ws0,
 						Pagination: pagination,
 					})
 				}
@@ -74,39 +74,39 @@ func init() {
 			LogErr: nil,
 		})
 
-		t = sdk.ServiceTransport.HttpJson
+		t = mql.ServiceTransport.HttpJson
 
 		return
 	}
 }
 
-func getWhateversCollection(ws []sdk.Whatever, req sdk.GetWhateversRequest) (ws0 []sdk.Whatever, pagination *sdk.Pagination) {
-	var page sdk.ServicePage
+func getDummiesCollection(ws []mql.Dummy, req mql.GetDummiesRequest) (ws0 []mql.Dummy, pagination *mql.Pagination) {
+	var page mql.ServicePage
 
 	if len(req.Pages) == 1 {
 		page = req.Pages[0]
 	} else {
-		page = sdk.ServicePage{
-			Page: &sdk.Page{
-				Kind: &sdk.PageKind.IndexPage,
-				IndexPage: &sdk.IndexPage{
-					Value: sdk.Int32(0),
+		page = mql.ServicePage{
+			Page: &mql.Page{
+				Kind: &mql.PageKind.IndexPage,
+				IndexPage: &mql.IndexPage{
+					Value: mql.Int32(0),
 				},
 			},
 		}
 	}
 
-	pagination = &sdk.Pagination{}
+	pagination = &mql.Pagination{}
 
-	pagination.Current = []sdk.ServicePage{page}
+	pagination.Current = []mql.ServicePage{page}
 
 	if int(*page.Page.IndexPage.Value) < len(ws) {
-		pagination.Next = []sdk.ServicePage{
+		pagination.Next = []mql.ServicePage{
 			{
-				Page: &sdk.Page{
-					Kind: &sdk.PageKind.IndexPage,
-					IndexPage: &sdk.IndexPage{
-						Value: sdk.Int32(*page.Page.IndexPage.Value + 1),
+				Page: &mql.Page{
+					Kind: &mql.PageKind.IndexPage,
+					IndexPage: &mql.IndexPage{
+						Value: mql.Int32(*page.Page.IndexPage.Value + 1),
 					},
 				},
 			},
@@ -114,12 +114,12 @@ func getWhateversCollection(ws []sdk.Whatever, req sdk.GetWhateversRequest) (ws0
 	}
 
 	if *page.Page.IndexPage.Value != 0 {
-		pagination.Previous = []sdk.ServicePage{
+		pagination.Previous = []mql.ServicePage{
 			{
-				Page: &sdk.Page{
-					Kind: &sdk.PageKind.IndexPage,
-					IndexPage: &sdk.IndexPage{
-						Value: sdk.Int32(*page.Page.IndexPage.Value - 1),
+				Page: &mql.Page{
+					Kind: &mql.PageKind.IndexPage,
+					IndexPage: &mql.IndexPage{
+						Value: mql.Int32(*page.Page.IndexPage.Value - 1),
 					},
 				},
 			},
@@ -130,7 +130,7 @@ func getWhateversCollection(ws []sdk.Whatever, req sdk.GetWhateversRequest) (ws0
 		return
 	}
 
-	ws0 = []sdk.Whatever{
+	ws0 = []mql.Dummy{
 		ws[*page.Page.IndexPage.Value],
 	}
 

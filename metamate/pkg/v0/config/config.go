@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/mql"
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/virtual"
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 )
@@ -35,19 +35,19 @@ var DefaultConfig = types.Config{
 			},
 		},
 	},
-	DiscoverySvc: sdk.Service{
-		Id: &sdk.ServiceId{
-			Value:       sdk.String("discovery"),
-			ServiceName: sdk.String("metamate"),
+	DiscoverySvc: mql.Service{
+		Id: &mql.ServiceId{
+			Value:       mql.String("discovery"),
+			ServiceName: mql.String("metamate"),
 		},
-		IsVirtual: sdk.Bool(true),
-		Url: &sdk.Url{
-			Value: sdk.String("http://discovery"),
+		IsVirtual: mql.Bool(true),
+		Url: &mql.Url{
+			Value: mql.String("http://discovery"),
 		},
-		Transport: &sdk.ServiceTransport.HttpJson,
-		Endpoints: &sdk.Endpoints{
-			LookupService: &sdk.LookupServiceEndpoint{},
-			GetServices:   &sdk.GetServicesEndpoint{},
+		Transport: &mql.ServiceTransport.HttpJson,
+		Endpoints: &mql.Endpoints{
+			LookupService: &mql.LookupServiceEndpoint{},
+			GetServices:   &mql.GetServicesEndpoint{},
 		},
 	},
 	Endpoints: types.EndpointsConfig{

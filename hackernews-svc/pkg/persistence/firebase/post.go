@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/metamatex/metamate/hackernews-svc/gen/v0/sdk"
+	"github.com/metamatex/metamate/hackernews-svc/gen/v0/mql"
 	"github.com/metamatex/metamate/hackernews-svc/pkg/types"
 	"net/http"
 	"strconv"
@@ -28,12 +28,12 @@ type firebaseStory struct {
 	Descendants *int32
 }
 
-func GetPostsId(c *http.Client, req sdk.GetPostsRequest) (ss []sdk.Post, errs []sdk.Error) {
+func GetPostsId(c *http.Client, req mql.GetPostsRequest) (ss []mql.Post, errs []mql.Error) {
 	err := func() (err error) {
 		var url string
 
 		switch *req.Mode.Id.Kind {
-		case sdk.IdKind.ServiceId:
+		case mql.IdKind.ServiceId:
 			url = fmt.Sprintf("https://hacker-news.firebaseio.com/v0/item/%v.json", *req.Mode.Id.ServiceId.Value)
 		default:
 			err = errors.New(fmt.Sprintf("can't handle id %v", req.Mode.Id))
@@ -58,15 +58,15 @@ func GetPostsId(c *http.Client, req sdk.GetPostsRequest) (ss []sdk.Post, errs []
 		return
 	}()
 	if err != nil {
-		errs = append(errs, sdk.Error{
-			Message: sdk.String(err.Error()),
+		errs = append(errs, mql.Error{
+			Message: mql.String(err.Error()),
 		})
 	}
 
 	return
 }
 
-func GetPostFeedContainsPosts(c *http.Client, feed string) (ss []sdk.Post, errs []sdk.Error) {
+func GetPostFeedContainsPosts(c *http.Client, feed string) (ss []mql.Post, errs []mql.Error) {
 	err := func() (err error) {
 		m := map[string]string{
 			types.TopStories:  "https://hacker-news.firebaseio.com/v0/topstories.json",
@@ -90,9 +90,9 @@ func GetPostFeedContainsPosts(c *http.Client, feed string) (ss []sdk.Post, errs 
 		}
 
 		for _, id := range ids {
-			ss = append(ss, sdk.Post{
-				Id: &sdk.ServiceId{
-					Value: sdk.String(strconv.Itoa(id)),
+			ss = append(ss, mql.Post{
+				Id: &mql.ServiceId{
+					Value: mql.String(strconv.Itoa(id)),
 				},
 			})
 		}
@@ -100,15 +100,15 @@ func GetPostFeedContainsPosts(c *http.Client, feed string) (ss []sdk.Post, errs 
 		return
 	}()
 	if err != nil {
-		errs = append(errs, sdk.Error{
-			Message: sdk.String(err.Error()),
+		errs = append(errs, mql.Error{
+			Message: mql.String(err.Error()),
 		})
 	}
 
 	return
 }
 
-func mapFirebaseStoryToPost(s firebaseStory) sdk.Post {
+func mapFirebaseStoryToPost(s firebaseStory) mql.Post {
 	//type firebaseStory struct {
 	//	Id          int32          x
 	//	Deleted     bool
@@ -127,91 +127,91 @@ func mapFirebaseStoryToPost(s firebaseStory) sdk.Post {
 	//	Descendants int32        x
 	//}
 
-	return sdk.Post{
-		Id: &sdk.ServiceId{
-			Value: sdk.String(fmt.Sprintf("%v", *s.Id)),
+	return mql.Post{
+		Id: &mql.ServiceId{
+			Value: mql.String(fmt.Sprintf("%v", *s.Id)),
 		},
 		Kind: func() *string {
 			if s.Parent == nil {
-				return &sdk.PostKind.Post
+				return &mql.PostKind.Post
 			} else {
-				return &sdk.PostKind.Reply
+				return &mql.PostKind.Reply
 			}
 		}(),
 		TotalWasRepliedToByPostsCount: s.Descendants,
-		AlternativeIds: []sdk.Id{
+		AlternativeIds: []mql.Id{
 			{
-				Kind: &sdk.IdKind.Url,
-				Url: &sdk.Url{
-					Value: sdk.String(fmt.Sprintf("https://news.ycombinator.com/item?id=%v", *s.Id)),
+				Kind: &mql.IdKind.Url,
+				Url: &mql.Url{
+					Value: mql.String(fmt.Sprintf("https://news.ycombinator.com/item?id=%v", *s.Id)),
 				},
 			},
 		},
-		Title: func() *sdk.Text {
+		Title: func() *mql.Text {
 			if s.Title == nil {
 				return nil
 			}
 
-			return &sdk.Text{
-				Formatting: &sdk.FormattingKind.Plain,
+			return &mql.Text{
+				Formatting: &mql.FormattingKind.Plain,
 				Value:      s.Title,
 			}
 		}(),
-		Content: func() *sdk.Text {
+		Content: func() *mql.Text {
 			if s.Text == nil {
 				return nil
 			}
 
-			return &sdk.Text{
-				Formatting: &sdk.FormattingKind.Html,
+			return &mql.Text{
+				Formatting: &mql.FormattingKind.Html,
 				Value:      s.Text,
 			}
 		}(),
-		Links: func() []sdk.HyperLink {
+		Links: func() []mql.HyperLink {
 			if s.Url == nil {
 				return nil
 			}
 
-			return []sdk.HyperLink{
+			return []mql.HyperLink{
 				{
 					Label: s.Title,
-					Url: &sdk.Url{
+					Url: &mql.Url{
 						Value: s.Url,
 					},
 				},
 			}
 		}(),
-		CreatedAt: func() (ts *sdk.Timestamp) {
+		CreatedAt: func() (ts *mql.Timestamp) {
 			if s.Time == nil {
 				return
 			}
 
-			return &sdk.Timestamp{
-				Kind: &sdk.TimestampKind.Unix,
-				Unix: &sdk.DurationScalar{
-					Unit:  &sdk.DurationUnit.S,
-					Value: sdk.Float64(float64(*s.Time)),
+			return &mql.Timestamp{
+				Kind: &mql.TimestampKind.Unix,
+				Unix: &mql.DurationScalar{
+					Unit:  &mql.DurationUnit.S,
+					Value: mql.Float64(float64(*s.Time)),
 				},
 			}
 		}(),
-		Relations: &sdk.PostRelations{
-			AuthoredBySocialAccount: &sdk.SocialAccount{
-				Id: &sdk.ServiceId{
+		Relations: &mql.PostRelations{
+			AuthoredBySocialAccount: &mql.SocialAccount{
+				Id: &mql.ServiceId{
 					Value: s.By,
 				},
 			},
-			WasRepliedToByPosts: func() (c *sdk.PostsCollection) {
+			WasRepliedToByPosts: func() (c *mql.PostsCollection) {
 				if s.Kids == nil {
 					return
 				}
 
-				return &sdk.PostsCollection{
-					Count: sdk.Int32(int32(len(s.Kids))),
-					Posts: func() (ss []sdk.Post) {
+				return &mql.PostsCollection{
+					Count: mql.Int32(int32(len(s.Kids))),
+					Posts: func() (ss []mql.Post) {
 						for _, k := range s.Kids {
-							ss = append(ss, sdk.Post{
-								Id: &sdk.ServiceId{
-									Value: sdk.String(fmt.Sprintf("%v", k)),
+							ss = append(ss, mql.Post{
+								Id: &mql.ServiceId{
+									Value: mql.String(fmt.Sprintf("%v", k)),
 								},
 							})
 						}
@@ -220,23 +220,23 @@ func mapFirebaseStoryToPost(s firebaseStory) sdk.Post {
 					}(),
 				}
 			}(),
-			RepliesToPost: func() (s1 *sdk.Post) {
+			RepliesToPost: func() (s1 *mql.Post) {
 				if s.Parent == nil {
 					return
 				}
 
-				return &sdk.Post{
-					Id: &sdk.ServiceId{
-						Value: sdk.String(fmt.Sprintf("%v", *s.Parent)),
+				return &mql.Post{
+					Id: &mql.ServiceId{
+						Value: mql.String(fmt.Sprintf("%v", *s.Parent)),
 					},
 				}
 			}(),
-			FavoredBySocialAccounts: func() (c *sdk.SocialAccountsCollection) {
+			FavoredBySocialAccounts: func() (c *mql.SocialAccountsCollection) {
 				if s.Score == nil {
 					return
 				}
 
-				return &sdk.SocialAccountsCollection{
+				return &mql.SocialAccountsCollection{
 					Count: s.Score,
 				}
 			}(),
@@ -244,13 +244,13 @@ func mapFirebaseStoryToPost(s firebaseStory) sdk.Post {
 	}
 }
 
-func GetSocialAccountAuthorsPosts(c *http.Client, req sdk.GetPostsRequest) (ss []sdk.Post, errs []sdk.Error) {
-	var as []sdk.SocialAccount
-	as, errs = GetSocialAccountId(c, sdk.GetSocialAccountsRequest{
-		Mode: &sdk.GetMode{
-			Kind: &sdk.GetModeKind.Id,
-			Id: &sdk.Id{
-				Kind:      &sdk.IdKind.ServiceId,
+func GetSocialAccountAuthorsPosts(c *http.Client, req mql.GetPostsRequest) (ss []mql.Post, errs []mql.Error) {
+	var as []mql.SocialAccount
+	as, errs = GetSocialAccountId(c, mql.GetSocialAccountsRequest{
+		Mode: &mql.GetMode{
+			Kind: &mql.GetModeKind.Id,
+			Id: &mql.Id{
+				Kind:      &mql.IdKind.ServiceId,
 				ServiceId: req.Mode.Relation.Id,
 			},
 		},

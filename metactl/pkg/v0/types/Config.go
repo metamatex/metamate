@@ -3,9 +3,9 @@ package types
 import "strings"
 
 const (
-	FORMAT_JSON    = "json"
-	FORMAT_YAML    = "yaml"
-	FORMAT_DEFAULT = FORMAT_YAML
+	FormatJson    = "json"
+	FormatYaml    = "yaml"
+	FormatDefault = FormatYaml
 )
 
 type GlobalArgs struct {
@@ -21,9 +21,9 @@ type GlobalArgs struct {
 
 func (a GlobalArgs) ReturnData() (b bool) {
 	switch strings.ToLower(a.OutputFormat) {
-	case FORMAT_YAML:
+	case FormatYaml:
 		b = true
-	case FORMAT_JSON:
+	case FormatJson:
 		b = true
 	default:
 		b = false

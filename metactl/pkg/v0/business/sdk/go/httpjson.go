@@ -13,16 +13,16 @@ const (
 func init() {
 	tasks[TaskHttpJson] = types.RenderTask{
 		TemplateData: &goHttpJsonTpl,
-		Out:          ptr.String("transport/httpjson_.go"),
+		Out:          ptr.String("httpjson_.go"),
 	}
 
 	tasks[TaskHttpJsonTypedGenericTest] = types.RenderTask{
 		TemplateData: &goHttpJsonTypedGenericTestTpl,
-		Out:          ptr.String("transport/typed_generic_test.go"),
+		Out:          ptr.String("typed_generic_test.go"),
 	}
 }
 
-var goHttpJsonTpl = `package transport
+var goHttpJsonTpl = `package mql
 const (
 	MetamateTypeHeader = "X-MetaMate-Type"
 	ContentTypeJson = "application/json; charset=utf-8"
@@ -31,15 +31,12 @@ const (
 )
 `
 
-var goHttpJsonTypedGenericTestTpl = `package httpjson
-{{ $package := index .Data "package" }}
+var goHttpJsonTypedGenericTestTpl = `package mql
+
 import (
 	"net/http"
 	"testing"
-
 	"github.com/stretchr/testify/assert"
-
-	"{{ $package }}/gen/v0/sdk"
 )
 
 func TestTypedClientGenericServer(t *testing.T) {
@@ -58,7 +55,7 @@ func TestTypedClientGenericServer(t *testing.T) {
 
 		c := NewTypedClient(&http.Client{}, "http://"+addr)
 
-		rsp0, err := c.GetWhatevers(ctx, req)
+		rsp0, err := c.GetDummies(ctx, req)
 		if err != nil {
 			return
 		}
@@ -84,7 +81,7 @@ func TestGenericClientTypedServer(t *testing.T) {
 		addr := "127.0.0.1:57003"
 		s := NewTypedServer(addr)
 
-		s.SetGetWhateversEndpoint(NewEndpoint(t))
+		s.SetGetDummiesEndpoint(NewEndpoint(t))
 
 		go func() {
 			err := s.Listen()
@@ -100,7 +97,7 @@ func TestGenericClientTypedServer(t *testing.T) {
 			return
 		}
 
-		var rsp0 types.GetWhateversResponse
+		var rsp0 types.GetDummiesResponse
 		err = types.GenericToStruct(gRsp, &rsp0)
 		if err != nil {
 			return

@@ -3,32 +3,32 @@ package pkg
 import (
 	"context"
 	"github.com/mattn/go-mastodon"
-	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/mql"
 	
 )
 
-func getSocialAccountId(ctx context.Context, c *mastodon.Client, req sdk.GetSocialAccountsRequest) (rsp sdk.GetSocialAccountsResponse) {
+func getSocialAccountId(ctx context.Context, c *mastodon.Client, req mql.GetSocialAccountsRequest) (rsp mql.GetSocialAccountsResponse) {
 	err := func() (err error) {
 		var account *mastodon.Account
 		switch *req.Mode.Id.Kind {
-		case sdk.IdKind.ServiceId:
+		case mql.IdKind.ServiceId:
 			account, err = c.GetAccount(ctx, mastodon.ID(*req.Mode.Id.ServiceId.Value))
 			if err != nil {
 				return
 			}
 
 			break
-		case sdk.IdKind.Email:
+		case mql.IdKind.Email:
 			break
-		case sdk.IdKind.Name:
+		case mql.IdKind.Name:
 			break
-		case sdk.IdKind.Username:
+		case mql.IdKind.Username:
 			break
-		case sdk.IdKind.Ean:
+		case mql.IdKind.Ean:
 			break
-		case sdk.IdKind.Url:
+		case mql.IdKind.Url:
 			break
-		case sdk.IdKind.Me:
+		case mql.IdKind.Me:
 			account, err = c.GetAccountCurrentUser(ctx)
 			if err != nil {
 				return
@@ -37,20 +37,20 @@ func getSocialAccountId(ctx context.Context, c *mastodon.Client, req sdk.GetSoci
 			break
 		}
 
-		rsp.SocialAccounts = []sdk.SocialAccount{MapSocialAccountFromMastodonAccount(*account)}
+		rsp.SocialAccounts = []mql.SocialAccount{MapSocialAccountFromMastodonAccount(*account)}
 
 		return
 	}()
 	if err != nil {
-		rsp.Errors = append(rsp.Errors, sdk.Error{
-			Message: sdk.String(err.Error()),
+		rsp.Errors = append(rsp.Errors, mql.Error{
+			Message: mql.String(err.Error()),
 		})
 	}
 
 	return
 }
 
-func getSocialAccountsSearch(ctx context.Context, c *mastodon.Client, req sdk.GetSocialAccountsRequest) (rsp sdk.GetSocialAccountsResponse) {
+func getSocialAccountsSearch(ctx context.Context, c *mastodon.Client, req mql.GetSocialAccountsRequest) (rsp mql.GetSocialAccountsResponse) {
 	err := func() (err error) {
 		accounts, err := c.AccountsSearch(ctx, *req.Mode.Search.Term, 100)
 		if err != nil {
@@ -62,18 +62,18 @@ func getSocialAccountsSearch(ctx context.Context, c *mastodon.Client, req sdk.Ge
 		return
 	}()
 	if err != nil {
-		rsp.Errors = append(rsp.Errors, sdk.Error{
-			Message: sdk.String(err.Error()),
+		rsp.Errors = append(rsp.Errors, mql.Error{
+			Message: mql.String(err.Error()),
 		})
 	}
 
 	return
 }
 
-func getSocialAccountsRelation(ctx context.Context, c *mastodon.Client, req sdk.GetSocialAccountsRequest) (rsp sdk.GetSocialAccountsResponse) {
+func getSocialAccountsRelation(ctx context.Context, c *mastodon.Client, req mql.GetSocialAccountsRequest) (rsp mql.GetSocialAccountsResponse) {
 	var accounts []*mastodon.Account
 
-	//var pagination *sdk.Pagination
+	//var pagination *mql.Pagination
 	pg := &mastodon.Pagination{}
 
 	//if len(req.Pages) > 0 {
@@ -94,32 +94,32 @@ func getSocialAccountsRelation(ctx context.Context, c *mastodon.Client, req sdk.
 
 	err := func() (err error) {
 		switch *req.Mode.Relation.Relation {
-		case sdk.SocialAccountRelationName.SocialAccountBlocksSocialAccounts:
+		case mql.SocialAccountRelationName.SocialAccountBlocksSocialAccounts:
 			accounts, err = c.GetBlocks(ctx, pg)
 			if err != nil {
 				return
 			}
-		case sdk.SocialAccountRelationName.SocialAccountFollowedBySocialAccounts:
+		case mql.SocialAccountRelationName.SocialAccountFollowedBySocialAccounts:
 			accounts, err = c.GetAccountFollowers(ctx, mastodon.ID(*req.Mode.Relation.Id.Value), pg)
 			if err != nil {
 				return
 			}
-		case sdk.SocialAccountRelationName.SocialAccountFollowsSocialAccounts:
+		case mql.SocialAccountRelationName.SocialAccountFollowsSocialAccounts:
 			accounts, err = c.GetAccountFollowing(ctx, mastodon.ID(*req.Mode.Relation.Id.Value), pg)
 			if err != nil {
 				return
 			}
-		case sdk.SocialAccountRelationName.SocialAccountMutesSocialAccounts:
+		case mql.SocialAccountRelationName.SocialAccountMutesSocialAccounts:
 			accounts, err = c.GetMutes(ctx, pg)
 			if err != nil {
 				return
 			}
-		case sdk.SocialAccountRelationName.SocialAccountRequestedToBeFollowedBySocialAccounts:
+		case mql.SocialAccountRelationName.SocialAccountRequestedToBeFollowedBySocialAccounts:
 			accounts, err = c.GetFollowRequests(ctx, pg)
 			if err != nil {
 				return
 			}
-		case sdk.PostRelationName.PostFavoredBySocialAccounts:
+		case mql.PostRelationName.PostFavoredBySocialAccounts:
 			accounts, err = c.GetFavouritedBy(ctx, mastodon.ID(*req.Mode.Relation.Id.Value), pg)
 			if err != nil {
 				return
@@ -129,23 +129,23 @@ func getSocialAccountsRelation(ctx context.Context, c *mastodon.Client, req sdk.
 		return
 	}()
 	if err != nil {
-		rsp.Errors = append(rsp.Errors, sdk.Error{
-			Message: sdk.String(err.Error()),
+		rsp.Errors = append(rsp.Errors, mql.Error{
+			Message: mql.String(err.Error()),
 		})
 	}
 
 	//if pg != nil {
-	//	pagination := &sdk.Pagination{
-	//		Previous: &sdk.Page{
-	//			Kind: &sdk.PageKind.CursorPage,
-	//			CursorPage: &sdk.CursorPage{
-	//				Value: sdk.String(string(pg.SinceID)),
+	//	pagination := &mql.Pagination{
+	//		Previous: &mql.Page{
+	//			Kind: &mql.PageKind.CursorPage,
+	//			CursorPage: &mql.CursorPage{
+	//				Value: mql.String(string(pg.SinceID)),
 	//			},
 	//		},
-	//		Next: &sdk.Page{
-	//			Kind: &sdk.PageKind.CursorPage,
-	//			CursorPage: &sdk.CursorPage{
-	//				Value: sdk.String(string(pg.MaxID)),
+	//		Next: &mql.Page{
+	//			Kind: &mql.PageKind.CursorPage,
+	//			CursorPage: &mql.CursorPage{
+	//				Value: mql.String(string(pg.MaxID)),
 	//			},
 	//		},
 	//	}

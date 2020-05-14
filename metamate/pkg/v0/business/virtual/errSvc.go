@@ -3,7 +3,7 @@ package virtual
 import (
 	"context"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
-	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/mql"
 
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/generic/pkg/v0/transport/httpjson"
@@ -18,32 +18,32 @@ func init() {
 			Factory: f,
 			Handler: func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic) {
 				switch gReq.Type().Name() {
-				case sdk.LookupServiceRequestName:
-					return f.MustFromStruct(sdk.LookupServiceResponse{
-						Output: &sdk.LookupServiceOutput{
-							Service: &sdk.Service{
-								Endpoints: &sdk.Endpoints{
-									GetWhatevers: &sdk.GetWhateversEndpoint{
-										Filter: &sdk.GetWhateversRequestFilter{
+				case mql.LookupServiceRequestName:
+					return f.MustFromStruct(mql.LookupServiceResponse{
+						Output: &mql.LookupServiceOutput{
+							Service: &mql.Service{
+								Endpoints: &mql.Endpoints{
+									GetDummies: &mql.GetDummiesEndpoint{
+										Filter: &mql.GetDummiesRequestFilter{
 										},
 									},
 								},
 							},
 						},
 					})
-				case sdk.GetWhateversRequestName:
-					return f.MustFromStruct(sdk.GetWhateversResponse{
-						Errors: []sdk.Error{
+				case mql.GetDummiesRequestName:
+					return f.MustFromStruct(mql.GetDummiesResponse{
+						Errors: []mql.Error{
 							{
-								Message: sdk.String("a"),
+								Message: mql.String("a"),
 							},
 						},
-						Whatevers: []sdk.Whatever{
+						Dummies: []mql.Dummy{
 							{
-								Id: &sdk.ServiceId{
-									Value: sdk.String("a"),
+								Id: &mql.ServiceId{
+									Value: mql.String("a"),
 								},
-								StringField: sdk.String("a"),
+								StringField: mql.String("a"),
 							},
 						},
 					})
@@ -54,7 +54,7 @@ func init() {
 			LogErr: nil,
 		})
 
-		t = sdk.ServiceTransport.HttpJson
+		t = mql.ServiceTransport.HttpJson
 
 		return
 	}

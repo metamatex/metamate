@@ -13,7 +13,7 @@ const (
 func init() {
 	tasks[TaskUtils] = types.RenderTask{
 		TemplateData: &goUtilsTpl,
-		Out:          ptr.String("utils/utils_.go"),
+		Out:          ptr.String("utils_.go"),
 	}
 
 	tasks[TaskUtilsPtr] = types.RenderTask{
@@ -22,8 +22,8 @@ func init() {
 	}
 }
 
-var goUtilsTpl = `package utils
-{{ $package := index .Data "package" }}
+var goUtilsTpl = `package mql
+
 import (
 	"gopkg.in/yaml.v2"
 	"regexp"
@@ -51,7 +51,7 @@ func Print(i interface{}) {
 	println(Sprint(i))
 }`
 
-var goUtilsPtrTpl = `package sdk
+var goUtilsPtrTpl = `package mql
 
 func String(s string) (*string) {
 	return &s

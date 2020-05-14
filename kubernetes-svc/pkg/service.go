@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/mql"
 
 	"io/ioutil"
 	"net/http"
@@ -58,25 +58,25 @@ func NewService() (svc Service, err error) {
 	return
 }
 
-func (Service) GetGetServicesEndpoint() (sdk.GetServicesEndpoint) {
-	return sdk.GetServicesEndpoint{
-		Filter: &sdk.GetServicesRequestFilter{
-			Or: []sdk.GetServicesRequestFilter{
+func (Service) GetGetServicesEndpoint() (mql.GetServicesEndpoint) {
+	return mql.GetServicesEndpoint{
+		Filter: &mql.GetServicesRequestFilter{
+			Or: []mql.GetServicesRequestFilter{
 				{
-					Mode: &sdk.GetModeFilter{
-						Kind: &sdk.EnumFilter{
-							Is: &sdk.GetModeKind.Collection,
+					Mode: &mql.GetModeFilter{
+						Kind: &mql.EnumFilter{
+							Is: &mql.GetModeKind.Collection,
 						},
 					},
 				},
 				{
-					Mode: &sdk.GetModeFilter{
-						Kind: &sdk.EnumFilter{
-							Is: sdk.String(sdk.GetModeKind.Id),
+					Mode: &mql.GetModeFilter{
+						Kind: &mql.EnumFilter{
+							Is: mql.String(mql.GetModeKind.Id),
 						},
-						Id: &sdk.IdFilter{
-							Kind: &sdk.EnumFilter{
-								Is: &sdk.IdKind.ServiceId,
+						Id: &mql.IdFilter{
+							Kind: &mql.EnumFilter{
+								Is: &mql.IdKind.ServiceId,
 							},
 						},
 					},
@@ -86,16 +86,16 @@ func (Service) GetGetServicesEndpoint() (sdk.GetServicesEndpoint) {
 	}
 }
 
-func (s Service) GetServices(ctx context.Context, req sdk.GetServicesRequest) (rsp sdk.GetServicesResponse) {
-	var svcs []sdk.Service
+func (s Service) GetServices(ctx context.Context, req mql.GetServicesRequest) (rsp mql.GetServicesResponse) {
+	var svcs []mql.Service
 	var errs []error
 	switch *req.Mode.Kind {
-	case sdk.GetModeKind.Id:
+	case mql.GetModeKind.Id:
 		switch *req.Mode.Id.Kind {
-		case sdk.IdKind.ServiceId:
+		case mql.IdKind.ServiceId:
 			svcs, errs = s.GetServicesModeId(*req.Mode.Id.ServiceId)
 		}
-	case sdk.GetModeKind.Collection:
+	case mql.GetModeKind.Collection:
 		svcs, errs = s.GetServicesModeCollection(s.namespace)
 	}
 
@@ -103,8 +103,8 @@ func (s Service) GetServices(ctx context.Context, req sdk.GetServicesRequest) (r
 
 	if len(errs) != 0 {
 		for _, err := range errs {
-			rsp.Errors = append(rsp.Errors, sdk.Error{
-				Message: sdk.String(err.Error()),
+			rsp.Errors = append(rsp.Errors, mql.Error{
+				Message: mql.String(err.Error()),
 			})
 		}
 	}
@@ -112,7 +112,7 @@ func (s Service) GetServices(ctx context.Context, req sdk.GetServicesRequest) (r
 	return
 }
 
-func (s Service) GetServicesModeId(serviceId sdk.ServiceId) (services []sdk.Service, errs []error) {
+func (s Service) GetServicesModeId(serviceId mql.ServiceId) (services []mql.Service, errs []error) {
 	namespace, name := resolveIdValue(*serviceId.Value)
 
 	rq, err := http.NewRequest(http.MethodGet, getIdUrl(namespace, name), nil)
@@ -143,7 +143,7 @@ func (s Service) GetServicesModeId(serviceId sdk.ServiceId) (services []sdk.Serv
 	return
 }
 
-func (s Service) GetServicesModeCollection(namespace string) (svcs []sdk.Service, errs []error) {
+func (s Service) GetServicesModeCollection(namespace string) (svcs []mql.Service, errs []error) {
 	err := func() (err error) {
 		rq, err := http.NewRequest(http.MethodGet, getCollectionUrl(namespace), nil)
 		if err != nil {
@@ -209,14 +209,14 @@ func containsSvc(k8sSvc K8sService) (bool) {
 	return k8sSvc.Metadata.Annotations.Transport != "" || k8sSvc.Metadata.Annotations.Port != ""
 }
 
-func svcFromK8sSvc(k8sSvc K8sService) (svc sdk.Service, err error) {
-	svc.Id = &sdk.ServiceId{}
-	svc.Id.Value = sdk.String(genIdValue(k8sSvc.Metadata.Namespace, k8sSvc.Metadata.Name))
+func svcFromK8sSvc(k8sSvc K8sService) (svc mql.Service, err error) {
+	svc.Id = &mql.ServiceId{}
+	svc.Id.Value = mql.String(genIdValue(k8sSvc.Metadata.Namespace, k8sSvc.Metadata.Name))
 
-	svc.Url = &sdk.Url{}
-	svc.Url.Value = sdk.String("http://" + k8sSvc.Metadata.Name)
+	svc.Url = &mql.Url{}
+	svc.Url.Value = mql.String("http://" + k8sSvc.Metadata.Name)
 
-	svc.Transport = sdk.String(k8sSvc.Metadata.Annotations.Transport)
+	svc.Transport = mql.String(k8sSvc.Metadata.Annotations.Transport)
 
 	i, err := strconv.ParseInt(k8sSvc.Metadata.Annotations.Port, 10, 32)
 	if err != nil {
@@ -225,7 +225,7 @@ func svcFromK8sSvc(k8sSvc K8sService) (svc sdk.Service, err error) {
 		return
 	}
 
-	svc.Port = sdk.Int32(int32(i))
+	svc.Port = mql.Int32(int32(i))
 
 	return
 }

@@ -21,7 +21,6 @@ const (
 )
 
 const (
-	SdkTypes           = "go_types"
 	SdkHttpJsonService = "go_httpjson_service"
 	SdkHttpJsonClient  = "go_httpjson_client"
 )
@@ -30,21 +29,21 @@ const (
 	DataPackage = "package"
 	DataName    = "name"
 	RootPath    = "gen/"
-	Path        = RootPath + "v0/sdk/"
+	Path        = RootPath + "v0/mql/"
 )
 
 var tasks = map[string]types.RenderTask{}
 
 func initSdk(g *types.SdkGenerator, c types.SdkConfig) (err error) {
-	_, ok := c.Data[DataPackage]
+	_, ok := c.Args[DataPackage]
 	if !ok {
 		err = errors.New("data.package is missing")
 
 		return
 	}
 
-	prepareTasks(c.Data, g.Dependencies)
-	prepareTasks(c.Data, g.Tasks)
+	prepareTasks(c.Args, g.Dependencies)
+	prepareTasks(c.Args, g.Tasks)
 
 	return
 }
@@ -58,22 +57,22 @@ func prepareTasks(data map[string]interface{}, tasks []types.RenderTask) {
 }
 
 func initServiceSdk(g *types.SdkGenerator, c types.SdkConfig) (err error) {
-	_, ok := c.Data[DataPackage]
+	_, ok := c.Args[DataPackage]
 	if !ok {
 		err = errors.New("data.package is missing")
 
 		return
 	}
 
-	_, ok = c.Data[DataName]
+	_, ok = c.Args[DataName]
 	if !ok {
 		err = errors.New("data.name is missing")
 
 		return
 	}
 
-	prepareTasks(c.Data, g.Dependencies)
-	prepareTasks(c.Data, g.Tasks)
+	prepareTasks(c.Args, g.Dependencies)
+	prepareTasks(c.Args, g.Tasks)
 
 	return
 }
@@ -143,14 +142,6 @@ func GetSdks() []types.SdkGenerator {
 	}
 
 	return []types.SdkGenerator{
-		{
-			Name:         SdkTypes,
-			Description:  "go types",
-			Tasks:        utils.ConcatTaskSets(taskSets[TaskSetTypes]),
-			Init:         initSdk,
-			Reset:        resetSdk,
-			Dependencies: taskSets[DependecyRelationNames],
-		},
 		{
 			Name:         SdkHttpJsonClient,
 			Description:  "go client sdk that transports via httpjson",

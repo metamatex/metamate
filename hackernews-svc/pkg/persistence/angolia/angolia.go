@@ -3,25 +3,25 @@ package angolia
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/metamatex/metamate/hackernews-svc/gen/v0/sdk"
+	"github.com/metamatex/metamate/hackernews-svc/gen/v0/mql"
 	"net/http"
 	"net/url"
 )
 
-func GetPostsSearch(c *http.Client, req sdk.GetPostsRequest) (ss []sdk.Post, errs []sdk.Error, pagination *sdk.Pagination) {
+func GetPostsSearch(c *http.Client, req mql.GetPostsRequest) (ss []mql.Post, errs []mql.Error, pagination *mql.Pagination) {
 	err := func() (err error) {
 		var u string
 
-		var page *sdk.ServicePage
+		var page *mql.ServicePage
 		if len(req.Pages) > 0 {
 			page = &req.Pages[0]
 		}
 
 		if page == nil {
-			page = &sdk.ServicePage{
-				Page: &sdk.Page{
-					IndexPage: &sdk.IndexPage{
-						Value: sdk.Int32(0),
+			page = &mql.ServicePage{
+				Page: &mql.Page{
+					IndexPage: &mql.IndexPage{
+						Value: mql.Int32(0),
 					},
 				},
 			}
@@ -59,8 +59,8 @@ func GetPostsSearch(c *http.Client, req sdk.GetPostsRequest) (ss []sdk.Post, err
 		return
 	}()
 	if err != nil {
-		errs = append(errs, sdk.Error{
-			Message: sdk.String(err.Error()),
+		errs = append(errs, mql.Error{
+			Message: mql.String(err.Error()),
 		})
 	}
 
@@ -85,7 +85,7 @@ type searchHnStory struct {
 	ObjectId       *string `json:"objectID"`
 }
 
-func mapSearchHNStoryToPostX(s searchHnStory) (p sdk.Post) {
+func mapSearchHNStoryToPostX(s searchHnStory) (p mql.Post) {
 	//type searchHnStory struct {
 	//	CreatedAt      *string `json:"created_at"`
 	//	Title          *string
@@ -104,14 +104,14 @@ func mapSearchHNStoryToPostX(s searchHnStory) (p sdk.Post) {
 	//	x ObjectId       *string `json:"objectID"`
 	//}
 
-	return sdk.Post{
-		Id: &sdk.ServiceId{
+	return mql.Post{
+		Id: &mql.ServiceId{
 			Value: s.ObjectId,
 		},
 	}
 }
 
-func mapSearchHNStoryToPost(s searchHnStory) (p sdk.Post) {
+func mapSearchHNStoryToPost(s searchHnStory) (p mql.Post) {
 	//type searchHnStory struct {
 	//	CreatedAt      *string `json:"created_at"`
 	//	Title          *string
@@ -130,96 +130,96 @@ func mapSearchHNStoryToPost(s searchHnStory) (p sdk.Post) {
 	//	x ObjectId       *string `json:"objectID"`
 	//}
 
-	return sdk.Post{
-		Id: &sdk.ServiceId{
+	return mql.Post{
+		Id: &mql.ServiceId{
 			Value: s.ObjectId,
 		},
 		Kind: func() *string {
 			if s.ParentId == nil {
-				return &sdk.PostKind.Post
+				return &mql.PostKind.Post
 			} else {
-				return &sdk.PostKind.Reply
+				return &mql.PostKind.Reply
 			}
 		}(),
 		TotalWasRepliedToByPostsCount: s.NumComments,
-		AlternativeIds: []sdk.Id{
+		AlternativeIds: []mql.Id{
 			{
-				Kind: &sdk.IdKind.Url,
-				Url: &sdk.Url{
-					Value: sdk.String(fmt.Sprintf("https://news.ycombinator.com/item?id=%v", *s.ObjectId)),
+				Kind: &mql.IdKind.Url,
+				Url: &mql.Url{
+					Value: mql.String(fmt.Sprintf("https://news.ycombinator.com/item?id=%v", *s.ObjectId)),
 				},
 			},
 		},
-		Title: func() *sdk.Text {
+		Title: func() *mql.Text {
 			if s.Title == nil {
 				return nil
 			}
 
-			return &sdk.Text{
-				Formatting: &sdk.FormattingKind.Plain,
+			return &mql.Text{
+				Formatting: &mql.FormattingKind.Plain,
 				Value:      s.Title,
 			}
 		}(),
-		Content: func() *sdk.Text {
+		Content: func() *mql.Text {
 			if s.StoryText == nil {
 				return nil
 			}
 
-			return &sdk.Text{
-				Formatting: &sdk.FormattingKind.Html,
+			return &mql.Text{
+				Formatting: &mql.FormattingKind.Html,
 				Value:      s.StoryText,
 			}
 		}(),
-		Links: func() []sdk.HyperLink {
+		Links: func() []mql.HyperLink {
 			if s.Url == nil {
 				return nil
 			}
 
-			return []sdk.HyperLink{
+			return []mql.HyperLink{
 				{
 					Label: s.Title,
-					Url: &sdk.Url{
+					Url: &mql.Url{
 						Value: s.Url,
 					},
 				},
 			}
 		}(),
-		CreatedAt: func() (ts *sdk.Timestamp) {
+		CreatedAt: func() (ts *mql.Timestamp) {
 			if s.CreateAtI == nil {
 				return
 			}
 
-			return &sdk.Timestamp{
-				Kind: &sdk.TimestampKind.Unix,
-				Unix: &sdk.DurationScalar{
-					Unit:  &sdk.DurationUnit.S,
-					Value: sdk.Float64(float64(*s.CreateAtI)),
+			return &mql.Timestamp{
+				Kind: &mql.TimestampKind.Unix,
+				Unix: &mql.DurationScalar{
+					Unit:  &mql.DurationUnit.S,
+					Value: mql.Float64(float64(*s.CreateAtI)),
 				},
 			}
 		}(),
-		Relations: &sdk.PostRelations{
-			AuthoredBySocialAccount: &sdk.SocialAccount{
-				Id: &sdk.ServiceId{
+		Relations: &mql.PostRelations{
+			AuthoredBySocialAccount: &mql.SocialAccount{
+				Id: &mql.ServiceId{
 					Value: s.Author,
 				},
 			},
-			RepliesToPost: func() (s1 *sdk.Post) {
+			RepliesToPost: func() (s1 *mql.Post) {
 				if s.ParentId == nil {
 					return
 				}
 
-				return &sdk.Post{
-					Id: &sdk.ServiceId{
-						Value: sdk.String(fmt.Sprintf("%v", *s.ParentId)),
+				return &mql.Post{
+					Id: &mql.ServiceId{
+						Value: mql.String(fmt.Sprintf("%v", *s.ParentId)),
 					},
 				}
 			}(),
-			FavoredBySocialAccounts: func() (c *sdk.SocialAccountsCollection) {
+			FavoredBySocialAccounts: func() (c *mql.SocialAccountsCollection) {
 				if s.Points == nil {
 					return
 				}
 
-				return &sdk.SocialAccountsCollection{
+				return &mql.SocialAccountsCollection{
 					Count: s.Points,
 				}
 			}(),

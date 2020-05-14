@@ -8,7 +8,7 @@ import (
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/typenames"
-	"github.com/metamatex/metamate/gen/v0/sdk"
+	"github.com/metamatex/metamate/gen/v0/mql"
 	"github.com/metamatex/metamate/metamate/pkg/v0/config"
 
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
@@ -66,7 +66,7 @@ func ReduceSvcRspErrsToCliRspErrs(f generic.Factory) types.FuncTransformer {
 	return types.FuncTransformer{
 		Name0: FuncName,
 		Func: func(ctx types.ReqCtx) types.ReqCtx {
-			gErrs := f.MustFromStructs([]sdk.Error{})
+			gErrs := f.MustFromStructs([]mql.Error{})
 
 			gCliRspErrs, ok := ctx.GCliRsp.GenericSlice(fieldnames.Errors)
 			if ok {
@@ -93,7 +93,7 @@ func ReduceSvcRspPaginationsToCliRspPagination(f generic.Factory) types.FuncTran
 	return types.FuncTransformer{
 		Name0: FuncName,
 		Func: func(ctx types.ReqCtx) types.ReqCtx {
-			p := sdk.Pagination{}
+			p := mql.Pagination{}
 
 			for _, gSvcRsp := range ctx.GSvcRsps {
 				gPagination, ok := gSvcRsp.Generic(fieldnames.Pagination)
@@ -101,7 +101,7 @@ func ReduceSvcRspPaginationsToCliRspPagination(f generic.Factory) types.FuncTran
 					continue
 				}
 
-				var p0 sdk.Pagination
+				var p0 mql.Pagination
 				gPagination.MustToStruct(&p0)
 
 				p.Previous = append(p.Previous, p0.Previous...)
@@ -155,7 +155,7 @@ func ApplySvcEndpointReqFilters(f generic.Factory) types.FuncTransformer {
 			gReqs := f.NewSlice(ctx.GCliReq.Type())
 			gReqs.Append(ctx.GCliReq)
 
-			var svcs []sdk.Service
+			var svcs []mql.Service
 			for i, _ := range ctx.Svcs {
 				gSvc := f.MustFromStruct(ctx.Svcs[i])
 
@@ -188,12 +188,12 @@ func SetSvcFilterToGetModeIdSvcIdFunc() types.FuncTransformer {
 			}
 
 			if ctx.SvcFilter.Id == nil {
-				ctx.SvcFilter.Id = &sdk.ServiceIdFilter{
-					Value: &sdk.StringFilter{},
+				ctx.SvcFilter.Id = &mql.ServiceIdFilter{
+					Value: &mql.StringFilter{},
 				}
 			}
 
-			ctx.SvcFilter.Id.Value.Is = sdk.String(serviceName)
+			ctx.SvcFilter.Id.Value.Is = mql.String(serviceName)
 
 			return ctx
 		},
@@ -210,12 +210,12 @@ func SetSvcFilterToGetModeRelationIdFunc() types.FuncTransformer {
 			}
 
 			if ctx.SvcFilter.Id == nil {
-				ctx.SvcFilter.Id = &sdk.ServiceIdFilter{
-					Value: &sdk.StringFilter{},
+				ctx.SvcFilter.Id = &mql.ServiceIdFilter{
+					Value: &mql.StringFilter{},
 				}
 			}
 
-			ctx.SvcFilter.Id.Value.Is = sdk.String(serviceName)
+			ctx.SvcFilter.Id.Value.Is = mql.String(serviceName)
 
 			return ctx
 		},
@@ -286,7 +286,7 @@ func SetId() types.FuncTransformer {
 			var u uuid.UUID
 			u, err := uuid.NewUUID()
 			if err != nil {
-				ctx.Errs = append(ctx.Errs, NewError(nil, sdk.ErrorKind.Internal, err.Error()))
+				ctx.Errs = append(ctx.Errs, NewError(nil, mql.ErrorKind.Internal, err.Error()))
 
 				return ctx
 			}
@@ -450,7 +450,7 @@ func Copy(from, to string) types.FuncTransformer {
 			return types.FuncTransformer{
 				Name0: name,
 				Func: func(ctx types.ReqCtx) types.ReqCtx {
-					ctx.SvcFilter = &sdk.ServiceFilter{}
+					ctx.SvcFilter = &mql.ServiceFilter{}
 
 					gSvcFilter, ok := ctx.GCliReq.Generic(fieldnames.ServiceFilter)
 					if ok {
@@ -514,14 +514,14 @@ func HandleSvcReq(hs map[bool]map[string]types.RequestHandler) types.FuncTransfo
 		Func: func(ctx types.ReqCtx) types.ReqCtx {
 			ctx = func(ctx types.ReqCtx) types.ReqCtx {
 				if ctx.Svc.Url == nil || ctx.Svc.Url.Value == nil {
-					ctx.Errs = append(ctx.Errs, NewError(ctx.Svc, sdk.ErrorKind.Internal, "service.url.value not set"))
+					ctx.Errs = append(ctx.Errs, NewError(ctx.Svc, mql.ErrorKind.Internal, "service.url.value not set"))
 
 					return ctx
 				}
 
 				h, ok := hs[ctx.Svc.IsVirtual != nil && *ctx.Svc.IsVirtual][*ctx.Svc.Transport]
 				if !ok {
-					ctx.Errs = append(ctx.Errs, NewError(nil, sdk.ErrorKind.Internal, fmt.Sprintf("no handler for transport %v", *ctx.Svc.Transport)))
+					ctx.Errs = append(ctx.Errs, NewError(nil, mql.ErrorKind.Internal, fmt.Sprintf("no handler for transport %v", *ctx.Svc.Transport)))
 
 					return ctx
 				}
@@ -529,14 +529,14 @@ func HandleSvcReq(hs map[bool]map[string]types.RequestHandler) types.FuncTransfo
 				var err error
 				ctx.GSvcRsp, err = h(ctx.Ctx, *ctx.Svc.Url.Value, ctx.GSvcReq)
 				if err != nil {
-					ctx.Errs = append(ctx.Errs, NewError(ctx.Svc, sdk.ErrorKind.Service, err.Error()))
+					ctx.Errs = append(ctx.Errs, NewError(ctx.Svc, mql.ErrorKind.Service, err.Error()))
 
 					return ctx
 				}
 
 				gErrs, ok := ctx.GSvcRsp.GenericSlice(fieldnames.Errors)
 				if ok {
-					var errs []sdk.Error
+					var errs []mql.Error
 					gErrs.MustToStructs(&errs)
 
 					ctx.Errs = append(ctx.Errs, errs...)
@@ -590,7 +590,7 @@ func Log(stage string, stages types.InternalLogTemplates) types.FuncTransformer 
 				Ctx:     ctx,
 			})
 			if err != nil {
-				ctx.Errs = append(ctx.Errs, NewError(nil, sdk.ErrorKind.Internal, err.Error()))
+				ctx.Errs = append(ctx.Errs, NewError(nil, mql.ErrorKind.Internal, err.Error()))
 
 				return ctx
 			}
@@ -614,14 +614,14 @@ func ResolveRelations(resolvePl *line.Line, f generic.Factory) types.FuncTransfo
 			gRelations.EachGeneric(func(fn *graph.FieldNode, gGetCollection generic.Generic) {
 				gGetReq := f.New(fn.Edges.Path.BelongsTo().Edges.Type.To().Edges.Type.GetRequest())
 
-				id := sdk.ServiceId{}
+				id := mql.ServiceId{}
 				ctx.GEntity.MustGeneric(fieldnames.Id).MustToStruct(&id)
 
-				getMode := sdk.GetMode{
-					Kind: &sdk.GetModeKind.Relation,
-					Relation: &sdk.RelationGetMode{
+				getMode := mql.GetMode{
+					Kind: &mql.GetModeKind.Relation,
+					Relation: &mql.RelationGetMode{
 						Id:       &id,
-						Relation: sdk.String(fn.Edges.Path.BelongsTo().Name()),
+						Relation: mql.String(fn.Edges.Path.BelongsTo().Name()),
 					},
 				}
 
@@ -684,13 +684,13 @@ func GetEntityById(f generic.Factory, resolvePl *line.Line) types.FuncTransforme
 		Func: func(ctx types.ReqCtx) types.ReqCtx {
 			gGetReq := f.New(ctx.GEntity.Type().Edges.Type.GetRequest())
 
-			id := sdk.ServiceId{}
+			id := mql.ServiceId{}
 			ctx.GEntity.MustGeneric(fieldnames.Id).MustToStruct(&id)
 
-			getMode := sdk.GetMode{
-				Kind: &sdk.GetModeKind.Id,
-				Id: &sdk.Id{
-					Kind:      &sdk.IdKind.ServiceId,
+			getMode := mql.GetMode{
+				Kind: &mql.GetModeKind.Id,
+				Id: &mql.Id{
+					Kind:      &mql.IdKind.ServiceId,
 					ServiceId: &id,
 				},
 			}
@@ -794,7 +794,7 @@ func AddSvcIdToSvcPages(f generic.Factory) types.FuncTransformer {
 				return ctx
 			}
 
-			var p sdk.Pagination
+			var p mql.Pagination
 			gPagination.MustToStruct(&p)
 
 			for i, _ := range p.Previous {
@@ -825,12 +825,12 @@ func FilterSvcPages(f generic.Factory) types.FuncTransformer {
 				return ctx
 			}
 
-			filter := sdk.ServicePageFilter{
-				Id: &sdk.ServiceIdFilter{
-					ServiceName: &sdk.StringFilter{
+			filter := mql.ServicePageFilter{
+				Id: &mql.ServiceIdFilter{
+					ServiceName: &mql.StringFilter{
 						Is: ctx.Svc.Id.ServiceName,
 					},
-					Value: &sdk.StringFilter{
+					Value: &mql.StringFilter{
 						Is: ctx.Svc.Id.Value,
 					},
 				},
@@ -845,12 +845,12 @@ func FilterSvcPages(f generic.Factory) types.FuncTransformer {
 	}
 }
 
-func GetSvcs(resolve *line.Line, f generic.Factory, discoverySvc sdk.Service) types.FuncTransformer {
+func GetSvcs(resolve *line.Line, f generic.Factory, discoverySvc mql.Service) types.FuncTransformer {
 	return types.FuncTransformer{
 		Name0: GetSvcsName,
 		Func: func(ctx types.ReqCtx) types.ReqCtx {
 			if ctx.EndpointNode.Name() == endpointnames.Get(typenames.Service) {
-				ctx.Svcs = []sdk.Service{
+				ctx.Svcs = []mql.Service{
 					discoverySvc,
 				}
 
@@ -862,16 +862,16 @@ func GetSvcs(resolve *line.Line, f generic.Factory, discoverySvc sdk.Service) ty
 				MustSetBool([]string{fieldnames.Endpoints, ctx.EndpointNode.FieldName(), fieldnames.Set}, true).
 				MustToStruct(ctx.SvcFilter)
 
-			req := sdk.GetServicesRequest{
-				Mode: &sdk.GetMode{
-					Kind:       &sdk.GetModeKind.Collection,
-					Collection: &sdk.CollectionGetMode{},
+			req := mql.GetServicesRequest{
+				Mode: &mql.GetMode{
+					Kind:       &mql.GetModeKind.Collection,
+					Collection: &mql.CollectionGetMode{},
 				},
 				Filter: ctx.SvcFilter,
-				Select: &sdk.GetServicesResponseSelect{
-					All: sdk.Bool(true),
-					Services: &sdk.ServiceSelect{
-						All: sdk.Bool(true),
+				Select: &mql.GetServicesResponseSelect{
+					All: mql.Bool(true),
+					Services: &mql.ServiceSelect{
+						All: mql.Bool(true),
 					},
 				},
 			}
@@ -882,7 +882,7 @@ func GetSvcs(resolve *line.Line, f generic.Factory, discoverySvc sdk.Service) ty
 
 			gSvcErrs, ok := ctx0.GCliRsp.GenericSlice(fieldnames.Errors)
 			if ok {
-				var errs []sdk.Error
+				var errs []mql.Error
 				gSvcErrs.MustToStructs(&errs)
 				ctx.Errs = append(ctx.Errs, errs...)
 			}
@@ -902,13 +902,13 @@ func RequireOneGSvc() types.FuncTransformer {
 		Name0: RequireOneGSvcName,
 		Func: func(ctx types.ReqCtx) types.ReqCtx {
 			if len(ctx.Svcs) == 0 {
-				ctx.Errs = append(ctx.Errs, NewError(nil, sdk.ErrorKind.Internal, "len(ctx.gSvcs) is 0"))
+				ctx.Errs = append(ctx.Errs, NewError(nil, mql.ErrorKind.Internal, "len(ctx.gSvcs) is 0"))
 
 				return ctx
 			}
 
 			if len(ctx.Svcs) > 1 {
-				ctx.Errs = append(ctx.Errs, NewError(nil, sdk.ErrorKind.Internal, "len(ctx.gSvcs) is greater 1"))
+				ctx.Errs = append(ctx.Errs, NewError(nil, mql.ErrorKind.Internal, "len(ctx.gSvcs) is greater 1"))
 
 				return ctx
 			}
@@ -951,9 +951,9 @@ func Inspect() types.FuncTransformer {
 	}
 }
 
-func NewError(svc *sdk.Service, kind, message string) sdk.Error {
-	return sdk.Error{
-		Kind:    sdk.String(kind),
+func NewError(svc *mql.Service, kind, message string) mql.Error {
+	return mql.Error{
+		Kind:    mql.String(kind),
 		Message: &message,
 		Service: svc,
 	}

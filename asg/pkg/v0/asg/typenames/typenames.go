@@ -70,9 +70,9 @@ const (
 	PipeMode        = "PipeMode"
 	ContextPipeMode = "ContextPipeMode"
 
-	Whatever      = "Whatever"
-	BlueWhatever  = "BlueWhatever"
-	WhateverUnion = "WhateverUnion"
+	Dummy      = "Dummy"
+	BlueDummy  = "BlueDummy"
+	DummyUnion = "DummyUnion"
 
 	CurrencyScalar = "CurrencyScalar"
 )
