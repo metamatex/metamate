@@ -14,10 +14,10 @@ type V0Project struct {
 
 type Gen struct {
 	Tasks []RenderTask `json:"tasks,omitempty" yaml:"tasks,omitempty"`
-	Sdks  []ProjectSdk `json:"sdks,omitempty" yaml:"sdks,omitempty"`
+	Sdks  []SdkConfig  `json:"sdks,omitempty" yaml:"sdks,omitempty"`
 }
 
-type ProjectSdk struct {
+type SdkConfig struct {
 	Names     []string               `json:"names,omitempty" yaml:"names,omitempty"`
 	Data      map[string]interface{} `json:"data,omitempty" yaml:"data,omitempty"`
 	Endpoints *graph.Filter          `json:"endpoints,omitempty" yaml:"endpoints,omitempty"`

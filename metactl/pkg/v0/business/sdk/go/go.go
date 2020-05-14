@@ -35,16 +35,16 @@ const (
 
 var tasks = map[string]types.RenderTask{}
 
-func initSdk(sdk *types.Sdk, data map[string]interface{}) (err error) {
-	_, ok := data[DataPackage]
+func initSdk(g *types.SdkGenerator, c types.SdkConfig) (err error) {
+	_, ok := c.Data[DataPackage]
 	if !ok {
 		err = errors.New("data.package is missing")
 
 		return
 	}
 
-	prepareTasks(data, sdk.Dependencies)
-	prepareTasks(data, sdk.Tasks)
+	prepareTasks(c.Data, g.Dependencies)
+	prepareTasks(c.Data, g.Tasks)
 
 	return
 }
@@ -57,28 +57,28 @@ func prepareTasks(data map[string]interface{}, tasks []types.RenderTask) {
 	}
 }
 
-func initServiceSdk(sdk *types.Sdk, data map[string]interface{}) (err error) {
-	_, ok := data[DataPackage]
+func initServiceSdk(g *types.SdkGenerator, c types.SdkConfig) (err error) {
+	_, ok := c.Data[DataPackage]
 	if !ok {
 		err = errors.New("data.package is missing")
 
 		return
 	}
 
-	_, ok = data[DataName]
+	_, ok = c.Data[DataName]
 	if !ok {
 		err = errors.New("data.name is missing")
 
 		return
 	}
 
-	prepareTasks(data, sdk.Dependencies)
-	prepareTasks(data, sdk.Tasks)
+	prepareTasks(c.Data, g.Dependencies)
+	prepareTasks(c.Data, g.Tasks)
 
 	return
 }
 
-func resetSdk() (err error) {
+func resetSdk(c types.SdkConfig) (err error) {
 	err = os.RemoveAll(RootPath)
 	if err != nil {
 		return
@@ -87,7 +87,7 @@ func resetSdk() (err error) {
 	return
 }
 
-func GetSdks() []types.Sdk {
+func GetSdks() []types.SdkGenerator {
 	taskSets := map[string][]types.RenderTask{}
 
 	taskSets[TaskSetTypes] = []types.RenderTask{
@@ -142,7 +142,7 @@ func GetSdks() []types.Sdk {
 		},
 	}
 
-	return []types.Sdk{
+	return []types.SdkGenerator{
 		{
 			Name:         SdkTypes,
 			Description:  "go types",

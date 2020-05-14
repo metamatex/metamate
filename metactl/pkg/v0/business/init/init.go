@@ -4,6 +4,7 @@ import (
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/metamatex/metamate/metactl/pkg/v0/business/sdk"
 	_go "github.com/metamatex/metamate/metactl/pkg/v0/business/sdk/go"
+	"github.com/metamatex/metamate/metactl/pkg/v0/business/sdk/typescript"
 	"github.com/metamatex/metamate/metactl/pkg/v0/types"
 	"github.com/pkg/errors"
 	"github.com/spf13/afero"
@@ -12,7 +13,7 @@ import (
 )
 
 type templateData struct {
-	Sdks []types.Sdk
+	Sdks   []types.SdkGenerator
 	Config string
 }
 
@@ -30,16 +31,16 @@ var metactlyaml = `# this file is used by metactl to generate client and service
 var initialConfig = types.ProjectConfig{
 	V0: types.V0Project{
 		Gen: types.Gen{
-			Sdks: []types.ProjectSdk{
+			Sdks: []types.SdkConfig{
 				{
 					Names: []string{_go.SdkHttpJsonService},
 					Data: map[string]interface{}{
-						"name": "socialservice",
+						"name":    "socialservice",
 						"package": "github.com/somebody/socialservice",
 					},
 					Endpoints: &graph.Filter{
 						Names: &graph.NamesSubset{
-							Or: []string{"GetFeeds", "GetPeople", "GetStatuses"},
+							Or: []string{"GetPostFeeds", "GetSocialAccounts", "GetPosts"},
 						},
 					},
 				},
@@ -50,7 +51,18 @@ var initialConfig = types.ProjectConfig{
 					},
 					Endpoints: &graph.Filter{
 						Names: &graph.NamesSubset{
-							Or: []string{"GetFeeds", "GetPeople", "GetStatuses"},
+							Or: []string{"GetPostFeeds", "GetSocialAccounts", "GetPosts"},
+						},
+					},
+				},
+				{
+					Names: []string{typescript.SdkHttpJsonClient},
+					Data: map[string]interface{}{
+						"path": "src",
+					},
+					Endpoints: &graph.Filter{
+						Names: &graph.NamesSubset{
+							Or: []string{"GetPostFeeds", "GetSocialAccounts", "GetPosts"},
 						},
 					},
 				},
@@ -77,7 +89,7 @@ func Init(fs afero.Fs, report *types.MessageReport) (err error) {
 		return
 	}
 
-	err = template.Must(template.New("").Parse(metactlyaml)).Execute(f, templateData{Config:string(b), Sdks: sdk.GetSdks()})
+	err = template.Must(template.New("").Parse(metactlyaml)).Execute(f, templateData{Config: string(b), Sdks: sdk.GetSdks()})
 	if err != nil {
 		return
 	}
