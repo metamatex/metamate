@@ -5,6 +5,7 @@ import (
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/metamatex/metamate/metactl/pkg/v0/business/gen"
 	_go "github.com/metamatex/metamate/metactl/pkg/v0/business/sdk/go"
+	"github.com/metamatex/metamate/metactl/pkg/v0/business/sdk/typescript"
 	"github.com/metamatex/metamate/metactl/pkg/v0/types"
 	"github.com/metamatex/metamate/metactl/pkg/v0/utils/ptr"
 	"github.com/pkg/errors"
@@ -12,8 +13,9 @@ import (
 	"sort"
 )
 
-func GetSdks() (sdks []types.Sdk) {
+func GetSdks() (sdks []types.SdkGenerator) {
 	sdks = append(sdks, _go.GetSdks()...)
+	sdks = append(sdks, typescript.GetSdks()...)
 
 	sort.Slice(sdks, func(i, j int) bool {
 		return sdks[i].Name < sdks[j].Name
@@ -22,7 +24,7 @@ func GetSdks() (sdks []types.Sdk) {
 	return sdks
 }
 
-func Format(sdks []types.Sdk) (s string) {
+func Format(sdks []types.SdkGenerator) (s string) {
 	for _, sdk := range sdks {
 		s += sdk.Name + " : " + sdk.Description + "\n"
 	}
@@ -30,48 +32,50 @@ func Format(sdks []types.Sdk) (s string) {
 	return
 }
 
-func Reset(names []string) (errs []error) {
-	for _, name := range names {
-		sdk, err := getSdk(name)
-		if err != nil {
-			errs = append(errs, err)
+func Reset(cs []types.SdkConfig) (errs []error) {
+	for _, c := range cs {
+		for _, n := range c.Names {
+			g, err := getSdkGenerator(n)
+			if err != nil {
+				errs = append(errs, err)
 
-			return
-		}
+				return
+			}
 
-		err = sdk.Reset()
-		if err != nil {
-			errs = append(errs, err)
+			err = g.Reset(c)
+			if err != nil {
+				errs = append(errs, err)
 
-			return
+				return
+			}
 		}
 	}
 
 	return
 }
 
-func Gen(report *types.MessageReport, fs afero.Fs, version types.Version, rn *graph.RootNode, name string, data map[string]interface{}, endpointFilter *graph.Filter, typeFilter *graph.Filter) (errs []error) {
-	sdk, err := getSdk(name)
+func Gen(report *types.MessageReport, fs afero.Fs, version types.Version, rn *graph.RootNode, name string, c types.SdkConfig, typeFilter *graph.Filter) (errs []error) {
+	sdk, err := getSdkGenerator(name)
 	if err != nil {
 		errs = append(errs, err)
 
 		return
 	}
 
-	err = sdk.Init(&sdk, data)
+	err = sdk.Init(&sdk, c)
 	if err != nil {
 		errs = append(errs, err)
 
 		return
 	}
 
-	if endpointFilter != nil {
+	if c.Endpoints != nil {
 		for i, _ := range sdk.Tasks {
 			if sdk.Tasks[i].Dependencies == nil {
 				sdk.Tasks[i].Dependencies = &types.RenderTaskDependencies{}
 			}
 
-			sdk.Tasks[i].Dependencies.Endpoints = endpointFilter
+			sdk.Tasks[i].Dependencies.Endpoints = c.Endpoints
 		}
 	}
 
@@ -106,7 +110,7 @@ func Gen(report *types.MessageReport, fs afero.Fs, version types.Version, rn *gr
 	return
 }
 
-func getSdk(name string) (sdk types.Sdk, err error) {
+func getSdkGenerator(name string) (sdk types.SdkGenerator, err error) {
 	for _, sdk = range GetSdks() {
 		if sdk.Name == name {
 			return

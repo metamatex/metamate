@@ -25,19 +25,14 @@ var genCmd = &cobra.Command{
 				return
 			}
 
-			var sdkNames []string
-			for _, sdk0 := range c.V0.Gen.Sdks {
-				sdkNames = append(sdkNames, sdk0.Names...)
-			}
-
-			errs = sdk.Reset(sdkNames)
+			errs = sdk.Reset(c.V0.Gen.Sdks)
 			if len(errs) != 0 {
 				return
 			}
 
-			for _, sdk0 := range c.V0.Gen.Sdks {
-				for _, name := range sdk0.Names {
-					errs = sdk.Gen(d.MessageReport, d.FileSystem, d.Version, d.RootNode, name, sdk0.Data, sdk0.Endpoints, nil)
+			for _, c := range c.V0.Gen.Sdks {
+				for _, name := range c.Names {
+					errs = sdk.Gen(d.MessageReport, d.FileSystem, d.Version, d.RootNode, name, c, nil)
 					if len(errs) != 0 {
 						return
 					}
