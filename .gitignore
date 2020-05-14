@@ -2,7 +2,7 @@
 .idea
 dist
 bin
-go
+
 gen_temp
 **/node_modules
 metamate.yaml
