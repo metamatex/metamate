@@ -31,8 +31,11 @@ deploy:
 test:
 	@${SOURCE_MAKE} && test
 
-x_build_and_serve:
-	@${SOURCE_MAKE} && x_build_and_serve
+dev_build_and_serve:
+	@${SOURCE_MAKE} && dev_build_and_serve
 
-x_serve:
-	@${SOURCE_MAKE} && x_serve
+dev_serve:
+	@${SOURCE_MAKE} && dev_serve
+
+dev_copy_metactl:
+	@${SOURCE_MAKE} && dev_copy_metactl
