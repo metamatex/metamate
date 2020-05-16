@@ -19,7 +19,7 @@ export class Client {
             method: "post",
             data: req,
             headers: {
-                "X-MetaMate-Type": "GetPostsRequest",
+                "X-Asg-type": "GetPostsRequest",
                 "Content-Type": "application/json; charset=utf-8",
             },
         });
