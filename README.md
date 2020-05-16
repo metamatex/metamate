@@ -59,6 +59,16 @@ Building requires a couple dependencies
 
 `esc` is required to add static assets to the `metamate` binary [Installation](https://github.com/mjibson/esc)
 
+```sh
+# yarn
+curl -o- -L https://yarnpkg.com/install.sh | bash
+
+# esc
+go get -u github.com/mjibson/esc
+```
+
+Run `make prepare`
+
 To build `metamate` and `metactl` run `make build`
 
 To test `metamate` and `metactl` run `make test`
