@@ -10,15 +10,13 @@ import (
 )
 
 func init() {
-	handler[Kubernetes] = func(f generic.Factory, rn *graph.RootNode, c *http.Client, vSvc types.VirtualSvc) (h http.Handler, t string, err error) {
+	handler[Kubernetes] = func(f generic.Factory, rn *graph.RootNode, c *http.Client, vSvc types.VirtualSvc) (h http.Handler, err error) {
 		svc, err := pkg.NewService()
 		if err != nil {
 			return
 		}
 
-		h = mql.NewKubernetesHttpJsonServer(mql.KubernetesHttpJsonServerOpts{Service: svc})
-
-		t = mql.ServiceTransport.HttpJson
+		h = mql.NewKubernetesServer(mql.KubernetesServerOpts{Service: svc})
 
 		return
 	}

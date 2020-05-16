@@ -4,15 +4,13 @@ import (
 	"context"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/metamatex/metamate/gen/v0/mql"
-
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
-	"github.com/metamatex/metamate/generic/pkg/v0/transport/httpjson"
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 	"net/http"
 )
 
 func init() {
-	handler[Pagination] = func(f generic.Factory, rn *graph.RootNode, c *http.Client, vSvc types.VirtualSvc) (h http.Handler, t string, err error) {
+	handler[Pagination] = func(f generic.Factory, rn *graph.RootNode, c *http.Client, vSvc types.VirtualSvc) (h http.Handler, err error) {
 		ws := []mql.Dummy{
 			{
 				Id: &mql.ServiceId{
@@ -34,7 +32,7 @@ func init() {
 			},
 		}
 
-		h = httpjson.NewServer(httpjson.ServerOpts{
+		h = generic.NewServer(generic.ServerOpts{
 			Root:    rn,
 			Factory: f,
 			Handler: func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic) {
@@ -64,7 +62,7 @@ func init() {
 					}
 
 					return f.MustFromStruct(mql.GetDummiesResponse{
-						Dummies: ws0,
+						Dummies:    ws0,
 						Pagination: pagination,
 					})
 				}
@@ -73,8 +71,6 @@ func init() {
 			},
 			LogErr: nil,
 		})
-
-		t = mql.ServiceTransport.HttpJson
 
 		return
 	}
@@ -126,7 +122,7 @@ func getDummiesCollection(ws []mql.Dummy, req mql.GetDummiesRequest) (ws0 []mql.
 		}
 	}
 
-	if int(*page.Page.IndexPage.Value) + 1 >= len(ws) {
+	if int(*page.Page.IndexPage.Value)+1 >= len(ws) {
 		return
 	}
 

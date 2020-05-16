@@ -11,7 +11,7 @@ import (
 )
 
 func init() {
-	handler[Mastodon] = func(f generic.Factory, rn *graph.RootNode, c *http.Client, vSvc types.VirtualSvc) (h http.Handler, t string, err error) {
+	handler[Mastodon] = func(f generic.Factory, rn *graph.RootNode, c *http.Client, vSvc types.VirtualSvc) (h http.Handler, err error) {
 		err = validateMastodonOpts(*vSvc.Opts)
 		if err != nil {
 			return
@@ -23,9 +23,7 @@ func init() {
 			ClientSecret: vSvc.Opts.Mastodon.ClientSecret,
 		})
 
-		h = mql.NewMastodonHttpJsonServer(mql.MastodonHttpJsonServerOpts{Service: svc})
-
-		t = mql.ServiceTransport.HttpJson
+		h = mql.NewMastodonServer(mql.MastodonServerOpts{Service: svc})
 
 		return
 	}

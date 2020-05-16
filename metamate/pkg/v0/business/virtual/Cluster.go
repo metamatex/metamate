@@ -6,9 +6,7 @@ import (
 	"fmt"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/metamatex/metamate/gen/v0/mql"
-
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
-	"github.com/metamatex/metamate/generic/pkg/v0/transport/httpjson"
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 	"io/ioutil"
 	"net/http"
@@ -95,7 +93,7 @@ func NewCluster(rn *graph.RootNode, f generic.Factory, logErr func(err error)) (
 }
 
 func (c *Cluster) HostSvc(svc types.VirtualSvc) (err error) {
-	f, t, err := handler[svc.Name](c.f, c.rn, &http.Client{Transport: c}, svc)
+	f, err := handler[svc.Name](c.f, c.rn, &http.Client{Transport: c}, svc)
 	if err != nil {
 		return
 	}
@@ -114,7 +112,6 @@ func (c *Cluster) HostSvc(svc types.VirtualSvc) (err error) {
 			Value: mql.String(svc.Id),
 		},
 		IsVirtual: mql.Bool(true),
-		Transport: &t,
 		Port:      mql.Int32(80),
 		Url: &mql.Url{
 			Value: mql.String("http://" + svc.Id),
@@ -124,7 +121,7 @@ func (c *Cluster) HostSvc(svc types.VirtualSvc) (err error) {
 	return
 }
 
-func (c *Cluster) Host(id, transport string, h http.Handler) (err error) {
+func (c *Cluster) Host(id string, h http.Handler) (err error) {
 	_, ok := c.hs[id]
 	if ok {
 		err = errors.New(fmt.Sprintf("host %v is already taken", id))
@@ -139,7 +136,6 @@ func (c *Cluster) Host(id, transport string, h http.Handler) (err error) {
 			Value: mql.String(id),
 		},
 		IsVirtual: mql.Bool(true),
-		Transport: mql.String(transport),
 		Port:      mql.Int32(80),
 		Url: &mql.Url{
 			Value: mql.String("http://" + id),
@@ -150,14 +146,14 @@ func (c *Cluster) Host(id, transport string, h http.Handler) (err error) {
 }
 
 func (c *Cluster) HostHttpJsonFunc(id string, f func(context.Context, generic.Generic) generic.Generic) (err error) {
-	h := httpjson.NewServer(httpjson.ServerOpts{
+	h := generic.NewServer(generic.ServerOpts{
 		Root:    c.rn,
 		Factory: c.f,
 		Handler: f,
 		LogErr:  c.logErr,
 	})
 
-	return c.Host(id, mql.ServiceTransport.HttpJson, h)
+	return c.Host(id, h)
 }
 
 func (c *Cluster) HostBus(id string, f func(context.Context, generic.Generic) generic.Generic) (err error) {
@@ -168,7 +164,7 @@ func (c *Cluster) HostBus(id string, f func(context.Context, generic.Generic) ge
 		return
 	}
 
-	c.hs[id] = httpjson.NewServer(httpjson.ServerOpts{
+	c.hs[id] = generic.NewServer(generic.ServerOpts{
 		Root:    c.rn,
 		Factory: c.f,
 		Handler: f,

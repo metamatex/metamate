@@ -508,7 +508,7 @@ func Move(f generic.Factory, from, to string) types.FuncTransformer {
 	panic(fmt.Sprintf("move %v to %v not supported", from, to))
 }
 
-func HandleSvcReq(hs map[bool]map[string]types.RequestHandler) types.FuncTransformer {
+func HandleSvcReq(hs map[bool]types.RequestHandler) types.FuncTransformer {
 	return types.FuncTransformer{
 		Name0: HandleReqName,
 		Func: func(ctx types.ReqCtx) types.ReqCtx {
@@ -519,9 +519,9 @@ func HandleSvcReq(hs map[bool]map[string]types.RequestHandler) types.FuncTransfo
 					return ctx
 				}
 
-				h, ok := hs[ctx.Svc.IsVirtual != nil && *ctx.Svc.IsVirtual][*ctx.Svc.Transport]
+				h, ok := hs[ctx.Svc.IsVirtual != nil && *ctx.Svc.IsVirtual]
 				if !ok {
-					ctx.Errs = append(ctx.Errs, NewError(nil, mql.ErrorKind.Internal, fmt.Sprintf("no handler for transport %v", *ctx.Svc.Transport)))
+					panic("there should be a handler for virtual and http")
 
 					return ctx
 				}

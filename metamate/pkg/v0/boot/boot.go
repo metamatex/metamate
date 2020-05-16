@@ -8,7 +8,6 @@ import (
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
 	"github.com/metamatex/metamate/gen/v0/mql"
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
-	"github.com/metamatex/metamate/generic/pkg/v0/transport/httpjson"
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/pipeline"
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/virtual"
 	httpjsonHandler "github.com/metamatex/metamate/metamate/pkg/v0/communication/clients/httpjson"
@@ -96,22 +95,14 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 		}
 	}
 
-	reqHs := map[bool]map[string]types.RequestHandler{
-		true: {
-			mql.ServiceTransport.HttpJson: httpjsonHandler.GetRequestHandler(d.Factory, vclient),
-		},
-		false: {
-			mql.ServiceTransport.HttpJson: httpjsonHandler.GetRequestHandler(d.Factory, client),
-		},
+	reqHs := map[bool]types.RequestHandler{
+		true:  httpjsonHandler.GetRequestHandler(d.Factory, vclient),
+		false: httpjsonHandler.GetRequestHandler(d.Factory, client),
 	}
 
-	cachedReqHs := map[bool]map[string]types.RequestHandler{
-		true: {
-			mql.ServiceTransport.HttpJson: cacheHandlerF(httpjsonHandler.GetRequestHandler(d.Factory, vclient)),
-		},
-		false: {
-			mql.ServiceTransport.HttpJson: cacheHandlerF(httpjsonHandler.GetRequestHandler(d.Factory, client)),
-		},
+	cachedReqHs := map[bool]types.RequestHandler{
+		true:  cacheHandlerF(httpjsonHandler.GetRequestHandler(d.Factory, vclient)),
+		false: cacheHandlerF(httpjsonHandler.GetRequestHandler(d.Factory, client)),
 	}
 
 	d.ResolveLine = pipeline.NewResolveLine(d.RootNode, d.Factory, c.DiscoverySvc, reqHs, cachedReqHs, d.InternalLogTemplates, c.Internal.Get)
@@ -168,7 +159,7 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 	}
 
 	if c.Endpoints.HttpJson.On {
-		d.Routes = append(d.Routes, types.Route{Methods: []string{http.MethodPost}, Path: "/httpjson", Handler: httpjson.NewServer(httpjson.ServerOpts{
+		d.Routes = append(d.Routes, types.Route{Methods: []string{http.MethodPost}, Path: "/httpjson", Handler: generic.NewServer(generic.ServerOpts{
 			Root:    d.RootNode,
 			Factory: d.Factory,
 			Handler: d.ServeFunc,

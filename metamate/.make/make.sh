@@ -9,6 +9,7 @@ function build {
 
 function prepare {
     (cd pkg/v0/communication/servers/explorer && \
+    yarn install && \
     yarn build && \
     esc -pkg explorer -o static.go -prefix build build)
 

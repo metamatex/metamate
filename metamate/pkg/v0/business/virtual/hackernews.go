@@ -10,12 +10,10 @@ import (
 )
 
 func init() {
-	handler[Hackernews] = func(f generic.Factory, rn *graph.RootNode, c *http.Client, vSvc types.VirtualSvc) (h http.Handler, t string, err error) {
+	handler[Hackernews] = func(f generic.Factory, rn *graph.RootNode, c *http.Client, vSvc types.VirtualSvc) (h http.Handler, err error) {
 		svc := pkg.NewService(&http.Client{})
 
-		h = mql.NewHackernewsHttpJsonServer(mql.HackernewsHttpJsonServerOpts{Service: svc})
-
-		t = mql.ServiceTransport.HttpJson
+		h = mql.NewHackernewsServer(mql.HackernewsServerOpts{Service: svc})
 
 		return
 	}

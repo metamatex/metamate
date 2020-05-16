@@ -12,7 +12,7 @@ import (
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 )
 
-func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc mql.Service, reqHs map[bool]map[string]types.RequestHandler, cachedReqHs map[bool]map[string]types.RequestHandler, logTemplates types.InternalLogTemplates, getConfig types.GetConfig) *line.Line {
+func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc mql.Service, reqHs map[bool]types.RequestHandler, cachedReqHs map[bool]types.RequestHandler, logTemplates types.InternalLogTemplates, getConfig types.GetConfig) *line.Line {
 	resolveLine := line.Do()
 
 	cliReqErrL := getErrLine(f, types.GCliRsp)
@@ -295,7 +295,7 @@ func SetDefaults(f generic.Factory) func(l *line.Line) *line.Line {
 	}
 }
 
-func FetchSvcDataFromSvcs(f generic.Factory, hs map[bool]map[string]types.RequestHandler, logTemplates types.InternalLogTemplates) (l *line.Line) {
+func FetchSvcDataFromSvcs(f generic.Factory, hs map[bool]types.RequestHandler, logTemplates types.InternalLogTemplates) (l *line.Line) {
 	return line.Parallel(
 		-1,
 		funcs.Map(types.GSvcRsp, types.GEntity),

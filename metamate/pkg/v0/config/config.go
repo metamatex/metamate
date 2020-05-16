@@ -44,7 +44,6 @@ var DefaultConfig = types.Config{
 		Url: &mql.Url{
 			Value: mql.String("http://discovery"),
 		},
-		Transport: &mql.ServiceTransport.HttpJson,
 		Endpoints: &mql.Endpoints{
 			LookupService: &mql.LookupServiceEndpoint{},
 			GetServices:   &mql.GetServicesEndpoint{},

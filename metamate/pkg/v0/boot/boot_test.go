@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
 	"github.com/metamatex/metamate/gen/v0/mql"
-	"github.com/metamatex/metamate/gen/v0/mql/utils"
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/metamate/pkg/v0/boot"
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/line"
@@ -168,7 +167,7 @@ func FTestPagination(t *testing.T, ctx context.Context, f generic.Factory, h fun
 			for _, tc := range tcs {
 				t.Run(*tc.mode.Kind, func(t *testing.T) {
 					err := func() (err error) {
-						getReq := mql.GetWhateversRequest{
+						getReq := mql.GetDummiesRequest{
 							ServiceFilter: &mql.ServiceFilter{
 								Id: &mql.ServiceIdFilter{
 									Value: &mql.StringFilter{
@@ -225,7 +224,7 @@ func FTestPagination(t *testing.T, ctx context.Context, f generic.Factory, h fun
 			for _, tc := range tcs {
 				t.Run(*tc.mode.Kind, func(t *testing.T) {
 					err := func() (err error) {
-						getReq := mql.GetWhateversRequest{
+						getReq := mql.GetDummiesRequest{
 							ServiceFilter: &mql.ServiceFilter{
 								Id: &mql.ServiceIdFilter{
 									Value: &mql.StringFilter{
@@ -283,7 +282,7 @@ func FTestPagination(t *testing.T, ctx context.Context, f generic.Factory, h fun
 			for _, tc := range tcs {
 				t.Run(*tc.mode.Kind, func(t *testing.T) {
 					err := func() (err error) {
-						getReq := mql.GetWhateversRequest{
+						getReq := mql.GetDummiesRequest{
 							ServiceFilter: &mql.ServiceFilter{
 								Id: &mql.ServiceIdFilter{
 									Value: &mql.StringFilter{
@@ -341,7 +340,7 @@ func FTestPagination(t *testing.T, ctx context.Context, f generic.Factory, h fun
 			for _, tc := range tcs {
 				t.Run(*tc.mode.Kind, func(t *testing.T) {
 					err := func() (err error) {
-						getReq := mql.GetWhateversRequest{
+						getReq := mql.GetDummiesRequest{
 							ServiceFilter: &mql.ServiceFilter{
 								Id: &mql.ServiceIdFilter{
 									Value: &mql.StringFilter{
@@ -414,7 +413,7 @@ func FTestError(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx
 		t.Parallel()
 
 		err := func() (err error) {
-			getReq := mql.GetWhateversRequest{
+			getReq := mql.GetDummiesRequest{
 				ServiceFilter: &mql.ServiceFilter{
 					Id: &mql.ServiceIdFilter{
 						Value: &mql.StringFilter{
@@ -422,7 +421,7 @@ func FTestError(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx
 						},
 					},
 				},
-				Select: &mql.GetWhateversResponseSelect{
+				Select: &mql.GetDummiesResponseSelect{
 					Errors: &mql.ErrorSelect{
 						Message: mql.Bool(true),
 					},
@@ -740,7 +739,7 @@ func FTestHackernewsGetSocialAccountBookmarksPosts(t *testing.T, ctx context.Con
 			getRsp := mql.GetPostsResponse{}
 			gGetRsp.MustToStruct(&getRsp)
 
-			utils.Print(getRsp.Pagination)
+			mql.Print(getRsp.Pagination)
 
 			assert.True(t, len(getRsp.Posts) != 0)
 
