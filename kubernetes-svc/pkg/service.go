@@ -8,7 +8,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/metamatex/metamate/gen/v0/mql"
-
 	"io/ioutil"
 	"net/http"
 	"strconv"
