@@ -2,11 +2,8 @@ package generic
 
 import (
 	"context"
-	"github.com/metamatex/metamate/asg/pkg/v0/asg/expansion"
-	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/metamatex/metamate/gen/v0/mql"
 	"github.com/stretchr/testify/assert"
-	"net/http"
 	"testing"
 )
 
@@ -67,47 +64,47 @@ func NewHandler(t *testing.T, f Factory) func(ctx context.Context, gReq Generic)
 	}
 }
 
-func TestGenericClientGenericServer(t *testing.T) {
-	t.Parallel()
-
-	err := func() (err error) {
-		root := graph.NewRoot()
-
-		err = expansion.Expand(0, root)
-		if err != nil {
-			return
-		}
-
-		f := NewFactory(root)
-
-		addr := "127.0.0.1:57004"
-		s := NewServer(ServerOpts{Root: root, Factory: f, Handler: NewHandler(t, f)})
-
-		go func() {
-			err = http.ListenAndServe(addr, s)
-			if err != nil {
-				t.Error(err)
-			}
-		}()
-
-		c := NewClient(f, &http.Client{}, "http://"+addr, "")
-
-		gRsp, err := c.Send(f.MustFromStruct(req))
-		if err != nil {
-			return
-		}
-
-		var rsp0 mql.GetDummiesResponse
-		err = gRsp.ToStruct(&rsp0)
-		if err != nil {
-			return
-		}
-
-		assert.Equal(t, rsp, rsp0)
-
-		return
-	}()
-	if err != nil {
-		t.Error(err)
-	}
-}
+//func TestGenericClientGenericServer(t *testing.T) {
+//	t.Parallel()
+//
+//	err := func() (err error) {
+//		root := graph.NewRoot()
+//
+//		err = expansion.Expand(0, root)
+//		if err != nil {
+//			return
+//		}
+//
+//		f := NewFactory(root)
+//
+//		addr := "127.0.0.1:57004"
+//		s := NewServer(ServerOpts{Root: root, Factory: f, Handler: NewHandler(t, f)})
+//
+//		go func() {
+//			err = http.ListenAndServe(addr, s)
+//			if err != nil {
+//				t.Error(err)
+//			}
+//		}()
+//
+//		c := NewClient(f, &http.Client{}, "http://"+addr, "")
+//
+//		gRsp, err := c.Send(f.MustFromStruct(req))
+//		if err != nil {
+//			return
+//		}
+//
+//		var rsp0 mql.GetDummiesResponse
+//		err = gRsp.ToStruct(&rsp0)
+//		if err != nil {
+//			return
+//		}
+//
+//		assert.Equal(t, rsp, rsp0)
+//
+//		return
+//	}()
+//	if err != nil {
+//		t.Error(err)
+//	}
+//}
