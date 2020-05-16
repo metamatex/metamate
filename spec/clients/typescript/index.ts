@@ -2,7 +2,7 @@ import * as mql from "./mql_";
 import axios from "axios";
 
 let c = new mql.Client({
-  addr: "https://metamate.one/httpjson",
+  host: "https://metamate.one",
   client: axios.create(),
 });
 

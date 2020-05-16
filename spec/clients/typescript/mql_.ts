@@ -3,19 +3,21 @@ import * as axios from 'axios';
 
 export interface ClientOpts {
     client: axios.AxiosInstance;
-    addr: string;
+    host: string;
 }
 
 export class Client {
     opts: ClientOpts;
+    addr: string;
 
     constructor(opts: ClientOpts) {
         this.opts = opts;
+        this.addr = opts.host + "/httpjson";
     }
     
     async GetPosts(req: GetPostsRequest): Promise<GetPostsResponse> {
         let rsp = await this.opts.client.request<GetPostsResponse>({
-            url: this.opts.addr,
+            url: this.addr,
             method: "post",
             data: req,
             headers: {

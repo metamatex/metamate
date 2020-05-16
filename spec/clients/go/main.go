@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	c := mql.NewHttpJsonClient(mql.HttpJsonClientOpts{Addr: "https://metamate.one/httpjson"})
+	c := mql.NewClient(mql.ClientOpts{Host: "https://metamate.one"})
 
 	rsp, err := c.GetPosts(context.Background(), mql.GetPostsRequest{
 		ServiceFilter: &mql.ServiceFilter{
@@ -24,7 +24,7 @@ func main() {
 		},
 	})
 	if err != nil {
-	    panic(err)
+		panic(err)
 	}
 
 	println(rsp.Posts)
