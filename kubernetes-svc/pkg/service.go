@@ -27,7 +27,7 @@ type Service struct {
 	namespace string
 }
 
-func (Service) Name() (string) {
+func (Service) Name() string {
 	return "kubernetes"
 }
 
@@ -58,7 +58,7 @@ func NewService() (svc Service, err error) {
 	return
 }
 
-func (Service) GetGetServicesEndpoint() (mql.GetServicesEndpoint) {
+func (Service) GetGetServicesEndpoint() mql.GetServicesEndpoint {
 	return mql.GetServicesEndpoint{
 		Filter: &mql.GetServicesRequestFilter{
 			Or: []mql.GetServicesRequestFilter{
@@ -187,15 +187,15 @@ func (s Service) GetServicesModeCollection(namespace string) (svcs []mql.Service
 	return
 }
 
-func getCollectionUrl(namespace string) (string) {
+func getCollectionUrl(namespace string) string {
 	return fmt.Sprintf(Endpoint, namespace, "")
 }
 
-func getIdUrl(namespace, name string) (string) {
+func getIdUrl(namespace, name string) string {
 	return fmt.Sprintf(Endpoint, namespace, name)
 }
 
-func genIdValue(namespace, name string) (string) {
+func genIdValue(namespace, name string) string {
 	return namespace + "/" + name
 }
 
@@ -205,7 +205,7 @@ func resolveIdValue(value string) (namespace, name string) {
 	return spl[0], spl[1]
 }
 
-func containsSvc(k8sSvc K8sService) (bool) {
+func containsSvc(k8sSvc K8sService) bool {
 	return k8sSvc.Metadata.Annotations.Transport != "" || k8sSvc.Metadata.Annotations.Port != ""
 }
 
@@ -215,8 +215,6 @@ func svcFromK8sSvc(k8sSvc K8sService) (svc mql.Service, err error) {
 
 	svc.Url = &mql.Url{}
 	svc.Url.Value = mql.String("http://" + k8sSvc.Metadata.Name)
-
-	svc.Transport = mql.String(k8sSvc.Metadata.Annotations.Transport)
 
 	i, err := strconv.ParseInt(k8sSvc.Metadata.Annotations.Port, 10, 32)
 	if err != nil {
