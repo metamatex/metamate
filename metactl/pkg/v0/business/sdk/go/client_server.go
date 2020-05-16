@@ -6,24 +6,24 @@ import (
 )
 
 const (
-	TaskTypedHttpJsonClient  = "TaskTypedHttpJsonClient"
-	TaskTypedHttpJsonService = "TaskTypedHttpJsonService"
+	TaskTypedClient = "TaskTypedClient"
+	TaskTypedServer = "TaskTypedServer"
 )
 
 func init() {
-	tasks[TaskTypedHttpJsonClient] = types.RenderTask{
-		TemplateData: &goTypedHttpJsonClientTpl,
-		Out:          ptr.String("httpjson_client_.go"),
+	tasks[TaskTypedClient] = types.RenderTask{
+		TemplateData: &goTypedClientTpl,
+		Out:          ptr.String("client_.go"),
 	}
 
-	tasks[TaskTypedHttpJsonService] = types.RenderTask{
-		Name:         ptr.String(TaskTypedHttpJsonService),
-		TemplateData: &goTypedHttpJsonServiceTpl,
-		Out:          ptr.String("{{ index .Data \"name\" }}_httpjson_server_.go"),
+	tasks[TaskTypedServer] = types.RenderTask{
+		Name:         ptr.String(TaskTypedServer),
+		TemplateData: &goTypedServiceTpl,
+		Out:          ptr.String("{{ index .Data \"name\" }}_server_.go"),
 	}
 }
 
-var goTypedHttpJsonClientTpl = `package mql
+var goTypedClientTpl = `package mql
 
 import (
 	"bytes"
@@ -33,24 +33,24 @@ import (
 	"reflect"
 )
 
-type HttpJsonClient struct {
-	opts HttpJsonClientOpts
+type Client struct {
+	opts ClientOpts
 }
 
-type HttpJsonClientOpts struct {
+type ClientOpts struct {
 	HttpClient	*http.Client
 	Addr	string
 }
 
-func NewHttpJsonClient(opts HttpJsonClientOpts) (Client) {
+func NewClient(opts ClientOpts) (Client) {
 	if opts.HttpClient == nil {
 		opts.HttpClient = &http.Client{}
 	}
 	
-	return HttpJsonClient{opts: opts}
+	return Client{opts: opts}
 }
 
-func (c HttpJsonClient) send(req interface{}, rsp interface{}) (err error) {
+func (c Client) send(req interface{}, rsp interface{}) (err error) {
 	b := new(bytes.Buffer)
 	err = json.NewEncoder(b).Encode(req)
 	if err != nil {
@@ -63,7 +63,7 @@ func (c HttpJsonClient) send(req interface{}, rsp interface{}) (err error) {
 	}
 
 	httpReq.Header.Set(ContentTypeHeader, ContentTypeJson)
-	httpReq.Header.Set(MetamateTypeHeader, reflect.TypeOf(req).Name())
+	httpReq.Header.Set(AsgTypeHeader, reflect.TypeOf(req).Name())
 
 	res, err := c.opts.HttpClient.Do(httpReq)
 	if err != nil {
@@ -79,14 +79,14 @@ func (c HttpJsonClient) send(req interface{}, rsp interface{}) (err error) {
 }
 
 {{- range $i, $endpoint := .Endpoints.Slice.Sort }}
-func (c HttpJsonClient) {{ $endpoint.Name }}(ctx context.Context, req {{ $endpoint.Edges.Type.Request.Name }}) (rsp *{{ $endpoint.Edges.Type.Response.Name }}, err error) {
+func (c Client) {{ $endpoint.Name }}(ctx context.Context, req {{ $endpoint.Edges.Type.Request.Name }}) (rsp *{{ $endpoint.Edges.Type.Response.Name }}, err error) {
 	err = c.send(req, &rsp)
 
 	return
 }
 {{- end }}`
 
-var goTypedHttpJsonServiceTpl = `package mql
+var goTypedServiceTpl = `package mql
 
 import (
 	"encoding/json"
@@ -94,21 +94,21 @@ import (
 	"reflect"
 )
 
-type {{ index .Data "name" | title }}HttpJsonServer struct {
-	opts {{ index .Data "name" | title }}HttpJsonServerOpts
+type {{ index .Data "name" | title }}Server struct {
+	opts {{ index .Data "name" | title }}ServerOpts
 }
 
-type {{ index .Data "name" | title }}HttpJsonServerOpts struct {
+type {{ index .Data "name" | title }}ServerOpts struct {
 	Service {{ index .Data "name" | title }}Service
 }
 
-func New{{ index .Data "name" | title }}HttpJsonServer(opts {{ index .Data "name" | title }}HttpJsonServerOpts) (http.Handler) {
-	return {{ index .Data "name" | title }}HttpJsonServer{opts: opts}
+func New{{ index .Data "name" | title }}Server(opts {{ index .Data "name" | title }}ServerOpts) (http.Handler) {
+	return {{ index .Data "name" | title }}Server{opts: opts}
 }
 
-func (s {{ index .Data "name" | title }}HttpJsonServer) send(w http.ResponseWriter, rsp interface{}) (err error) {
+func (s {{ index .Data "name" | title }}Server) send(w http.ResponseWriter, rsp interface{}) (err error) {
 	w.Header().Set(ContentTypeHeader, ContentTypeJson)
-	w.Header().Set(MetamateTypeHeader, reflect.TypeOf(rsp).Name())
+	w.Header().Set(AsgTypeHeader, reflect.TypeOf(rsp).Name())
 
 	err = json.NewEncoder(w).Encode(rsp)
 	if err != nil {
@@ -118,7 +118,7 @@ func (s {{ index .Data "name" | title }}HttpJsonServer) send(w http.ResponseWrit
 	return
 }
 
-func (s {{ index .Data "name" | title }}HttpJsonServer) getService() (Service) {
+func (s {{ index .Data "name" | title }}Server) getService() (Service) {
 {{- range $ei, $endpoint := .Endpoints.Slice.Sort }}
 {{- if ne $endpoint.Name "LookupService" }}
 	{{ $endpoint.FieldName }}Endpoint := s.opts.Service.Get{{ $endpoint.Name }}Endpoint()
@@ -139,8 +139,8 @@ func (s {{ index .Data "name" | title }}HttpJsonServer) getService() (Service) {
 	}
 }
 
-func (s {{ index .Data "name" | title }}HttpJsonServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	switch r.Header.Get(MetamateTypeHeader) {
+func (s {{ index .Data "name" | title }}Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	switch r.Header.Get(AsgTypeHeader) {
 	case LookupServiceRequestName:
 			var req LookupServiceRequest
 			err := json.NewDecoder(r.Body).Decode(&req)

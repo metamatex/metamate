@@ -6,17 +6,17 @@ import (
 )
 
 const (
-	TaskHttpJsonClient = "TaskHttpJsonClient"
+	TaskClient = "TaskClient"
 )
 
 func init() {
-	tasks[TaskHttpJsonClient] = types.RenderTask{
-		TemplateData: &typescriptHttpJsonClientTpl,
+	tasks[TaskClient] = types.RenderTask{
+		TemplateData: &ClientTpl,
 		Out:          ptr.String("mql_.ts"),
 	}
 }
 
-var typescriptHttpJsonClientTpl = `import * as axios from 'axios';
+var ClientTpl = `import * as axios from 'axios';
 
 export interface ClientOpts {
     client: axios.AxiosInstance;
@@ -36,7 +36,7 @@ export class Client {
             method: "post",
             data: req,
             headers: {
-                "X-MetaMate-Type": "{{ $endpoint.Edges.Type.Request.Name }}",
+                "X-Asg-type": "{{ $endpoint.Edges.Type.Request.Name }}",
                 "Content-Type": "application/json; charset=utf-8",
             },
         });

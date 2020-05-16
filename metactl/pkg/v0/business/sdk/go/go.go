@@ -13,16 +13,16 @@ import (
 
 const (
 	TaskSetTypes           = "types"
-	TaskSetHttpJsonService = "httpjsonServer"
-	TaskSetHttpJsonClient  = "httpjsonClient"
+	TaskSetService         = "server"
+	TaskSetClient          = "client"
 	TaskSetHttpJson        = "httpjson"
 	DependecyRelationNames = "dependencyRelationNames"
 	DependecyLookupService = "dependencyLookupService"
 )
 
 const (
-	SdkHttpJsonService = "go_httpjson_service"
-	SdkHttpJsonClient  = "go_httpjson_client"
+	SdkService = "go-service"
+	SdkClient  = "go-client"
 )
 
 const (
@@ -97,18 +97,18 @@ func GetSdks() []types.SdkGenerator {
 		tasks[TaskVersion],
 	}
 
-	taskSets[TaskSetHttpJsonClient] = []types.RenderTask{
+	taskSets[TaskSetClient] = []types.RenderTask{
 		tasks[TaskClientInterface],
-		tasks[TaskTypedHttpJsonClient],
+		tasks[TaskTypedClient],
 	}
 
-	taskSets[TaskSetHttpJsonService] = []types.RenderTask{
+	taskSets[TaskSetService] = []types.RenderTask{
 		tasks[TaskServiceInterface],
-		tasks[TaskTypedHttpJsonService],
+		tasks[TaskTypedServer],
 	}
 
 	taskSets[TaskSetHttpJson] = []types.RenderTask{
-		tasks[TaskHttpJson],
+		tasks[TaskHeader],
 	}
 
 	taskSets[DependecyRelationNames] = []types.RenderTask{
@@ -143,17 +143,17 @@ func GetSdks() []types.SdkGenerator {
 
 	return []types.SdkGenerator{
 		{
-			Name:         SdkHttpJsonClient,
-			Description:  "go client sdk that transports via httpjson",
-			Tasks:        utils.ConcatTaskSets(taskSets[TaskSetTypes], taskSets[TaskSetHttpJson], taskSets[TaskSetHttpJsonClient]),
+			Name:         SdkClient,
+			Description:  "go client sdk",
+			Tasks:        utils.ConcatTaskSets(taskSets[TaskSetTypes], taskSets[TaskSetHttpJson], taskSets[TaskSetClient]),
 			Init:         initSdk,
 			Reset:        resetSdk,
 			Dependencies: append(taskSets[DependecyRelationNames], taskSets[DependecyLookupService]...),
 		},
 		{
-			Name:         SdkHttpJsonService,
-			Description:  "go server sdk that transports via httpjson",
-			Tasks:        utils.ConcatTaskSets(taskSets[TaskSetTypes], taskSets[TaskSetHttpJson], taskSets[TaskSetHttpJsonService]),
+			Name:         SdkService,
+			Description:  "go server sdk",
+			Tasks:        utils.ConcatTaskSets(taskSets[TaskSetTypes], taskSets[TaskSetHttpJson], taskSets[TaskSetService]),
 			Init:         initServiceSdk,
 			Reset:        resetSdk,
 			Dependencies: append(taskSets[DependecyRelationNames], taskSets[DependecyLookupService]...),

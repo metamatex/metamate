@@ -9,15 +9,15 @@ import (
 )
 
 const (
-	TaskSetHttpJsonClient  = "httpjsonClient"
+	TaskSetClient = "client"
 )
 
 const (
-	SdkHttpJsonClient  = "typescript_httpjson_client"
+	SdkClient = "typescript-client"
 )
 
 const (
-	ArgPath    = "path"
+	ArgPath = "path"
 )
 
 var tasks = map[string]types.RenderTask{}
@@ -56,17 +56,17 @@ func resetSdk(c types.SdkConfig) (err error) {
 func GetSdks() []types.SdkGenerator {
 	taskSets := map[string][]types.RenderTask{}
 
-	taskSets[TaskSetHttpJsonClient] = []types.RenderTask{
-		tasks[TaskHttpJsonClient],
+	taskSets[TaskSetClient] = []types.RenderTask{
+		tasks[TaskClient],
 	}
 
 	return []types.SdkGenerator{
 		{
-			Name:         SdkHttpJsonClient,
-			Description:  "typescript client sdk that transports via httpjson",
-			Tasks:        utils.ConcatTaskSets(taskSets[TaskSetHttpJsonClient]),
-			Init:         initSdk,
-			Reset:        resetSdk,
+			Name:        SdkClient,
+			Description: "typescript client sdk",
+			Tasks:       utils.ConcatTaskSets(taskSets[TaskSetClient]),
+			Init:        initSdk,
+			Reset:       resetSdk,
 		},
 	}
 }

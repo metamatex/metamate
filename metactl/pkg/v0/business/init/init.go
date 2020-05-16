@@ -32,7 +32,7 @@ var initialConfig = types.ProjectConfig{
 		Gen: types.Gen{
 			Sdks: []types.SdkConfig{
 				{
-					Name: _go.SdkHttpJsonService,
+					Name: _go.SdkService,
 					Args: map[string]interface{}{
 						"name":    "socialservice",
 						"package": "github.com/somebody/socialservice",
@@ -40,14 +40,14 @@ var initialConfig = types.ProjectConfig{
 					Endpoints: []string{"GetPostFeeds", "GetSocialAccounts", "GetPosts"},
 				},
 				{
-					Name: _go.SdkHttpJsonClient,
+					Name: _go.SdkClient,
 					Args: map[string]interface{}{
 						"package": "github.com/somebody/socialclient",
 					},
 					Endpoints: []string{"GetPostFeeds", "GetSocialAccounts", "GetPosts"},
 				},
 				{
-					Name: typescript.SdkHttpJsonClient,
+					Name: typescript.SdkClient,
 					Args: map[string]interface{}{
 						"path": "src",
 					},
