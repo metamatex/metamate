@@ -14,7 +14,7 @@ const (
 	Language          = "Language"
 	FormattingKind    = "FormattingKind"
 	ValueKind         = "ValueKind"
-	WhateverKind      = "WhateverKind"
+	DummyKind         = "DummyKind"
 	CurrencyUnit      = "CurrencyUnit"
 	PostFeedKind      = "PostFeedKind"
 	PostKind          = "PostKind"

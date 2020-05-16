@@ -250,16 +250,11 @@ func addEntities(root *RootNode) {
 		Float64Field("to"),
 	})
 
-	root.AddEnumNode(typenames.ServiceTransport, []string{
-		"httpJson",
-	})
-
 	root.AddTypeNode(typenames.Service, FieldNodeSlice{
 		BoolField(fieldnames.IsVirtual),
 		StringField(fieldnames.Name),
 		StringField(fieldnames.SdkVersion),
 		TypeField(fieldnames.Url, typenames.Url),
-		EnumField(fieldnames.Transport, typenames.ServiceTransport),
 		Int32Field(fieldnames.Port),
 	}, Flags{
 		typeflags.GetEndpoints: true,
@@ -462,20 +457,20 @@ func addEntities(root *RootNode) {
 		RelationPath{typenames.BlueDummy, []string{past.Knew, preposition.By}, cardinality.Many, typenames.Dummy},
 	)
 
-	root.AddEnumNode(enumnames.WhateverKind, []string{
+	root.AddEnumNode(enumnames.DummyKind, []string{
 		"red",
 		"blue",
 		"green",
 	})
 
 	root.AddTypeNode(typenames.Dummy, FieldNodeSlice{
-		EnumField("enumField", enumnames.WhateverKind),
+		EnumField("enumField", enumnames.DummyKind),
 		StringField("stringField"),
 		Int32Field("int32Field"),
 		Float64Field("float64Field"),
 		BoolField("boolField"),
 		TypeField("unionField", typenames.DummyUnion),
-		ListField(EnumField("enumList", enumnames.WhateverKind)),
+		ListField(EnumField("enumList", enumnames.DummyKind)),
 		ListField(StringField("stringList")),
 		ListField(Int32Field("int32List")),
 		ListField(Float64Field("float64List")),
@@ -487,13 +482,13 @@ func addEntities(root *RootNode) {
 	})
 
 	root.AddTypeNode(typenames.BlueDummy, FieldNodeSlice{
-		EnumField("enumField", enumnames.WhateverKind),
+		EnumField("enumField", enumnames.DummyKind),
 		StringField("stringField"),
 		Int32Field("int32Field"),
 		Float64Field("float64Field"),
 		BoolField("boolField"),
 		TypeField("unionField", typenames.DummyUnion),
-		ListField(EnumField("enumList", enumnames.WhateverKind)),
+		ListField(EnumField("enumList", enumnames.DummyKind)),
 		ListField(StringField("stringList")),
 		ListField(Int32Field("int32List")),
 		ListField(Float64Field("float64List")),
@@ -509,7 +504,7 @@ func addEntities(root *RootNode) {
 		Int32Field("int32Field"),
 		Float64Field("float64Field"),
 		BoolField("boolField"),
-		EnumField("enumField", enumnames.WhateverKind),
+		EnumField("enumField", enumnames.DummyKind),
 	})
 
 	root.AddEnumNode(enumnames.CurrencyUnit, []string{

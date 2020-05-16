@@ -62,8 +62,8 @@ func (nm {{ $name }}NodeMap) Filter(s Filter) ({{ $name }}NodeMap) {
 		nm = nm.FilterByFlags(*s.Flags)
 	}
 
-	if s.Name != nil {
-		nm = nm.FilterByNames(*s.Name)
+	if s.Names != nil {
+		nm = nm.FilterByNames(*s.Names)
 	}
 
 	return nm

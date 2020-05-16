@@ -19,7 +19,6 @@ const (
 	BoolListFilter    = "BoolListFilter"
 	ValueKind         = "ValueKind"
 	FloatRange        = "FloatRange"
-	ServiceTransport  = "ServiceTransport"
 	Service           = "Service"
 	Error             = "Error"
 	Warning           = "Warning"
