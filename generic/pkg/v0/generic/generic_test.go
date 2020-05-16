@@ -2,45 +2,43 @@ package generic
 
 import (
 	"github.com/metamatex/metamate/asg/pkg/v0/asg"
-	"github.com/metamatex/metamate/asg/pkg/v0/asg/typenames"
-	"testing"
-
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
-	"github.com/stretchr/testify/assert"
-
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/typenames"
 	"github.com/metamatex/metamate/gen/v0/mql"
+	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
-var w = sdk.Whatever{
-	StringField:  sdk.String("a"),
-	Int32Field:   sdk.Int32(1),
-	Float64Field: sdk.Float64(1),
-	BoolField:    sdk.Bool(true),
-	EnumField:    sdk.String(sdk.WhateverKind.Red),
-	UnionField: &sdk.WhateverUnion{
-		StringField:  sdk.String("a"),
-		Int32Field:   sdk.Int32(1),
-		Float64Field: sdk.Float64(1),
-		BoolField:    sdk.Bool(true),
+var w = mql.Dummy{
+	StringField:  mql.String("a"),
+	Int32Field:   mql.Int32(1),
+	Float64Field: mql.Float64(1),
+	BoolField:    mql.Bool(true),
+	EnumField:    mql.String(mql.DummyKind.Red),
+	UnionField: &mql.DummyUnion{
+		StringField:  mql.String("a"),
+		Int32Field:   mql.Int32(1),
+		Float64Field: mql.Float64(1),
+		BoolField:    mql.Bool(true),
 	},
 	StringList:  []string{"a"},
 	Int32List:   []int32{1},
 	Float64List: []float64{1},
 	BoolList:    []bool{true},
-	EnumList:    []string{sdk.WhateverKind.Red},
-	UnionList: []sdk.WhateverUnion{
+	EnumList:    []string{mql.DummyKind.Red},
+	UnionList: []mql.DummyUnion{
 		{
-			StringField:  sdk.String("a"),
-			Int32Field:   sdk.Int32(1),
-			Float64Field: sdk.Float64(1),
-			BoolField:    sdk.Bool(true),
+			StringField:  mql.String("a"),
+			Int32Field:   mql.Int32(1),
+			Float64Field: mql.Float64(1),
+			BoolField:    mql.Bool(true),
 		},
 		{
-			StringField:  sdk.String("b"),
-			Int32Field:   sdk.Int32(2),
-			Float64Field: sdk.Float64(2),
-			BoolField:    sdk.Bool(true),
+			StringField:  mql.String("b"),
+			Int32Field:   mql.Int32(2),
+			Float64Field: mql.Float64(2),
+			BoolField:    mql.Bool(true),
 		},
 	},
 }
@@ -186,7 +184,7 @@ func GetHash(t *testing.T, rn *graph.RootNode, factory Factory) {
 		err := func() (err error) {
 			g, err := factory.FromStruct(w)
 			if err != nil {
-			    return
+				return
 			}
 
 			assert.True(t, g.GetHash() == g.GetHash())

@@ -4,7 +4,6 @@ import (
 	"github.com/metamatex/metamate/asg/pkg/v0/asg"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
 	"github.com/metamatex/metamate/gen/v0/mql"
-
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -23,27 +22,26 @@ func init() {
 }
 
 func TestTypeFilter(t *testing.T) {
-	whatevers := []sdk.Whatever{
-		{
-		},
+	dummies := []mql.Dummy{
+		{},
 	}
 
 	table := []struct {
 		name     string
-		filter   sdk.WhateverFilter
+		filter   mql.DummyFilter
 		expected int
 	}{
 		{
 			name: "set:true",
-			filter: sdk.WhateverFilter{
-				Set: sdk.Bool(true),
+			filter: mql.DummyFilter{
+				Set: mql.Bool(true),
 			},
 			expected: 1,
 		},
 		{
 			name: "set:false",
-			filter: sdk.WhateverFilter{
-				Set: sdk.Bool(false),
+			filter: mql.DummyFilter{
+				Set: mql.Bool(false),
 			},
 			expected: 0,
 		},
@@ -51,7 +49,7 @@ func TestTypeFilter(t *testing.T) {
 
 	for _, c := range table {
 		t.Run(c.name, func(t *testing.T) {
-			gSlice := f.MustFromStructs(whatevers)
+			gSlice := f.MustFromStructs(dummies)
 
 			gSlice = gSlice.Filter(false, f.MustFromStruct(c.filter))
 
@@ -63,33 +61,32 @@ func TestTypeFilter(t *testing.T) {
 }
 
 func TestNestedTypeFilter(t *testing.T) {
-	whatevers := []sdk.Whatever{
+	dummies := []mql.Dummy{
 		{
-			UnionField: &sdk.WhateverUnion{},
+			UnionField: &mql.DummyUnion{},
 		},
-		{
-		},
+		{},
 	}
 
 	table := []struct {
 		name     string
-		filter   sdk.WhateverFilter
+		filter   mql.DummyFilter
 		expected int
 	}{
 		{
 			name: "set:true",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					Set: sdk.Bool(true),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					Set: mql.Bool(true),
 				},
 			},
 			expected: 1,
 		},
 		{
 			name: "set:false",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					Set: sdk.Bool(false),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					Set: mql.Bool(false),
 				},
 			},
 			expected: 1,
@@ -98,7 +95,7 @@ func TestNestedTypeFilter(t *testing.T) {
 
 	for _, c := range table {
 		t.Run(c.name, func(t *testing.T) {
-			gSlice := f.MustFromStructs(whatevers)
+			gSlice := f.MustFromStructs(dummies)
 
 			gSlice = gSlice.Filter(false, f.MustFromStruct(c.filter))
 
@@ -110,224 +107,223 @@ func TestNestedTypeFilter(t *testing.T) {
 }
 
 func TestStringFilter(t *testing.T) {
-	whatevers := []sdk.Whatever{
+	dummies := []mql.Dummy{
+		{},
 		{
+			StringField: mql.String("a"),
 		},
 		{
-			StringField: sdk.String("a"),
+			StringField: mql.String("A"),
 		},
 		{
-			StringField: sdk.String("A"),
+			StringField: mql.String("b"),
 		},
 		{
-			StringField: sdk.String("b"),
+			StringField: mql.String("B"),
 		},
 		{
-			StringField: sdk.String("B"),
+			StringField: mql.String("c"),
 		},
 		{
-			StringField: sdk.String("c"),
+			StringField: mql.String("C"),
 		},
 		{
-			StringField: sdk.String("C"),
+			StringField: mql.String("yxy"),
 		},
 		{
-			StringField: sdk.String("yxy"),
-		},
-		{
-			StringField: sdk.String("yXy"),
+			StringField: mql.String("yXy"),
 		},
 	}
 
 	table := []struct {
 		name     string
-		filter   sdk.WhateverFilter
+		filter   mql.DummyFilter
 		expected int
 	}{
 		{
 			name: "set:true",
-			filter: sdk.WhateverFilter{
-				StringField: &sdk.StringFilter{
-					Set: sdk.Bool(true),
+			filter: mql.DummyFilter{
+				StringField: &mql.StringFilter{
+					Set: mql.Bool(true),
 				},
 			},
-			expected: len(whatevers) - 1,
+			expected: len(dummies) - 1,
 		},
 		{
 			name: "set:false",
-			filter: sdk.WhateverFilter{
-				StringField: &sdk.StringFilter{
-					Set: sdk.Bool(false),
+			filter: mql.DummyFilter{
+				StringField: &mql.StringFilter{
+					Set: mql.Bool(false),
 				},
-				UnionField: &sdk.WhateverUnionFilter{},
+				UnionField: &mql.DummyUnionFilter{},
 			},
 			expected: 1,
 		},
 		{
 			name: "caseSensitive:false,is:a",
-			filter: sdk.WhateverFilter{
-				StringField: &sdk.StringFilter{
-					CaseSensitive: sdk.Bool(false),
-					Is:            sdk.String("a"),
+			filter: mql.DummyFilter{
+				StringField: &mql.StringFilter{
+					CaseSensitive: mql.Bool(false),
+					Is:            mql.String("a"),
 				},
 			},
 			expected: 2,
 		},
 		{
 			name: "caseSensitive:true,is: a",
-			filter: sdk.WhateverFilter{
-				StringField: &sdk.StringFilter{
-					CaseSensitive: sdk.Bool(true),
-					Is:            sdk.String("a"),
+			filter: mql.DummyFilter{
+				StringField: &mql.StringFilter{
+					CaseSensitive: mql.Bool(true),
+					Is:            mql.String("a"),
 				},
 			},
 			expected: 1,
 		},
 		{
 			name: "caseSensitive:false,not:a",
-			filter: sdk.WhateverFilter{
-				StringField: &sdk.StringFilter{
-					CaseSensitive: sdk.Bool(false),
-					Not:           sdk.String("a"),
+			filter: mql.DummyFilter{
+				StringField: &mql.StringFilter{
+					CaseSensitive: mql.Bool(false),
+					Not:           mql.String("a"),
 				},
 			},
-			expected: len(whatevers) - 2,
+			expected: len(dummies) - 2,
 		},
 		{
 			name: "caseSensitive:true,not:a",
-			filter: sdk.WhateverFilter{
-				StringField: &sdk.StringFilter{
-					CaseSensitive: sdk.Bool(true),
-					Not:           sdk.String("a"),
+			filter: mql.DummyFilter{
+				StringField: &mql.StringFilter{
+					CaseSensitive: mql.Bool(true),
+					Not:           mql.String("a"),
 				},
 			},
-			expected: len(whatevers) - 1,
+			expected: len(dummies) - 1,
 		},
 		{
 			name: "caseSensitive:false,contains:x",
-			filter: sdk.WhateverFilter{
-				StringField: &sdk.StringFilter{
-					CaseSensitive: sdk.Bool(false),
-					Contains:      sdk.String("x"),
+			filter: mql.DummyFilter{
+				StringField: &mql.StringFilter{
+					CaseSensitive: mql.Bool(false),
+					Contains:      mql.String("x"),
 				},
 			},
 			expected: 2,
 		},
 		{
 			name: "caseSensitive:true,contains:x",
-			filter: sdk.WhateverFilter{
-				StringField: &sdk.StringFilter{
-					CaseSensitive: sdk.Bool(true),
-					Contains:      sdk.String("x"),
+			filter: mql.DummyFilter{
+				StringField: &mql.StringFilter{
+					CaseSensitive: mql.Bool(true),
+					Contains:      mql.String("x"),
 				},
 			},
 			expected: 1,
 		},
 		{
 			name: "caseSensitive:false,notContains:x",
-			filter: sdk.WhateverFilter{
-				StringField: &sdk.StringFilter{
-					CaseSensitive: sdk.Bool(false),
-					NotContains:   sdk.String("x"),
+			filter: mql.DummyFilter{
+				StringField: &mql.StringFilter{
+					CaseSensitive: mql.Bool(false),
+					NotContains:   mql.String("x"),
 				},
 			},
-			expected: len(whatevers) - 2,
+			expected: len(dummies) - 2,
 		},
 		{
 			name: "caseSensitive:true,notContains:x",
-			filter: sdk.WhateverFilter{
-				StringField: &sdk.StringFilter{
-					CaseSensitive: sdk.Bool(true),
-					NotContains:   sdk.String("x"),
+			filter: mql.DummyFilter{
+				StringField: &mql.StringFilter{
+					CaseSensitive: mql.Bool(true),
+					NotContains:   mql.String("x"),
 				},
 			},
-			expected: len(whatevers) - 1,
+			expected: len(dummies) - 1,
 		},
 		{
 			name: "caseSensitive:false,startsWith:yx",
-			filter: sdk.WhateverFilter{
-				StringField: &sdk.StringFilter{
-					CaseSensitive: sdk.Bool(false),
-					StartsWith:    sdk.String("yx"),
+			filter: mql.DummyFilter{
+				StringField: &mql.StringFilter{
+					CaseSensitive: mql.Bool(false),
+					StartsWith:    mql.String("yx"),
 				},
 			},
 			expected: 2,
 		},
 		{
 			name: "caseSensitive:true,startsWith:yx",
-			filter: sdk.WhateverFilter{
-				StringField: &sdk.StringFilter{
-					CaseSensitive: sdk.Bool(true),
-					StartsWith:    sdk.String("yx"),
+			filter: mql.DummyFilter{
+				StringField: &mql.StringFilter{
+					CaseSensitive: mql.Bool(true),
+					StartsWith:    mql.String("yx"),
 				},
 			},
 			expected: 1,
 		},
 		{
 			name: "caseSensitive:false,notStartsWith:yx",
-			filter: sdk.WhateverFilter{
-				StringField: &sdk.StringFilter{
-					CaseSensitive: sdk.Bool(false),
-					NotStartsWith: sdk.String("yx"),
+			filter: mql.DummyFilter{
+				StringField: &mql.StringFilter{
+					CaseSensitive: mql.Bool(false),
+					NotStartsWith: mql.String("yx"),
 				},
 			},
-			expected: len(whatevers) - 2,
+			expected: len(dummies) - 2,
 		},
 		{
 			name: "caseSensitive:true,notStartsWith:yx",
-			filter: sdk.WhateverFilter{
-				StringField: &sdk.StringFilter{
-					CaseSensitive: sdk.Bool(true),
-					NotStartsWith: sdk.String("yx"),
+			filter: mql.DummyFilter{
+				StringField: &mql.StringFilter{
+					CaseSensitive: mql.Bool(true),
+					NotStartsWith: mql.String("yx"),
 				},
 			},
-			expected: len(whatevers) - 1,
+			expected: len(dummies) - 1,
 		},
 		{
 			name: "caseSensitive:false,endsWith:xy",
-			filter: sdk.WhateverFilter{
-				StringField: &sdk.StringFilter{
-					CaseSensitive: sdk.Bool(false),
-					EndsWith:      sdk.String("xy"),
+			filter: mql.DummyFilter{
+				StringField: &mql.StringFilter{
+					CaseSensitive: mql.Bool(false),
+					EndsWith:      mql.String("xy"),
 				},
 			},
 			expected: 2,
 		},
 		{
 			name: "caseSensitive:true,endsWith:xy",
-			filter: sdk.WhateverFilter{
-				StringField: &sdk.StringFilter{
-					CaseSensitive: sdk.Bool(true),
-					EndsWith:      sdk.String("xy"),
+			filter: mql.DummyFilter{
+				StringField: &mql.StringFilter{
+					CaseSensitive: mql.Bool(true),
+					EndsWith:      mql.String("xy"),
 				},
 			},
 			expected: 1,
 		},
 		{
 			name: "caseSensitive:false,notEndsWith:xy",
-			filter: sdk.WhateverFilter{
-				StringField: &sdk.StringFilter{
-					CaseSensitive: sdk.Bool(false),
-					NotEndsWith:   sdk.String("xy"),
+			filter: mql.DummyFilter{
+				StringField: &mql.StringFilter{
+					CaseSensitive: mql.Bool(false),
+					NotEndsWith:   mql.String("xy"),
 				},
 			},
-			expected: len(whatevers) - 2,
+			expected: len(dummies) - 2,
 		},
 		{
 			name: "caseSensitive:true,notEndsWith:xy",
-			filter: sdk.WhateverFilter{
-				StringField: &sdk.StringFilter{
-					CaseSensitive: sdk.Bool(true),
-					NotEndsWith:   sdk.String("xy"),
+			filter: mql.DummyFilter{
+				StringField: &mql.StringFilter{
+					CaseSensitive: mql.Bool(true),
+					NotEndsWith:   mql.String("xy"),
 				},
 			},
-			expected: len(whatevers) - 1,
+			expected: len(dummies) - 1,
 		},
 		{
 			name: "caseSensitive:false,in:[a]",
-			filter: sdk.WhateverFilter{
-				StringField: &sdk.StringFilter{
-					CaseSensitive: sdk.Bool(false),
+			filter: mql.DummyFilter{
+				StringField: &mql.StringFilter{
+					CaseSensitive: mql.Bool(false),
 					In:            []string{"a"},
 				},
 			},
@@ -335,9 +331,9 @@ func TestStringFilter(t *testing.T) {
 		},
 		{
 			name: "caseSensitive:true,in:[a]",
-			filter: sdk.WhateverFilter{
-				StringField: &sdk.StringFilter{
-					CaseSensitive: sdk.Bool(true),
+			filter: mql.DummyFilter{
+				StringField: &mql.StringFilter{
+					CaseSensitive: mql.Bool(true),
 					In:            []string{"a"},
 				},
 			},
@@ -345,29 +341,29 @@ func TestStringFilter(t *testing.T) {
 		},
 		{
 			name: "caseSensitive:false,notIn:[a]",
-			filter: sdk.WhateverFilter{
-				StringField: &sdk.StringFilter{
-					CaseSensitive: sdk.Bool(false),
+			filter: mql.DummyFilter{
+				StringField: &mql.StringFilter{
+					CaseSensitive: mql.Bool(false),
 					NotIn:         []string{"a"},
 				},
 			},
-			expected: len(whatevers) - 2,
+			expected: len(dummies) - 2,
 		},
 		{
 			name: "caseSensitive:true,notIn:[a]",
-			filter: sdk.WhateverFilter{
-				StringField: &sdk.StringFilter{
-					CaseSensitive: sdk.Bool(true),
+			filter: mql.DummyFilter{
+				StringField: &mql.StringFilter{
+					CaseSensitive: mql.Bool(true),
 					NotIn:         []string{"a"},
 				},
 			},
-			expected: len(whatevers) - 1,
+			expected: len(dummies) - 1,
 		},
 	}
 
 	for _, c := range table {
 		t.Run(c.name, func(t *testing.T) {
-			gSlice := f.MustFromStructs(whatevers)
+			gSlice := f.MustFromStructs(dummies)
 
 			gSlice = gSlice.Filter(false, f.MustFromStruct(c.filter))
 
@@ -379,75 +375,74 @@ func TestStringFilter(t *testing.T) {
 }
 
 func TestNestedStringFilter(t *testing.T) {
-	whatevers := []sdk.Whatever{
+	dummies := []mql.Dummy{
 		{
-			UnionField: &sdk.WhateverUnion{
+			UnionField: &mql.DummyUnion{},
+		},
+		{
+			UnionField: &mql.DummyUnion{
+				StringField: mql.String("a"),
 			},
 		},
 		{
-			UnionField: &sdk.WhateverUnion{
-				StringField: sdk.String("a"),
+			UnionField: &mql.DummyUnion{
+				StringField: mql.String("A"),
 			},
 		},
 		{
-			UnionField: &sdk.WhateverUnion{
-				StringField: sdk.String("A"),
+			UnionField: &mql.DummyUnion{
+				StringField: mql.String("b"),
 			},
 		},
 		{
-			UnionField: &sdk.WhateverUnion{
-				StringField: sdk.String("b"),
+			UnionField: &mql.DummyUnion{
+				StringField: mql.String("B"),
 			},
 		},
 		{
-			UnionField: &sdk.WhateverUnion{
-				StringField: sdk.String("B"),
+			UnionField: &mql.DummyUnion{
+				StringField: mql.String("c"),
 			},
 		},
 		{
-			UnionField: &sdk.WhateverUnion{
-				StringField: sdk.String("c"),
+			UnionField: &mql.DummyUnion{
+				StringField: mql.String("C"),
 			},
 		},
 		{
-			UnionField: &sdk.WhateverUnion{
-				StringField: sdk.String("C"),
+			UnionField: &mql.DummyUnion{
+				StringField: mql.String("yxy"),
 			},
 		},
 		{
-			UnionField: &sdk.WhateverUnion{
-				StringField: sdk.String("yxy"),
-			},
-		},
-		{
-			UnionField: &sdk.WhateverUnion{
-				StringField: sdk.String("yXy"),
+			UnionField: &mql.DummyUnion{
+				StringField: mql.String("yXy"),
 			},
 		},
 	}
 
 	table := []struct {
 		name     string
-		filter   sdk.WhateverFilter
+		filter   mql.DummyFilter
 		expected int
 	}{
 		{
 			name: "set:true",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					StringField: &sdk.StringFilter{
-						Set: sdk.Bool(true),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					StringField: &mql.StringFilter{
+						Set: mql.Bool(true),
 					},
 				},
 			},
-			expected: len(whatevers) -1,
+			expected: len(dummies) - 1,
 		},
 		{
 			name: "set:false",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					StringField: &sdk.StringFilter{
-						Set: sdk.Bool(false),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					StringField: &mql.StringFilter{
+						Set: mql.Bool(false),
 					},
 				},
 			},
@@ -455,11 +450,11 @@ func TestNestedStringFilter(t *testing.T) {
 		},
 		{
 			name: "caseSensitive:false,is:a",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					StringField: &sdk.StringFilter{
-						CaseSensitive: sdk.Bool(false),
-						Is:            sdk.String("a"),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					StringField: &mql.StringFilter{
+						CaseSensitive: mql.Bool(false),
+						Is:            mql.String("a"),
 					},
 				},
 			},
@@ -467,11 +462,11 @@ func TestNestedStringFilter(t *testing.T) {
 		},
 		{
 			name: "caseSensitive:true,is: a",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					StringField: &sdk.StringFilter{
-						CaseSensitive: sdk.Bool(true),
-						Is:            sdk.String("a"),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					StringField: &mql.StringFilter{
+						CaseSensitive: mql.Bool(true),
+						Is:            mql.String("a"),
 					},
 				},
 			},
@@ -479,35 +474,35 @@ func TestNestedStringFilter(t *testing.T) {
 		},
 		{
 			name: "caseSensitive:false,not:a",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					StringField: &sdk.StringFilter{
-						CaseSensitive: sdk.Bool(false),
-						Not:           sdk.String("a"),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					StringField: &mql.StringFilter{
+						CaseSensitive: mql.Bool(false),
+						Not:           mql.String("a"),
 					},
 				},
 			},
-			expected: len(whatevers) - 2,
+			expected: len(dummies) - 2,
 		},
 		{
 			name: "caseSensitive:true,not:a",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					StringField: &sdk.StringFilter{
-						CaseSensitive: sdk.Bool(true),
-						Not:           sdk.String("a"),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					StringField: &mql.StringFilter{
+						CaseSensitive: mql.Bool(true),
+						Not:           mql.String("a"),
 					},
 				},
 			},
-			expected: len(whatevers) - 1,
+			expected: len(dummies) - 1,
 		},
 		{
 			name: "caseSensitive:false,contains:x",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					StringField: &sdk.StringFilter{
-						CaseSensitive: sdk.Bool(false),
-						Contains:      sdk.String("x"),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					StringField: &mql.StringFilter{
+						CaseSensitive: mql.Bool(false),
+						Contains:      mql.String("x"),
 					},
 				},
 			},
@@ -515,11 +510,11 @@ func TestNestedStringFilter(t *testing.T) {
 		},
 		{
 			name: "caseSensitive:true,contains:x",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					StringField: &sdk.StringFilter{
-						CaseSensitive: sdk.Bool(true),
-						Contains:      sdk.String("x"),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					StringField: &mql.StringFilter{
+						CaseSensitive: mql.Bool(true),
+						Contains:      mql.String("x"),
 					},
 				},
 			},
@@ -527,35 +522,35 @@ func TestNestedStringFilter(t *testing.T) {
 		},
 		{
 			name: "caseSensitive:false,notContains:x",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					StringField: &sdk.StringFilter{
-						CaseSensitive: sdk.Bool(false),
-						NotContains:   sdk.String("x"),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					StringField: &mql.StringFilter{
+						CaseSensitive: mql.Bool(false),
+						NotContains:   mql.String("x"),
 					},
 				},
 			},
-			expected: len(whatevers) - 2,
+			expected: len(dummies) - 2,
 		},
 		{
 			name: "caseSensitive:true,notContains:x",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					StringField: &sdk.StringFilter{
-						CaseSensitive: sdk.Bool(true),
-						NotContains:   sdk.String("x"),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					StringField: &mql.StringFilter{
+						CaseSensitive: mql.Bool(true),
+						NotContains:   mql.String("x"),
 					},
 				},
 			},
-			expected: len(whatevers) - 1,
+			expected: len(dummies) - 1,
 		},
 		{
 			name: "caseSensitive:false,startsWith:yx",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					StringField: &sdk.StringFilter{
-						CaseSensitive: sdk.Bool(false),
-						StartsWith:    sdk.String("yx"),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					StringField: &mql.StringFilter{
+						CaseSensitive: mql.Bool(false),
+						StartsWith:    mql.String("yx"),
 					},
 				},
 			},
@@ -563,11 +558,11 @@ func TestNestedStringFilter(t *testing.T) {
 		},
 		{
 			name: "caseSensitive:true,startsWith:yx",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					StringField: &sdk.StringFilter{
-						CaseSensitive: sdk.Bool(true),
-						StartsWith:    sdk.String("yx"),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					StringField: &mql.StringFilter{
+						CaseSensitive: mql.Bool(true),
+						StartsWith:    mql.String("yx"),
 					},
 				},
 			},
@@ -575,35 +570,35 @@ func TestNestedStringFilter(t *testing.T) {
 		},
 		{
 			name: "caseSensitive:false,notStartsWith:yx",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					StringField: &sdk.StringFilter{
-						CaseSensitive: sdk.Bool(false),
-						NotStartsWith: sdk.String("yx"),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					StringField: &mql.StringFilter{
+						CaseSensitive: mql.Bool(false),
+						NotStartsWith: mql.String("yx"),
 					},
 				},
 			},
-			expected: len(whatevers) - 2,
+			expected: len(dummies) - 2,
 		},
 		{
 			name: "caseSensitive:true,notStartsWith:yx",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					StringField: &sdk.StringFilter{
-						CaseSensitive: sdk.Bool(true),
-						NotStartsWith: sdk.String("yx"),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					StringField: &mql.StringFilter{
+						CaseSensitive: mql.Bool(true),
+						NotStartsWith: mql.String("yx"),
 					},
 				},
 			},
-			expected: len(whatevers) - 1,
+			expected: len(dummies) - 1,
 		},
 		{
 			name: "caseSensitive:false,endsWith:xy",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					StringField: &sdk.StringFilter{
-						CaseSensitive: sdk.Bool(false),
-						EndsWith:      sdk.String("xy"),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					StringField: &mql.StringFilter{
+						CaseSensitive: mql.Bool(false),
+						EndsWith:      mql.String("xy"),
 					},
 				},
 			},
@@ -611,11 +606,11 @@ func TestNestedStringFilter(t *testing.T) {
 		},
 		{
 			name: "caseSensitive:true,endsWith:xy",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					StringField: &sdk.StringFilter{
-						CaseSensitive: sdk.Bool(true),
-						EndsWith:      sdk.String("xy"),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					StringField: &mql.StringFilter{
+						CaseSensitive: mql.Bool(true),
+						EndsWith:      mql.String("xy"),
 					},
 				},
 			},
@@ -623,34 +618,34 @@ func TestNestedStringFilter(t *testing.T) {
 		},
 		{
 			name: "caseSensitive:false,notEndsWith:xy",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					StringField: &sdk.StringFilter{
-						CaseSensitive: sdk.Bool(false),
-						NotEndsWith:   sdk.String("xy"),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					StringField: &mql.StringFilter{
+						CaseSensitive: mql.Bool(false),
+						NotEndsWith:   mql.String("xy"),
 					},
 				},
 			},
-			expected: len(whatevers) - 2,
+			expected: len(dummies) - 2,
 		},
 		{
 			name: "caseSensitive:true,notEndsWith:xy",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					StringField: &sdk.StringFilter{
-						CaseSensitive: sdk.Bool(true),
-						NotEndsWith:   sdk.String("xy"),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					StringField: &mql.StringFilter{
+						CaseSensitive: mql.Bool(true),
+						NotEndsWith:   mql.String("xy"),
 					},
 				},
 			},
-			expected: len(whatevers) - 1,
+			expected: len(dummies) - 1,
 		},
 		{
 			name: "caseSensitive:false,in:[a]",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					StringField: &sdk.StringFilter{
-						CaseSensitive: sdk.Bool(false),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					StringField: &mql.StringFilter{
+						CaseSensitive: mql.Bool(false),
 						In:            []string{"a"},
 					},
 				},
@@ -659,10 +654,10 @@ func TestNestedStringFilter(t *testing.T) {
 		},
 		{
 			name: "caseSensitive:true,in:[a]",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					StringField: &sdk.StringFilter{
-						CaseSensitive: sdk.Bool(true),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					StringField: &mql.StringFilter{
+						CaseSensitive: mql.Bool(true),
 						In:            []string{"a"},
 					},
 				},
@@ -671,33 +666,33 @@ func TestNestedStringFilter(t *testing.T) {
 		},
 		{
 			name: "caseSensitive:false,notIn:[a]",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					StringField: &sdk.StringFilter{
-						CaseSensitive: sdk.Bool(false),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					StringField: &mql.StringFilter{
+						CaseSensitive: mql.Bool(false),
 						NotIn:         []string{"a"},
 					},
 				},
 			},
-			expected: len(whatevers) - 2,
+			expected: len(dummies) - 2,
 		},
 		{
 			name: "caseSensitive:true,notIn:[a]",
-			filter: sdk.WhateverFilter{
-				UnionField: &sdk.WhateverUnionFilter{
-					StringField: &sdk.StringFilter{
-						CaseSensitive: sdk.Bool(true),
+			filter: mql.DummyFilter{
+				UnionField: &mql.DummyUnionFilter{
+					StringField: &mql.StringFilter{
+						CaseSensitive: mql.Bool(true),
 						NotIn:         []string{"a"},
 					},
 				},
 			},
-			expected: len(whatevers) - 1,
+			expected: len(dummies) - 1,
 		},
 	}
 
 	for _, c := range table {
 		t.Run(c.name, func(t *testing.T) {
-			gSlice := f.MustFromStructs(whatevers)
+			gSlice := f.MustFromStructs(dummies)
 
 			gSlice = gSlice.Filter(false, f.MustFromStruct(c.filter))
 
@@ -709,84 +704,83 @@ func TestNestedStringFilter(t *testing.T) {
 }
 
 func TestEnumFilter(t *testing.T) {
-	whatevers := []sdk.Whatever{
+	dummies := []mql.Dummy{
+		{},
 		{
+			EnumField: mql.String(mql.DummyKind.Red),
 		},
 		{
-			EnumField: sdk.String(sdk.WhateverKind.Red),
+			EnumField: mql.String(mql.DummyKind.Blue),
 		},
 		{
-			EnumField: sdk.String(sdk.WhateverKind.Blue),
-		},
-		{
-			EnumField: sdk.String(sdk.WhateverKind.Green),
+			EnumField: mql.String(mql.DummyKind.Green),
 		},
 	}
 
 	table := []struct {
 		name     string
-		filter   sdk.WhateverFilter
+		filter   mql.DummyFilter
 		expected int
 	}{
 		{
 			name: "set:true",
-			filter: sdk.WhateverFilter{
-				EnumField: &sdk.EnumFilter{
-					Set: sdk.Bool(true),
+			filter: mql.DummyFilter{
+				EnumField: &mql.EnumFilter{
+					Set: mql.Bool(true),
 				},
 			},
-			expected: len(whatevers) - 1,
+			expected: len(dummies) - 1,
 		},
 		{
 			name: "set:false",
-			filter: sdk.WhateverFilter{
-				EnumField: &sdk.EnumFilter{
-					Set: sdk.Bool(false),
+			filter: mql.DummyFilter{
+				EnumField: &mql.EnumFilter{
+					Set: mql.Bool(false),
 				},
 			},
 			expected: 1,
 		},
 		{
 			name: "is:red",
-			filter: sdk.WhateverFilter{
-				EnumField: &sdk.EnumFilter{
-					Is: sdk.String(sdk.WhateverKind.Red),
+			filter: mql.DummyFilter{
+				EnumField: &mql.EnumFilter{
+					Is: mql.String(mql.DummyKind.Red),
 				},
 			},
 			expected: 1,
 		},
 		{
 			name: "not:red",
-			filter: sdk.WhateverFilter{
-				EnumField: &sdk.EnumFilter{
-					Not: sdk.String(sdk.WhateverKind.Red),
+			filter: mql.DummyFilter{
+				EnumField: &mql.EnumFilter{
+					Not: mql.String(mql.DummyKind.Red),
 				},
 			},
-			expected: len(whatevers) - 1,
+			expected: len(dummies) - 1,
 		},
 		{
 			name: "in:[red,blue]",
-			filter: sdk.WhateverFilter{
-				EnumField: &sdk.EnumFilter{
-					In: []string{sdk.WhateverKind.Red, sdk.WhateverKind.Blue},
+			filter: mql.DummyFilter{
+				EnumField: &mql.EnumFilter{
+					In: []string{mql.DummyKind.Red, mql.DummyKind.Blue},
 				},
 			},
 			expected: 2,
 		},
 		{
 			name: "notIn:[red,blue]",
-			filter: sdk.WhateverFilter{
-				EnumField: &sdk.EnumFilter{
-					NotIn: []string{sdk.WhateverKind.Red, sdk.WhateverKind.Blue},
+			filter: mql.DummyFilter{
+				EnumField: &mql.EnumFilter{
+					NotIn: []string{mql.DummyKind.Red, mql.DummyKind.Blue},
 				},
 			},
-			expected: len(whatevers) - 2,
+			expected: len(dummies) - 2,
 		},
 	}
 
 	for _, c := range table {
 		t.Run(c.name, func(t *testing.T) {
-			gSlice := f.MustFromStructs(whatevers)
+			gSlice := f.MustFromStructs(dummies)
 
 			gSlice = gSlice.Filter(false, f.MustFromStruct(c.filter))
 
@@ -798,101 +792,100 @@ func TestEnumFilter(t *testing.T) {
 }
 
 func TestInt32Filter(t *testing.T) {
-	whatevers := []sdk.Whatever{
+	dummies := []mql.Dummy{
+		{},
 		{
+			Int32Field: mql.Int32(0),
 		},
 		{
-			Int32Field: sdk.Int32(0),
+			Int32Field: mql.Int32(1),
 		},
 		{
-			Int32Field: sdk.Int32(1),
-		},
-		{
-			Int32Field: sdk.Int32(2),
+			Int32Field: mql.Int32(2),
 		},
 	}
 
 	table := []struct {
 		name     string
-		filter   sdk.WhateverFilter
+		filter   mql.DummyFilter
 		expected int
 	}{
 		{
 			name: "set:false",
-			filter: sdk.WhateverFilter{
-				Int32Field: &sdk.Int32Filter{
-					Set: sdk.Bool(false),
+			filter: mql.DummyFilter{
+				Int32Field: &mql.Int32Filter{
+					Set: mql.Bool(false),
 				},
 			},
 			expected: 1,
 		},
 		{
 			name: "set:true",
-			filter: sdk.WhateverFilter{
-				Int32Field: &sdk.Int32Filter{
-					Set: sdk.Bool(true),
+			filter: mql.DummyFilter{
+				Int32Field: &mql.Int32Filter{
+					Set: mql.Bool(true),
 				},
 			},
-			expected: len(whatevers) - 1,
+			expected: len(dummies) - 1,
 		},
 		{
 			name: "is:1",
-			filter: sdk.WhateverFilter{
-				Int32Field: &sdk.Int32Filter{
-					Is: sdk.Int32(1),
+			filter: mql.DummyFilter{
+				Int32Field: &mql.Int32Filter{
+					Is: mql.Int32(1),
 				},
 			},
 			expected: 1,
 		},
 		{
 			name: "not:1",
-			filter: sdk.WhateverFilter{
-				Int32Field: &sdk.Int32Filter{
-					Not: sdk.Int32(1),
+			filter: mql.DummyFilter{
+				Int32Field: &mql.Int32Filter{
+					Not: mql.Int32(1),
 				},
 			},
-			expected: len(whatevers) - 1,
+			expected: len(dummies) - 1,
 		},
 		{
 			name: "lt:1",
-			filter: sdk.WhateverFilter{
-				Int32Field: &sdk.Int32Filter{
-					Lt: sdk.Int32(1),
+			filter: mql.DummyFilter{
+				Int32Field: &mql.Int32Filter{
+					Lt: mql.Int32(1),
 				},
 			},
 			expected: 1,
 		},
 		{
 			name: "lte:1",
-			filter: sdk.WhateverFilter{
-				Int32Field: &sdk.Int32Filter{
-					Lte: sdk.Int32(1),
+			filter: mql.DummyFilter{
+				Int32Field: &mql.Int32Filter{
+					Lte: mql.Int32(1),
 				},
 			},
 			expected: 2,
 		},
 		{
 			name: "gt:1",
-			filter: sdk.WhateverFilter{
-				Int32Field: &sdk.Int32Filter{
-					Gt: sdk.Int32(1),
+			filter: mql.DummyFilter{
+				Int32Field: &mql.Int32Filter{
+					Gt: mql.Int32(1),
 				},
 			},
 			expected: 1,
 		},
 		{
 			name: "gte:1",
-			filter: sdk.WhateverFilter{
-				Int32Field: &sdk.Int32Filter{
-					Gte: sdk.Int32(1),
+			filter: mql.DummyFilter{
+				Int32Field: &mql.Int32Filter{
+					Gte: mql.Int32(1),
 				},
 			},
 			expected: 2,
 		},
 		{
 			name: "in:[1,2]",
-			filter: sdk.WhateverFilter{
-				Int32Field: &sdk.Int32Filter{
+			filter: mql.DummyFilter{
+				Int32Field: &mql.Int32Filter{
 					In: []int32{1, 2},
 				},
 			},
@@ -900,18 +893,18 @@ func TestInt32Filter(t *testing.T) {
 		},
 		{
 			name: "notIn:[1,2]",
-			filter: sdk.WhateverFilter{
-				Int32Field: &sdk.Int32Filter{
+			filter: mql.DummyFilter{
+				Int32Field: &mql.Int32Filter{
 					In: []int32{1, 2},
 				},
 			},
-			expected: len(whatevers) - 2,
+			expected: len(dummies) - 2,
 		},
 	}
 
 	for _, c := range table {
 		t.Run(c.name, func(t *testing.T) {
-			gSlice := f.MustFromStructs(whatevers)
+			gSlice := f.MustFromStructs(dummies)
 
 			gSlice = gSlice.Filter(false, f.MustFromStruct(c.filter))
 
@@ -923,101 +916,100 @@ func TestInt32Filter(t *testing.T) {
 }
 
 func TestFloat64Filter(t *testing.T) {
-	whatevers := []sdk.Whatever{
+	dummies := []mql.Dummy{
+		{},
 		{
+			Float64Field: mql.Float64(0),
 		},
 		{
-			Float64Field: sdk.Float64(0),
+			Float64Field: mql.Float64(1),
 		},
 		{
-			Float64Field: sdk.Float64(1),
-		},
-		{
-			Float64Field: sdk.Float64(2),
+			Float64Field: mql.Float64(2),
 		},
 	}
 
 	table := []struct {
 		name     string
-		filter   sdk.WhateverFilter
+		filter   mql.DummyFilter
 		expected int
 	}{
 		{
 			name: "set:false",
-			filter: sdk.WhateverFilter{
-				Float64Field: &sdk.Float64Filter{
-					Set: sdk.Bool(false),
+			filter: mql.DummyFilter{
+				Float64Field: &mql.Float64Filter{
+					Set: mql.Bool(false),
 				},
 			},
 			expected: 1,
 		},
 		{
 			name: "set:true",
-			filter: sdk.WhateverFilter{
-				Float64Field: &sdk.Float64Filter{
-					Set: sdk.Bool(true),
+			filter: mql.DummyFilter{
+				Float64Field: &mql.Float64Filter{
+					Set: mql.Bool(true),
 				},
 			},
-			expected: len(whatevers) - 1,
+			expected: len(dummies) - 1,
 		},
 		{
 			name: "is:1",
-			filter: sdk.WhateverFilter{
-				Float64Field: &sdk.Float64Filter{
-					Is: sdk.Float64(1),
+			filter: mql.DummyFilter{
+				Float64Field: &mql.Float64Filter{
+					Is: mql.Float64(1),
 				},
 			},
 			expected: 1,
 		},
 		{
 			name: "not:1",
-			filter: sdk.WhateverFilter{
-				Float64Field: &sdk.Float64Filter{
-					Not: sdk.Float64(1),
+			filter: mql.DummyFilter{
+				Float64Field: &mql.Float64Filter{
+					Not: mql.Float64(1),
 				},
 			},
-			expected: len(whatevers) - 1,
+			expected: len(dummies) - 1,
 		},
 		{
 			name: "lt:1",
-			filter: sdk.WhateverFilter{
-				Float64Field: &sdk.Float64Filter{
-					Lt: sdk.Float64(1),
+			filter: mql.DummyFilter{
+				Float64Field: &mql.Float64Filter{
+					Lt: mql.Float64(1),
 				},
 			},
 			expected: 1,
 		},
 		{
 			name: "lte:1",
-			filter: sdk.WhateverFilter{
-				Float64Field: &sdk.Float64Filter{
-					Lte: sdk.Float64(1),
+			filter: mql.DummyFilter{
+				Float64Field: &mql.Float64Filter{
+					Lte: mql.Float64(1),
 				},
 			},
 			expected: 2,
 		},
 		{
 			name: "gt:1",
-			filter: sdk.WhateverFilter{
-				Float64Field: &sdk.Float64Filter{
-					Gt: sdk.Float64(1),
+			filter: mql.DummyFilter{
+				Float64Field: &mql.Float64Filter{
+					Gt: mql.Float64(1),
 				},
 			},
 			expected: 1,
 		},
 		{
 			name: "gte:1",
-			filter: sdk.WhateverFilter{
-				Float64Field: &sdk.Float64Filter{
-					Gte: sdk.Float64(1),
+			filter: mql.DummyFilter{
+				Float64Field: &mql.Float64Filter{
+					Gte: mql.Float64(1),
 				},
 			},
 			expected: 2,
 		},
 		{
 			name: "in:[1,2]",
-			filter: sdk.WhateverFilter{
-				Float64Field: &sdk.Float64Filter{
+			filter: mql.DummyFilter{
+				Float64Field: &mql.Float64Filter{
 					In: []float64{1, 2},
 				},
 			},
@@ -1025,18 +1017,18 @@ func TestFloat64Filter(t *testing.T) {
 		},
 		{
 			name: "notIn:[1,2]",
-			filter: sdk.WhateverFilter{
-				Float64Field: &sdk.Float64Filter{
+			filter: mql.DummyFilter{
+				Float64Field: &mql.Float64Filter{
 					In: []float64{1, 2},
 				},
 			},
-			expected: len(whatevers) - 2,
+			expected: len(dummies) - 2,
 		},
 	}
 
 	for _, c := range table {
 		t.Run(c.name, func(t *testing.T) {
-			gSlice := f.MustFromStructs(whatevers)
+			gSlice := f.MustFromStructs(dummies)
 
 			gSlice = gSlice.Filter(false, f.MustFromStruct(c.filter))
 
@@ -1048,72 +1040,71 @@ func TestFloat64Filter(t *testing.T) {
 }
 
 func TestBoolFilter(t *testing.T) {
-	whatevers := []sdk.Whatever{
+	dummies := []mql.Dummy{
+		{},
 		{
+			BoolField: mql.Bool(true),
 		},
 		{
-			BoolField: sdk.Bool(true),
-		},
-		{
-			BoolField: sdk.Bool(false),
+			BoolField: mql.Bool(false),
 		},
 	}
 
 	table := []struct {
 		name     string
-		filter   sdk.WhateverFilter
+		filter   mql.DummyFilter
 		expected int
 	}{
 		{
 			name: "set:false",
-			filter: sdk.WhateverFilter{
-				BoolField: &sdk.BoolFilter{
-					Set: sdk.Bool(false),
+			filter: mql.DummyFilter{
+				BoolField: &mql.BoolFilter{
+					Set: mql.Bool(false),
 				},
 			},
 			expected: 1,
 		},
 		{
 			name: "set:true",
-			filter: sdk.WhateverFilter{
-				BoolField: &sdk.BoolFilter{
-					Set: sdk.Bool(true),
+			filter: mql.DummyFilter{
+				BoolField: &mql.BoolFilter{
+					Set: mql.Bool(true),
 				},
 			},
 			expected: 2,
 		},
 		{
 			name: "is:true",
-			filter: sdk.WhateverFilter{
-				BoolField: &sdk.BoolFilter{
-					Is: sdk.Bool(true),
+			filter: mql.DummyFilter{
+				BoolField: &mql.BoolFilter{
+					Is: mql.Bool(true),
 				},
 			},
 			expected: 1,
 		},
 		{
 			name: "is:false",
-			filter: sdk.WhateverFilter{
-				BoolField: &sdk.BoolFilter{
-					Is: sdk.Bool(false),
+			filter: mql.DummyFilter{
+				BoolField: &mql.BoolFilter{
+					Is: mql.Bool(false),
 				},
 			},
 			expected: 1,
 		},
 		{
 			name: "not:true",
-			filter: sdk.WhateverFilter{
-				BoolField: &sdk.BoolFilter{
-					Not: sdk.Bool(true),
+			filter: mql.DummyFilter{
+				BoolField: &mql.BoolFilter{
+					Not: mql.Bool(true),
 				},
 			},
 			expected: 2,
 		},
 		{
 			name: "not:false",
-			filter: sdk.WhateverFilter{
-				BoolField: &sdk.BoolFilter{
-					Not: sdk.Bool(false),
+			filter: mql.DummyFilter{
+				BoolField: &mql.BoolFilter{
+					Not: mql.Bool(false),
 				},
 			},
 			expected: 2,
@@ -1122,7 +1113,7 @@ func TestBoolFilter(t *testing.T) {
 
 	for _, c := range table {
 		t.Run(c.name, func(t *testing.T) {
-			gSlice := f.MustFromStructs(whatevers)
+			gSlice := f.MustFromStructs(dummies)
 
 			gSlice = gSlice.Filter(false, f.MustFromStruct(c.filter))
 
@@ -1134,34 +1125,34 @@ func TestBoolFilter(t *testing.T) {
 }
 
 //func TestAndFilter(t *testing.T) {
-//	whatevers := []sdk.Whatever{
+//	dummies := []mql.Dummy{
 //		{
-//			BoolField: sdk.Bool(true),
-//			Int32Field: sdk.Int32(0),
+//			BoolField: mql.Bool(true),
+//			Int32Field: mql.Int32(0),
 //		},
 //		{
-//			BoolField: sdk.Bool(true),
-//			Int32Field: sdk.Int32(1),
+//			BoolField: mql.Bool(true),
+//			Int32Field: mql.Int32(1),
 //		},
 //	}
 //
 //	table := []struct {
 //		name     string
-//		filter   sdk.WhateverFilter
+//		filter   mql.DummyFilter
 //		expected int
 //	}{
 //		{
 //			name: "boolField.is:true && int32Field.is:0",
-//			filter: sdk.WhateverFilter{
-//				And: []sdk.WhateverFilter{
+//			filter: mql.DummyFilter{
+//				And: []mql.DummyFilter{
 //					{
-//						BoolField: &sdk.BoolFilter{
-//							Is: sdk.Bool(true),
+//						BoolField: &mql.BoolFilter{
+//							Is: mql.Bool(true),
 //						},
 //					},
 //					{
-//						Int32Field: &sdk.Int32Filter{
-//							Is: sdk.Int32(0),
+//						Int32Field: &mql.Int32Filter{
+//							Is: mql.Int32(0),
 //						},
 //					},
 //				},
@@ -1172,7 +1163,7 @@ func TestBoolFilter(t *testing.T) {
 //
 //	for _, c := range table {
 //		t.Run(c.name, func(t *testing.T) {
-//			gSlice := f.MustFromStructs(whatevers)
+//			gSlice := f.MustFromStructs(dummies)
 //
 //			gSlice = gSlice.Filter(false, f.MustFromStruct(c.filter))
 //

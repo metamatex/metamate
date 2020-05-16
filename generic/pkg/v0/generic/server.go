@@ -1,12 +1,10 @@
-package httpjson
+package generic
 
 import (
 	"context"
 	"encoding/json"
-	"github.com/metamatex/metamate/generic/pkg/v0/generic"
-	"net/http"
-
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
+	"net/http"
 )
 
 type Server struct {
@@ -15,8 +13,8 @@ type Server struct {
 
 type ServerOpts struct {
 	Root    *graph.RootNode
-	Factory generic.Factory
-	Handler func(ctx context.Context, gRequest generic.Generic) (gResponse generic.Generic)
+	Factory Factory
+	Handler func(ctx context.Context, gRequest Generic) (gResponse Generic)
 	LogErr  func(err error)
 }
 
@@ -34,7 +32,7 @@ func (s Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 
-		tn, err := s.opts.Root.Types.ByName(req.Header.Get(METAMATE_TYPE_HEADER))
+		tn, err := s.opts.Root.Types.ByName(req.Header.Get(AsgTypeHeader))
 		if err != nil {
 			return
 		}
@@ -43,8 +41,8 @@ func (s Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 		gRsp := s.opts.Handler(req.Context(), gReq)
 
-		w.Header().Set(CONTENT_TYPE_HEADER, CONTENT_TYPE_JSON)
-		w.Header().Set(METAMATE_TYPE_HEADER, gRsp.Type().Name())
+		w.Header().Set(ContentTypeHeader, ContentTypeJson)
+		w.Header().Set(AsgTypeHeader, gRsp.Type().Name())
 
 		err = json.NewEncoder(w).Encode(gRsp.ToStringInterfaceMap())
 		if err != nil {

@@ -2,13 +2,11 @@ package generic
 
 import (
 	"github.com/metamatex/metamate/asg/pkg/v0/asg"
-	"github.com/metamatex/metamate/asg/pkg/v0/asg/typenames"
-	"testing"
-
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
-	"github.com/stretchr/testify/assert"
-
+	"github.com/metamatex/metamate/asg/pkg/v0/asg/typenames"
 	"github.com/metamatex/metamate/gen/v0/mql"
+	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestFactory(t *testing.T) {
@@ -43,7 +41,7 @@ func FTestFactoryFromStruct(t *testing.T, rn *graph.RootNode, f Factory) {
 		err := func() (err error) {
 			g := f.MustFromStruct(w)
 
-			w0 := sdk.Whatever{}
+			w0 := mql.Dummy{}
 			g.MustToStruct(&w0)
 
 			assert.Equal(t, w, w0)
@@ -72,7 +70,7 @@ func FTestFactoryFromStringInterfaceMap(t *testing.T, rn *graph.RootNode, f Fact
 				return
 			}
 
-			w0 := sdk.Whatever{}
+			w0 := mql.Dummy{}
 			err = g0.ToStruct(&w0)
 			if err != nil {
 				return
@@ -110,7 +108,7 @@ func FTestFactoryUnflatten(t *testing.T, rn *graph.RootNode, f Factory) {
 				return
 			}
 
-			w0 := sdk.Whatever{}
+			w0 := mql.Dummy{}
 			err = g0.ToStruct(&w0)
 			if err != nil {
 				return

@@ -1,20 +1,19 @@
-package httpjson
+package generic
 
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"net/http"
 )
 
 type Client struct {
 	client *http.Client
 	token  string
-	f      generic.Factory
+	f      Factory
 	addr   string
 }
 
-func NewClient(f generic.Factory, c *http.Client, addr string, token string) (Client) {
+func NewClient(f Factory, c *http.Client, addr string, token string) Client {
 	return Client{
 		client: c,
 		addr:   addr,
@@ -23,7 +22,7 @@ func NewClient(f generic.Factory, c *http.Client, addr string, token string) (Cl
 	}
 }
 
-func (c Client) Send(gReq generic.Generic) (gRsp generic.Generic, err error) {
+func (c Client) Send(gReq Generic) (gRsp Generic, err error) {
 	b := new(bytes.Buffer)
 	err = json.NewEncoder(b).Encode(gReq.ToStringInterfaceMap())
 	if err != nil {
@@ -34,9 +33,9 @@ func (c Client) Send(gReq generic.Generic) (gRsp generic.Generic, err error) {
 	if err != nil {
 		return
 	}
-	httpReq.Header.Set(CONTENT_TYPE_HEADER, CONTENT_TYPE_JSON)
-	httpReq.Header.Set(METAMATE_TYPE_HEADER, gReq.Type().Name())
-	httpReq.Header.Set(AUTHORIZATION_HEADER, "Bearer "+c.token)
+	httpReq.Header.Set(ContentTypeHeader, ContentTypeJson)
+	httpReq.Header.Set(AsgTypeHeader, gReq.Type().Name())
+	httpReq.Header.Set(AuthorizationHeader, "Bearer "+c.token)
 
 	res, err := c.client.Do(httpReq)
 	if err != nil {
@@ -52,7 +51,7 @@ func (c Client) Send(gReq generic.Generic) (gRsp generic.Generic, err error) {
 	return c.f.FromStringInterfaceMap(gReq.Type().Edges.Type.Response(), m)
 }
 
-func Send(f generic.Factory, client *http.Client, addr string, token string, gReq generic.Generic) (gRsp generic.Generic, err error) {
+func Send(f Factory, client *http.Client, addr string, token string, gReq Generic) (gRsp Generic, err error) {
 	b := new(bytes.Buffer)
 	err = json.NewEncoder(b).Encode(gReq.ToStringInterfaceMap())
 	if err != nil {
@@ -63,9 +62,9 @@ func Send(f generic.Factory, client *http.Client, addr string, token string, gRe
 	if err != nil {
 		return
 	}
-	httpReq.Header.Set(CONTENT_TYPE_HEADER, CONTENT_TYPE_JSON)
-	httpReq.Header.Set(METAMATE_TYPE_HEADER, gReq.Type().Name())
-	httpReq.Header.Set(AUTHORIZATION_HEADER, "Bearer "+token)
+	httpReq.Header.Set(ContentTypeHeader, ContentTypeJson)
+	httpReq.Header.Set(AsgTypeHeader, gReq.Type().Name())
+	httpReq.Header.Set(AuthorizationHeader, "Bearer "+token)
 
 	res, err := client.Do(httpReq)
 	if err != nil {
