@@ -7,18 +7,12 @@ import (
 )
 
 const (
-	TaskClientInterface  = "TaskClientInterface"
 	TaskServiceInterface = "TaskServiceInterface"
 	TaskTypes            = "TaskTypes"
 	TaskEnums            = "TaskEnums"
 )
 
 func init() {
-	tasks[TaskClientInterface] = types.RenderTask{
-		TemplateData: &goClientInterfaceTpl,
-		Out:          ptr.String("client_.go"),
-	}
-
 	tasks[TaskServiceInterface] = types.RenderTask{
 		Name:         ptr.String(TaskServiceInterface),
 		TemplateData: &goServiceInterfaceTpl,
@@ -37,18 +31,6 @@ func init() {
 		Iterate:      ptr.String(graph.ENUM),
 	}
 }
-
-var goClientInterfaceTpl = `package mql
-
-import (
-    "context"
-)
-
-type Client interface {
-{{- range $i, $endpoint := .Endpoints.Slice.Sort }}
-	{{ $endpoint.Name }}(context.Context, {{ $endpoint.Edges.Type.Request.Name }}) (*{{ $endpoint.Edges.Type.Response.Name }}, error)
-{{- end }}
-}`
 
 var goServiceInterfaceTpl = `package mql
 

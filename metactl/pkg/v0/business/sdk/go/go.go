@@ -98,7 +98,6 @@ func GetSdks() []types.SdkGenerator {
 	}
 
 	taskSets[TaskSetClient] = []types.RenderTask{
-		tasks[TaskClientInterface],
 		tasks[TaskTypedClient],
 	}
 

@@ -35,19 +35,20 @@ import (
 
 type Client struct {
 	opts ClientOpts
+	addr string
 }
 
 type ClientOpts struct {
-	HttpClient	*http.Client
-	Addr	string
+	HttpClient *http.Client
+	Host       string
 }
 
-func NewClient(opts ClientOpts) (Client) {
+func NewClient(opts ClientOpts) Client {
 	if opts.HttpClient == nil {
 		opts.HttpClient = &http.Client{}
 	}
-	
-	return Client{opts: opts}
+
+	return Client{opts: opts, addr: opts.Host + "/httpjson"}
 }
 
 func (c Client) send(req interface{}, rsp interface{}) (err error) {
@@ -57,7 +58,7 @@ func (c Client) send(req interface{}, rsp interface{}) (err error) {
 		return
 	}
 
-	httpReq, err := http.NewRequest(http.MethodPost, c.opts.Addr, b)
+	httpReq, err := http.NewRequest(http.MethodPost, c.addr, b)
 	if err != nil {
 		return
 	}
