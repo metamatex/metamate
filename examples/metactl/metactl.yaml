@@ -12,14 +12,14 @@ v0:
     - name: go-service
       args:
         name: socialservice
-        package: github.com/somebody/socialservice
+        package: github.com/foo/bar
       endpoints:
       - GetPostFeeds
       - GetSocialAccounts
       - GetPosts
     - name: go-client
       args:
-        package: github.com/somebody/socialclient
+        package: github.com/foo/bar
       endpoints:
       - GetPostFeeds
       - GetSocialAccounts
