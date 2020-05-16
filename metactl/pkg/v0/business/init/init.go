@@ -35,14 +35,14 @@ var initialConfig = types.ProjectConfig{
 					Name: _go.SdkService,
 					Args: map[string]interface{}{
 						"name":    "socialservice",
-						"package": "github.com/somebody/socialservice",
+						"package": "github.com/foo/bar",
 					},
 					Endpoints: []string{"GetPostFeeds", "GetSocialAccounts", "GetPosts"},
 				},
 				{
 					Name: _go.SdkClient,
 					Args: map[string]interface{}{
-						"package": "github.com/somebody/socialclient",
+						"package": "github.com/foo/bar",
 					},
 					Endpoints: []string{"GetPostFeeds", "GetSocialAccounts", "GetPosts"},
 				},
