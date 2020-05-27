@@ -12,6 +12,10 @@ This monorepo hosts
 - `metactl` MetaMate's cli
 - `metamate` semantic service bus
 
+## Showcase
+
+Please see [showcase.metamate.io](https://showcase.metamate.io) for examples applications built with MetaMate
+
 ## Installation
 
 #### metamate
