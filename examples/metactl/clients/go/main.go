@@ -27,5 +27,5 @@ func main() {
 		panic(err)
 	}
 
-	println(rsp.Posts)
+	mql.Print(rsp.Posts)
 }
