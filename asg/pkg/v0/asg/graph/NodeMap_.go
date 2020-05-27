@@ -2,11 +2,10 @@
 package graph
 
 import (
-	"fmt"
 	"errors"
+	"fmt"
 	"strings"
 )
-
 
 type BasicTypeNodeMap map[NodeId]*BasicTypeNode
 
@@ -20,16 +19,30 @@ func (nm BasicTypeNodeMap) ToNodeMap() (nm0 NodeMap) {
 	return
 }
 
-func (nm BasicTypeNodeMap) Copy() (nm0 BasicTypeNodeMap) {
-	nm0 = BasicTypeNodeMap{}
-	for k,v := range nm {
-		nm0[k] = v
+func (nm BasicTypeNodeMap) UniqueNames() (ns []string) {
+	nsm := map[string]bool{}
+
+	for _, v := range nm {
+		nsm[v.Name()] = true
 	}
-	
-	return 
+
+	for k, _ := range nsm {
+		ns = append(ns, k)
+	}
+
+	return
 }
 
-func (nm BasicTypeNodeMap) Filter(s Filter) (BasicTypeNodeMap) {
+func (nm BasicTypeNodeMap) Copy() (nm0 BasicTypeNodeMap) {
+	nm0 = BasicTypeNodeMap{}
+	for k, v := range nm {
+		nm0[k] = v
+	}
+
+	return
+}
+
+func (nm BasicTypeNodeMap) Filter(s Filter) BasicTypeNodeMap {
 	if s.Flags != nil {
 		nm = nm.FilterByFlags(*s.Flags)
 	}
@@ -54,7 +67,7 @@ func (nm BasicTypeNodeMap) Add(ns ...*BasicTypeNode) {
 
 func (nm BasicTypeNodeMap) AddBasicTypeNodeMap(nm0 BasicTypeNodeMap) (nm1 BasicTypeNodeMap) {
 	nm1 = BasicTypeNodeMap{}
-	
+
 	for _, n := range nm {
 		nm1.Add(n)
 	}
@@ -62,11 +75,11 @@ func (nm BasicTypeNodeMap) AddBasicTypeNodeMap(nm0 BasicTypeNodeMap) (nm1 BasicT
 	for _, n := range nm0 {
 		nm1.Add(n)
 	}
-	
-	return 
+
+	return
 }
 
-func (nm BasicTypeNodeMap) ExcludeIds(ids ...NodeId) (BasicTypeNodeMap) {
+func (nm BasicTypeNodeMap) ExcludeIds(ids ...NodeId) BasicTypeNodeMap {
 	not := map[NodeId]bool{}
 
 	for _, id := range ids {
@@ -80,7 +93,7 @@ func (nm BasicTypeNodeMap) ExcludeIds(ids ...NodeId) (BasicTypeNodeMap) {
 	})
 }
 
-func (nm BasicTypeNodeMap) ExcludeNames(names ...string) (BasicTypeNodeMap) {
+func (nm BasicTypeNodeMap) ExcludeNames(names ...string) BasicTypeNodeMap {
 	ids := []NodeId{}
 	for _, name := range names {
 		ids = append(ids, ToNodeId(name))
@@ -99,12 +112,12 @@ func (nm BasicTypeNodeMap) ByIds(ids ...NodeId) (filtered BasicTypeNodeMap) {
 	return
 }
 
-func (nm BasicTypeNodeMap) ByNames(names ...string) (BasicTypeNodeMap) {
+func (nm BasicTypeNodeMap) ByNames(names ...string) BasicTypeNodeMap {
 	ids := []NodeId{}
 	for _, name := range names {
 		ids = append(ids, ToNodeId(name))
 	}
-	
+
 	return nm.ByIds(ids...)
 }
 
@@ -127,20 +140,32 @@ func (nm BasicTypeNodeMap) MustById(id NodeId) (n *BasicTypeNode) {
 }
 
 func (nm BasicTypeNodeMap) ByName(name string) (*BasicTypeNode, error) {
-	return nm.ById(ToNodeId(name))
+	name = strings.ToLower(name)
+	for _, fn := range nm {
+		if strings.ToLower(fn.Name()) == name {
+			return fn, nil
+		}
+	}
+
+	return nil, errors.New(fmt.Sprintf("BasicType node name %v not found", name))
 }
 
-func (nm BasicTypeNodeMap) MustByName(name string) (*BasicTypeNode) {
-	return nm.MustById(ToNodeId(name))
+func (nm BasicTypeNodeMap) MustByName(name string) (n *BasicTypeNode) {
+	n, err := nm.ByName(name)
+	if err != nil {
+		panic(err)
+	}
+
+	return
 }
 
-func (nm BasicTypeNodeMap) Each(f func(n *BasicTypeNode)) () {
+func (nm BasicTypeNodeMap) Each(f func(n *BasicTypeNode)) {
 	for _, n := range nm {
 		f(n)
 	}
 }
 
-func (nm BasicTypeNodeMap) FilterFunc(f func(n *BasicTypeNode)(bool)) (nm0 BasicTypeNodeMap) {
+func (nm BasicTypeNodeMap) FilterFunc(f func(n *BasicTypeNode) bool) (nm0 BasicTypeNodeMap) {
 	nm0 = BasicTypeNodeMap{}
 
 	for _, n := range nm {
@@ -152,17 +177,17 @@ func (nm BasicTypeNodeMap) FilterFunc(f func(n *BasicTypeNode)(bool)) (nm0 Basic
 	return
 }
 
-func (nm BasicTypeNodeMap) HasId(id NodeId) (bool) {
+func (nm BasicTypeNodeMap) HasId(id NodeId) bool {
 	_, ok := nm[id]
 
 	return ok
 }
 
-func (nm BasicTypeNodeMap) HasName(name string) (bool) {
+func (nm BasicTypeNodeMap) HasName(name string) bool {
 	return nm.HasId(ToNodeId(name))
 }
 
-func (nm BasicTypeNodeMap) BroadcastSetFlag(name string, v bool) () {
+func (nm BasicTypeNodeMap) BroadcastSetFlag(name string, v bool) {
 	for _, n := range nm {
 		n.Flags().Set(name, v)
 	}
@@ -190,7 +215,7 @@ func (nm BasicTypeNodeMap) Flagged(flag string, b bool) (nm0 BasicTypeNodeMap) {
 	return
 }
 
-func (nm BasicTypeNodeMap) FilterByFlags(subset FlagsSubset) (BasicTypeNodeMap) {
+func (nm BasicTypeNodeMap) FilterByFlags(subset FlagsSubset) BasicTypeNodeMap {
 	if len(subset.Or) != 0 {
 		var tfs []string
 		for _, f := range subset.Or {
@@ -217,7 +242,7 @@ func (nm BasicTypeNodeMap) FilterByFlags(subset FlagsSubset) (BasicTypeNodeMap) 
 	return nm
 }
 
-func (nm BasicTypeNodeMap) FilterByNames(subset NamesSubset) (BasicTypeNodeMap) {
+func (nm BasicTypeNodeMap) FilterByNames(subset NamesSubset) BasicTypeNodeMap {
 	if len(subset.Or) != 0 {
 		nm = nm.ByNames(subset.Or...)
 	}
@@ -257,7 +282,7 @@ func (nm BasicTypeNodeMap) FlaggedOr(fs ...string) (nm0 BasicTypeNodeMap) {
 	return
 }
 
-func (nm BasicTypeNodeMap) BroadcastPrint() () {
+func (nm BasicTypeNodeMap) BroadcastPrint() {
 	for _, n := range nm {
 		n.Print()
 		println("- - - - - - - - - -")
@@ -286,16 +311,30 @@ func (nm EndpointNodeMap) ToNodeMap() (nm0 NodeMap) {
 	return
 }
 
-func (nm EndpointNodeMap) Copy() (nm0 EndpointNodeMap) {
-	nm0 = EndpointNodeMap{}
-	for k,v := range nm {
-		nm0[k] = v
+func (nm EndpointNodeMap) UniqueNames() (ns []string) {
+	nsm := map[string]bool{}
+
+	for _, v := range nm {
+		nsm[v.Name()] = true
 	}
-	
-	return 
+
+	for k, _ := range nsm {
+		ns = append(ns, k)
+	}
+
+	return
 }
 
-func (nm EndpointNodeMap) Filter(s Filter) (EndpointNodeMap) {
+func (nm EndpointNodeMap) Copy() (nm0 EndpointNodeMap) {
+	nm0 = EndpointNodeMap{}
+	for k, v := range nm {
+		nm0[k] = v
+	}
+
+	return
+}
+
+func (nm EndpointNodeMap) Filter(s Filter) EndpointNodeMap {
 	if s.Flags != nil {
 		nm = nm.FilterByFlags(*s.Flags)
 	}
@@ -320,7 +359,7 @@ func (nm EndpointNodeMap) Add(ns ...*EndpointNode) {
 
 func (nm EndpointNodeMap) AddEndpointNodeMap(nm0 EndpointNodeMap) (nm1 EndpointNodeMap) {
 	nm1 = EndpointNodeMap{}
-	
+
 	for _, n := range nm {
 		nm1.Add(n)
 	}
@@ -328,11 +367,11 @@ func (nm EndpointNodeMap) AddEndpointNodeMap(nm0 EndpointNodeMap) (nm1 EndpointN
 	for _, n := range nm0 {
 		nm1.Add(n)
 	}
-	
-	return 
+
+	return
 }
 
-func (nm EndpointNodeMap) ExcludeIds(ids ...NodeId) (EndpointNodeMap) {
+func (nm EndpointNodeMap) ExcludeIds(ids ...NodeId) EndpointNodeMap {
 	not := map[NodeId]bool{}
 
 	for _, id := range ids {
@@ -346,7 +385,7 @@ func (nm EndpointNodeMap) ExcludeIds(ids ...NodeId) (EndpointNodeMap) {
 	})
 }
 
-func (nm EndpointNodeMap) ExcludeNames(names ...string) (EndpointNodeMap) {
+func (nm EndpointNodeMap) ExcludeNames(names ...string) EndpointNodeMap {
 	ids := []NodeId{}
 	for _, name := range names {
 		ids = append(ids, ToNodeId(name))
@@ -365,12 +404,12 @@ func (nm EndpointNodeMap) ByIds(ids ...NodeId) (filtered EndpointNodeMap) {
 	return
 }
 
-func (nm EndpointNodeMap) ByNames(names ...string) (EndpointNodeMap) {
+func (nm EndpointNodeMap) ByNames(names ...string) EndpointNodeMap {
 	ids := []NodeId{}
 	for _, name := range names {
 		ids = append(ids, ToNodeId(name))
 	}
-	
+
 	return nm.ByIds(ids...)
 }
 
@@ -393,20 +432,32 @@ func (nm EndpointNodeMap) MustById(id NodeId) (n *EndpointNode) {
 }
 
 func (nm EndpointNodeMap) ByName(name string) (*EndpointNode, error) {
-	return nm.ById(ToNodeId(name))
+	name = strings.ToLower(name)
+	for _, fn := range nm {
+		if strings.ToLower(fn.Name()) == name {
+			return fn, nil
+		}
+	}
+
+	return nil, errors.New(fmt.Sprintf("Endpoint node name %v not found", name))
 }
 
-func (nm EndpointNodeMap) MustByName(name string) (*EndpointNode) {
-	return nm.MustById(ToNodeId(name))
+func (nm EndpointNodeMap) MustByName(name string) (n *EndpointNode) {
+	n, err := nm.ByName(name)
+	if err != nil {
+		panic(err)
+	}
+
+	return
 }
 
-func (nm EndpointNodeMap) Each(f func(n *EndpointNode)) () {
+func (nm EndpointNodeMap) Each(f func(n *EndpointNode)) {
 	for _, n := range nm {
 		f(n)
 	}
 }
 
-func (nm EndpointNodeMap) FilterFunc(f func(n *EndpointNode)(bool)) (nm0 EndpointNodeMap) {
+func (nm EndpointNodeMap) FilterFunc(f func(n *EndpointNode) bool) (nm0 EndpointNodeMap) {
 	nm0 = EndpointNodeMap{}
 
 	for _, n := range nm {
@@ -418,17 +469,17 @@ func (nm EndpointNodeMap) FilterFunc(f func(n *EndpointNode)(bool)) (nm0 Endpoin
 	return
 }
 
-func (nm EndpointNodeMap) HasId(id NodeId) (bool) {
+func (nm EndpointNodeMap) HasId(id NodeId) bool {
 	_, ok := nm[id]
 
 	return ok
 }
 
-func (nm EndpointNodeMap) HasName(name string) (bool) {
+func (nm EndpointNodeMap) HasName(name string) bool {
 	return nm.HasId(ToNodeId(name))
 }
 
-func (nm EndpointNodeMap) BroadcastSetFlag(name string, v bool) () {
+func (nm EndpointNodeMap) BroadcastSetFlag(name string, v bool) {
 	for _, n := range nm {
 		n.Flags().Set(name, v)
 	}
@@ -456,7 +507,7 @@ func (nm EndpointNodeMap) Flagged(flag string, b bool) (nm0 EndpointNodeMap) {
 	return
 }
 
-func (nm EndpointNodeMap) FilterByFlags(subset FlagsSubset) (EndpointNodeMap) {
+func (nm EndpointNodeMap) FilterByFlags(subset FlagsSubset) EndpointNodeMap {
 	if len(subset.Or) != 0 {
 		var tfs []string
 		for _, f := range subset.Or {
@@ -483,7 +534,7 @@ func (nm EndpointNodeMap) FilterByFlags(subset FlagsSubset) (EndpointNodeMap) {
 	return nm
 }
 
-func (nm EndpointNodeMap) FilterByNames(subset NamesSubset) (EndpointNodeMap) {
+func (nm EndpointNodeMap) FilterByNames(subset NamesSubset) EndpointNodeMap {
 	if len(subset.Or) != 0 {
 		nm = nm.ByNames(subset.Or...)
 	}
@@ -523,7 +574,7 @@ func (nm EndpointNodeMap) FlaggedOr(fs ...string) (nm0 EndpointNodeMap) {
 	return
 }
 
-func (nm EndpointNodeMap) BroadcastPrint() () {
+func (nm EndpointNodeMap) BroadcastPrint() {
 	for _, n := range nm {
 		n.Print()
 		println("- - - - - - - - - -")
@@ -552,16 +603,30 @@ func (nm EnumNodeMap) ToNodeMap() (nm0 NodeMap) {
 	return
 }
 
-func (nm EnumNodeMap) Copy() (nm0 EnumNodeMap) {
-	nm0 = EnumNodeMap{}
-	for k,v := range nm {
-		nm0[k] = v
+func (nm EnumNodeMap) UniqueNames() (ns []string) {
+	nsm := map[string]bool{}
+
+	for _, v := range nm {
+		nsm[v.Name()] = true
 	}
-	
-	return 
+
+	for k, _ := range nsm {
+		ns = append(ns, k)
+	}
+
+	return
 }
 
-func (nm EnumNodeMap) Filter(s Filter) (EnumNodeMap) {
+func (nm EnumNodeMap) Copy() (nm0 EnumNodeMap) {
+	nm0 = EnumNodeMap{}
+	for k, v := range nm {
+		nm0[k] = v
+	}
+
+	return
+}
+
+func (nm EnumNodeMap) Filter(s Filter) EnumNodeMap {
 	if s.Flags != nil {
 		nm = nm.FilterByFlags(*s.Flags)
 	}
@@ -586,7 +651,7 @@ func (nm EnumNodeMap) Add(ns ...*EnumNode) {
 
 func (nm EnumNodeMap) AddEnumNodeMap(nm0 EnumNodeMap) (nm1 EnumNodeMap) {
 	nm1 = EnumNodeMap{}
-	
+
 	for _, n := range nm {
 		nm1.Add(n)
 	}
@@ -594,11 +659,11 @@ func (nm EnumNodeMap) AddEnumNodeMap(nm0 EnumNodeMap) (nm1 EnumNodeMap) {
 	for _, n := range nm0 {
 		nm1.Add(n)
 	}
-	
-	return 
+
+	return
 }
 
-func (nm EnumNodeMap) ExcludeIds(ids ...NodeId) (EnumNodeMap) {
+func (nm EnumNodeMap) ExcludeIds(ids ...NodeId) EnumNodeMap {
 	not := map[NodeId]bool{}
 
 	for _, id := range ids {
@@ -612,7 +677,7 @@ func (nm EnumNodeMap) ExcludeIds(ids ...NodeId) (EnumNodeMap) {
 	})
 }
 
-func (nm EnumNodeMap) ExcludeNames(names ...string) (EnumNodeMap) {
+func (nm EnumNodeMap) ExcludeNames(names ...string) EnumNodeMap {
 	ids := []NodeId{}
 	for _, name := range names {
 		ids = append(ids, ToNodeId(name))
@@ -631,12 +696,12 @@ func (nm EnumNodeMap) ByIds(ids ...NodeId) (filtered EnumNodeMap) {
 	return
 }
 
-func (nm EnumNodeMap) ByNames(names ...string) (EnumNodeMap) {
+func (nm EnumNodeMap) ByNames(names ...string) EnumNodeMap {
 	ids := []NodeId{}
 	for _, name := range names {
 		ids = append(ids, ToNodeId(name))
 	}
-	
+
 	return nm.ByIds(ids...)
 }
 
@@ -659,20 +724,32 @@ func (nm EnumNodeMap) MustById(id NodeId) (n *EnumNode) {
 }
 
 func (nm EnumNodeMap) ByName(name string) (*EnumNode, error) {
-	return nm.ById(ToNodeId(name))
+	name = strings.ToLower(name)
+	for _, fn := range nm {
+		if strings.ToLower(fn.Name()) == name {
+			return fn, nil
+		}
+	}
+
+	return nil, errors.New(fmt.Sprintf("Enum node name %v not found", name))
 }
 
-func (nm EnumNodeMap) MustByName(name string) (*EnumNode) {
-	return nm.MustById(ToNodeId(name))
+func (nm EnumNodeMap) MustByName(name string) (n *EnumNode) {
+	n, err := nm.ByName(name)
+	if err != nil {
+		panic(err)
+	}
+
+	return
 }
 
-func (nm EnumNodeMap) Each(f func(n *EnumNode)) () {
+func (nm EnumNodeMap) Each(f func(n *EnumNode)) {
 	for _, n := range nm {
 		f(n)
 	}
 }
 
-func (nm EnumNodeMap) FilterFunc(f func(n *EnumNode)(bool)) (nm0 EnumNodeMap) {
+func (nm EnumNodeMap) FilterFunc(f func(n *EnumNode) bool) (nm0 EnumNodeMap) {
 	nm0 = EnumNodeMap{}
 
 	for _, n := range nm {
@@ -684,17 +761,17 @@ func (nm EnumNodeMap) FilterFunc(f func(n *EnumNode)(bool)) (nm0 EnumNodeMap) {
 	return
 }
 
-func (nm EnumNodeMap) HasId(id NodeId) (bool) {
+func (nm EnumNodeMap) HasId(id NodeId) bool {
 	_, ok := nm[id]
 
 	return ok
 }
 
-func (nm EnumNodeMap) HasName(name string) (bool) {
+func (nm EnumNodeMap) HasName(name string) bool {
 	return nm.HasId(ToNodeId(name))
 }
 
-func (nm EnumNodeMap) BroadcastSetFlag(name string, v bool) () {
+func (nm EnumNodeMap) BroadcastSetFlag(name string, v bool) {
 	for _, n := range nm {
 		n.Flags().Set(name, v)
 	}
@@ -722,7 +799,7 @@ func (nm EnumNodeMap) Flagged(flag string, b bool) (nm0 EnumNodeMap) {
 	return
 }
 
-func (nm EnumNodeMap) FilterByFlags(subset FlagsSubset) (EnumNodeMap) {
+func (nm EnumNodeMap) FilterByFlags(subset FlagsSubset) EnumNodeMap {
 	if len(subset.Or) != 0 {
 		var tfs []string
 		for _, f := range subset.Or {
@@ -749,7 +826,7 @@ func (nm EnumNodeMap) FilterByFlags(subset FlagsSubset) (EnumNodeMap) {
 	return nm
 }
 
-func (nm EnumNodeMap) FilterByNames(subset NamesSubset) (EnumNodeMap) {
+func (nm EnumNodeMap) FilterByNames(subset NamesSubset) EnumNodeMap {
 	if len(subset.Or) != 0 {
 		nm = nm.ByNames(subset.Or...)
 	}
@@ -789,7 +866,7 @@ func (nm EnumNodeMap) FlaggedOr(fs ...string) (nm0 EnumNodeMap) {
 	return
 }
 
-func (nm EnumNodeMap) BroadcastPrint() () {
+func (nm EnumNodeMap) BroadcastPrint() {
 	for _, n := range nm {
 		n.Print()
 		println("- - - - - - - - - -")
@@ -818,16 +895,30 @@ func (nm FieldNodeMap) ToNodeMap() (nm0 NodeMap) {
 	return
 }
 
-func (nm FieldNodeMap) Copy() (nm0 FieldNodeMap) {
-	nm0 = FieldNodeMap{}
-	for k,v := range nm {
-		nm0[k] = v
+func (nm FieldNodeMap) UniqueNames() (ns []string) {
+	nsm := map[string]bool{}
+
+	for _, v := range nm {
+		nsm[v.Name()] = true
 	}
-	
-	return 
+
+	for k, _ := range nsm {
+		ns = append(ns, k)
+	}
+
+	return
 }
 
-func (nm FieldNodeMap) Filter(s Filter) (FieldNodeMap) {
+func (nm FieldNodeMap) Copy() (nm0 FieldNodeMap) {
+	nm0 = FieldNodeMap{}
+	for k, v := range nm {
+		nm0[k] = v
+	}
+
+	return
+}
+
+func (nm FieldNodeMap) Filter(s Filter) FieldNodeMap {
 	if s.Flags != nil {
 		nm = nm.FilterByFlags(*s.Flags)
 	}
@@ -852,7 +943,7 @@ func (nm FieldNodeMap) Add(ns ...*FieldNode) {
 
 func (nm FieldNodeMap) AddFieldNodeMap(nm0 FieldNodeMap) (nm1 FieldNodeMap) {
 	nm1 = FieldNodeMap{}
-	
+
 	for _, n := range nm {
 		nm1.Add(n)
 	}
@@ -860,11 +951,11 @@ func (nm FieldNodeMap) AddFieldNodeMap(nm0 FieldNodeMap) (nm1 FieldNodeMap) {
 	for _, n := range nm0 {
 		nm1.Add(n)
 	}
-	
-	return 
+
+	return
 }
 
-func (nm FieldNodeMap) ExcludeIds(ids ...NodeId) (FieldNodeMap) {
+func (nm FieldNodeMap) ExcludeIds(ids ...NodeId) FieldNodeMap {
 	not := map[NodeId]bool{}
 
 	for _, id := range ids {
@@ -878,7 +969,7 @@ func (nm FieldNodeMap) ExcludeIds(ids ...NodeId) (FieldNodeMap) {
 	})
 }
 
-func (nm FieldNodeMap) ExcludeNames(names ...string) (FieldNodeMap) {
+func (nm FieldNodeMap) ExcludeNames(names ...string) FieldNodeMap {
 	ids := []NodeId{}
 	for _, name := range names {
 		ids = append(ids, ToNodeId(name))
@@ -897,12 +988,12 @@ func (nm FieldNodeMap) ByIds(ids ...NodeId) (filtered FieldNodeMap) {
 	return
 }
 
-func (nm FieldNodeMap) ByNames(names ...string) (FieldNodeMap) {
+func (nm FieldNodeMap) ByNames(names ...string) FieldNodeMap {
 	ids := []NodeId{}
 	for _, name := range names {
 		ids = append(ids, ToNodeId(name))
 	}
-	
+
 	return nm.ByIds(ids...)
 }
 
@@ -925,20 +1016,32 @@ func (nm FieldNodeMap) MustById(id NodeId) (n *FieldNode) {
 }
 
 func (nm FieldNodeMap) ByName(name string) (*FieldNode, error) {
-	return nm.ById(ToNodeId(name))
+	name = strings.ToLower(name)
+	for _, fn := range nm {
+		if strings.ToLower(fn.Name()) == name {
+			return fn, nil
+		}
+	}
+
+	return nil, errors.New(fmt.Sprintf("Field node name %v not found", name))
 }
 
-func (nm FieldNodeMap) MustByName(name string) (*FieldNode) {
-	return nm.MustById(ToNodeId(name))
+func (nm FieldNodeMap) MustByName(name string) (n *FieldNode) {
+	n, err := nm.ByName(name)
+	if err != nil {
+		panic(err)
+	}
+
+	return
 }
 
-func (nm FieldNodeMap) Each(f func(n *FieldNode)) () {
+func (nm FieldNodeMap) Each(f func(n *FieldNode)) {
 	for _, n := range nm {
 		f(n)
 	}
 }
 
-func (nm FieldNodeMap) FilterFunc(f func(n *FieldNode)(bool)) (nm0 FieldNodeMap) {
+func (nm FieldNodeMap) FilterFunc(f func(n *FieldNode) bool) (nm0 FieldNodeMap) {
 	nm0 = FieldNodeMap{}
 
 	for _, n := range nm {
@@ -950,17 +1053,17 @@ func (nm FieldNodeMap) FilterFunc(f func(n *FieldNode)(bool)) (nm0 FieldNodeMap)
 	return
 }
 
-func (nm FieldNodeMap) HasId(id NodeId) (bool) {
+func (nm FieldNodeMap) HasId(id NodeId) bool {
 	_, ok := nm[id]
 
 	return ok
 }
 
-func (nm FieldNodeMap) HasName(name string) (bool) {
+func (nm FieldNodeMap) HasName(name string) bool {
 	return nm.HasId(ToNodeId(name))
 }
 
-func (nm FieldNodeMap) BroadcastSetFlag(name string, v bool) () {
+func (nm FieldNodeMap) BroadcastSetFlag(name string, v bool) {
 	for _, n := range nm {
 		n.Flags().Set(name, v)
 	}
@@ -988,7 +1091,7 @@ func (nm FieldNodeMap) Flagged(flag string, b bool) (nm0 FieldNodeMap) {
 	return
 }
 
-func (nm FieldNodeMap) FilterByFlags(subset FlagsSubset) (FieldNodeMap) {
+func (nm FieldNodeMap) FilterByFlags(subset FlagsSubset) FieldNodeMap {
 	if len(subset.Or) != 0 {
 		var tfs []string
 		for _, f := range subset.Or {
@@ -1015,7 +1118,7 @@ func (nm FieldNodeMap) FilterByFlags(subset FlagsSubset) (FieldNodeMap) {
 	return nm
 }
 
-func (nm FieldNodeMap) FilterByNames(subset NamesSubset) (FieldNodeMap) {
+func (nm FieldNodeMap) FilterByNames(subset NamesSubset) FieldNodeMap {
 	if len(subset.Or) != 0 {
 		nm = nm.ByNames(subset.Or...)
 	}
@@ -1055,7 +1158,7 @@ func (nm FieldNodeMap) FlaggedOr(fs ...string) (nm0 FieldNodeMap) {
 	return
 }
 
-func (nm FieldNodeMap) BroadcastPrint() () {
+func (nm FieldNodeMap) BroadcastPrint() {
 	for _, n := range nm {
 		n.Print()
 		println("- - - - - - - - - -")
@@ -1084,16 +1187,30 @@ func (nm RelationNodeMap) ToNodeMap() (nm0 NodeMap) {
 	return
 }
 
-func (nm RelationNodeMap) Copy() (nm0 RelationNodeMap) {
-	nm0 = RelationNodeMap{}
-	for k,v := range nm {
-		nm0[k] = v
+func (nm RelationNodeMap) UniqueNames() (ns []string) {
+	nsm := map[string]bool{}
+
+	for _, v := range nm {
+		nsm[v.Name()] = true
 	}
-	
-	return 
+
+	for k, _ := range nsm {
+		ns = append(ns, k)
+	}
+
+	return
 }
 
-func (nm RelationNodeMap) Filter(s Filter) (RelationNodeMap) {
+func (nm RelationNodeMap) Copy() (nm0 RelationNodeMap) {
+	nm0 = RelationNodeMap{}
+	for k, v := range nm {
+		nm0[k] = v
+	}
+
+	return
+}
+
+func (nm RelationNodeMap) Filter(s Filter) RelationNodeMap {
 	if s.Flags != nil {
 		nm = nm.FilterByFlags(*s.Flags)
 	}
@@ -1118,7 +1235,7 @@ func (nm RelationNodeMap) Add(ns ...*RelationNode) {
 
 func (nm RelationNodeMap) AddRelationNodeMap(nm0 RelationNodeMap) (nm1 RelationNodeMap) {
 	nm1 = RelationNodeMap{}
-	
+
 	for _, n := range nm {
 		nm1.Add(n)
 	}
@@ -1126,11 +1243,11 @@ func (nm RelationNodeMap) AddRelationNodeMap(nm0 RelationNodeMap) (nm1 RelationN
 	for _, n := range nm0 {
 		nm1.Add(n)
 	}
-	
-	return 
+
+	return
 }
 
-func (nm RelationNodeMap) ExcludeIds(ids ...NodeId) (RelationNodeMap) {
+func (nm RelationNodeMap) ExcludeIds(ids ...NodeId) RelationNodeMap {
 	not := map[NodeId]bool{}
 
 	for _, id := range ids {
@@ -1144,7 +1261,7 @@ func (nm RelationNodeMap) ExcludeIds(ids ...NodeId) (RelationNodeMap) {
 	})
 }
 
-func (nm RelationNodeMap) ExcludeNames(names ...string) (RelationNodeMap) {
+func (nm RelationNodeMap) ExcludeNames(names ...string) RelationNodeMap {
 	ids := []NodeId{}
 	for _, name := range names {
 		ids = append(ids, ToNodeId(name))
@@ -1163,12 +1280,12 @@ func (nm RelationNodeMap) ByIds(ids ...NodeId) (filtered RelationNodeMap) {
 	return
 }
 
-func (nm RelationNodeMap) ByNames(names ...string) (RelationNodeMap) {
+func (nm RelationNodeMap) ByNames(names ...string) RelationNodeMap {
 	ids := []NodeId{}
 	for _, name := range names {
 		ids = append(ids, ToNodeId(name))
 	}
-	
+
 	return nm.ByIds(ids...)
 }
 
@@ -1191,20 +1308,32 @@ func (nm RelationNodeMap) MustById(id NodeId) (n *RelationNode) {
 }
 
 func (nm RelationNodeMap) ByName(name string) (*RelationNode, error) {
-	return nm.ById(ToNodeId(name))
+	name = strings.ToLower(name)
+	for _, fn := range nm {
+		if strings.ToLower(fn.Name()) == name {
+			return fn, nil
+		}
+	}
+
+	return nil, errors.New(fmt.Sprintf("Relation node name %v not found", name))
 }
 
-func (nm RelationNodeMap) MustByName(name string) (*RelationNode) {
-	return nm.MustById(ToNodeId(name))
+func (nm RelationNodeMap) MustByName(name string) (n *RelationNode) {
+	n, err := nm.ByName(name)
+	if err != nil {
+		panic(err)
+	}
+
+	return
 }
 
-func (nm RelationNodeMap) Each(f func(n *RelationNode)) () {
+func (nm RelationNodeMap) Each(f func(n *RelationNode)) {
 	for _, n := range nm {
 		f(n)
 	}
 }
 
-func (nm RelationNodeMap) FilterFunc(f func(n *RelationNode)(bool)) (nm0 RelationNodeMap) {
+func (nm RelationNodeMap) FilterFunc(f func(n *RelationNode) bool) (nm0 RelationNodeMap) {
 	nm0 = RelationNodeMap{}
 
 	for _, n := range nm {
@@ -1216,17 +1345,17 @@ func (nm RelationNodeMap) FilterFunc(f func(n *RelationNode)(bool)) (nm0 Relatio
 	return
 }
 
-func (nm RelationNodeMap) HasId(id NodeId) (bool) {
+func (nm RelationNodeMap) HasId(id NodeId) bool {
 	_, ok := nm[id]
 
 	return ok
 }
 
-func (nm RelationNodeMap) HasName(name string) (bool) {
+func (nm RelationNodeMap) HasName(name string) bool {
 	return nm.HasId(ToNodeId(name))
 }
 
-func (nm RelationNodeMap) BroadcastSetFlag(name string, v bool) () {
+func (nm RelationNodeMap) BroadcastSetFlag(name string, v bool) {
 	for _, n := range nm {
 		n.Flags().Set(name, v)
 	}
@@ -1254,7 +1383,7 @@ func (nm RelationNodeMap) Flagged(flag string, b bool) (nm0 RelationNodeMap) {
 	return
 }
 
-func (nm RelationNodeMap) FilterByFlags(subset FlagsSubset) (RelationNodeMap) {
+func (nm RelationNodeMap) FilterByFlags(subset FlagsSubset) RelationNodeMap {
 	if len(subset.Or) != 0 {
 		var tfs []string
 		for _, f := range subset.Or {
@@ -1281,7 +1410,7 @@ func (nm RelationNodeMap) FilterByFlags(subset FlagsSubset) (RelationNodeMap) {
 	return nm
 }
 
-func (nm RelationNodeMap) FilterByNames(subset NamesSubset) (RelationNodeMap) {
+func (nm RelationNodeMap) FilterByNames(subset NamesSubset) RelationNodeMap {
 	if len(subset.Or) != 0 {
 		nm = nm.ByNames(subset.Or...)
 	}
@@ -1321,7 +1450,7 @@ func (nm RelationNodeMap) FlaggedOr(fs ...string) (nm0 RelationNodeMap) {
 	return
 }
 
-func (nm RelationNodeMap) BroadcastPrint() () {
+func (nm RelationNodeMap) BroadcastPrint() {
 	for _, n := range nm {
 		n.Print()
 		println("- - - - - - - - - -")
@@ -1350,16 +1479,30 @@ func (nm TypeNodeMap) ToNodeMap() (nm0 NodeMap) {
 	return
 }
 
-func (nm TypeNodeMap) Copy() (nm0 TypeNodeMap) {
-	nm0 = TypeNodeMap{}
-	for k,v := range nm {
-		nm0[k] = v
+func (nm TypeNodeMap) UniqueNames() (ns []string) {
+	nsm := map[string]bool{}
+
+	for _, v := range nm {
+		nsm[v.Name()] = true
 	}
-	
-	return 
+
+	for k, _ := range nsm {
+		ns = append(ns, k)
+	}
+
+	return
 }
 
-func (nm TypeNodeMap) Filter(s Filter) (TypeNodeMap) {
+func (nm TypeNodeMap) Copy() (nm0 TypeNodeMap) {
+	nm0 = TypeNodeMap{}
+	for k, v := range nm {
+		nm0[k] = v
+	}
+
+	return
+}
+
+func (nm TypeNodeMap) Filter(s Filter) TypeNodeMap {
 	if s.Flags != nil {
 		nm = nm.FilterByFlags(*s.Flags)
 	}
@@ -1384,7 +1527,7 @@ func (nm TypeNodeMap) Add(ns ...*TypeNode) {
 
 func (nm TypeNodeMap) AddTypeNodeMap(nm0 TypeNodeMap) (nm1 TypeNodeMap) {
 	nm1 = TypeNodeMap{}
-	
+
 	for _, n := range nm {
 		nm1.Add(n)
 	}
@@ -1392,11 +1535,11 @@ func (nm TypeNodeMap) AddTypeNodeMap(nm0 TypeNodeMap) (nm1 TypeNodeMap) {
 	for _, n := range nm0 {
 		nm1.Add(n)
 	}
-	
-	return 
+
+	return
 }
 
-func (nm TypeNodeMap) ExcludeIds(ids ...NodeId) (TypeNodeMap) {
+func (nm TypeNodeMap) ExcludeIds(ids ...NodeId) TypeNodeMap {
 	not := map[NodeId]bool{}
 
 	for _, id := range ids {
@@ -1410,7 +1553,7 @@ func (nm TypeNodeMap) ExcludeIds(ids ...NodeId) (TypeNodeMap) {
 	})
 }
 
-func (nm TypeNodeMap) ExcludeNames(names ...string) (TypeNodeMap) {
+func (nm TypeNodeMap) ExcludeNames(names ...string) TypeNodeMap {
 	ids := []NodeId{}
 	for _, name := range names {
 		ids = append(ids, ToNodeId(name))
@@ -1429,12 +1572,12 @@ func (nm TypeNodeMap) ByIds(ids ...NodeId) (filtered TypeNodeMap) {
 	return
 }
 
-func (nm TypeNodeMap) ByNames(names ...string) (TypeNodeMap) {
+func (nm TypeNodeMap) ByNames(names ...string) TypeNodeMap {
 	ids := []NodeId{}
 	for _, name := range names {
 		ids = append(ids, ToNodeId(name))
 	}
-	
+
 	return nm.ByIds(ids...)
 }
 
@@ -1457,20 +1600,32 @@ func (nm TypeNodeMap) MustById(id NodeId) (n *TypeNode) {
 }
 
 func (nm TypeNodeMap) ByName(name string) (*TypeNode, error) {
-	return nm.ById(ToNodeId(name))
+	name = strings.ToLower(name)
+	for _, fn := range nm {
+		if strings.ToLower(fn.Name()) == name {
+			return fn, nil
+		}
+	}
+
+	return nil, errors.New(fmt.Sprintf("Type node name %v not found", name))
 }
 
-func (nm TypeNodeMap) MustByName(name string) (*TypeNode) {
-	return nm.MustById(ToNodeId(name))
+func (nm TypeNodeMap) MustByName(name string) (n *TypeNode) {
+	n, err := nm.ByName(name)
+	if err != nil {
+		panic(err)
+	}
+
+	return
 }
 
-func (nm TypeNodeMap) Each(f func(n *TypeNode)) () {
+func (nm TypeNodeMap) Each(f func(n *TypeNode)) {
 	for _, n := range nm {
 		f(n)
 	}
 }
 
-func (nm TypeNodeMap) FilterFunc(f func(n *TypeNode)(bool)) (nm0 TypeNodeMap) {
+func (nm TypeNodeMap) FilterFunc(f func(n *TypeNode) bool) (nm0 TypeNodeMap) {
 	nm0 = TypeNodeMap{}
 
 	for _, n := range nm {
@@ -1482,17 +1637,17 @@ func (nm TypeNodeMap) FilterFunc(f func(n *TypeNode)(bool)) (nm0 TypeNodeMap) {
 	return
 }
 
-func (nm TypeNodeMap) HasId(id NodeId) (bool) {
+func (nm TypeNodeMap) HasId(id NodeId) bool {
 	_, ok := nm[id]
 
 	return ok
 }
 
-func (nm TypeNodeMap) HasName(name string) (bool) {
+func (nm TypeNodeMap) HasName(name string) bool {
 	return nm.HasId(ToNodeId(name))
 }
 
-func (nm TypeNodeMap) BroadcastSetFlag(name string, v bool) () {
+func (nm TypeNodeMap) BroadcastSetFlag(name string, v bool) {
 	for _, n := range nm {
 		n.Flags().Set(name, v)
 	}
@@ -1520,7 +1675,7 @@ func (nm TypeNodeMap) Flagged(flag string, b bool) (nm0 TypeNodeMap) {
 	return
 }
 
-func (nm TypeNodeMap) FilterByFlags(subset FlagsSubset) (TypeNodeMap) {
+func (nm TypeNodeMap) FilterByFlags(subset FlagsSubset) TypeNodeMap {
 	if len(subset.Or) != 0 {
 		var tfs []string
 		for _, f := range subset.Or {
@@ -1547,7 +1702,7 @@ func (nm TypeNodeMap) FilterByFlags(subset FlagsSubset) (TypeNodeMap) {
 	return nm
 }
 
-func (nm TypeNodeMap) FilterByNames(subset NamesSubset) (TypeNodeMap) {
+func (nm TypeNodeMap) FilterByNames(subset NamesSubset) TypeNodeMap {
 	if len(subset.Or) != 0 {
 		nm = nm.ByNames(subset.Or...)
 	}
@@ -1587,7 +1742,7 @@ func (nm TypeNodeMap) FlaggedOr(fs ...string) (nm0 TypeNodeMap) {
 	return
 }
 
-func (nm TypeNodeMap) BroadcastPrint() () {
+func (nm TypeNodeMap) BroadcastPrint() {
 	for _, n := range nm {
 		n.Print()
 		println("- - - - - - - - - -")
@@ -1616,16 +1771,30 @@ func (nm PathNodeMap) ToNodeMap() (nm0 NodeMap) {
 	return
 }
 
-func (nm PathNodeMap) Copy() (nm0 PathNodeMap) {
-	nm0 = PathNodeMap{}
-	for k,v := range nm {
-		nm0[k] = v
+func (nm PathNodeMap) UniqueNames() (ns []string) {
+	nsm := map[string]bool{}
+
+	for _, v := range nm {
+		nsm[v.Name()] = true
 	}
-	
-	return 
+
+	for k, _ := range nsm {
+		ns = append(ns, k)
+	}
+
+	return
 }
 
-func (nm PathNodeMap) Filter(s Filter) (PathNodeMap) {
+func (nm PathNodeMap) Copy() (nm0 PathNodeMap) {
+	nm0 = PathNodeMap{}
+	for k, v := range nm {
+		nm0[k] = v
+	}
+
+	return
+}
+
+func (nm PathNodeMap) Filter(s Filter) PathNodeMap {
 	if s.Flags != nil {
 		nm = nm.FilterByFlags(*s.Flags)
 	}
@@ -1650,7 +1819,7 @@ func (nm PathNodeMap) Add(ns ...*PathNode) {
 
 func (nm PathNodeMap) AddPathNodeMap(nm0 PathNodeMap) (nm1 PathNodeMap) {
 	nm1 = PathNodeMap{}
-	
+
 	for _, n := range nm {
 		nm1.Add(n)
 	}
@@ -1658,11 +1827,11 @@ func (nm PathNodeMap) AddPathNodeMap(nm0 PathNodeMap) (nm1 PathNodeMap) {
 	for _, n := range nm0 {
 		nm1.Add(n)
 	}
-	
-	return 
+
+	return
 }
 
-func (nm PathNodeMap) ExcludeIds(ids ...NodeId) (PathNodeMap) {
+func (nm PathNodeMap) ExcludeIds(ids ...NodeId) PathNodeMap {
 	not := map[NodeId]bool{}
 
 	for _, id := range ids {
@@ -1676,7 +1845,7 @@ func (nm PathNodeMap) ExcludeIds(ids ...NodeId) (PathNodeMap) {
 	})
 }
 
-func (nm PathNodeMap) ExcludeNames(names ...string) (PathNodeMap) {
+func (nm PathNodeMap) ExcludeNames(names ...string) PathNodeMap {
 	ids := []NodeId{}
 	for _, name := range names {
 		ids = append(ids, ToNodeId(name))
@@ -1695,12 +1864,12 @@ func (nm PathNodeMap) ByIds(ids ...NodeId) (filtered PathNodeMap) {
 	return
 }
 
-func (nm PathNodeMap) ByNames(names ...string) (PathNodeMap) {
+func (nm PathNodeMap) ByNames(names ...string) PathNodeMap {
 	ids := []NodeId{}
 	for _, name := range names {
 		ids = append(ids, ToNodeId(name))
 	}
-	
+
 	return nm.ByIds(ids...)
 }
 
@@ -1723,20 +1892,32 @@ func (nm PathNodeMap) MustById(id NodeId) (n *PathNode) {
 }
 
 func (nm PathNodeMap) ByName(name string) (*PathNode, error) {
-	return nm.ById(ToNodeId(name))
+	name = strings.ToLower(name)
+	for _, fn := range nm {
+		if strings.ToLower(fn.Name()) == name {
+			return fn, nil
+		}
+	}
+
+	return nil, errors.New(fmt.Sprintf("Path node name %v not found", name))
 }
 
-func (nm PathNodeMap) MustByName(name string) (*PathNode) {
-	return nm.MustById(ToNodeId(name))
+func (nm PathNodeMap) MustByName(name string) (n *PathNode) {
+	n, err := nm.ByName(name)
+	if err != nil {
+		panic(err)
+	}
+
+	return
 }
 
-func (nm PathNodeMap) Each(f func(n *PathNode)) () {
+func (nm PathNodeMap) Each(f func(n *PathNode)) {
 	for _, n := range nm {
 		f(n)
 	}
 }
 
-func (nm PathNodeMap) FilterFunc(f func(n *PathNode)(bool)) (nm0 PathNodeMap) {
+func (nm PathNodeMap) FilterFunc(f func(n *PathNode) bool) (nm0 PathNodeMap) {
 	nm0 = PathNodeMap{}
 
 	for _, n := range nm {
@@ -1748,17 +1929,17 @@ func (nm PathNodeMap) FilterFunc(f func(n *PathNode)(bool)) (nm0 PathNodeMap) {
 	return
 }
 
-func (nm PathNodeMap) HasId(id NodeId) (bool) {
+func (nm PathNodeMap) HasId(id NodeId) bool {
 	_, ok := nm[id]
 
 	return ok
 }
 
-func (nm PathNodeMap) HasName(name string) (bool) {
+func (nm PathNodeMap) HasName(name string) bool {
 	return nm.HasId(ToNodeId(name))
 }
 
-func (nm PathNodeMap) BroadcastSetFlag(name string, v bool) () {
+func (nm PathNodeMap) BroadcastSetFlag(name string, v bool) {
 	for _, n := range nm {
 		n.Flags().Set(name, v)
 	}
@@ -1786,7 +1967,7 @@ func (nm PathNodeMap) Flagged(flag string, b bool) (nm0 PathNodeMap) {
 	return
 }
 
-func (nm PathNodeMap) FilterByFlags(subset FlagsSubset) (PathNodeMap) {
+func (nm PathNodeMap) FilterByFlags(subset FlagsSubset) PathNodeMap {
 	if len(subset.Or) != 0 {
 		var tfs []string
 		for _, f := range subset.Or {
@@ -1813,7 +1994,7 @@ func (nm PathNodeMap) FilterByFlags(subset FlagsSubset) (PathNodeMap) {
 	return nm
 }
 
-func (nm PathNodeMap) FilterByNames(subset NamesSubset) (PathNodeMap) {
+func (nm PathNodeMap) FilterByNames(subset NamesSubset) PathNodeMap {
 	if len(subset.Or) != 0 {
 		nm = nm.ByNames(subset.Or...)
 	}
@@ -1853,7 +2034,7 @@ func (nm PathNodeMap) FlaggedOr(fs ...string) (nm0 PathNodeMap) {
 	return
 }
 
-func (nm PathNodeMap) BroadcastPrint() () {
+func (nm PathNodeMap) BroadcastPrint() {
 	for _, n := range nm {
 		n.Print()
 		println("- - - - - - - - - -")

@@ -21,6 +21,6 @@ func Concat(ss []string) (s string) {
 	return
 }
 
-func Plural(s string) (string) {
+func Plural(s string) string {
 	return inflection.Plural(s)
 }

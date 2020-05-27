@@ -77,12 +77,12 @@ var nodeEdges = NodeEdges{
 	},
 	Enum: &NodeEdge{
 		One: &Edges{
-			Type: &StaticDynamic{Static: []string{"FilteredBy"},},
+			Type: &StaticDynamic{Static: []string{"FilteredBy"}},
 		},
 	},
 	Field: &NodeEdge{
 		One: &Edges{
-			BasicType: &StaticDynamic{Static: []string{"Holds"},},
+			BasicType: &StaticDynamic{Static: []string{"Holds"}},
 			Enum:      &StaticDynamic{Static: []string{"Holds"}},
 			Field:     &StaticDynamic{Static: []string{"For", "RelatedTo"}},
 			Relation:  &StaticDynamic{Static: []string{"RelatedThrough"}},
@@ -92,8 +92,8 @@ var nodeEdges = NodeEdges{
 	},
 	Relation: &NodeEdge{
 		One: &Edges{
-			Type: &StaticDynamic{Static: []string{"NodeA", "NodeB"},},
-			Path: &StaticDynamic{Static: []string{"Active", "Passive"},},
+			Type: &StaticDynamic{Static: []string{"NodeA", "NodeB"}},
+			Path: &StaticDynamic{Static: []string{"Active", "Passive"}},
 		},
 		// todo remove many Holds Fields egde
 		Many: &Edges{
@@ -102,10 +102,9 @@ var nodeEdges = NodeEdges{
 	},
 	Type: &NodeEdge{
 		One: &Edges{
-			Type: &StaticDynamic{Static: []string{"For", "FilteredBy", "SortedBy", "SelectedBy", "Collection", "Request", "Response", "GetRequest", "GetCollection", "GetRelations", "GetResponse", "GetEndpoint", "PipeRequest", "PipeResponse", "PipeEndpoint",
-			}},
+			Type:     &StaticDynamic{Static: []string{"For", "FilteredBy", "SortedBy", "SelectedBy", "Relations", "Collection", "Request", "Response", "GetRequest", "GetCollection", "GetRelations", "GetResponse", "GetEndpoint", "PipeRequest", "PipeResponse", "PipeEndpoint"}},
 			Enum:     &StaticDynamic{Static: []string{"For", "ListKind"}},
-			Endpoint: &StaticDynamic{Static: []string{"BelongsTo", "Get", "Pipe",}},
+			Endpoint: &StaticDynamic{Static: []string{"BelongsTo", "Get", "Pipe"}},
 		},
 		Many: &Edges{
 			Field:    &StaticDynamic{Static: []string{"Holds", "EdgedByFields", "EdgedByListFields"}},

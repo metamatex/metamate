@@ -56,7 +56,7 @@ func addExpansion(root *RootNode) {
 	})
 
 	root.AddTypeNode(typenames.RelationGetMode, FieldNodeSlice{
-		TypeField(fieldnames.Id, typenames.ServiceId),
+		TypeField(fieldnames.Id, typenames.Id),
 		StringField(fieldnames.Relation),
 	})
 

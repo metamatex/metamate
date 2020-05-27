@@ -48,6 +48,20 @@ func (nm {{ $name }}NodeMap) ToNodeMap() (nm0 NodeMap) {
 	return
 }
 
+func (nm {{ $name }}NodeMap) UniqueNames() (ns []string) {
+	nsm := map[string]bool{}
+
+	for _, v := range nm {
+		nsm[v.Name()] = true
+	}
+	
+	for k, _ := range nsm {
+		ns = append(ns, k)
+	}
+
+	return
+}
+
 func (nm {{ $name }}NodeMap) Copy() (nm0 {{ $name }}NodeMap) {
 	nm0 = {{ $name }}NodeMap{}
 	for k,v := range nm {
@@ -155,11 +169,23 @@ func (nm {{ $name }}NodeMap) MustById(id NodeId) (n *{{ $name }}Node) {
 }
 
 func (nm {{ $name }}NodeMap) ByName(name string) (*{{ $name }}Node, error) {
-	return nm.ById(ToNodeId(name))
+	name = strings.ToLower(name)
+	for _, fn := range nm {
+		if strings.ToLower(fn.Name()) == name {
+			return fn, nil
+		}
+	}
+
+	return nil, errors.New(fmt.Sprintf("{{ $name }} node name %v not found", name))
 }
 
-func (nm {{ $name }}NodeMap) MustByName(name string) (*{{ $name }}Node) {
-	return nm.MustById(ToNodeId(name))
+func (nm {{ $name }}NodeMap) MustByName(name string) (n *{{ $name }}Node) {
+	n, err := nm.ByName(name)
+	if err != nil {
+		panic(err)
+	}
+
+	return
 }
 
 func (nm {{ $name }}NodeMap) Each(f func(n *{{ $name }}Node)) () {

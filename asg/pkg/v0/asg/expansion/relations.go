@@ -103,6 +103,8 @@ func generateRelations(root *graph.RootNode, paths map[string]map[string]map[str
 		typeflags.IsRelations: true,
 	})
 
+	tn.Edges.Type.Resolver.SetRelations(graph.ToNodeId(typenames.Relations(tn.Name())))
+
 	return
 }
 
@@ -152,7 +154,7 @@ func generateRelationships(root *graph.RootNode, fromToCardinalityRelationPaths 
 	for from, toMap := range fromToCardinalityRelationPaths {
 		cardinalityMap, ok := toMap[typenames.SocialAccount]
 		if !ok {
-		    continue
+			continue
 		}
 
 		fns := graph.FieldNodeSlice{}
@@ -160,7 +162,7 @@ func generateRelationships(root *graph.RootNode, fromToCardinalityRelationPaths 
 		for _, paths := range cardinalityMap {
 			for _, p := range paths {
 				fns = append(fns,
-					graph.BoolField(p.Data.Verb + "Me"),
+					graph.BoolField(p.Data.Verb+"Me"),
 				)
 			}
 		}
