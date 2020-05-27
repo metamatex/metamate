@@ -8,17 +8,15 @@ import (
 
 type Client struct {
 	client *http.Client
-	token  string
 	f      Factory
 	addr   string
 }
 
-func NewClient(f Factory, c *http.Client, addr string, token string) Client {
+func NewClient(f Factory, c *http.Client, addr string) Client {
 	return Client{
 		client: c,
 		addr:   addr,
 		f:      f,
-		token:  token,
 	}
 }
 
@@ -35,7 +33,6 @@ func (c Client) Send(gReq Generic) (gRsp Generic, err error) {
 	}
 	httpReq.Header.Set(ContentTypeHeader, ContentTypeJson)
 	httpReq.Header.Set(AsgTypeHeader, gReq.Type().Name())
-	httpReq.Header.Set(AuthorizationHeader, "Bearer "+c.token)
 
 	res, err := c.client.Do(httpReq)
 	if err != nil {
@@ -51,7 +48,7 @@ func (c Client) Send(gReq Generic) (gRsp Generic, err error) {
 	return c.f.FromStringInterfaceMap(gReq.Type().Edges.Type.Response(), m)
 }
 
-func Send(f Factory, client *http.Client, addr string, token string, gReq Generic) (gRsp Generic, err error) {
+func Send(f Factory, client *http.Client, addr string, gReq Generic) (gRsp Generic, err error) {
 	b := new(bytes.Buffer)
 	err = json.NewEncoder(b).Encode(gReq.ToStringInterfaceMap())
 	if err != nil {
@@ -64,7 +61,6 @@ func Send(f Factory, client *http.Client, addr string, token string, gReq Generi
 	}
 	httpReq.Header.Set(ContentTypeHeader, ContentTypeJson)
 	httpReq.Header.Set(AsgTypeHeader, gReq.Type().Name())
-	httpReq.Header.Set(AuthorizationHeader, "Bearer "+token)
 
 	res, err := client.Do(httpReq)
 	if err != nil {

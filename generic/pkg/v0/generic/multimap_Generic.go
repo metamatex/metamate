@@ -28,7 +28,7 @@ type MultiMapGeneric struct {
 	GenericSlice0 map[string]*MultiMapSlice
 }
 
-func (g *MultiMapGeneric) MustString(names ...string) (string) {
+func (g *MultiMapGeneric) MustString(names ...string) string {
 	v, ok := g.String(names...)
 	if !ok {
 		panic(fmt.Sprintf("%v.%v string not set", g.Type().Name(), strings.Join(names, ".")))
@@ -37,7 +37,7 @@ func (g *MultiMapGeneric) MustString(names ...string) (string) {
 	return v
 }
 
-func (g *MultiMapGeneric) MustInt32(names ...string) (int32) {
+func (g *MultiMapGeneric) MustInt32(names ...string) int32 {
 	v, ok := g.Int32(names...)
 	if !ok {
 		panic(fmt.Sprintf("%v.%v Int320 not set", g.Type().Name(), strings.Join(names, ".")))
@@ -46,7 +46,7 @@ func (g *MultiMapGeneric) MustInt32(names ...string) (int32) {
 	return v
 }
 
-func (g *MultiMapGeneric) MustFloat64(names ...string) (float64) {
+func (g *MultiMapGeneric) MustFloat64(names ...string) float64 {
 	v, ok := g.Float64(names...)
 	if !ok {
 		panic(fmt.Sprintf("%v.%v float64 not set", g.Type().Name(), strings.Join(names, ".")))
@@ -55,7 +55,7 @@ func (g *MultiMapGeneric) MustFloat64(names ...string) (float64) {
 	return v
 }
 
-func (g *MultiMapGeneric) MustBool(names ...string) (bool) {
+func (g *MultiMapGeneric) MustBool(names ...string) bool {
 	v, ok := g.Bool(names...)
 	if !ok {
 		panic(fmt.Sprintf("%v.%v []bool not set", g.Type().Name(), strings.Join(names, ".")))
@@ -64,7 +64,7 @@ func (g *MultiMapGeneric) MustBool(names ...string) (bool) {
 	return v
 }
 
-func (g *MultiMapGeneric) MustGeneric(names ...string) (Generic) {
+func (g *MultiMapGeneric) MustGeneric(names ...string) Generic {
 	v, ok := g.Generic(names...)
 	if !ok {
 		panic(fmt.Sprintf("%v.%v generic.Generic not set", g.Type().Name(), strings.Join(names, ".")))
@@ -73,7 +73,7 @@ func (g *MultiMapGeneric) MustGeneric(names ...string) (Generic) {
 	return v
 }
 
-func (g *MultiMapGeneric) MustStringSlice(names ...string) ([]string) {
+func (g *MultiMapGeneric) MustStringSlice(names ...string) []string {
 	v, ok := g.StringSlice(names...)
 	if !ok {
 		panic(fmt.Sprintf("%v.%v []string not set", g.Type().Name(), strings.Join(names, ".")))
@@ -82,7 +82,7 @@ func (g *MultiMapGeneric) MustStringSlice(names ...string) ([]string) {
 	return v
 }
 
-func (g *MultiMapGeneric) MustInt32Slice(names ...string) ([]int32) {
+func (g *MultiMapGeneric) MustInt32Slice(names ...string) []int32 {
 	v, ok := g.Int32Slice(names...)
 	if !ok {
 		panic(fmt.Sprintf("%v.%v []Int320 not set", g.Type().Name(), strings.Join(names, ".")))
@@ -91,7 +91,7 @@ func (g *MultiMapGeneric) MustInt32Slice(names ...string) ([]int32) {
 	return v
 }
 
-func (g *MultiMapGeneric) MustFloat64Slice(names ...string) ([]float64) {
+func (g *MultiMapGeneric) MustFloat64Slice(names ...string) []float64 {
 	v, ok := g.Float64Slice(names...)
 	if !ok {
 		panic(fmt.Sprintf("%v.%v []float64 not set", g.Type().Name(), strings.Join(names, ".")))
@@ -100,7 +100,7 @@ func (g *MultiMapGeneric) MustFloat64Slice(names ...string) ([]float64) {
 	return v
 }
 
-func (g *MultiMapGeneric) MustBoolSlice(names ...string) ([]bool) {
+func (g *MultiMapGeneric) MustBoolSlice(names ...string) []bool {
 	v, ok := g.BoolSlice(names...)
 	if !ok {
 		panic(fmt.Sprintf("%v.%v []bool not set", g.Type().Name(), strings.Join(names, ".")))
@@ -109,7 +109,7 @@ func (g *MultiMapGeneric) MustBoolSlice(names ...string) ([]bool) {
 	return v
 }
 
-func (g *MultiMapGeneric) MustGenericSlice(names ...string) (Slice) {
+func (g *MultiMapGeneric) MustGenericSlice(names ...string) Slice {
 	v, ok := g.GenericSlice(names...)
 	if !ok {
 		panic(fmt.Sprintf("%v.%v generic.Slice not set", g.Type().Name(), strings.Join(names, ".")))
@@ -118,7 +118,7 @@ func (g *MultiMapGeneric) MustGenericSlice(names ...string) (Slice) {
 	return v
 }
 
-func NewMultiMapGeneric(t *graph.TypeNode) (*MultiMapGeneric) {
+func NewMultiMapGeneric(t *graph.TypeNode) *MultiMapGeneric {
 	return &MultiMapGeneric{
 		tn: t,
 	}
@@ -128,7 +128,7 @@ func (g *MultiMapGeneric) EachString(f func(fn *graph.FieldNode, v string)) {
 	fnm := g.Type().Edges.Fields.Holds()
 
 	for k, v := range g.String0 {
-		f(fnm.MustById(g.Type().Id() + "_" + graph.ToNodeId(k)), v)
+		f(fnm.MustById(g.Type().Id()+"_"+graph.ToNodeId(k)), v)
 	}
 }
 
@@ -136,7 +136,7 @@ func (g *MultiMapGeneric) EachInt32(f func(fn *graph.FieldNode, v int32)) {
 	fnm := g.Type().Edges.Fields.Holds()
 
 	for k, v := range g.Int320 {
-		f(fnm.MustById(g.Type().Id() + "_" + graph.ToNodeId(k)), v)
+		f(fnm.MustById(g.Type().Id()+"_"+graph.ToNodeId(k)), v)
 	}
 }
 
@@ -144,7 +144,7 @@ func (g *MultiMapGeneric) EachFloat64(f func(fn *graph.FieldNode, v float64)) {
 	fnm := g.Type().Edges.Fields.Holds()
 
 	for k, v := range g.Float640 {
-		f(fnm.MustById(g.Type().Id() + "_" + graph.ToNodeId(k)), v)
+		f(fnm.MustById(g.Type().Id()+"_"+graph.ToNodeId(k)), v)
 	}
 }
 
@@ -152,7 +152,7 @@ func (g *MultiMapGeneric) EachBool(f func(fn *graph.FieldNode, v bool)) {
 	fnm := g.Type().Edges.Fields.Holds()
 
 	for k, v := range g.Bool0 {
-		f(fnm.MustById(g.Type().Id() + "_" + graph.ToNodeId(k)), v)
+		f(fnm.MustById(g.Type().Id()+"_"+graph.ToNodeId(k)), v)
 	}
 }
 
@@ -160,7 +160,7 @@ func (g *MultiMapGeneric) EachEnum(f func(fn *graph.FieldNode, v string)) {
 	fnm := g.Type().Edges.Fields.Holds()
 
 	for k, v := range g.String0 {
-		f(fnm.MustById(g.Type().Id() + "_" + graph.ToNodeId(k)), v)
+		f(fnm.MustById(g.Type().Id()+"_"+graph.ToNodeId(k)), v)
 	}
 }
 
@@ -168,7 +168,7 @@ func (g *MultiMapGeneric) EachGeneric(f func(fn *graph.FieldNode, v Generic)) {
 	fnm := g.Type().Edges.Fields.Holds()
 
 	for k, v := range g.Generic0 {
-		f(fnm.MustById(g.Type().Id() + "_" + graph.ToNodeId(k)), v)
+		f(fnm.MustById(g.Type().Id()+"_"+graph.ToNodeId(k)), v)
 	}
 }
 
@@ -176,7 +176,7 @@ func (g *MultiMapGeneric) EachStringSlice(f func(fn *graph.FieldNode, v []string
 	fnm := g.Type().Edges.Fields.Holds()
 
 	for k, v := range g.StringSlice0 {
-		f(fnm.MustById(g.Type().Id() + "_" + graph.ToNodeId(k)), v)
+		f(fnm.MustById(g.Type().Id()+"_"+graph.ToNodeId(k)), v)
 	}
 }
 
@@ -184,7 +184,7 @@ func (g *MultiMapGeneric) EachInt32Slice(f func(fn *graph.FieldNode, v []int32))
 	fnm := g.Type().Edges.Fields.Holds()
 
 	for k, v := range g.Int32Slice0 {
-		f(fnm.MustById(g.Type().Id() + "_" + graph.ToNodeId(k)), v)
+		f(fnm.MustById(g.Type().Id()+"_"+graph.ToNodeId(k)), v)
 	}
 }
 
@@ -192,7 +192,7 @@ func (g *MultiMapGeneric) EachFloat64Slice(f func(fn *graph.FieldNode, v []float
 	fnm := g.Type().Edges.Fields.Holds()
 
 	for k, v := range g.Float64Slice0 {
-		f(fnm.MustById(g.Type().Id() + "_" + graph.ToNodeId(k)), v)
+		f(fnm.MustById(g.Type().Id()+"_"+graph.ToNodeId(k)), v)
 	}
 }
 
@@ -200,7 +200,7 @@ func (g *MultiMapGeneric) EachBoolSlice(f func(fn *graph.FieldNode, v []bool)) {
 	fnm := g.Type().Edges.Fields.Holds()
 
 	for k, v := range g.BoolSlice0 {
-		f(fnm.MustById(g.Type().Id() + "_" + graph.ToNodeId(k)), v)
+		f(fnm.MustById(g.Type().Id()+"_"+graph.ToNodeId(k)), v)
 	}
 }
 
@@ -208,7 +208,7 @@ func (g *MultiMapGeneric) EachEnumSlice(f func(fn *graph.FieldNode, v []string))
 	fnm := g.Type().Edges.Fields.Holds()
 
 	for k, v := range g.StringSlice0 {
-		f(fnm.MustById(g.Type().Id() + "_" + graph.ToNodeId(k)), v)
+		f(fnm.MustById(g.Type().Id()+"_"+graph.ToNodeId(k)), v)
 	}
 }
 
@@ -216,11 +216,11 @@ func (g *MultiMapGeneric) EachGenericSlice(f func(fn *graph.FieldNode, v Slice))
 	fnm := g.Type().Edges.Fields.Holds()
 
 	for k, v := range g.GenericSlice0 {
-		f(fnm.MustById(g.Type().Id() + "_" + graph.ToNodeId(k)), v)
+		f(fnm.MustById(g.Type().Id()+"_"+graph.ToNodeId(k)), v)
 	}
 }
 
-func (g *MultiMapGeneric) MustSetInt32(names []string, i int32) (Generic) {
+func (g *MultiMapGeneric) MustSetInt32(names []string, i int32) Generic {
 	err := g.SetInt32(names, i)
 	if err != nil {
 		panic(err)
@@ -248,7 +248,7 @@ func (g *MultiMapGeneric) SetInt32(names []string, i int32) (err error) {
 	return
 }
 
-func (g *MultiMapGeneric) MustSetFloat64(names []string, f float64) (Generic) {
+func (g *MultiMapGeneric) MustSetFloat64(names []string, f float64) Generic {
 	err := g.SetFloat64(names, f)
 	if err != nil {
 		panic(err)
@@ -276,7 +276,7 @@ func (g *MultiMapGeneric) SetFloat64(names []string, f float64) (err error) {
 	return
 }
 
-func (g *MultiMapGeneric) MustSetBool(names []string, b bool) (Generic) {
+func (g *MultiMapGeneric) MustSetBool(names []string, b bool) Generic {
 	err := g.SetBool(names, b)
 	if err != nil {
 		log.Print(err)
@@ -305,7 +305,7 @@ func (g *MultiMapGeneric) SetBool(names []string, b bool) (err error) {
 	return
 }
 
-func (g *MultiMapGeneric) MustSetGeneric(names []string, g0 Generic) (Generic) {
+func (g *MultiMapGeneric) MustSetGeneric(names []string, g0 Generic) Generic {
 	err := g.SetGeneric(names, g0)
 	if err != nil {
 		panic(err)
@@ -333,7 +333,7 @@ func (g *MultiMapGeneric) SetGeneric(names []string, g0 Generic) (err error) {
 	return
 }
 
-func (g *MultiMapGeneric) MustSetInt32Slice(names []string, is []int32) (Generic) {
+func (g *MultiMapGeneric) MustSetInt32Slice(names []string, is []int32) Generic {
 	err := g.SetInt32Slice(names, is)
 	if err != nil {
 		panic(err)
@@ -361,7 +361,7 @@ func (g *MultiMapGeneric) SetInt32Slice(names []string, is []int32) (err error) 
 	return
 }
 
-func (g *MultiMapGeneric) MustSetFloat64Slice(names []string, fs []float64) (Generic) {
+func (g *MultiMapGeneric) MustSetFloat64Slice(names []string, fs []float64) Generic {
 	err := g.SetFloat64Slice(names, fs)
 	if err != nil {
 		panic(err)
@@ -389,7 +389,7 @@ func (g *MultiMapGeneric) SetFloat64Slice(names []string, fs []float64) (err err
 	return
 }
 
-func (g *MultiMapGeneric) MustSetBoolSlice(names []string, bs []bool) (Generic) {
+func (g *MultiMapGeneric) MustSetBoolSlice(names []string, bs []bool) Generic {
 	err := g.SetBoolSlice(names, bs)
 	if err != nil {
 		panic(err)
@@ -417,7 +417,7 @@ func (g *MultiMapGeneric) SetBoolSlice(names []string, bs []bool) (err error) {
 	return
 }
 
-func (g *MultiMapGeneric) MustSetGenericSlice(names []string, gSlice Slice) (Generic) {
+func (g *MultiMapGeneric) MustSetGenericSlice(names []string, gSlice Slice) Generic {
 	err := g.SetGenericSlice(names, gSlice)
 	if err != nil {
 		panic(err)
@@ -445,7 +445,7 @@ func (g *MultiMapGeneric) SetGenericSlice(names []string, g0 Slice) (err error) 
 	return
 }
 
-func (g *MultiMapGeneric) MustSetStringSlice(names []string, ss []string) (Generic) {
+func (g *MultiMapGeneric) MustSetStringSlice(names []string, ss []string) Generic {
 	err := g.SetStringSlice(names, ss)
 	if err != nil {
 		panic(err)
@@ -473,7 +473,7 @@ func (g *MultiMapGeneric) SetStringSlice(names []string, ss []string) (err error
 	return
 }
 
-func (g *MultiMapGeneric) MustSetEnum(names []string, s string) (Generic) {
+func (g *MultiMapGeneric) MustSetEnum(names []string, s string) Generic {
 	err := g.SetEnum(names, s)
 	if err != nil {
 		panic(err)
@@ -501,7 +501,7 @@ func (g *MultiMapGeneric) SetEnum(names []string, s string) (err error) {
 	return
 }
 
-func (g *MultiMapGeneric) MustSetString(names []string, s string) (Generic) {
+func (g *MultiMapGeneric) MustSetString(names []string, s string) Generic {
 	err := g.SetString(names, s)
 	if err != nil {
 		panic(err)
@@ -529,7 +529,7 @@ func (g *MultiMapGeneric) SetString(names []string, s string) (err error) {
 	return
 }
 
-func (g *MultiMapGeneric) WalkDelete(f func(fn *graph.FieldNode) (bool)) {
+func (g *MultiMapGeneric) WalkDelete(f func(fn *graph.FieldNode) bool) {
 	fnm := g.Type().Edges.Fields.Holds()
 
 	for k, _ := range g.String0 {
@@ -628,7 +628,7 @@ func (g *MultiMapGeneric) WalkDelete(f func(fn *graph.FieldNode) (bool)) {
 func (g *MultiMapGeneric) MustDelete(names ...string) {
 	err := g.Delete(names...)
 	if err != nil {
-	    panic(err)
+		panic(err)
 	}
 }
 
@@ -646,7 +646,7 @@ func (g *MultiMapGeneric) Delete(names ...string) (err error) {
 	id := g.Type().Id() + "_" + graph.ToNodeId(base)
 	fn, err := g.Type().Edges.Fields.Holds().ById(id)
 	if err != nil {
-	    return
+		return
 	}
 
 	switch fn.Kind() {
@@ -1105,11 +1105,11 @@ func (g *MultiMapGeneric) sanitize() {
 	g = g0
 }
 
-func (g *MultiMapGeneric) Type() (*graph.TypeNode) {
+func (g *MultiMapGeneric) Type() *graph.TypeNode {
 	return g.tn
 }
 
-func (g *MultiMapGeneric) Copy() (Generic) {
+func (g *MultiMapGeneric) Copy() Generic {
 	return g.copy()
 }
 
@@ -1215,7 +1215,7 @@ func (g *MultiMapGeneric) ToStruct(output interface{}) (err error) {
 	return
 }
 
-func (g *MultiMapGeneric) MustToStruct(output interface{}) () {
+func (g *MultiMapGeneric) MustToStruct(output interface{}) {
 	m := g.ToStringInterfaceMap()
 
 	err := mapstructure.Decode(m, &output)
@@ -1248,11 +1248,11 @@ func (g *MultiMapGeneric) Print() {
 	println(g.sprint())
 }
 
-func (g *MultiMapGeneric) Sprint() (string) {
+func (g *MultiMapGeneric) Sprint() string {
 	return g.sprint()
 }
 
-func (g *MultiMapGeneric) sprint() (string) {
+func (g *MultiMapGeneric) sprint() string {
 	b, err := yaml.Marshal(g.toStringInterfaceMap())
 	if err != nil {
 		panic(err)
@@ -1314,6 +1314,70 @@ func (g *MultiMapGeneric) toStringInterfaceMap() (m map[string]interface{}) {
 
 	for k, v := range g.GenericSlice0 {
 		m[k] = v.ToStringInterfaceMaps()
+	}
+
+	return
+}
+
+func (g *MultiMapGeneric) PrintDebug() {
+	println(g.Type().Name())
+	b, err := yaml.Marshal(g.toDebugStringInterfaceMap())
+	if err != nil {
+		panic(err)
+	}
+
+	println(string(b))
+}
+
+func (g *MultiMapGeneric) toDebugStringInterfaceMap() (m map[string]interface{}) {
+	m = map[string]interface{}{}
+
+	for k, v := range g.String0 {
+		m[k] = v
+	}
+
+	for k, v := range g.StringSlice0 {
+		m[k] = v
+	}
+
+	for k, v := range g.Int320 {
+		m[k] = v
+	}
+
+	for k, v := range g.Int32Slice0 {
+		m[k] = v
+	}
+
+	for k, v := range g.Uint320 {
+		m[k] = v
+	}
+
+	for k, v := range g.Uint32Slice0 {
+		m[k] = v
+	}
+
+	for k, v := range g.Float640 {
+		m[k] = v
+	}
+
+	for k, v := range g.Float64Slice0 {
+		m[k] = v
+	}
+
+	for k, v := range g.Bool0 {
+		m[k] = v
+	}
+
+	for k, v := range g.BoolSlice0 {
+		m[k] = v
+	}
+
+	for k, v := range g.Generic0 {
+		m[k+" ("+v.Type().Name()+")"] = v.toDebugStringInterfaceMap()
+	}
+
+	for k, v := range g.GenericSlice0 {
+		m[k+" ("+v.Type().Name()+")"] = v.ToStringInterfaceMaps()
 	}
 
 	return
