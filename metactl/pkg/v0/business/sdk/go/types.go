@@ -10,6 +10,9 @@ const (
 	TaskServiceInterface = "TaskServiceInterface"
 	TaskTypes            = "TaskTypes"
 	TaskEnums            = "TaskEnums"
+	TaskFieldNames       = "TaskFieldNames"
+	TaskTypeNames        = "TaskTypeNames"
+	TaskPathNames        = "TaskPathNames"
 )
 
 func init() {
@@ -29,6 +32,21 @@ func init() {
 		TemplateData: &goEnumsTpl,
 		Out:          ptr.String("{{ .Enum.Name }}_.go"),
 		Iterate:      ptr.String(graph.ENUM),
+	}
+
+	tasks[TaskFieldNames] = types.RenderTask{
+		TemplateData: &goFieldNamesTpl,
+		Out:          ptr.String("fieldnames_.go"),
+	}
+
+	tasks[TaskTypeNames] = types.RenderTask{
+		TemplateData: &goTypeNamesTpl,
+		Out:          ptr.String("typenames_.go"),
+	}
+
+	tasks[TaskPathNames] = types.RenderTask{
+		TemplateData: &goPathNamesTpl,
+		Out:          ptr.String("pathnames_.go"),
 	}
 }
 
@@ -111,3 +129,39 @@ var {{ $enum.Name }} = struct{
 {{- end }}
 }
 `
+
+var goFieldNamesTpl = `package mql
+
+var FieldNames = struct{
+{{- range $i, $n := sortAlpha .Fields.UniqueNames }}
+	{{ camel $n }} string
+{{- end }}
+}{
+{{- range $i, $n := sortAlpha .Fields.UniqueNames }}
+	{{ camel $n }}: "{{ $n }}",
+{{- end }}
+}`
+
+var goTypeNamesTpl = `package mql
+
+var TypeNames = struct{
+{{- range $i, $tn := .Types.Slice.Sort }}
+	{{ camel $tn.Name }} string
+{{- end }}
+}{
+{{- range $i, $tn := .Types.Slice.Sort }}
+	{{ camel $tn.Name }}: "{{ $tn.Name }}",
+{{- end }}
+}`
+
+var goPathNamesTpl = `package mql
+
+var PathNames = struct{
+{{- range $i, $pn := .Paths.Slice.Sort }}
+	{{ camel $pn.Name }} string
+{{- end }}
+}{
+{{- range $i, $pn := .Paths.Slice.Sort }}
+	{{ camel $pn.Name }}: "{{ $pn.Name }}",
+{{- end }}
+}`

@@ -471,11 +471,14 @@ func getRenderContext(rn *graph.RootNode, version types.Version, task types.Rend
 			renderCtx.Types = graph.GetTypeDependenciesFromEndpointIds(rn, renderCtx.Endpoints)
 			//renderCtx.Types = renderCtx.Types.AddTypeNodeMap(getReqRspTypesFromEndpoints(renderCtx.Endpoints))
 			renderCtx.Enums = graph.GetEnumDependenciesFromEndpointIds(rn, renderCtx.Endpoints)
+			renderCtx.Fields = rn.Fields
+			renderCtx.Paths = rn.Paths
 		}
 
 		if task.Dependencies.Types != nil {
 			renderCtx.Types = graph.GetTypeDependenciesFromTypeIds(rn, rn.Types.Filter(*task.Dependencies.Types))
 			renderCtx.Enums = graph.GetEnumDependenciesFromTypeIds(rn, rn.Types.Filter(*task.Dependencies.Types))
+			renderCtx.Paths = rn.Paths
 		}
 	}
 

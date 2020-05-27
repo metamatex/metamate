@@ -8,14 +8,13 @@ import (
 )
 
 type Dependencies struct {
-	VerbosityLevel int
-	Version        Version
-	FileSystem     afero.Fs
-	ProjectConfig  *ProjectConfig
-	GlobalConfig   GlobalConfig
-	MessageReport  *MessageReport
-	RootNode       *graph.RootNode
-	Factory        generic.Factory
-	GlobalArgs     GlobalArgs
+	Version       Version
+	FileSystem    afero.Fs
+	ProjectConfig *ProjectConfig
+	GlobalConfig  GlobalConfig
+	MessageReport *MessageReport
+	RootNode      *graph.RootNode
+	Factory       generic.Factory
+	GlobalArgs    GlobalArgs
 	//Index          bleve.Index
 }

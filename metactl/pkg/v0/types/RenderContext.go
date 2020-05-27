@@ -13,6 +13,7 @@ type RenderContext struct {
 	Fields     graph.FieldNodeMap
 	Relations  graph.RelationNodeMap
 	Types      graph.TypeNodeMap
+	Paths      graph.PathNodeMap
 }
 
 type IterateRenderContext struct {
@@ -24,4 +25,5 @@ type IterateRenderContext struct {
 	Field     *graph.FieldNode
 	Relation  *graph.RelationNode
 	Type      *graph.TypeNode
+	Path      *graph.PathNode
 }

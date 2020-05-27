@@ -2,6 +2,7 @@ package v0
 
 import (
 	"github.com/metamatex/metamate/metactl/pkg/v0/business/asg"
+	"github.com/metamatex/metamate/metactl/pkg/v0/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -12,7 +13,7 @@ var asgFlagsCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) (err error) {
 		o := asg.Flags(gArgs.ReturnData())
 
-		handleReport(*d.MessageReport, o, gArgs.VerbosityLevel)
+		utils.HandleReport(gArgs, *d.MessageReport, o, gArgs.VerbosityLevel)
 
 		return
 	},

@@ -6,6 +6,8 @@ import (
 	"github.com/metamatex/metamate/metactl/pkg/v0/types"
 	"github.com/olekukonko/tablewriter"
 	"gopkg.in/yaml.v2"
+	"log"
+	"os"
 	"reflect"
 	"strings"
 )
@@ -116,6 +118,7 @@ func GetTableString(header []string, rows [][]string, containNewLines []int) str
 
 	table := tablewriter.NewWriter(tableString)
 	table.SetHeader(header)
+	table.SetAutoFormatHeaders(false)
 
 	table.SetBorders(tablewriter.Border{Left: false, Top: false, Right: false, Bottom: false})
 
@@ -133,6 +136,34 @@ func GetTableString(header []string, rows [][]string, containNewLines []int) str
 	table.Render()
 
 	return tableString.String()
+}
+
+func HandleReport(gArgs types.GlobalArgs, r types.MessageReport, o types.Output, verbosityLevel int) {
+	printR := types.MessageReport{
+		Debug:   r.Debug,
+		Info:    r.Info,
+		Warning: r.Warning,
+		Error:   r.Error,
+	}
+
+	switch verbosityLevel {
+	case 0:
+		printR.Debug = []string{}
+	default:
+	}
+
+	if len(r.Error) != 0 {
+		printR.AddHint("get help on https://metamate.io/community")
+	}
+
+	err := PrintReport(gArgs.NoColor, gArgs.OutputFormat, gArgs.ReturnData(), printR, o)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if len(r.Error) != 0 {
+		os.Exit(1)
+	}
 }
 
 func PrintReport(noColor bool, outputFormat string, returnData bool, messageReport types.MessageReport, o types.Output) (err error) {

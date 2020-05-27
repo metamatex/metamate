@@ -3,6 +3,7 @@ package v0
 import (
 	"fmt"
 	"github.com/metamatex/metamate/metactl/pkg/v0/types"
+	"github.com/metamatex/metamate/metactl/pkg/v0/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -24,7 +25,7 @@ var versionCmd = &cobra.Command{
 			Text: t,
 		}
 
-		handleReport(*d.MessageReport, o, gArgs.VerbosityLevel)
+		utils.HandleReport(gArgs, *d.MessageReport, o, gArgs.VerbosityLevel)
 
 		return
 	},

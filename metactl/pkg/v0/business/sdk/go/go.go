@@ -92,6 +92,9 @@ func GetSdks() []types.SdkGenerator {
 	taskSets[TaskSetTypes] = []types.RenderTask{
 		tasks[TaskTypes],
 		tasks[TaskEnums],
+		tasks[TaskFieldNames],
+		tasks[TaskTypeNames],
+		tasks[TaskPathNames],
 		tasks[TaskUtils],
 		tasks[TaskUtilsPtr],
 		tasks[TaskVersion],

@@ -4,6 +4,7 @@ import (
 	"github.com/metamatex/metamate/metactl/pkg/v0/business/gen"
 	"github.com/metamatex/metamate/metactl/pkg/v0/business/sdk"
 	"github.com/metamatex/metamate/metactl/pkg/v0/types"
+	"github.com/metamatex/metamate/metactl/pkg/v0/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -43,7 +44,7 @@ var genCmd = &cobra.Command{
 			d.MessageReport.AddError(errs)
 		}
 
-		handleReport(*d.MessageReport, types.Output{}, gArgs.VerbosityLevel)
+		utils.HandleReport(gArgs, *d.MessageReport, types.Output{}, gArgs.VerbosityLevel)
 
 		return
 	},

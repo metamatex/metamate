@@ -5,11 +5,8 @@ import (
 	"fmt"
 	"github.com/metamatex/metamate/metactl/pkg/v0/boot"
 	"github.com/metamatex/metamate/metactl/pkg/v0/types"
-	"github.com/metamatex/metamate/metactl/pkg/v0/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"log"
-	"os"
 )
 
 var d types.Dependencies
@@ -36,6 +33,7 @@ func AddV0(cmd *cobra.Command, prefix bool, v types.Version) {
 
 	addInit(parentCmd)
 	addGen(parentCmd)
+	addGet(parentCmd)
 	addAsg(parentCmd)
 	addVersion(parentCmd)
 	addUpdate(parentCmd)
@@ -93,34 +91,6 @@ func hasProjectConfig(args types.GlobalArgs) (err error) {
 	return
 }
 
-func handleReport(r types.MessageReport, o types.Output, verbosityLevel int) {
-	printR := types.MessageReport{
-		Debug:   r.Debug,
-		Info:    r.Info,
-		Warning: r.Warning,
-		Error:   r.Error,
-	}
-
-	switch verbosityLevel {
-	case 0:
-		printR.Debug = []string{}
-	default:
-	}
-
-	if len(r.Error) != 0 {
-		printR.AddHint("get help on https://metamate.io/community")
-	}
-
-	err := utils.PrintReport(gArgs.NoColor, gArgs.OutputFormat, gArgs.ReturnData(), printR, o)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	if len(r.Error) != 0 {
-		os.Exit(1)
-	}
-}
-
 func requireProjectConfig(gArgs types.GlobalArgs) (c types.ProjectConfig, err error) {
 	err = hasProjectConfig(gArgs)
 	if err != nil {
@@ -129,7 +99,6 @@ func requireProjectConfig(gArgs types.GlobalArgs) (c types.ProjectConfig, err er
 			err = errors.New("metactl.yaml not found, run `metactl init` to create it")
 		default:
 		}
-
 
 		return
 	}

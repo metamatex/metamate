@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/blang/semver"
 	"github.com/metamatex/metamate/metactl/pkg/v0/types"
+	"github.com/metamatex/metamate/metactl/pkg/v0/utils"
 	"github.com/rhysd/go-github-selfupdate/selfupdate"
 	"github.com/spf13/cobra"
 	"os"
@@ -67,7 +68,7 @@ var updateCmd = &cobra.Command{
 			if err != nil {
 				err = errors.New(fmt.Sprintf("error occurred while updating binary: %v", err.Error()))
 
-			    return
+				return
 			}
 
 			d.MessageReport.AddInfo(fmt.Sprintf("successfully updated to version: v%v", latest.Version))
@@ -77,10 +78,10 @@ var updateCmd = &cobra.Command{
 		if err != nil {
 			d.MessageReport.AddError(err)
 
-		    return
+			return
 		}
 
-		handleReport(*d.MessageReport, types.Output{}, gArgs.VerbosityLevel)
+		utils.HandleReport(gArgs, *d.MessageReport, types.Output{}, gArgs.VerbosityLevel)
 
 		return
 	},

@@ -14,6 +14,7 @@ func addAsg(parentCmd *cobra.Command) {
 	addAsgInfo(asgCmd)
 	addAsgFlags(asgCmd)
 	addAsgType(asgCmd)
+	addAsgField(asgCmd)
 
 	parentCmd.AddCommand(asgCmd)
 }
