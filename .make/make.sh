@@ -39,7 +39,7 @@ function test_release {
 }
 
 function generate {
-    ./metactl/dist/metactl gen
+    ./metactl/dist/metactl gen || ((cd gen && go mod init github.com/metamatex/metamate/gen) && exit 1)
     (cd gen && go mod init github.com/metamatex/metamate/gen)
     (cd hackernews-svc && ./../metactl/dist/metactl gen)
 }
