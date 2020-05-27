@@ -166,6 +166,10 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 			LogErr: func(err error) {
 				log.Print(err)
 			},
+			Name: "metamate",
+			Log: func(name string, b []byte, req *http.Request) {
+				log.Printf("%v - %v: %v", name, req.Header.Get(generic.AsgTypeHeader), string(b))
+			},
 		})})
 	}
 

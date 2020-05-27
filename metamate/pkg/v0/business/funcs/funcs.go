@@ -204,7 +204,7 @@ func SetSvcFilterToGetModeRelationIdFunc() types.FuncTransformer {
 	return types.FuncTransformer{
 		Name0: SetSvcFilterToGetModeRelationSvcIdName,
 		Func: func(ctx types.ReqCtx) types.ReqCtx {
-			serviceName, ok := ctx.GCliReq.String(fieldnames.Mode, fieldnames.Relation, fieldnames.Id, fieldnames.ServiceName)
+			serviceName, ok := ctx.GCliReq.String(fieldnames.Mode, fieldnames.Relation, fieldnames.Id, fieldnames.ServiceId, fieldnames.ServiceName)
 			if !ok {
 				return ctx
 			}
@@ -620,7 +620,10 @@ func ResolveRelations(resolvePl *line.Line, f generic.Factory) types.FuncTransfo
 				getMode := mql.GetMode{
 					Kind: &mql.GetModeKind.Relation,
 					Relation: &mql.RelationGetMode{
-						Id:       &id,
+						Id: &mql.Id{
+							Kind:      &mql.IdKind.ServiceId,
+							ServiceId: &id,
+						},
 						Relation: mql.String(fn.Edges.Path.BelongsTo().Name()),
 					},
 				}

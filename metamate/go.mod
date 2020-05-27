@@ -6,6 +6,8 @@ replace github.com/metamatex/metamate/asg => ../asg
 
 replace github.com/metamatex/metamate/mastodon-svc => ../mastodon-svc
 
+replace github.com/metamatex/metamate/reddit-svc => ../reddit-svc
+
 replace github.com/metamatex/metamate/hackernews-svc => ../hackernews-svc
 
 replace github.com/metamatex/metamate/kubernetes-svc => ../kubernetes-svc
@@ -33,6 +35,8 @@ require (
 	github.com/metamatex/metamate/hackernews-svc v0.0.0-00010101000000-000000000000
 	github.com/metamatex/metamate/kubernetes-svc v0.0.0-00010101000000-000000000000
 	github.com/metamatex/metamate/mastodon-svc v0.0.0-00010101000000-000000000000
+	github.com/metamatex/metamate/reddit-svc v0.0.0-00010101000000-000000000000
+	github.com/metamatex/metamate/spec v0.0.0-00010101000000-000000000000
 	github.com/pkg/errors v0.8.1
 	github.com/prometheus/client_golang v1.5.0
 	github.com/rhysd/go-github-selfupdate v1.2.1

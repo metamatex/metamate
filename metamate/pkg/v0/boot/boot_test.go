@@ -92,9 +92,9 @@ func TestBoot(t *testing.T) {
 
 	//FTestHackernews(t, ctx, d.Factory, f)
 
-	FTestPagination(t, ctx, d.Factory, f)
-
-	FTestHackernews(t, ctx, d.Factory, f)
+	//FTestPagination(t, ctx, d.Factory, f)
+	//
+	//FTestHackernews(t, ctx, d.Factory, f)
 
 	//FTestHackernews(t, ctx, d.Factory, f)
 
@@ -131,6 +131,98 @@ func TestBoot(t *testing.T) {
 	//spec.TestGetModeIdWithSelfReferencingRelation(t, ctx, d.Factory, f, suffix, SqlxA)
 	//
 	//spec.TestGetModeIdWithRelation(t, ctx, d.Factory, f, suffix, SqlxA)
+
+	tester := boot.NewTester(false, t, ctx, d.Factory, d.RootNode, f)
+
+	GeneralTest(tester, false)
+	RedditTest(tester, false)
+	HackerNewsTest(tester, false)
+}
+
+func GeneralTest(tester boot.Tester, print bool) {
+	tester.NewSubTester(print, "general", func(tester boot.Tester) {
+		tester.TestGetCollection(false, mql.TypeNames.Service, nil, nil)
+	})
+}
+
+func RedditTest(tester boot.Tester, print bool) {
+	tester.NewSubTester(print, "reddit", func(tester boot.Tester) {
+		svcSvcId := mql.Id{
+			Kind: &mql.IdKind.ServiceId,
+			ServiceId: &mql.ServiceId{
+				ServiceName: mql.String("discovery"),
+				Value:       mql.String("reddit"),
+			},
+		}
+
+		postFeedSvcId := mql.Id{
+			Kind: &mql.IdKind.ServiceId,
+			ServiceId: &mql.ServiceId{
+				ServiceName: mql.String("reddit"),
+				Value:       mql.String("graphql"),
+			},
+		}
+
+		socialAccountSvcId := mql.Id{
+			Kind: &mql.IdKind.ServiceId,
+			ServiceId: &mql.ServiceId{
+				ServiceName: mql.String("reddit"),
+				Value:       mql.String("TheMrZZ0"),
+			},
+		}
+
+		tester.TestGetId(false, mql.TypeNames.Service, svcSvcId, nil)
+		tester.TestGetId(false, mql.TypeNames.PostFeed, postFeedSvcId, []string{mql.FieldNames.ContainsPosts})
+		tester.TestGetRelation(false, mql.TypeNames.Post, postFeedSvcId, mql.PathNames.PostFeedContainsPosts, nil, 2)
+		tester.TestGetRelation(false, mql.TypeNames.Post, socialAccountSvcId, mql.PathNames.SocialAccountAuthorsPosts, nil, 1)
+		tester.TestGetId(false, mql.TypeNames.SocialAccount, socialAccountSvcId, []string{mql.FieldNames.AuthorsPosts})
+	})
+}
+
+func HackerNewsTest(tester boot.Tester, print bool) {
+	tester.NewSubTester(print, "hackernews", func(tester boot.Tester) {
+		svcSvcId := mql.Id{
+			Kind: &mql.IdKind.ServiceId,
+			ServiceId: &mql.ServiceId{
+				ServiceName: mql.String("discovery"),
+				Value:       mql.String("hackernews"),
+			},
+		}
+
+		svcFilter := mql.ServiceFilter{
+			Id: &mql.ServiceIdFilter{
+				Value: &mql.StringFilter{
+					Is: mql.String("hackernews"),
+				},
+			},
+		}
+
+		socialAccountSvcId := mql.Id{
+			Kind: &mql.IdKind.ServiceId,
+			ServiceId: &mql.ServiceId{
+				ServiceName: mql.String("hackernews"),
+				Value:       mql.String("21stio"),
+			},
+		}
+
+		postFeedSvcId := mql.Id{
+			Kind: &mql.IdKind.ServiceId,
+			ServiceId: &mql.ServiceId{
+				ServiceName: mql.String("hackernews"),
+				Value:       mql.String("topstories"),
+			},
+		}
+
+		tester.TestGetId(false, mql.TypeNames.Service, svcSvcId, nil)
+		tester.TestGetRelation(false, mql.TypeNames.Post, socialAccountSvcId, mql.PathNames.SocialAccountAuthorsPosts, nil, 1)
+		tester.TestGetId(false, mql.TypeNames.SocialAccount, socialAccountSvcId, []string{mql.FieldNames.AuthorsPosts})
+		tester.TestGetRelation(false, mql.TypeNames.Post, postFeedSvcId, mql.PathNames.PostFeedContainsPosts, nil, 1)
+		tester.TestGetRelation(false, mql.TypeNames.Post, socialAccountSvcId, mql.PathNames.SocialAccountBookmarksPosts, nil, 1)
+		tester.TestGetRelation(false, mql.TypeNames.Post, socialAccountSvcId, mql.PathNames.SocialAccountAuthorsPosts, nil, 1)
+		tester.TestGetSearch(false, mql.TypeNames.Post, "books", &svcFilter, nil)
+		tester.TestGetCollection(false, mql.TypeNames.PostFeed, &svcFilter, nil)
+		//tester.TestGetId(mql.TypeNames.PostFeed, postFeedSvcId, []string{mql.FieldNames.ContainsPosts})
+	})
 }
 
 func FTestPagination(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error)) {
@@ -434,314 +526,6 @@ func FTestError(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx
 			}
 
 			gGetRsp.Print()
-
-			return
-		}()
-		if err != nil {
-			t.Error(err)
-		}
-	})
-}
-
-func FTestHackernews(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error)) {
-	t.Run("GetSocialAccounts", func(t *testing.T) {
-		t.Run("id", func(t *testing.T) {
-			err := func() (err error) {
-				getReq := mql.GetSocialAccountsRequest{
-					Mode: &mql.GetMode{
-						Kind: &mql.GetModeKind.Id,
-						Id: &mql.Id{
-							Kind: &mql.IdKind.ServiceId,
-							ServiceId: &mql.ServiceId{
-								Value:       mql.String("21stio"),
-								ServiceName: mql.String("hackernews"),
-							},
-						},
-					},
-				}
-
-				gGetReq := f.MustFromStruct(getReq)
-
-				gGetRsp, err := h(ctx, gGetReq)
-				if err != nil {
-					return
-				}
-
-				var getRsp mql.GetSocialAccountsResponse
-				gGetRsp.MustToStruct(&getRsp)
-
-				assert.Len(t, getRsp.SocialAccounts, 1)
-
-				return
-			}()
-			if err != nil {
-				t.Error(err)
-			}
-		})
-	})
-
-	//FTestHackernewsSocialAccount(t, ctx, f, h)
-	//FTestHackernewsGetPostFeedContainsPosts(t, ctx, f, h)
-	//FTestHackernewsGetPostsSearch(t, ctx, f, h)
-	//FTestHackernewsGetSocialAccountBookmarksPosts(t, ctx, f, h)
-	//FTestHackernewsGetSocialAccountAuthorsPosts(t, ctx, f, h)
-	//FTestHackernewsGetPostFeedsCollection(t, ctx, f, h)
-}
-
-func FTestHackernewsSocialAccount(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error)) {
-	name := "TestHackernews"
-	t.Run(name, func(t *testing.T) {
-		t.Parallel()
-
-		err := func() (err error) {
-			getReq := mql.GetSocialAccountsRequest{
-				ServiceFilter: &mql.ServiceFilter{
-					Id: &mql.ServiceIdFilter{
-						Value: &mql.StringFilter{
-							Is: mql.String("hackernews"),
-						},
-					},
-				},
-				Mode: &mql.GetMode{
-					Kind: &mql.GetModeKind.Id,
-					Id: &mql.Id{
-						Kind: &mql.IdKind.ServiceId,
-						ServiceId: &mql.ServiceId{
-							Value:       mql.String("21stio"),
-							ServiceName: mql.String("hackernews"),
-						},
-					},
-				},
-				Select: &mql.GetSocialAccountsResponseSelect{
-					SocialAccounts: &mql.SocialAccountSelect{
-						All: mql.Bool(true),
-						Relations: &mql.SocialAccountRelationsSelect{
-							AuthorsPosts: &mql.PostsCollectionSelect{
-								Errors: &mql.ErrorSelect{
-									Message: mql.Bool(true),
-								},
-								Posts: &mql.PostSelect{
-									Id: &mql.ServiceIdSelect{
-										Value:       mql.Bool(true),
-										ServiceName: mql.Bool(true),
-									},
-								},
-							},
-						},
-					},
-				},
-				Relations: &mql.GetSocialAccountsRelations{
-					AuthorsPosts: &mql.GetPostsCollection{
-						Select: &mql.PostsCollectionSelect{
-							Errors: &mql.ErrorSelect{
-								Message: mql.Bool(true),
-							},
-							Posts: &mql.PostSelect{
-								Id: &mql.ServiceIdSelect{
-									Value:       mql.Bool(true),
-									ServiceName: mql.Bool(true),
-								},
-							},
-						},
-					},
-				},
-			}
-
-			gGetRsp, err := h(ctx, f.MustFromStruct(getReq))
-			if err != nil {
-				return
-			}
-
-			gGetRsp.Print()
-
-			return
-		}()
-		if err != nil {
-			t.Error(err)
-		}
-	})
-}
-
-func FTestHackernewsGetPostFeedContainsPosts(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error)) {
-	name := "TestHackernewsGetPostFeedContainsPosts"
-	t.Run(name, func(t *testing.T) {
-		t.Parallel()
-
-		err := func() (err error) {
-			getReq := mql.GetPostsRequest{
-				Mode: &mql.GetMode{
-					Kind: &mql.GetModeKind.Relation,
-					Relation: &mql.RelationGetMode{
-						Id: &mql.ServiceId{
-							ServiceName: mql.String("hackernews"),
-							Value:       mql.String("topstories"),
-						},
-						Relation: &mql.PostFeedRelationName.PostFeedContainsPosts,
-					},
-				},
-			}
-
-			gGetRsp, err := h(ctx, f.MustFromStruct(getReq))
-			if err != nil {
-				return
-			}
-
-			gGetRsp.Print()
-
-			getRsp := mql.GetPostsResponse{}
-			gGetRsp.MustToStruct(&getRsp)
-
-			assert.True(t, len(getRsp.Posts) != 0)
-
-			return
-		}()
-		if err != nil {
-			t.Error(err)
-		}
-	})
-}
-
-func FTestHackernewsGetPostsSearch(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error)) {
-	name := "TestHackernewsGetPostsSearch"
-	t.Run(name, func(t *testing.T) {
-		t.Parallel()
-
-		err := func() (err error) {
-			getReq := mql.GetPostsRequest{
-				Mode: &mql.GetMode{
-					Kind: &mql.GetModeKind.Search,
-					Search: &mql.SearchGetMode{
-						Term: mql.String("book recommendations"),
-					},
-				},
-			}
-
-			gGetRsp, err := h(ctx, f.MustFromStruct(getReq))
-			if err != nil {
-				return
-			}
-
-			gGetRsp.Print()
-
-			getRsp := mql.GetPostsResponse{}
-			gGetRsp.MustToStruct(&getRsp)
-
-			assert.True(t, len(getRsp.Posts) != 0)
-
-			return
-		}()
-		if err != nil {
-			t.Error(err)
-		}
-	})
-}
-
-func FTestHackernewsGetSocialAccountAuthorsPosts(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error)) {
-	name := "TestHackernewsGetSocialAccountAuthorsPosts"
-	t.Run(name, func(t *testing.T) {
-		t.Parallel()
-
-		err := func() (err error) {
-			getReq := mql.GetPostsRequest{
-				Mode: &mql.GetMode{
-					Kind: &mql.GetModeKind.Relation,
-					Relation: &mql.RelationGetMode{
-						Id: &mql.ServiceId{
-							ServiceName: mql.String("hackernews"),
-							Value:       mql.String("21stio"),
-						},
-						Relation: &mql.SocialAccountRelationName.SocialAccountAuthorsPosts,
-					},
-				},
-			}
-
-			gGetRsp, err := h(ctx, f.MustFromStruct(getReq))
-			if err != nil {
-				return
-			}
-
-			gGetRsp.Print()
-
-			getRsp := mql.GetPostsResponse{}
-			gGetRsp.MustToStruct(&getRsp)
-
-			assert.True(t, len(getRsp.Posts) != 0)
-
-			return
-		}()
-		if err != nil {
-			t.Error(err)
-		}
-	})
-}
-
-func FTestHackernewsGetPostFeedsCollection(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error)) {
-	name := "TestHackernewsGetPostFeedsCollection"
-	t.Run(name, func(t *testing.T) {
-		t.Parallel()
-
-		err := func() (err error) {
-			getReq := mql.GetPostFeedsRequest{
-				Filter: &mql.PostFeedFilter{
-					Id: &mql.ServiceIdFilter{
-						Value: &mql.StringFilter{
-							Contains: mql.String("top"),
-						},
-					},
-				},
-			}
-
-			gGetRsp, err := h(ctx, f.MustFromStruct(getReq))
-			if err != nil {
-				return
-			}
-
-			gGetRsp.Print()
-
-			getRsp := mql.GetPostFeedsResponse{}
-			gGetRsp.MustToStruct(&getRsp)
-			assert.True(t, len(getRsp.PostFeeds) != 0)
-
-			return
-		}()
-		if err != nil {
-			t.Error(err)
-		}
-	})
-}
-
-func FTestHackernewsGetSocialAccountBookmarksPosts(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error)) {
-	name := "TestHackernewsGetSocialAccountBookmarksPosts"
-	t.Run(name, func(t *testing.T) {
-		t.Parallel()
-
-		err := func() (err error) {
-			getReq := mql.GetPostsRequest{
-				Mode: &mql.GetMode{
-					Kind: &mql.GetModeKind.Relation,
-					Relation: &mql.RelationGetMode{
-						Id: &mql.ServiceId{
-							ServiceName: mql.String("hackernews"),
-							Value:       mql.String("peter_d_sherman"),
-						},
-						Relation: &mql.SocialAccountRelationName.SocialAccountBookmarksPosts,
-					},
-				},
-			}
-
-			gGetRsp, err := h(ctx, f.MustFromStruct(getReq))
-			if err != nil {
-				return
-			}
-
-			//gGetRsp.Print()
-
-			getRsp := mql.GetPostsResponse{}
-			gGetRsp.MustToStruct(&getRsp)
-
-			mql.Print(getRsp.Pagination)
-
-			assert.True(t, len(getRsp.Posts) != 0)
 
 			return
 		}()

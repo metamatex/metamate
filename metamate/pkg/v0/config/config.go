@@ -86,6 +86,19 @@ var DefaultConfig = types.Config{
 				Id:   "hackernews",
 				Name: virtual.Hackernews,
 			},
+			{
+				Id:   "reddit",
+				Name: virtual.Reddit,
+				Opts: &types.VirtualSvcOpts{
+					Reddit: &types.RedditOpts{
+						ClientId:     "5Spu4UHEEVbvsQ",
+						ClientSecret: "OzXCIrbPZVbTlgy37YeZDfCiYWQ",
+						Username:     "metamatex",
+						Password:     "vJ6g3ouQbZ4ztiA",
+						UserAgent:    "abc",
+					},
+				},
+			},
 		},
 	},
 }

@@ -8,6 +8,11 @@ v0:
         endpoints: [GetPostFeeds, GetSocialAccounts, GetPosts]
       - name: go-service
         args:
+          name: reddit
+          package: github.com/metamatex/metamate
+        endpoints: [GetPostFeeds, GetSocialAccounts, GetPosts]
+      - name: go-service
+        args:
           name: kubernetes
           package: github.com/metamatex/metamate
         endpoints: [GetServices]

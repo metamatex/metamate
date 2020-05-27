@@ -13,6 +13,7 @@ const (
 	Error      = "error"
 	Pagination = "pagination"
 	Mastodon   = "mastodon"
+	Reddit     = "reddit"
 	Hackernews = "hackernews"
 	Kubernetes = "kubernetes"
 )

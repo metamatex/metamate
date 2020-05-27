@@ -66,6 +66,10 @@ func validateVirtualSvcOpts(opts types.VirtualSvcOpts) (err error) {
 		c++
 	}
 
+	if opts.Reddit != nil {
+		c++
+	}
+
 	if c != 1 {
 		err = errors.New("must exactly one opts")
 
@@ -193,27 +197,54 @@ func (c *Cluster) RoundTrip(req *http.Request) (rsp *http.Response, err error) {
 	return
 }
 
-func (c *Cluster) serveDiscovery(ctx context.Context, gRequest generic.Generic) (gResponse generic.Generic) {
-	switch gRequest.Type().Name() {
+func (c *Cluster) serveDiscovery(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic) {
+	switch gReq.Type().Name() {
 	case mql.LookupServiceRequestName:
 		return c.f.MustFromStruct(mql.LookupServiceResponse{
 			Output: &mql.LookupServiceOutput{
 				Service: &mql.Service{
 					Endpoints: &mql.Endpoints{
 						LookupService: &mql.LookupServiceEndpoint{},
-						GetServices:   &mql.GetServicesEndpoint{},
+						GetServices:   &mql.GetServicesEndpoint{
+							//Filter: &mql.GetServicesRequestFilter{
+							//	Mode: &mql.GetModeFilter{
+							//		Kind: &mql.EnumFilter{
+							//			In: []string{mql.GetModeKind.Collection, mql.GetModeKind.Id},
+							//		},
+							//	},
+							//},
+						},
 					},
 				},
 			},
 		})
 	case mql.GetServicesRequestName:
+		var errs []mql.Error
 		var svcs []mql.Service
 
-		for _, svc := range c.svcs {
-			svcs = append(svcs, svc)
+		var req mql.GetServicesRequest
+		gReq.MustToStruct(&req)
+
+		switch *req.Mode.Kind {
+		case mql.GetModeKind.Id:
+
+			svc, ok := c.svcs[*req.Mode.Id.ServiceId.Value]
+			if !ok {
+				errs = append(errs, mql.Error{
+					Kind: &mql.ErrorKind.IdNotPresent,
+					Id:   req.Mode.Id,
+				})
+			} else {
+				svcs = append(svcs, svc)
+			}
+		case mql.GetModeKind.Collection:
+			for _, svc := range c.svcs {
+				svcs = append(svcs, svc)
+			}
 		}
 
 		return c.f.MustFromStruct(mql.GetServicesResponse{
+			Errors:   errs,
 			Services: svcs,
 		})
 	}
