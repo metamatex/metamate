@@ -14,6 +14,8 @@ replace github.com/metamatex/metamate/kubernetes-svc => ./kubernetes-svc
 
 replace github.com/metamatex/metamate/mastodon-svc => ./mastodon-svc
 
+replace github.com/metamatex/metamate/reddit-svc => ./reddit-svc
+
 replace github.com/metamatex/metamate/metactl => ./metactl
 
 replace github.com/metamatex/metamate/metamate => ./metamate
