@@ -2,8 +2,8 @@ package spec
 
 import (
 	"context"
-	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/gen/v0/mql"
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"testing"
 )
 
@@ -13,10 +13,10 @@ func TestDiscovery(t *testing.T, ctx context.Context, f generic.Factory, h func(
 		t.Parallel()
 
 		err := func() (err error) {
-			getReq := sdk.GetServicesRequest{
-				Mode: &sdk.GetMode{
-					Kind:       &sdk.GetModeKind.Collection,
-					Collection: &sdk.CollectionGetMode{},
+			getReq := mql.GetServicesRequest{
+				Mode: &mql.GetMode{
+					Kind:       &mql.GetModeKind.Collection,
+					Collection: &mql.CollectionGetMode{},
 				},
 			}
 
@@ -41,10 +41,10 @@ func TestEmptyServiceFilter(t *testing.T, ctx context.Context, f generic.Factory
 		t.Parallel()
 
 		err := func() (err error) {
-			getReq := sdk.GetServicesRequest{
-				Mode: &sdk.GetMode{
-					Kind:       &sdk.GetModeKind.Collection,
-					Collection: &sdk.CollectionGetMode{},
+			getReq := mql.GetServicesRequest{
+				Mode: &mql.GetMode{
+					Kind:       &mql.GetModeKind.Collection,
+					Collection: &mql.CollectionGetMode{},
 				},
 			}
 

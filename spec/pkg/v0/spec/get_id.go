@@ -3,9 +3,9 @@ package spec
 import (
 	"context"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
-	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/gen/v0/mql"
-	
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -17,29 +17,29 @@ func TestGetModeId(t *testing.T, ctx context.Context, f generic.Factory, h func(
 		t.Parallel()
 
 		err := func() (err error) {
-			postReq := sdk.PostWhateversRequest{
-				ServiceFilter: &sdk.ServiceFilter{
-					Id: &sdk.ServiceIdFilter{
-						Value: &sdk.StringFilter{
-							Is: sdk.String(svcName),
+			postReq := mql.PostWhateversRequest{
+				ServiceFilter: &mql.ServiceFilter{
+					Id: &mql.ServiceIdFilter{
+						Value: &mql.StringFilter{
+							Is: mql.String(svcName),
 						},
 					},
 				},
-				Select: &sdk.PostWhateversResponseSelect{
+				Select: &mql.PostWhateversResponseSelect{
 					Meta: GetResponseMetaSelect(),
-					Whatevers: &sdk.WhateverSelect{
-						Id: &sdk.ServiceIdSelect{
-							Value: sdk.Bool(true),
+					Whatevers: &mql.WhateverSelect{
+						Id: &mql.ServiceIdSelect{
+							Value: mql.Bool(true),
 						},
-						StringField: sdk.Bool(true),
+						StringField: mql.Bool(true),
 					},
 				},
-				Whatevers: []sdk.Whatever{
+				Whatevers: []mql.Whatever{
 					{
-						Id: &sdk.ServiceId{
-							Value: sdk.String(nameSvcId(suffix, name, "0")),
+						Id: &mql.ServiceId{
+							Value: mql.String(nameSvcId(suffix, name, "0")),
 						},
-						StringField: sdk.String("hi"),
+						StringField: mql.String("hi"),
 					},
 				},
 			}
@@ -49,35 +49,35 @@ func TestGetModeId(t *testing.T, ctx context.Context, f generic.Factory, h func(
 				return
 			}
 
-			postRsp := sdk.PostWhateversResponse{}
+			postRsp := mql.PostWhateversResponse{}
 			gPostRsp.MustToStruct(&postRsp)
 
 			requirePostRsp(t, gPostRsp)
 
-			getReq := sdk.GetWhateversRequest{
-				ServiceFilter: &sdk.ServiceFilter{
-					Id: &sdk.ServiceIdFilter{
-						Value: &sdk.StringFilter{
-							Is: sdk.String(svcName),
+			getReq := mql.GetWhateversRequest{
+				ServiceFilter: &mql.ServiceFilter{
+					Id: &mql.ServiceIdFilter{
+						Value: &mql.StringFilter{
+							Is: mql.String(svcName),
 						},
 					},
 				},
-				Mode: &sdk.GetMode{
-					Kind: &sdk.GetModeKind.Id,
-					Id: &sdk.Id{
-						Kind: &sdk.IdKind.ServiceId,
-						ServiceId: &sdk.ServiceId{
+				Mode: &mql.GetMode{
+					Kind: &mql.GetModeKind.Id,
+					Id: &mql.Id{
+						Kind: &mql.IdKind.ServiceId,
+						ServiceId: &mql.ServiceId{
 							Value: postRsp.Whatevers[0].Id.Value,
 						},
 					},
 				},
-				Select: &sdk.GetWhateversResponseSelect{
+				Select: &mql.GetWhateversResponseSelect{
 					Meta: GetCollectionMetaSelect(),
-					Whatevers: &sdk.WhateverSelect{
-						Id: &sdk.ServiceIdSelect{
-							Value: sdk.Bool(true),
+					Whatevers: &mql.WhateverSelect{
+						Id: &mql.ServiceIdSelect{
+							Value: mql.Bool(true),
 						},
-						StringField: sdk.Bool(true),
+						StringField: mql.Bool(true),
 					},
 				},
 			}
@@ -89,7 +89,7 @@ func TestGetModeId(t *testing.T, ctx context.Context, f generic.Factory, h func(
 
 			requireGetRsp(t, gGetRsp)
 
-			getRsp := sdk.GetWhateversResponse{}
+			getRsp := mql.GetWhateversResponse{}
 			gGetRsp.MustToStruct(&getRsp)
 
 			assert.Equal(t, *postRsp.Whatevers[0].Id.Value, *getRsp.Whatevers[0].Id.Value)
@@ -108,23 +108,23 @@ func TestGetModeIdWithZeroId(t *testing.T, ctx context.Context, f generic.Factor
 		t.Parallel()
 
 		err := func() (err error) {
-			getReq := sdk.GetWhateversRequest{
-				Mode: &sdk.GetMode{
-					Kind: &sdk.GetModeKind.Id,
-					Id: &sdk.Id{
-						Kind: &sdk.IdKind.ServiceId,
-						ServiceId: &sdk.ServiceId{
-							Value: sdk.String(""),
+			getReq := mql.GetWhateversRequest{
+				Mode: &mql.GetMode{
+					Kind: &mql.GetModeKind.Id,
+					Id: &mql.Id{
+						Kind: &mql.IdKind.ServiceId,
+						ServiceId: &mql.ServiceId{
+							Value: mql.String(""),
 						},
 					},
 				},
-				Select: &sdk.GetWhateversResponseSelect{
+				Select: &mql.GetWhateversResponseSelect{
 					Meta: GetCollectionMetaSelect(),
-					Whatevers: &sdk.WhateverSelect{
-						Id: &sdk.ServiceIdSelect{
-							Value: sdk.Bool(true),
+					Whatevers: &mql.WhateverSelect{
+						Id: &mql.ServiceIdSelect{
+							Value: mql.Bool(true),
 						},
-						StringField: sdk.Bool(true),
+						StringField: mql.Bool(true),
 					},
 				},
 			}
@@ -136,7 +136,7 @@ func TestGetModeIdWithZeroId(t *testing.T, ctx context.Context, f generic.Factor
 
 			requireGetRsp(t, gGetRsp)
 
-			getRsp := sdk.GetWhateversResponse{}
+			getRsp := mql.GetWhateversResponse{}
 			gGetRsp.MustToStruct(&getRsp)
 
 			return
@@ -153,26 +153,26 @@ func TestGetModeIdWithServiceFilter(t *testing.T, ctx context.Context, f generic
 		t.Parallel()
 
 		err := func() (err error) {
-			postReq := sdk.PostWhateversRequest{
-				ServiceFilter: &sdk.ServiceFilter{
-					Id: &sdk.ServiceIdFilter{
-						Value: &sdk.StringFilter{
-							Is: sdk.String(svcNameA),
+			postReq := mql.PostWhateversRequest{
+				ServiceFilter: &mql.ServiceFilter{
+					Id: &mql.ServiceIdFilter{
+						Value: &mql.StringFilter{
+							Is: mql.String(svcNameA),
 						},
 					},
 				},
-				Select: &sdk.PostWhateversResponseSelect{
+				Select: &mql.PostWhateversResponseSelect{
 					Meta: GetResponseMetaSelect(),
-					Whatevers: &sdk.WhateverSelect{
-						Id: &sdk.ServiceIdSelect{
-							Value: sdk.Bool(true),
+					Whatevers: &mql.WhateverSelect{
+						Id: &mql.ServiceIdSelect{
+							Value: mql.Bool(true),
 						},
 					},
 				},
-				Whatevers: []sdk.Whatever{
+				Whatevers: []mql.Whatever{
 					{
-						Id: &sdk.ServiceId{
-							Value: sdk.String(nameSvcId(suffix, name, "0")),
+						Id: &mql.ServiceId{
+							Value: mql.String(nameSvcId(suffix, name, "0")),
 						},
 					},
 				},
@@ -183,19 +183,19 @@ func TestGetModeIdWithServiceFilter(t *testing.T, ctx context.Context, f generic
 				return
 			}
 
-			postRsp := sdk.PostWhateversResponse{}
+			postRsp := mql.PostWhateversResponse{}
 			gPostRsp.MustToStruct(&postRsp)
 
 			requirePostRsp(t, gPostRsp)
 
 			err = requireSvcHasSvcId(t, h, f, ctx, svcNameA, *postRsp.Whatevers[0].Id.Value)
 			if err != nil {
-			    return
+				return
 			}
 
 			err = requireSvcHasNotSvcId(t, h, f, ctx, svcNameB, *postRsp.Whatevers[0].Id.Value)
 			if err != nil {
-			    return
+				return
 			}
 
 			return
@@ -212,36 +212,36 @@ func TestGetModeIdWithNameId(t *testing.T, ctx context.Context, f generic.Factor
 		t.Parallel()
 
 		err := func() (err error) {
-			postReq := sdk.PostWhateversRequest{
-				ServiceFilter: &sdk.ServiceFilter{
-					Id: &sdk.ServiceIdFilter{
-						Value: &sdk.StringFilter{
-							Is: sdk.String(svcName),
+			postReq := mql.PostWhateversRequest{
+				ServiceFilter: &mql.ServiceFilter{
+					Id: &mql.ServiceIdFilter{
+						Value: &mql.StringFilter{
+							Is: mql.String(svcName),
 						},
 					},
 				},
-				Select: &sdk.PostWhateversResponseSelect{
+				Select: &mql.PostWhateversResponseSelect{
 					Meta: GetResponseMetaSelect(),
-					Whatevers: &sdk.WhateverSelect{
-						Id: &sdk.ServiceIdSelect{
-							Value: sdk.Bool(true),
+					Whatevers: &mql.WhateverSelect{
+						Id: &mql.ServiceIdSelect{
+							Value: mql.Bool(true),
 						},
-						AlternativeIds: &sdk.IdSelect{
-							Kind: sdk.Bool(true),
-							Name: sdk.Bool(true),
+						AlternativeIds: &mql.IdSelect{
+							Kind: mql.Bool(true),
+							Name: mql.Bool(true),
 						},
-						StringField: sdk.Bool(true),
+						StringField: mql.Bool(true),
 					},
 				},
-				Whatevers: []sdk.Whatever{
+				Whatevers: []mql.Whatever{
 					{
-						AlternativeIds: []sdk.Id{
+						AlternativeIds: []mql.Id{
 							{
-								Kind: &sdk.IdKind.Name,
-								Name: sdk.String(nameSvcId(suffix, name, "0")),
+								Kind: &mql.IdKind.Name,
+								Name: mql.String(nameSvcId(suffix, name, "0")),
 							},
 						},
-						StringField: sdk.String("a"),
+						StringField: mql.String("a"),
 					},
 				},
 			}
@@ -251,37 +251,37 @@ func TestGetModeIdWithNameId(t *testing.T, ctx context.Context, f generic.Factor
 				return
 			}
 
-			postRsp := sdk.PostWhateversResponse{}
+			postRsp := mql.PostWhateversResponse{}
 			gPostRsp.MustToStruct(&postRsp)
 
 			requirePostRsp(t, gPostRsp)
 
-			getReq := sdk.GetWhateversRequest{
-				ServiceFilter: &sdk.ServiceFilter{
-					Id: &sdk.ServiceIdFilter{
-						Value: &sdk.StringFilter{
-							Is: sdk.String(svcName),
+			getReq := mql.GetWhateversRequest{
+				ServiceFilter: &mql.ServiceFilter{
+					Id: &mql.ServiceIdFilter{
+						Value: &mql.StringFilter{
+							Is: mql.String(svcName),
 						},
 					},
 				},
-				Mode: &sdk.GetMode{
-					Kind: &sdk.GetModeKind.Id,
-					Id: &sdk.Id{
-						Kind: &sdk.IdKind.Name,
+				Mode: &mql.GetMode{
+					Kind: &mql.GetModeKind.Id,
+					Id: &mql.Id{
+						Kind: &mql.IdKind.Name,
 						Name: postRsp.Whatevers[0].AlternativeIds[0].Name,
 					},
 				},
-				Select: &sdk.GetWhateversResponseSelect{
+				Select: &mql.GetWhateversResponseSelect{
 					Meta: GetCollectionMetaSelect(),
-					Whatevers: &sdk.WhateverSelect{
-						Id: &sdk.ServiceIdSelect{
-							Value: sdk.Bool(true),
+					Whatevers: &mql.WhateverSelect{
+						Id: &mql.ServiceIdSelect{
+							Value: mql.Bool(true),
 						},
-						AlternativeIds: &sdk.IdSelect{
-							Kind: sdk.Bool(true),
-							Name: sdk.Bool(true),
+						AlternativeIds: &mql.IdSelect{
+							Kind: mql.Bool(true),
+							Name: mql.Bool(true),
 						},
-						StringField: sdk.Bool(true),
+						StringField: mql.Bool(true),
 					},
 				},
 			}
@@ -293,7 +293,7 @@ func TestGetModeIdWithNameId(t *testing.T, ctx context.Context, f generic.Factor
 
 			requireGetRsp(t, gGetRsp)
 
-			getRsp := sdk.GetWhateversResponse{}
+			getRsp := mql.GetWhateversResponse{}
 			gGetRsp.MustToStruct(&getRsp)
 
 			assert.Equal(t, *postReq.Whatevers[0].StringField, *getRsp.Whatevers[0].StringField)
@@ -318,76 +318,75 @@ func TestGetModeIdWithSelfReferencingRelation(t *testing.T, ctx context.Context,
 		t.Parallel()
 
 		err := func() (err error) {
-			whatevers := []sdk.Whatever{
+			whatevers := []mql.Whatever{
 				{
-					Id: &sdk.ServiceId{
-						Value: sdk.String(nameSvcId(suffix, name, "a")),
+					Id: &mql.ServiceId{
+						Value: mql.String(nameSvcId(suffix, name, "a")),
 					},
 				},
 				{
-					Id: &sdk.ServiceId{
-						Value: sdk.String(nameSvcId(suffix, name, "b")),
+					Id: &mql.ServiceId{
+						Value: mql.String(nameSvcId(suffix, name, "b")),
 					},
 				},
 				{
-					Id: &sdk.ServiceId{
-						Value: sdk.String(nameSvcId(suffix, name, "c")),
+					Id: &mql.ServiceId{
+						Value: mql.String(nameSvcId(suffix, name, "c")),
 					},
 				},
 			}
 
 			postRsp := requirePostWhatevers(t, ctx, f, h, svcName, whatevers)
 
-			err = requirePutWhatevers(t, ctx, f, h, postRsp.Whatevers[0].Id, []sdk.ServiceId{*postRsp.Whatevers[1].Id, *postRsp.Whatevers[2].Id}, sdk.WhateverRelationName.WhateverKnowsWhatevers, sdk.RelationOperation.Add)
+			err = requirePutWhatevers(t, ctx, f, h, postRsp.Whatevers[0].Id, []mql.ServiceId{*postRsp.Whatevers[1].Id, *postRsp.Whatevers[2].Id}, mql.WhateverRelationName.WhateverKnowsWhatevers, mql.RelationOperation.Add)
 			if err != nil {
 				return
 			}
 
-			getReq := sdk.GetWhateversRequest{
-				Mode: &sdk.GetMode{
-					Kind: &sdk.GetModeKind.Id,
-					Id: &sdk.Id{
-						Kind:      &sdk.IdKind.ServiceId,
+			getReq := mql.GetWhateversRequest{
+				Mode: &mql.GetMode{
+					Kind: &mql.GetModeKind.Id,
+					Id: &mql.Id{
+						Kind:      &mql.IdKind.ServiceId,
 						ServiceId: whatevers[0].Id,
 					},
 				},
-				ServiceFilter: &sdk.ServiceFilter{
-					Id: &sdk.ServiceIdFilter{
-						Value: &sdk.StringFilter{
-							Is: sdk.String(svcName),
+				ServiceFilter: &mql.ServiceFilter{
+					Id: &mql.ServiceIdFilter{
+						Value: &mql.StringFilter{
+							Is: mql.String(svcName),
 						},
 					},
 				},
-				Select: &sdk.GetWhateversResponseSelect{
+				Select: &mql.GetWhateversResponseSelect{
 					Meta: GetCollectionMetaSelect(),
-					Whatevers: &sdk.WhateverSelect{
-						Id: &sdk.ServiceIdSelect{
-							Value: sdk.Bool(true),
+					Whatevers: &mql.WhateverSelect{
+						Id: &mql.ServiceIdSelect{
+							Value: mql.Bool(true),
 						},
-						AlternativeIds: &sdk.IdSelect{
-							Kind: sdk.Bool(true),
-							Name: sdk.Bool(true),
-							Email: &sdk.EmailSelect{
-								Value: sdk.Bool(true),
+						AlternativeIds: &mql.IdSelect{
+							Kind: mql.Bool(true),
+							Name: mql.Bool(true),
+							Email: &mql.EmailSelect{
+								Value: mql.Bool(true),
 							},
 						},
-						Relations: &sdk.WhateverRelationsSelect{
-							KnowsWhatevers: &sdk.WhateversCollectionSelect{
+						Relations: &mql.WhateverRelationsSelect{
+							KnowsWhatevers: &mql.WhateversCollectionSelect{
 								Meta: GetCollectionMetaSelect(),
-								Whatevers: &sdk.WhateverSelect{
-									Id: &sdk.ServiceIdSelect{
-										Value: sdk.Bool(true),
+								Whatevers: &mql.WhateverSelect{
+									Id: &mql.ServiceIdSelect{
+										Value: mql.Bool(true),
 									},
 								},
 							},
 						},
 					},
 				},
-				Relations: &sdk.GetWhateversRelations{
-					KnowsWhatevers: &sdk.GetWhateversCollection{
-						Relations: &sdk.GetWhateversRelations{
-							KnewByWhatevers: &sdk.GetWhateversCollection{
-							},
+				Relations: &mql.GetWhateversRelations{
+					KnowsWhatevers: &mql.GetWhateversCollection{
+						Relations: &mql.GetWhateversRelations{
+							KnewByWhatevers: &mql.GetWhateversCollection{},
 						},
 					},
 				},
@@ -419,23 +418,23 @@ func TestGetModeIdWithRelation(t *testing.T, ctx context.Context, f generic.Fact
 		t.Parallel()
 
 		err := func() (err error) {
-			whatevers := []sdk.Whatever{
+			whatevers := []mql.Whatever{
 				{
-					Id: &sdk.ServiceId{
-						Value: sdk.String(nameSvcId(suffix, name, "a")),
+					Id: &mql.ServiceId{
+						Value: mql.String(nameSvcId(suffix, name, "a")),
 					},
 				},
 			}
 
-			blueWhatevers := []sdk.BlueWhatever{
+			blueWhatevers := []mql.BlueWhatever{
 				{
-					Id: &sdk.ServiceId{
-						Value: sdk.String(nameSvcId(suffix, name, "a")),
+					Id: &mql.ServiceId{
+						Value: mql.String(nameSvcId(suffix, name, "a")),
 					},
 				},
 				{
-					Id: &sdk.ServiceId{
-						Value: sdk.String(nameSvcId(suffix, name, "b")),
+					Id: &mql.ServiceId{
+						Value: mql.String(nameSvcId(suffix, name, "b")),
 					},
 				},
 			}
@@ -444,55 +443,55 @@ func TestGetModeIdWithRelation(t *testing.T, ctx context.Context, f generic.Fact
 
 			postBlueWhateversRsp := requirePostBlueWhatevers(t, ctx, f, h, svcName, blueWhatevers)
 
-			err = requirePutBlueWhatevers(t, ctx, f, h, postWhateversRsp.Whatevers[0].Id, []sdk.ServiceId{*postBlueWhateversRsp.BlueWhatevers[0].Id, *postBlueWhateversRsp.BlueWhatevers[1].Id}, sdk.WhateverRelationName.WhateverKnowsBlueWhatevers, sdk.RelationOperation.Add)
+			err = requirePutBlueWhatevers(t, ctx, f, h, postWhateversRsp.Whatevers[0].Id, []mql.ServiceId{*postBlueWhateversRsp.BlueWhatevers[0].Id, *postBlueWhateversRsp.BlueWhatevers[1].Id}, mql.WhateverRelationName.WhateverKnowsBlueWhatevers, mql.RelationOperation.Add)
 			if err != nil {
 				return
 			}
 
-			getReq := sdk.GetWhateversRequest{
-				Mode: &sdk.GetMode{
-					Kind: &sdk.GetModeKind.Id,
-					Id: &sdk.Id{
-						Kind:      &sdk.IdKind.ServiceId,
+			getReq := mql.GetWhateversRequest{
+				Mode: &mql.GetMode{
+					Kind: &mql.GetModeKind.Id,
+					Id: &mql.Id{
+						Kind:      &mql.IdKind.ServiceId,
 						ServiceId: whatevers[0].Id,
 					},
 				},
-				ServiceFilter: &sdk.ServiceFilter{
-					Id: &sdk.ServiceIdFilter{
-						Value: &sdk.StringFilter{
-							Is: sdk.String(svcName),
+				ServiceFilter: &mql.ServiceFilter{
+					Id: &mql.ServiceIdFilter{
+						Value: &mql.StringFilter{
+							Is: mql.String(svcName),
 						},
 					},
 				},
-				Select: &sdk.GetWhateversResponseSelect{
+				Select: &mql.GetWhateversResponseSelect{
 					Meta: GetCollectionMetaSelect(),
-					Whatevers: &sdk.WhateverSelect{
-						Id: &sdk.ServiceIdSelect{
-							Value: sdk.Bool(true),
+					Whatevers: &mql.WhateverSelect{
+						Id: &mql.ServiceIdSelect{
+							Value: mql.Bool(true),
 						},
-						AlternativeIds: &sdk.IdSelect{
-							Kind: sdk.Bool(true),
-							Name: sdk.Bool(true),
-							Email: &sdk.EmailSelect{
-								Value: sdk.Bool(true),
+						AlternativeIds: &mql.IdSelect{
+							Kind: mql.Bool(true),
+							Name: mql.Bool(true),
+							Email: &mql.EmailSelect{
+								Value: mql.Bool(true),
 							},
 						},
-						Relations: &sdk.WhateverRelationsSelect{
-							KnowsBlueWhatevers: &sdk.BlueWhateversCollectionSelect{
+						Relations: &mql.WhateverRelationsSelect{
+							KnowsBlueWhatevers: &mql.BlueWhateversCollectionSelect{
 								Meta: GetCollectionMetaSelect(),
-								BlueWhatevers: &sdk.BlueWhateverSelect{
-									Id: &sdk.ServiceIdSelect{
-										Value: sdk.Bool(true),
+								BlueWhatevers: &mql.BlueWhateverSelect{
+									Id: &mql.ServiceIdSelect{
+										Value: mql.Bool(true),
 									},
 								},
 							},
 						},
 					},
 				},
-				Relations: &sdk.GetWhateversRelations{
-					KnowsBlueWhatevers: &sdk.GetBlueWhateversCollection{
-						Relations: &sdk.GetBlueWhateversRelations{
-							KnewByWhatevers: &sdk.GetWhateversCollection{},
+				Relations: &mql.GetWhateversRelations{
+					KnowsBlueWhatevers: &mql.GetBlueWhateversCollection{
+						Relations: &mql.GetBlueWhateversRelations{
+							KnewByWhatevers: &mql.GetWhateversCollection{},
 						},
 					},
 				},

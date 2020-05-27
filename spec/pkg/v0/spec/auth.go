@@ -2,9 +2,9 @@ package spec
 
 import (
 	"context"
-	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/gen/v0/mql"
-	
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -18,35 +18,35 @@ func TestPostClientAccounts(t *testing.T, ctx context.Context, f generic.Factory
 	})
 }
 
-func requirePostWhatevers(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error), svcName string, whatevers []sdk.Whatever) (postRsp sdk.PostWhateversResponse) {
-	postReq := sdk.PostWhateversRequest{
-		ServiceFilter: &sdk.ServiceFilter{
-			Id: &sdk.ServiceIdFilter{
-				Value: &sdk.StringFilter{
-					Is: sdk.String(svcName),
+func requirePostDummies(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error), svcName string, whatevers []mql.Whatever) (postRsp mql.PostDummiesResponse) {
+	postReq := mql.PostDummiesRequest{
+		ServiceFilter: &mql.ServiceFilter{
+			Id: &mql.ServiceIdFilter{
+				Value: &mql.StringFilter{
+					Is: mql.String(svcName),
 				},
 			},
 		},
-		Mode: &sdk.PostMode{
-			Kind: &sdk.PostModeKind.Collection,
-			Collection: &sdk.CollectionPostMode{},
+		Mode: &mql.PostMode{
+			Kind:       &mql.PostModeKind.Collection,
+			Collection: &mql.CollectionPostMode{},
 		},
-		Select: &sdk.PostWhateversResponseSelect{
+		Select: &mql.PostDummiesResponseSelect{
 			Meta: GetResponseMetaSelect(),
-			Whatevers: &sdk.WhateverSelect{
-				Id: &sdk.ServiceIdSelect{
-					Value: sdk.Bool(true),
+			Dummies: &mql.WhateverSelect{
+				Id: &mql.ServiceIdSelect{
+					Value: mql.Bool(true),
 				},
-				AlternativeIds: &sdk.IdSelect{
-					Kind: sdk.Bool(true),
-					Name: sdk.Bool(true),
-					Email: &sdk.EmailSelect{
-						Value: sdk.Bool(true),
+				AlternativeIds: &mql.IdSelect{
+					Kind: mql.Bool(true),
+					Name: mql.Bool(true),
+					Email: &mql.EmailSelect{
+						Value: mql.Bool(true),
 					},
 				},
 			},
 		},
-		Whatevers: whatevers,
+		Dummies: whatevers,
 	}
 
 	gPostRsp, err := h(ctx, f.MustFromStruct(postReq))
@@ -63,35 +63,35 @@ func requirePostWhatevers(t *testing.T, ctx context.Context, f generic.Factory, 
 	return
 }
 
-func requirePostBlueWhatevers(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error), svcName string, blueWhatevers []sdk.BlueWhatever) (postRsp sdk.PostBlueWhateversResponse) {
-	postReq := sdk.PostBlueWhateversRequest{
-		ServiceFilter: &sdk.ServiceFilter{
-			Id: &sdk.ServiceIdFilter{
-				Value: &sdk.StringFilter{
-					Is: sdk.String(svcName),
+func requirePostBlueDummies(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error), svcName string, blueDummies []mql.BlueWhatever) (postRsp mql.PostBlueDummiesResponse) {
+	postReq := mql.PostBlueDummiesRequest{
+		ServiceFilter: &mql.ServiceFilter{
+			Id: &mql.ServiceIdFilter{
+				Value: &mql.StringFilter{
+					Is: mql.String(svcName),
 				},
 			},
 		},
-		Mode: &sdk.PostMode{
-			Kind: &sdk.PostModeKind.Collection,
-			Collection: &sdk.CollectionPostMode{},
+		Mode: &mql.PostMode{
+			Kind:       &mql.PostModeKind.Collection,
+			Collection: &mql.CollectionPostMode{},
 		},
-		Select: &sdk.PostBlueWhateversResponseSelect{
+		Select: &mql.PostBlueDummiesResponseSelect{
 			Meta: GetResponseMetaSelect(),
-			BlueWhatevers: &sdk.BlueWhateverSelect{
-				Id: &sdk.ServiceIdSelect{
-					Value: sdk.Bool(true),
+			BlueDummies: &mql.BlueWhateverSelect{
+				Id: &mql.ServiceIdSelect{
+					Value: mql.Bool(true),
 				},
-				AlternativeIds: &sdk.IdSelect{
-					Kind: sdk.Bool(true),
-					Name: sdk.Bool(true),
-					Email: &sdk.EmailSelect{
-						Value: sdk.Bool(true),
+				AlternativeIds: &mql.IdSelect{
+					Kind: mql.Bool(true),
+					Name: mql.Bool(true),
+					Email: &mql.EmailSelect{
+						Value: mql.Bool(true),
 					},
 				},
 			},
 		},
-		BlueWhatevers: blueWhatevers,
+		BlueDummies: blueDummies,
 	}
 
 	gPostRsp, err := h(ctx, f.MustFromStruct(postReq))
@@ -107,51 +107,51 @@ func requirePostBlueWhatevers(t *testing.T, ctx context.Context, f generic.Facto
 	return
 }
 
-func requirePostClientAccount(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error), svcName, email, password string) (postRsp sdk.PostClientAccountsRequest) {
-	postReq := sdk.PostClientAccountsRequest{
-		ServiceFilter: &sdk.ServiceFilter{
-			Id: &sdk.ServiceIdFilter{
-				Value: &sdk.StringFilter{
-					Is: sdk.String(svcName),
+func requirePostClientAccount(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error), svcName, email, password string) (postRsp mql.PostClientAccountsRequest) {
+	postReq := mql.PostClientAccountsRequest{
+		ServiceFilter: &mql.ServiceFilter{
+			Id: &mql.ServiceIdFilter{
+				Value: &mql.StringFilter{
+					Is: mql.String(svcName),
 				},
 			},
 		},
-		Mode: &sdk.PostMode{
-			Kind: &sdk.PostModeKind.Collection,
-			Collection: &sdk.CollectionPostMode{},
+		Mode: &mql.PostMode{
+			Kind:       &mql.PostModeKind.Collection,
+			Collection: &mql.CollectionPostMode{},
 		},
-		Select: &sdk.PostClientAccountsResponseSelect{
+		Select: &mql.PostClientAccountsResponseSelect{
 			Meta: GetResponseMetaSelect(),
-			ClientAccounts: &sdk.ClientAccountSelect{
-				Id: &sdk.ServiceIdSelect{
-					Value: sdk.Bool(true),
+			ClientAccounts: &mql.ClientAccountSelect{
+				Id: &mql.ServiceIdSelect{
+					Value: mql.Bool(true),
 				},
-				AlternativeIds: &sdk.IdSelect{
-					Kind: sdk.Bool(true),
-					Name: sdk.Bool(true),
-					Email: &sdk.EmailSelect{
-						Value: sdk.Bool(true),
+				AlternativeIds: &mql.IdSelect{
+					Kind: mql.Bool(true),
+					Name: mql.Bool(true),
+					Email: &mql.EmailSelect{
+						Value: mql.Bool(true),
 					},
 				},
-				Password: &sdk.PasswordSelect{
-					IsHashed:     sdk.Bool(true),
-					HashFunction: sdk.Bool(true),
-					Value:        sdk.Bool(true),
+				Password: &mql.PasswordSelect{
+					IsHashed:     mql.Bool(true),
+					HashFunction: mql.Bool(true),
+					Value:        mql.Bool(true),
 				},
 			},
 		},
-		ClientAccounts: []sdk.ClientAccount{
+		ClientAccounts: []mql.ClientAccount{
 			{
-				AlternativeIds: []sdk.Id{
+				AlternativeIds: []mql.Id{
 					{
-						Kind: &sdk.IdKind.Email,
-						Email: &sdk.Email{
-							Value: sdk.String(email),
+						Kind: &mql.IdKind.Email,
+						Email: &mql.Email{
+							Value: mql.String(email),
 						},
 					},
 				},
-				Password: &sdk.Password{
-					Value: sdk.String(password),
+				Password: &mql.Password{
+					Value: mql.String(password),
 				},
 			},
 		},
@@ -180,31 +180,31 @@ func TestAuthenticateClientAccount(t *testing.T, ctx context.Context, f generic.
 	})
 }
 
-func requireAuthenticateClientAccount(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error), svcName, email, password string) (rsp sdk.AuthenticateClientAccountResponse) {
-	authRequest := sdk.AuthenticateClientAccountRequest{
-		ServiceFilter: &sdk.ServiceFilter{
-			Id: &sdk.ServiceIdFilter{
-				Value: &sdk.StringFilter{
-					Is: sdk.String(svcName),
+func requireAuthenticateClientAccount(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error), svcName, email, password string) (rsp mql.AuthenticateClientAccountResponse) {
+	authRequest := mql.AuthenticateClientAccountRequest{
+		ServiceFilter: &mql.ServiceFilter{
+			Id: &mql.ServiceIdFilter{
+				Value: &mql.StringFilter{
+					Is: mql.String(svcName),
 				},
 			},
 		},
-		Select: &sdk.AuthenticateClientAccountResponseSelect{
+		Select: &mql.AuthenticateClientAccountResponseSelect{
 			Meta: GetResponseMetaSelect(),
-			Output: &sdk.AuthenticateClientAccountOutputSelect{
-				Token: &sdk.TokenSelect{
-					Value: sdk.Bool(true),
+			Output: &mql.AuthenticateClientAccountOutputSelect{
+				Token: &mql.TokenSelect{
+					Value: mql.Bool(true),
 				},
 			},
 		},
-		Input: &sdk.AuthenticateClientAccountInput{
-			Id: &sdk.Id{
-				Kind: &sdk.IdKind.Email,
-				Email: &sdk.Email{
-					Value: sdk.String(email),
+		Input: &mql.AuthenticateClientAccountInput{
+			Id: &mql.Id{
+				Kind: &mql.IdKind.Email,
+				Email: &mql.Email{
+					Value: mql.String(email),
 				},
 			},
-			Password: sdk.String(password),
+			Password: mql.String(password),
 		},
 	}
 
@@ -215,7 +215,7 @@ func requireAuthenticateClientAccount(t *testing.T, ctx context.Context, f gener
 		return
 	}
 
-	authRsp := sdk.AuthenticateClientAccountResponse{}
+	authRsp := mql.AuthenticateClientAccountResponse{}
 	gAuthRsp.MustToStruct(&authRsp)
 
 	require.NotNil(t, authRsp)
@@ -238,48 +238,48 @@ func TestToken(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx 
 
 		authRsp := requireAuthenticateClientAccount(t, ctx, f, h, authSvcName, "metamate@metamate.io", "secret")
 
-		postReq := sdk.PostServiceAccountsRequest{
-			ServiceFilter: &sdk.ServiceFilter{
-				Id: &sdk.ServiceIdFilter{
-					Value: &sdk.StringFilter{
-						Is: sdk.String(storageSvcName),
+		postReq := mql.PostServiceAccountsRequest{
+			ServiceFilter: &mql.ServiceFilter{
+				Id: &mql.ServiceIdFilter{
+					Value: &mql.StringFilter{
+						Is: mql.String(storageSvcName),
 					},
 				},
 			},
-			Mode: &sdk.PostMode{
-				Kind: &sdk.PostModeKind.Collection,
-				Collection: &sdk.CollectionPostMode{},
+			Mode: &mql.PostMode{
+				Kind:       &mql.PostModeKind.Collection,
+				Collection: &mql.CollectionPostMode{},
 			},
-			Select: &sdk.PostServiceAccountsResponseSelect{
+			Select: &mql.PostServiceAccountsResponseSelect{
 				Meta: GetResponseMetaSelect(),
-				ServiceAccounts: &sdk.ServiceAccountSelect{
-					Id: &sdk.ServiceIdSelect{
-						Value: sdk.Bool(true),
+				ServiceAccounts: &mql.ServiceAccountSelect{
+					Id: &mql.ServiceIdSelect{
+						Value: mql.Bool(true),
 					},
-					AlternativeIds: &sdk.IdSelect{
-						Kind: sdk.Bool(true),
-						Name: sdk.Bool(true),
-						Email: &sdk.EmailSelect{
-							Value: sdk.Bool(true),
+					AlternativeIds: &mql.IdSelect{
+						Kind: mql.Bool(true),
+						Name: mql.Bool(true),
+						Email: &mql.EmailSelect{
+							Value: mql.Bool(true),
 						},
 					},
-					Url: &sdk.UrlSelect{
-						Value: sdk.Bool(true),
+					Url: &mql.UrlSelect{
+						Value: mql.Bool(true),
 					},
-					Handle: sdk.Bool(true),
-					Password: &sdk.PasswordSelect{
-						IsHashed: sdk.Bool(true),
-						Value:    sdk.Bool(true),
+					Handle: mql.Bool(true),
+					Password: &mql.PasswordSelect{
+						IsHashed: mql.Bool(true),
+						Value:    mql.Bool(true),
 					},
 				},
 			},
-			ServiceAccounts: []sdk.ServiceAccount{
+			ServiceAccounts: []mql.ServiceAccount{
 				{
-					Url: &sdk.Url{
-						Value: sdk.String("example.com"),
+					Url: &mql.Url{
+						Value: mql.String("example.com"),
 					},
-					Password: &sdk.Password{
-						Value: sdk.String("example123"),
+					Password: &mql.Password{
+						Value: mql.String("example123"),
 					},
 				},
 			},
@@ -292,27 +292,27 @@ func TestToken(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx 
 			return
 		}
 
-		postSvcRsp := sdk.PostServiceAccountsResponse{}
+		postSvcRsp := mql.PostServiceAccountsResponse{}
 		gPostRsp.MustToStruct(&postSvcRsp)
 
-		putReq := sdk.PutServiceAccountsRequest{
-			ServiceFilter: &sdk.ServiceFilter{
-				Id: &sdk.ServiceIdFilter{
-					Value: &sdk.StringFilter{
-						Is: sdk.String(storageSvcName),
+		putReq := mql.PutServiceAccountsRequest{
+			ServiceFilter: &mql.ServiceFilter{
+				Id: &mql.ServiceIdFilter{
+					Value: &mql.StringFilter{
+						Is: mql.String(storageSvcName),
 					},
 				},
 			},
-			Mode: &sdk.PutMode{
-				Kind: &sdk.PutModeKind.Relation,
-				Relation: &sdk.RelationPutMode{
-					Operation: &sdk.RelationOperation.Add,
+			Mode: &mql.PutMode{
+				Kind: &mql.PutModeKind.Relation,
+				Relation: &mql.RelationPutMode{
+					Operation: &mql.RelationOperation.Add,
 					Id:        postSysRsp.ClientAccounts[0].Id,
-					Ids:       []sdk.ServiceId{*postSvcRsp.ServiceAccounts[0].Id},
-					Relation:  &sdk.ClientAccountRelationName.ClientAccountOwnsServiceAccounts,
+					Ids:       []mql.ServiceId{*postSvcRsp.ServiceAccounts[0].Id},
+					Relation:  &mql.ClientAccountRelationName.ClientAccountOwnsServiceAccounts,
 				},
 			},
-			Select: &sdk.PutServiceAccountsResponseSelect{
+			Select: &mql.PutServiceAccountsResponseSelect{
 				Meta: GetResponseMetaSelect(),
 			},
 		}
@@ -324,12 +324,12 @@ func TestToken(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx 
 			return
 		}
 
-		getReq := sdk.GetWhateversRequest{
-			Mode: &sdk.GetMode{
-				Kind: &sdk.GetModeKind.Collection,
-				Collection: &sdk.CollectionGetMode{},
+		getReq := mql.GetDummiesRequest{
+			Mode: &mql.GetMode{
+				Kind:       &mql.GetModeKind.Collection,
+				Collection: &mql.CollectionGetMode{},
 			},
-			Auth: &sdk.Auth{
+			Auth: &mql.Auth{
 				Token: authRsp.Output.Token,
 			},
 		}
@@ -351,25 +351,25 @@ func TestVerifyToken(t *testing.T, ctx context.Context, f generic.Factory, h fun
 
 		authRsp := requireAuthenticateClientAccount(t, ctx, f, h, svcName, "metamate@metamate.io", "secret")
 
-		verifyReq := sdk.VerifyTokenRequest{
-			ServiceFilter: &sdk.ServiceFilter{
-				Id: &sdk.ServiceIdFilter{
-					Value: &sdk.StringFilter{
-						Is: sdk.String(svcName),
+		verifyReq := mql.VerifyTokenRequest{
+			ServiceFilter: &mql.ServiceFilter{
+				Id: &mql.ServiceIdFilter{
+					Value: &mql.StringFilter{
+						Is: mql.String(svcName),
 					},
 				},
 			},
-			Select: &sdk.VerifyTokenResponseSelect{
+			Select: &mql.VerifyTokenResponseSelect{
 				Meta: GetResponseMetaSelect(),
-				Output: &sdk.VerifyTokenOutputSelect{
-					IsValid: sdk.Bool(true),
-					ClientAccountId: &sdk.ServiceIdSelect{
-						ServiceName: sdk.Bool(true),
-						Value:       sdk.Bool(true),
+				Output: &mql.VerifyTokenOutputSelect{
+					IsValid: mql.Bool(true),
+					ClientAccountId: &mql.ServiceIdSelect{
+						ServiceName: mql.Bool(true),
+						Value:       mql.Bool(true),
 					},
 				},
 			},
-			Input: &sdk.VerifyTokenInput{
+			Input: &mql.VerifyTokenInput{
 				Token: authRsp.Output.Token,
 			},
 		}
@@ -381,7 +381,7 @@ func TestVerifyToken(t *testing.T, ctx context.Context, f generic.Factory, h fun
 			return
 		}
 
-		verfiyRsp := sdk.VerifyTokenResponse{}
+		verfiyRsp := mql.VerifyTokenResponse{}
 		gVerifyRsp.MustToStruct(&verfiyRsp)
 
 		require.NotNil(t, verfiyRsp.Output)

@@ -2,9 +2,9 @@ package spec
 
 import (
 	"context"
-	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/gen/v0/mql"
-	
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
+
 	"testing"
 )
 
@@ -14,36 +14,36 @@ func TestGetModeCollection(t *testing.T, ctx context.Context, f generic.Factory,
 		t.Parallel()
 
 		err := func() (err error) {
-			postReq := sdk.PostWhateversRequest{
-				ServiceFilter: &sdk.ServiceFilter{
-					Id: &sdk.ServiceIdFilter{
-						Value: &sdk.StringFilter{
-							Is: sdk.String(svcName),
+			postReq := mql.PostWhateversRequest{
+				ServiceFilter: &mql.ServiceFilter{
+					Id: &mql.ServiceIdFilter{
+						Value: &mql.StringFilter{
+							Is: mql.String(svcName),
 						},
 					},
 				},
-				Mode: &sdk.PostMode{
-					Kind: &sdk.PostModeKind.Collection,
-					Collection: &sdk.CollectionPostMode{},
+				Mode: &mql.PostMode{
+					Kind:       &mql.PostModeKind.Collection,
+					Collection: &mql.CollectionPostMode{},
 				},
-				Select: &sdk.PostWhateversResponseSelect{
+				Select: &mql.PostWhateversResponseSelect{
 					Meta: GetResponseMetaSelect(),
-					Whatevers: &sdk.WhateverSelect{
-						Id: &sdk.ServiceIdSelect{
-							Value: sdk.Bool(true),
+					Whatevers: &mql.WhateverSelect{
+						Id: &mql.ServiceIdSelect{
+							Value: mql.Bool(true),
 						},
-						StringField: sdk.Bool(true),
+						StringField: mql.Bool(true),
 					},
 				},
-				Whatevers: []sdk.Whatever{
+				Whatevers: []mql.Whatever{
 					{
-						Id: &sdk.ServiceId{
-							Value: sdk.String(name),
+						Id: &mql.ServiceId{
+							Value: mql.String(name),
 						},
-						StringField: sdk.String("a"),
+						StringField: mql.String("a"),
 					},
 					{
-						StringField: sdk.String("b"),
+						StringField: mql.String("b"),
 					},
 				},
 			}
@@ -55,25 +55,25 @@ func TestGetModeCollection(t *testing.T, ctx context.Context, f generic.Factory,
 
 			requirePostRsp(t, gPostRsp)
 
-			getReq := sdk.GetWhateversRequest{
-				ServiceFilter: &sdk.ServiceFilter{
-					Id: &sdk.ServiceIdFilter{
-						Value: &sdk.StringFilter{
-							Is: sdk.String(svcName),
+			getReq := mql.GetWhateversRequest{
+				ServiceFilter: &mql.ServiceFilter{
+					Id: &mql.ServiceIdFilter{
+						Value: &mql.StringFilter{
+							Is: mql.String(svcName),
 						},
 					},
 				},
-				Mode: &sdk.GetMode{
-					Kind: &sdk.GetModeKind.Collection,
-					Collection: &sdk.CollectionGetMode{},
+				Mode: &mql.GetMode{
+					Kind:       &mql.GetModeKind.Collection,
+					Collection: &mql.CollectionGetMode{},
 				},
-				Select: &sdk.GetWhateversResponseSelect{
+				Select: &mql.GetWhateversResponseSelect{
 					Meta: GetCollectionMetaSelect(),
-					Whatevers: &sdk.WhateverSelect{
-						Id: &sdk.ServiceIdSelect{
-							Value: sdk.Bool(true),
+					Whatevers: &mql.WhateverSelect{
+						Id: &mql.ServiceIdSelect{
+							Value: mql.Bool(true),
 						},
-						StringField: sdk.Bool(true),
+						StringField: mql.Bool(true),
 					},
 				},
 			}

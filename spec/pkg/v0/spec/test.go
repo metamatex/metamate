@@ -3,10 +3,10 @@ package spec
 import (
 	"context"
 	"fmt"
-	"github.com/metamatex/metamate/generic/pkg/v0/generic"
-	"github.com/metamatex/metamate/gen/v0/mql"
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
-	
+	"github.com/metamatex/metamate/gen/v0/mql"
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
+
 	"errors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -57,37 +57,37 @@ func requireEmptyGetRsp(t *testing.T, gRsp generic.Generic) {
 	requireNoGenerics(t, gRsp)
 }
 
-func GetCollectionMetaSelect() (*sdk.CollectionMetaSelect) {
-	return &sdk.CollectionMetaSelect{
-		Errors: &sdk.ErrorSelect{
-			Kind: sdk.Bool(true),
-			Service: &sdk.ServiceSelect{
-				Name: sdk.Bool(true),
+func GetCollectionMetaSelect() *mql.CollectionMetaSelect {
+	return &mql.CollectionMetaSelect{
+		Errors: &mql.ErrorSelect{
+			Kind: mql.Bool(true),
+			Service: &mql.ServiceSelect{
+				Name: mql.Bool(true),
 			},
-			Message: &sdk.TextSelect{
-				Formatting: sdk.Bool(true),
-				Value: sdk.Bool(true),
+			Message: &mql.TextSelect{
+				Formatting: mql.Bool(true),
+				Value:      mql.Bool(true),
 			},
-			Id: &sdk.IdSelect{
-				Kind: sdk.Bool(true),
+			Id: &mql.IdSelect{
+				Kind: mql.Bool(true),
 			},
 		},
 	}
 }
 
-func GetResponseMetaSelect() (*sdk.ResponseMetaSelect) {
-	return &sdk.ResponseMetaSelect{
-		Errors: &sdk.ErrorSelect{
-			Kind: sdk.Bool(true),
-			Service: &sdk.ServiceSelect{
-				Name: sdk.Bool(true),
+func GetResponseMetaSelect() *mql.ResponseMetaSelect {
+	return &mql.ResponseMetaSelect{
+		Errors: &mql.ErrorSelect{
+			Kind: mql.Bool(true),
+			Service: &mql.ServiceSelect{
+				Name: mql.Bool(true),
 			},
-			Message: &sdk.TextSelect{
-				Formatting: sdk.Bool(true),
-				Value: sdk.Bool(true),
+			Message: &mql.TextSelect{
+				Formatting: mql.Bool(true),
+				Value:      mql.Bool(true),
 			},
-			Id: &sdk.IdSelect{
-				Kind: sdk.Bool(true),
+			Id: &mql.IdSelect{
+				Kind: mql.Bool(true),
 			},
 		},
 	}
@@ -115,13 +115,13 @@ func requireNoCollectionMetaErrors(t *testing.T, gRsp generic.Generic) {
 		return
 	}
 
-	rspMeta := sdk.CollectionMeta{}
+	rspMeta := mql.CollectionMeta{}
 	gRspMeta.MustToStruct(&rspMeta)
 
 	require.Len(t, rspMeta.Errors, 0)
 }
 
-func assertNRspMetaErrs(t *testing.T, gRsp generic.Generic, n int) (bool) {
+func assertNRspMetaErrs(t *testing.T, gRsp generic.Generic, n int) bool {
 	gErrs, ok := gRsp.GenericSlice(fieldnames.Meta, fieldnames.Errors)
 	if !ok {
 		return n == 0
@@ -133,35 +133,35 @@ func assertNRspMetaErrs(t *testing.T, gRsp generic.Generic, n int) (bool) {
 func requireNoRspMetaErrs(t *testing.T, gRsp generic.Generic) {
 	gErrs, ok := gRsp.GenericSlice(fieldnames.Meta, fieldnames.Errors)
 	if !ok {
-	    return
+		return
 	}
 
 	require.Len(t, gErrs.Get(), 0, gErrs.Sprint())
 }
 
 func requireSvcHasSvcId(t *testing.T, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error), f generic.Factory, ctx context.Context, svcName string, svcIdValue string) (err error) {
-	getReq := sdk.GetWhateversRequest{
-		ServiceFilter: &sdk.ServiceFilter{
-			Id: &sdk.ServiceIdFilter{
-				Value: &sdk.StringFilter{
-					Is: sdk.String(svcName),
+	getReq := mql.GetWhateversRequest{
+		ServiceFilter: &mql.ServiceFilter{
+			Id: &mql.ServiceIdFilter{
+				Value: &mql.StringFilter{
+					Is: mql.String(svcName),
 				},
 			},
 		},
-		Mode: &sdk.GetMode{
-			Kind: &sdk.GetModeKind.Id,
-			Id: &sdk.Id{
-				Kind: &sdk.IdKind.ServiceId,
-				ServiceId: &sdk.ServiceId{
-					Value: sdk.String(svcIdValue),
+		Mode: &mql.GetMode{
+			Kind: &mql.GetModeKind.Id,
+			Id: &mql.Id{
+				Kind: &mql.IdKind.ServiceId,
+				ServiceId: &mql.ServiceId{
+					Value: mql.String(svcIdValue),
 				},
 			},
 		},
-		Select: &sdk.GetWhateversResponseSelect{
+		Select: &mql.GetWhateversResponseSelect{
 			Meta: GetCollectionMetaSelect(),
-			Whatevers: &sdk.WhateverSelect{
-				Id: &sdk.ServiceIdSelect{
-					Value: sdk.Bool(true),
+			Whatevers: &mql.WhateverSelect{
+				Id: &mql.ServiceIdSelect{
+					Value: mql.Bool(true),
 				},
 			},
 		},
@@ -169,12 +169,12 @@ func requireSvcHasSvcId(t *testing.T, h func(ctx context.Context, gReq generic.G
 
 	gGetRsp, err := h(ctx, f.MustFromStruct(getReq))
 	if err != nil {
-	    return
+		return
 	}
 
 	requireGetRsp(t, gGetRsp)
 
-	getRsp := sdk.GetWhateversResponse{}
+	getRsp := mql.GetWhateversResponse{}
 	gGetRsp.MustToStruct(&getRsp)
 
 	require.Len(t, getRsp.Whatevers, 1)
@@ -184,28 +184,28 @@ func requireSvcHasSvcId(t *testing.T, h func(ctx context.Context, gReq generic.G
 }
 
 func requireSvcHasNotSvcId(t *testing.T, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error), f generic.Factory, ctx context.Context, svcName string, svcIdValue string) (err error) {
-	getReq := sdk.GetWhateversRequest{
-		ServiceFilter: &sdk.ServiceFilter{
-			Id: &sdk.ServiceIdFilter{
-				Value: &sdk.StringFilter{
-					Is: sdk.String(svcName),
+	getReq := mql.GetWhateversRequest{
+		ServiceFilter: &mql.ServiceFilter{
+			Id: &mql.ServiceIdFilter{
+				Value: &mql.StringFilter{
+					Is: mql.String(svcName),
 				},
 			},
 		},
-		Mode: &sdk.GetMode{
-			Kind: &sdk.GetModeKind.Id,
-			Id: &sdk.Id{
-				Kind: &sdk.IdKind.ServiceId,
-				ServiceId: &sdk.ServiceId{
-					Value: sdk.String(svcIdValue),
+		Mode: &mql.GetMode{
+			Kind: &mql.GetModeKind.Id,
+			Id: &mql.Id{
+				Kind: &mql.IdKind.ServiceId,
+				ServiceId: &mql.ServiceId{
+					Value: mql.String(svcIdValue),
 				},
 			},
 		},
-		Select: &sdk.GetWhateversResponseSelect{
+		Select: &mql.GetWhateversResponseSelect{
 			Meta: GetCollectionMetaSelect(),
-			Whatevers: &sdk.WhateverSelect{
-				Id: &sdk.ServiceIdSelect{
-					Value: sdk.Bool(true),
+			Whatevers: &mql.WhateverSelect{
+				Id: &mql.ServiceIdSelect{
+					Value: mql.Bool(true),
 				},
 			},
 		},
@@ -213,7 +213,7 @@ func requireSvcHasNotSvcId(t *testing.T, h func(ctx context.Context, gReq generi
 
 	gGetRsp, err := h(ctx, f.MustFromStruct(getReq))
 	if err != nil {
-	    return
+		return
 	}
 
 	requireEmptyGetRsp(t, gGetRsp)

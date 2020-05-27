@@ -2,9 +2,9 @@ package spec
 
 import (
 	"context"
-	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/gen/v0/mql"
-	
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
+
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -14,41 +14,41 @@ func TestPost(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx c
 		t.Parallel()
 
 		err := func() (err error) {
-			postReq := sdk.PostWhateversRequest{
-				ServiceFilter: &sdk.ServiceFilter{
-					Id: &sdk.ServiceIdFilter{
-						Value: &sdk.StringFilter{
-							Is: sdk.String(svcName),
+			postReq := mql.PostWhateversRequest{
+				ServiceFilter: &mql.ServiceFilter{
+					Id: &mql.ServiceIdFilter{
+						Value: &mql.StringFilter{
+							Is: mql.String(svcName),
 						},
 					},
 				},
-				Select: &sdk.PostWhateversResponseSelect{
+				Select: &mql.PostWhateversResponseSelect{
 					Meta: GetResponseMetaSelect(),
-					Whatevers: &sdk.WhateverSelect{
-						Id: &sdk.ServiceIdSelect{
-							Value: sdk.Bool(true),
+					Whatevers: &mql.WhateverSelect{
+						Id: &mql.ServiceIdSelect{
+							Value: mql.Bool(true),
 						},
-						StringField: sdk.Bool(true),
+						StringField: mql.Bool(true),
 					},
 				},
-				Whatevers: []sdk.Whatever{
+				Whatevers: []mql.Whatever{
 					{
-						StringField: sdk.String("a"),
+						StringField: mql.String("a"),
 					},
 					{
-						StringField: sdk.String("b"),
+						StringField: mql.String("b"),
 					},
 				},
 			}
 
 			gPostRsp, err := h(ctx, f.MustFromStruct(postReq))
 			if err != nil {
-			    return
+				return
 			}
 
 			requirePostRsp(t, gPostRsp)
 
-			postRsp := sdk.GetWhateversResponse{}
+			postRsp := mql.GetWhateversResponse{}
 			gPostRsp.MustToStruct(&postRsp)
 
 			for i, _ := range postReq.Whatevers {
@@ -59,7 +59,7 @@ func TestPost(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx c
 			return
 		}()
 		if err != nil {
-		    t.Error(err)
+			t.Error(err)
 		}
 	})
 }
@@ -70,10 +70,10 @@ func TestEmptyPost(t *testing.T, ctx context.Context, f generic.Factory, h func(
 
 		err := func() (err error) {
 			table := []struct {
-				req sdk.PostWhateversRequest
+				req mql.PostWhateversRequest
 			}{
 				{
-					req: sdk.PostWhateversRequest{},
+					req: mql.PostWhateversRequest{},
 				},
 			}
 
@@ -99,18 +99,18 @@ func TestRequestFilter(t *testing.T, ctx context.Context, f generic.Factory, h f
 		t.Parallel()
 
 		err := func() (err error) {
-			var req = sdk.PostWhateversRequest{
-				Mode: &sdk.PostMode{
-					Kind: &sdk.PostModeKind.Collection,
-					Collection: &sdk.CollectionPostMode{},
+			var req = mql.PostWhateversRequest{
+				Mode: &mql.PostMode{
+					Kind:       &mql.PostModeKind.Collection,
+					Collection: &mql.CollectionPostMode{},
 				},
-				Select: &sdk.PostWhateversResponseSelect{
+				Select: &mql.PostWhateversResponseSelect{
 					Meta: GetResponseMetaSelect(),
 				},
-				Whatevers: []sdk.Whatever{
+				Whatevers: []mql.Whatever{
 					{
-						Id: &sdk.ServiceId{
-							Value: sdk.String("match"),
+						Id: &mql.ServiceId{
+							Value: mql.String("match"),
 						},
 					},
 				},
@@ -136,55 +136,55 @@ func TestPostWithNameId(t *testing.T, ctx context.Context, f generic.Factory, h 
 		t.Parallel()
 
 		err := func() (err error) {
-			postReq := sdk.PostWhateversRequest{
-				ServiceFilter: &sdk.ServiceFilter{
-					Id: &sdk.ServiceIdFilter{
-						Value: &sdk.StringFilter{
-							Is: sdk.String(svcName),
+			postReq := mql.PostWhateversRequest{
+				ServiceFilter: &mql.ServiceFilter{
+					Id: &mql.ServiceIdFilter{
+						Value: &mql.StringFilter{
+							Is: mql.String(svcName),
 						},
 					},
 				},
-				Select: &sdk.PostWhateversResponseSelect{
+				Select: &mql.PostWhateversResponseSelect{
 					Meta: GetResponseMetaSelect(),
-					Whatevers: &sdk.WhateverSelect{
-						Id: &sdk.ServiceIdSelect{
-							Value: sdk.Bool(true),
+					Whatevers: &mql.WhateverSelect{
+						Id: &mql.ServiceIdSelect{
+							Value: mql.Bool(true),
 						},
-						AlternativeIds: &sdk.IdSelect{
-							Kind: sdk.Bool(true),
-							Name: sdk.Bool(true),
+						AlternativeIds: &mql.IdSelect{
+							Kind: mql.Bool(true),
+							Name: mql.Bool(true),
 						},
-						StringField: sdk.Bool(true),
+						StringField: mql.Bool(true),
 					},
 				},
-				Whatevers: []sdk.Whatever{
+				Whatevers: []mql.Whatever{
 					{
-						AlternativeIds: []sdk.Id{
+						AlternativeIds: []mql.Id{
 							{
-								Kind: &sdk.IdKind.Name,
-								Name: sdk.String("a" + suffix),
+								Kind: &mql.IdKind.Name,
+								Name: mql.String("a" + suffix),
 							},
 						},
-						StringField: sdk.String("a"),
+						StringField: mql.String("a"),
 					},
 					{
-						AlternativeIds: []sdk.Id{
+						AlternativeIds: []mql.Id{
 							{
-								Kind: &sdk.IdKind.Name,
-								Name: sdk.String("b" + suffix),
+								Kind: &mql.IdKind.Name,
+								Name: mql.String("b" + suffix),
 							},
 						},
-						StringField: sdk.String("b"),
+						StringField: mql.String("b"),
 					},
 				},
 			}
 
 			gPostRsp, err := h(ctx, f.MustFromStruct(postReq))
 			if err != nil {
-			    return
+				return
 			}
 
-			postRsp := sdk.PostWhateversResponse{}
+			postRsp := mql.PostWhateversResponse{}
 			gPostRsp.MustToStruct(&postRsp)
 
 			requirePostRsp(t, gPostRsp)
@@ -198,7 +198,7 @@ func TestPostWithNameId(t *testing.T, ctx context.Context, f generic.Factory, h 
 			return
 		}()
 		if err != nil {
-		    t.Error(err)
+			t.Error(err)
 		}
 	})
 }

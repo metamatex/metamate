@@ -2,27 +2,27 @@ package spec
 
 import (
 	"context"
-	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/gen/v0/mql"
-	
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
 
-func getIdsFilter(suffix, caseName string) (idFilter *sdk.ServiceIdFilter) {
-	return &sdk.ServiceIdFilter{
-		Value: &sdk.StringFilter{
-			Contains: sdk.String(nameSvcCase(suffix, caseName)),
+func getIdsFilter(suffix, caseName string) (idFilter *mql.ServiceIdFilter) {
+	return &mql.ServiceIdFilter{
+		Value: &mql.StringFilter{
+			Contains: mql.String(nameSvcCase(suffix, caseName)),
 		},
 	}
 }
 
-func nameSvcId(suffix, caseName, id string) (string) {
+func nameSvcId(suffix, caseName, id string) string {
 	return nameSvcCase(suffix, caseName) + "_" + id
 }
 
-func nameSvcCase(suffix, caseName string) (string) {
+func nameSvcCase(suffix, caseName string) string {
 	return suffix + "_" + caseName
 }
 
@@ -32,32 +32,32 @@ func TestFilterStringIs(t *testing.T, ctx context.Context, f generic.Factory, h 
 		t.Parallel()
 
 		err := func() (err error) {
-			postReq := &sdk.PostWhateversRequest{
-				ServiceFilter: &sdk.ServiceFilter{
-					Id: &sdk.ServiceIdFilter{
-						Value: &sdk.StringFilter{
-							Is: sdk.String(svcName),
+			postReq := &mql.PostWhateversRequest{
+				ServiceFilter: &mql.ServiceFilter{
+					Id: &mql.ServiceIdFilter{
+						Value: &mql.StringFilter{
+							Is: mql.String(svcName),
 						},
 					},
 				},
-				Select: &sdk.PostWhateversResponseSelect{
+				Select: &mql.PostWhateversResponseSelect{
 					Meta: GetResponseMetaSelect(),
-					Whatevers: &sdk.WhateverSelect{
-						StringField: sdk.Bool(true),
+					Whatevers: &mql.WhateverSelect{
+						StringField: mql.Bool(true),
 					},
 				},
-				Whatevers: []sdk.Whatever{
+				Whatevers: []mql.Whatever{
 					{
-						Id: &sdk.ServiceId{
-							Value: sdk.String(nameSvcId(suffix, name, "0")),
+						Id: &mql.ServiceId{
+							Value: mql.String(nameSvcId(suffix, name, "0")),
 						},
-						StringField: sdk.String("a"),
+						StringField: mql.String("a"),
 					},
 					{
-						Id: &sdk.ServiceId{
-							Value: sdk.String(nameSvcId(suffix, name, "1")),
+						Id: &mql.ServiceId{
+							Value: mql.String(nameSvcId(suffix, name, "1")),
 						},
-						StringField: sdk.String("b"),
+						StringField: mql.String("b"),
 					},
 				},
 			}
@@ -69,31 +69,31 @@ func TestFilterStringIs(t *testing.T, ctx context.Context, f generic.Factory, h 
 
 			requirePostRsp(t, gPostRsp)
 
-			postRsp := sdk.PostWhateversResponse{}
+			postRsp := mql.PostWhateversResponse{}
 			gPostRsp.MustToStruct(&postRsp)
 
-			getReq := &sdk.GetWhateversRequest{
-				ServiceFilter: &sdk.ServiceFilter{
-					Id: &sdk.ServiceIdFilter{
-						Value: &sdk.StringFilter{
-							Is: sdk.String(svcName),
+			getReq := &mql.GetWhateversRequest{
+				ServiceFilter: &mql.ServiceFilter{
+					Id: &mql.ServiceIdFilter{
+						Value: &mql.StringFilter{
+							Is: mql.String(svcName),
 						},
 					},
 				},
-				Mode: &sdk.GetMode{
-					Kind: &sdk.GetModeKind.Collection,
-					Collection: &sdk.CollectionGetMode{},
+				Mode: &mql.GetMode{
+					Kind:       &mql.GetModeKind.Collection,
+					Collection: &mql.CollectionGetMode{},
 				},
-				Filter: &sdk.WhateverFilter{
+				Filter: &mql.WhateverFilter{
 					Id: getIdsFilter(suffix, name),
-					StringField: &sdk.StringFilter{
-						Is: sdk.String("a"),
+					StringField: &mql.StringFilter{
+						Is: mql.String("a"),
 					},
 				},
-				Select: &sdk.GetWhateversResponseSelect{
+				Select: &mql.GetWhateversResponseSelect{
 					Meta: GetCollectionMetaSelect(),
-					Whatevers: &sdk.WhateverSelect{
-						StringField: sdk.Bool(true),
+					Whatevers: &mql.WhateverSelect{
+						StringField: mql.Bool(true),
 					},
 				},
 			}
@@ -105,7 +105,7 @@ func TestFilterStringIs(t *testing.T, ctx context.Context, f generic.Factory, h 
 
 			requireGetRsp(t, gGetRsp)
 
-			getRsp := sdk.GetWhateversResponse{}
+			getRsp := mql.GetWhateversResponse{}
 			gGetRsp.MustToStruct(&getRsp)
 
 			require.Len(t, getRsp.Whatevers, 1)

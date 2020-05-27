@@ -2,9 +2,9 @@ package spec
 
 import (
 	"context"
-	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/gen/v0/mql"
-	
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
+
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -15,32 +15,32 @@ func TestPutRelationMode(t *testing.T, ctx context.Context, f generic.Factory, h
 		t.Parallel()
 
 		err := func() (err error) {
-			whatevers := []sdk.Whatever{
+			whatevers := []mql.Whatever{
 				{
-					Id: &sdk.ServiceId{
-						Value: sdk.String(nameSvcId(suffix, name, "a")),
+					Id: &mql.ServiceId{
+						Value: mql.String(nameSvcId(suffix, name, "a")),
 					},
 				},
 				{
-					Id: &sdk.ServiceId{
-						Value: sdk.String(nameSvcId(suffix, name, "b")),
+					Id: &mql.ServiceId{
+						Value: mql.String(nameSvcId(suffix, name, "b")),
 					},
 				},
 				{
-					Id: &sdk.ServiceId{
-						Value: sdk.String(nameSvcId(suffix, name, "c")),
+					Id: &mql.ServiceId{
+						Value: mql.String(nameSvcId(suffix, name, "c")),
 					},
 				},
 			}
 
 			requirePostWhatevers(t, ctx, f, h, svcName, whatevers)
 
-			err = requirePutWhatevers(t, ctx, f, h, whatevers[0].Id, []sdk.ServiceId{*whatevers[1].Id, *whatevers[2].Id}, sdk.WhateverRelationName.WhateverKnowsWhatevers, sdk.RelationOperation.Add)
+			err = requirePutWhatevers(t, ctx, f, h, whatevers[0].Id, []mql.ServiceId{*whatevers[1].Id, *whatevers[2].Id}, mql.WhateverRelationName.WhateverKnowsWhatevers, mql.RelationOperation.Add)
 			if err != nil {
 				return
 			}
 
-			err = requirePutWhatevers(t, ctx, f, h, whatevers[0].Id, []sdk.ServiceId{*whatevers[1].Id, *whatevers[2].Id}, sdk.WhateverRelationName.WhateverKnowsWhatevers, sdk.RelationOperation.Remove)
+			err = requirePutWhatevers(t, ctx, f, h, whatevers[0].Id, []mql.ServiceId{*whatevers[1].Id, *whatevers[2].Id}, mql.WhateverRelationName.WhateverKnowsWhatevers, mql.RelationOperation.Remove)
 			if err != nil {
 				return
 			}
@@ -48,30 +48,30 @@ func TestPutRelationMode(t *testing.T, ctx context.Context, f generic.Factory, h
 			return
 		}()
 		if err != nil {
-		    t.Error(err)
+			t.Error(err)
 		}
 	})
 }
 
-func requirePutWhatevers(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error), id *sdk.ServiceId, ids []sdk.ServiceId, relationName string, operation string) (err error) {
-	putReq := sdk.PutWhateversRequest{
-		Mode: &sdk.PutMode{
-			Kind: &sdk.PutModeKind.Relation,
-			Relation: &sdk.RelationPutMode{
-				Id: id,
-				Ids: ids,
-				Relation:  sdk.String(relationName),
-				Operation: sdk.String(operation),
+func requirePutWhatevers(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error), id *mql.ServiceId, ids []mql.ServiceId, relationName string, operation string) (err error) {
+	putReq := mql.PutWhateversRequest{
+		Mode: &mql.PutMode{
+			Kind: &mql.PutModeKind.Relation,
+			Relation: &mql.RelationPutMode{
+				Id:        id,
+				Ids:       ids,
+				Relation:  mql.String(relationName),
+				Operation: mql.String(operation),
 			},
 		},
-		Select: &sdk.PutWhateversResponseSelect{
-			Meta:GetResponseMetaSelect(),
+		Select: &mql.PutWhateversResponseSelect{
+			Meta: GetResponseMetaSelect(),
 		},
 	}
 
 	gPutRsp, err := h(ctx, f.MustFromStruct(putReq))
 	if err != nil {
-	    return
+		return
 	}
 
 	requirePutRsp(t, gPutRsp)
@@ -79,25 +79,25 @@ func requirePutWhatevers(t *testing.T, ctx context.Context, f generic.Factory, h
 	return
 }
 
-func requirePutBlueWhatevers(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error), id *sdk.ServiceId, ids []sdk.ServiceId, relationName string, operation string) (err error) {
-	putReq := sdk.PutBlueWhateversRequest{
-		Mode: &sdk.PutMode{
-			Kind: &sdk.PutModeKind.Relation,
-			Relation: &sdk.RelationPutMode{
-				Id: id,
-				Ids: ids,
-				Relation:  sdk.String(relationName),
-				Operation: sdk.String(operation),
+func requirePutBlueWhatevers(t *testing.T, ctx context.Context, f generic.Factory, h func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic, err error), id *mql.ServiceId, ids []mql.ServiceId, relationName string, operation string) (err error) {
+	putReq := mql.PutBlueWhateversRequest{
+		Mode: &mql.PutMode{
+			Kind: &mql.PutModeKind.Relation,
+			Relation: &mql.RelationPutMode{
+				Id:        id,
+				Ids:       ids,
+				Relation:  mql.String(relationName),
+				Operation: mql.String(operation),
 			},
 		},
-		Select: &sdk.PutBlueWhateversResponseSelect{
-			Meta:GetResponseMetaSelect(),
+		Select: &mql.PutBlueWhateversResponseSelect{
+			Meta: GetResponseMetaSelect(),
 		},
 	}
 
 	gPutRsp, err := h(ctx, f.MustFromStruct(putReq))
 	if err != nil {
-	    return
+		return
 	}
 
 	requirePutRsp(t, gPutRsp)

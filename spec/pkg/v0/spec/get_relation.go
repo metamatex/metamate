@@ -2,9 +2,9 @@ package spec
 
 import (
 	"context"
-	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/gen/v0/mql"
-	
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
+
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -15,46 +15,46 @@ func TestGetModeRelation(t *testing.T, ctx context.Context, f generic.Factory, h
 	t.Run(name, func(t *testing.T) {
 		t.Parallel()
 
-		err := func () (err error) {
-			whatevers := []sdk.Whatever{
+		err := func() (err error) {
+			whatevers := []mql.Whatever{
 				{
-					Id: &sdk.ServiceId{
-						Value: sdk.String(nameSvcId(suffix, name, "a")),
+					Id: &mql.ServiceId{
+						Value: mql.String(nameSvcId(suffix, name, "a")),
 					},
 				},
 				{
-					Id: &sdk.ServiceId{
-						Value: sdk.String(nameSvcId(suffix, name, "b")),
+					Id: &mql.ServiceId{
+						Value: mql.String(nameSvcId(suffix, name, "b")),
 					},
 				},
 				{
-					Id: &sdk.ServiceId{
-						Value: sdk.String(nameSvcId(suffix, name, "c")),
+					Id: &mql.ServiceId{
+						Value: mql.String(nameSvcId(suffix, name, "c")),
 					},
 				},
 			}
 
 			postRsp := requirePostWhatevers(t, ctx, f, h, svcName, whatevers)
 
-			err = requirePutWhatevers(t, ctx, f, h, postRsp.Whatevers[0].Id, []sdk.ServiceId{*postRsp.Whatevers[1].Id, *postRsp.Whatevers[2].Id}, sdk.WhateverRelationName.WhateverKnowsWhatevers, sdk.RelationOperation.Add)
+			err = requirePutWhatevers(t, ctx, f, h, postRsp.Whatevers[0].Id, []mql.ServiceId{*postRsp.Whatevers[1].Id, *postRsp.Whatevers[2].Id}, mql.WhateverRelationName.WhateverKnowsWhatevers, mql.RelationOperation.Add)
 			if err != nil {
-			    return
+				return
 			}
 
-			getReq := sdk.GetWhateversRequest{
-				Mode: &sdk.GetMode{
-					Kind: &sdk.GetModeKind.Relation,
-					Relation: &sdk.RelationGetMode{
-						Relation: sdk.String(sdk.WhateverRelationName.WhateverKnowsWhatevers),
-						Id: postRsp.Whatevers[0].Id,
+			getReq := mql.GetWhateversRequest{
+				Mode: &mql.GetMode{
+					Kind: &mql.GetModeKind.Relation,
+					Relation: &mql.RelationGetMode{
+						Relation: mql.String(mql.WhateverRelationName.WhateverKnowsWhatevers),
+						Id:       postRsp.Whatevers[0].Id,
 					},
 				},
-				Select: &sdk.GetWhateversResponseSelect{
+				Select: &mql.GetWhateversResponseSelect{
 					Meta: GetCollectionMetaSelect(),
-					Whatevers: &sdk.WhateverSelect{
-						Id: &sdk.ServiceIdSelect{
-							ServiceName: sdk.Bool(true),
-							Value: sdk.Bool(true),
+					Whatevers: &mql.WhateverSelect{
+						Id: &mql.ServiceIdSelect{
+							ServiceName: mql.Bool(true),
+							Value:       mql.Bool(true),
 						},
 					},
 				},
@@ -69,20 +69,20 @@ func TestGetModeRelation(t *testing.T, ctx context.Context, f generic.Factory, h
 
 			requireSvcIdValues(t, gGetRsp.MustGenericSlice(fieldnames.Whatevers), []string{*whatevers[1].Id.Value, *whatevers[2].Id.Value})
 
-			getReq = sdk.GetWhateversRequest{
-				Mode: &sdk.GetMode{
-					Kind: &sdk.GetModeKind.Relation,
-					Relation: &sdk.RelationGetMode{
-						Relation: &sdk.WhateverRelationName.WhateverKnewByWhatevers,
-						Id: postRsp.Whatevers[1].Id,
+			getReq = mql.GetWhateversRequest{
+				Mode: &mql.GetMode{
+					Kind: &mql.GetModeKind.Relation,
+					Relation: &mql.RelationGetMode{
+						Relation: &mql.WhateverRelationName.WhateverKnewByWhatevers,
+						Id:       postRsp.Whatevers[1].Id,
 					},
 				},
-				Select: &sdk.GetWhateversResponseSelect{
+				Select: &mql.GetWhateversResponseSelect{
 					Meta: GetCollectionMetaSelect(),
-					Whatevers: &sdk.WhateverSelect{
-						Id: &sdk.ServiceIdSelect{
-							ServiceName: sdk.Bool(true),
-							Value: sdk.Bool(true),
+					Whatevers: &mql.WhateverSelect{
+						Id: &mql.ServiceIdSelect{
+							ServiceName: mql.Bool(true),
+							Value:       mql.Bool(true),
 						},
 					},
 				},
@@ -95,7 +95,7 @@ func TestGetModeRelation(t *testing.T, ctx context.Context, f generic.Factory, h
 
 			requireGetRsp(t, gGetRsp)
 
-			getRsp := sdk.GetWhateversResponse{}
+			getRsp := mql.GetWhateversResponse{}
 			gGetRsp.MustToStruct(&getRsp)
 
 			assert.Equal(t, whatevers[0].Id.Value, getRsp.Whatevers[0].Id.Value)
@@ -114,20 +114,20 @@ func TestGetModeRelationInter(t *testing.T, ctx context.Context, f generic.Facto
 		t.Parallel()
 
 		err := func() (err error) {
-			whatevers := []sdk.Whatever{
+			whatevers := []mql.Whatever{
 				{
-					Id: &sdk.ServiceId{
-						Value: sdk.String(nameSvcId(suffix, name, "a")),
+					Id: &mql.ServiceId{
+						Value: mql.String(nameSvcId(suffix, name, "a")),
 					},
 				},
 				{
-					Id: &sdk.ServiceId{
-						Value: sdk.String(nameSvcId(suffix, name, "b")),
+					Id: &mql.ServiceId{
+						Value: mql.String(nameSvcId(suffix, name, "b")),
 					},
 				},
 				{
-					Id: &sdk.ServiceId{
-						Value: sdk.String(nameSvcId(suffix, name, "c")),
+					Id: &mql.ServiceId{
+						Value: mql.String(nameSvcId(suffix, name, "c")),
 					},
 				},
 			}
@@ -136,56 +136,56 @@ func TestGetModeRelationInter(t *testing.T, ctx context.Context, f generic.Facto
 
 			postRspB := requirePostWhatevers(t, ctx, f, h, storageSvcBName, whatevers[1:])
 
-			err = requirePutWhatevers(t, ctx, f, h, postRspA.Whatevers[0].Id, []sdk.ServiceId{*postRspB.Whatevers[0].Id, *postRspB.Whatevers[1].Id}, sdk.WhateverRelationName.WhateverKnowsWhatevers, sdk.RelationOperation.Add)
+			err = requirePutWhatevers(t, ctx, f, h, postRspA.Whatevers[0].Id, []mql.ServiceId{*postRspB.Whatevers[0].Id, *postRspB.Whatevers[1].Id}, mql.WhateverRelationName.WhateverKnowsWhatevers, mql.RelationOperation.Add)
 			if err != nil {
-			    return
+				return
 			}
 
-			getReq := sdk.GetWhateversRequest{
-				Mode: &sdk.GetMode{
-					Kind: &sdk.GetModeKind.Relation,
-					Relation: &sdk.RelationGetMode{
-						Relation: sdk.String(sdk.WhateverRelationName.WhateverKnowsWhatevers),
-						Id: postRspA.Whatevers[0].Id,
+			getReq := mql.GetWhateversRequest{
+				Mode: &mql.GetMode{
+					Kind: &mql.GetModeKind.Relation,
+					Relation: &mql.RelationGetMode{
+						Relation: mql.String(mql.WhateverRelationName.WhateverKnowsWhatevers),
+						Id:       postRspA.Whatevers[0].Id,
 					},
 				},
-				Select: &sdk.GetWhateversResponseSelect{
+				Select: &mql.GetWhateversResponseSelect{
 					Meta: GetCollectionMetaSelect(),
-					Whatevers: &sdk.WhateverSelect{
-						Id: &sdk.ServiceIdSelect{
-							ServiceName: sdk.Bool(true),
-							Value: sdk.Bool(true),
+					Whatevers: &mql.WhateverSelect{
+						Id: &mql.ServiceIdSelect{
+							ServiceName: mql.Bool(true),
+							Value:       mql.Bool(true),
 						},
 					},
 				},
-				Relations: &sdk.GetWhateversRelations{
-					KnowsWhatevers: &sdk.GetWhateversCollection{},
+				Relations: &mql.GetWhateversRelations{
+					KnowsWhatevers: &mql.GetWhateversCollection{},
 				},
 			}
 
 			gGetRsp, err := h(ctx, f.MustFromStruct(getReq))
 			if err != nil {
-			    return
+				return
 			}
 
 			requireGetRsp(t, gGetRsp)
 
 			requireSvcIdValues(t, gGetRsp.MustGenericSlice(fieldnames.Whatevers), []string{*whatevers[1].Id.Value, *whatevers[2].Id.Value})
 
-			getReq = sdk.GetWhateversRequest{
-				Mode: &sdk.GetMode{
-					Kind: &sdk.GetModeKind.Relation,
-					Relation: &sdk.RelationGetMode{
-						Relation: &sdk.WhateverRelationName.WhateverKnewByWhatevers,
-						Id: postRspB.Whatevers[0].Id,
+			getReq = mql.GetWhateversRequest{
+				Mode: &mql.GetMode{
+					Kind: &mql.GetModeKind.Relation,
+					Relation: &mql.RelationGetMode{
+						Relation: &mql.WhateverRelationName.WhateverKnewByWhatevers,
+						Id:       postRspB.Whatevers[0].Id,
 					},
 				},
-				Select: &sdk.GetWhateversResponseSelect{
+				Select: &mql.GetWhateversResponseSelect{
 					Meta: GetCollectionMetaSelect(),
-					Whatevers: &sdk.WhateverSelect{
-						Id: &sdk.ServiceIdSelect{
-							ServiceName: sdk.Bool(true),
-							Value: sdk.Bool(true),
+					Whatevers: &mql.WhateverSelect{
+						Id: &mql.ServiceIdSelect{
+							ServiceName: mql.Bool(true),
+							Value:       mql.Bool(true),
 						},
 					},
 				},
@@ -193,12 +193,12 @@ func TestGetModeRelationInter(t *testing.T, ctx context.Context, f generic.Facto
 
 			gGetRsp, err = h(ctx, f.MustFromStruct(getReq))
 			if err != nil {
-			    return
+				return
 			}
 
 			requireGetRsp(t, gGetRsp)
 
-			getRsp := sdk.GetWhateversResponse{}
+			getRsp := mql.GetWhateversResponse{}
 			gGetRsp.MustToStruct(&getRsp)
 
 			assert.Equal(t, whatevers[0].Id.Value, getRsp.Whatevers[0].Id.Value)
@@ -206,7 +206,7 @@ func TestGetModeRelationInter(t *testing.T, ctx context.Context, f generic.Facto
 			return
 		}()
 		if err != nil {
-		    t.Error(err)
+			t.Error(err)
 		}
 	})
 }

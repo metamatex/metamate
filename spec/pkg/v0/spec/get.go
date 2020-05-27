@@ -2,8 +2,8 @@ package spec
 
 import (
 	"context"
-	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/gen/v0/mql"
+	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -15,48 +15,48 @@ func TestEmptyGet(t *testing.T, ctx context.Context, f generic.Factory, h func(c
 		err := func() (err error) {
 			table := []struct {
 				name          string
-				req           sdk.GetWhateversRequest
+				req           mql.GetWhateversRequest
 				nExpectedErrs int
 			}{
 				{
 					name:          "0",
-					req:           sdk.GetWhateversRequest{},
+					req:           mql.GetWhateversRequest{},
 					nExpectedErrs: 0,
 				},
 				{
 					name: "1",
-					req: sdk.GetWhateversRequest{
-						Mode: &sdk.GetMode{},
+					req: mql.GetWhateversRequest{
+						Mode: &mql.GetMode{},
 					},
 					nExpectedErrs: 2,
 				},
 				{
 					name: "2",
-					req: sdk.GetWhateversRequest{
-						Mode: &sdk.GetMode{
-							Kind: &sdk.GetModeKind.Collection,
+					req: mql.GetWhateversRequest{
+						Mode: &mql.GetMode{
+							Kind: &mql.GetModeKind.Collection,
 						},
 					},
 					nExpectedErrs: 1,
 				},
 				{
 					name: "3",
-					req: sdk.GetWhateversRequest{
-						Mode: &sdk.GetMode{
-							Kind:       &sdk.GetModeKind.Collection,
-							Collection: &sdk.CollectionGetMode{},
+					req: mql.GetWhateversRequest{
+						Mode: &mql.GetMode{
+							Kind:       &mql.GetModeKind.Collection,
+							Collection: &mql.CollectionGetMode{},
 						},
 					},
 					nExpectedErrs: 0,
 				},
 				{
 					name: "4",
-					req: sdk.GetWhateversRequest{
-						Mode: &sdk.GetMode{
-							Kind:       &sdk.GetModeKind.Collection,
-							Collection: &sdk.CollectionGetMode{},
+					req: mql.GetWhateversRequest{
+						Mode: &mql.GetMode{
+							Kind:       &mql.GetModeKind.Collection,
+							Collection: &mql.CollectionGetMode{},
 						},
-						Select: &sdk.GetWhateversResponseSelect{},
+						Select: &mql.GetWhateversResponseSelect{},
 					},
 					nExpectedErrs: 0,
 				},
