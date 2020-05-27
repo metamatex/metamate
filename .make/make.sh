@@ -11,11 +11,11 @@ function build_metamate {
 }
 
 function prepare {
-    (cd asg && make prepare)
     (cd metamate && make prepare)
 }
 
 function build {
+    (cd asg && make generate)
     (cd metactl && make build)
     generate
     (cd metactl && make build)
@@ -39,6 +39,7 @@ function test_release {
 }
 
 function generate {
+    (cd asg && make generate)
     ./metactl/dist/metactl gen || ((cd gen && go mod init github.com/metamatex/metamate/gen) && exit 1)
     (cd gen && go mod init github.com/metamatex/metamate/gen)
     (cd hackernews-svc && ./../metactl/dist/metactl gen)
