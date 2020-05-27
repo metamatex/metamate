@@ -44,12 +44,12 @@ func (svc Service) GetGetPostsEndpoint() mql.GetPostsEndpoint {
 						Kind: &mql.EnumFilter{
 							In: []string{mql.GetModeKind.Relation},
 						},
-						Id: &mql.IdFilter{
-							Kind: &mql.EnumFilter{
-								Is: &mql.IdKind.ServiceId,
-							},
-						},
 						Relation: &mql.RelationGetModeFilter{
+							Id: &mql.IdFilter{
+								Kind: &mql.EnumFilter{
+									Is: &mql.IdKind.ServiceId,
+								},
+							},
 							Relation: &mql.StringFilter{
 								In: []string{
 									mql.SocialAccountRelationName.SocialAccountAuthorsPosts,
@@ -78,9 +78,9 @@ func (svc Service) GetPosts(ctx context.Context, req mql.GetPostsRequest) (rsp m
 		case mql.SocialAccountRelationName.SocialAccountAuthorsPosts:
 			ps, errs = firebase.GetSocialAccountAuthorsPosts(svc.c, req)
 		case mql.SocialAccountRelationName.SocialAccountBookmarksPosts:
-			ps, pagination, errs = website.GetSocialAccountBookmarksPosts(svc.c, *req.Mode.Relation.Id.Value, nil)
+			ps, pagination, errs = website.GetSocialAccountBookmarksPosts(svc.c, *req.Mode.Relation.Id.ServiceId.Value, nil)
 		case mql.PostFeedRelationName.PostFeedContainsPosts:
-			ps, errs = firebase.GetPostFeedContainsPosts(svc.c, *req.Mode.Relation.Id.Value)
+			ps, errs = firebase.GetPostFeedContainsPosts(svc.c, *req.Mode.Relation.Id.ServiceId.Value)
 		default:
 			errs = append(errs, mql.Error{
 				Message: mql.String(fmt.Sprintf("can't handle relation %v", *req.Mode.Relation.Relation)),

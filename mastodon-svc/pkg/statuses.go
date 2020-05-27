@@ -101,7 +101,7 @@ func getPostsRelation(ctx context.Context, c *mastodon.Client, req mql.GetPostsR
 			//	id = acc.ID
 			//}
 
-			id := mastodon.ID(*req.Mode.Relation.Id.Value)
+			id := mastodon.ID(*req.Mode.Relation.Id.ServiceId.Value)
 
 			statuses, err = c.GetAccountStatuses(ctx, id, pg)
 			if err != nil {
@@ -110,7 +110,7 @@ func getPostsRelation(ctx context.Context, c *mastodon.Client, req mql.GetPostsR
 
 			break
 		case mql.PostFeedRelationName.PostFeedContainsPosts:
-			switch *req.Mode.Relation.Id.Value {
+			switch *req.Mode.Relation.Id.ServiceId.Value {
 			case TimelinePublic:
 				statuses, err = c.GetTimelinePublic(ctx, false, pg)
 				if err != nil {

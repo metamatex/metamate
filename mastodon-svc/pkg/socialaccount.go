@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/mattn/go-mastodon"
 	"github.com/metamatex/metamate/gen/v0/mql"
-	
 )
 
 func getSocialAccountId(ctx context.Context, c *mastodon.Client, req mql.GetSocialAccountsRequest) (rsp mql.GetSocialAccountsResponse) {
@@ -100,12 +99,12 @@ func getSocialAccountsRelation(ctx context.Context, c *mastodon.Client, req mql.
 				return
 			}
 		case mql.SocialAccountRelationName.SocialAccountFollowedBySocialAccounts:
-			accounts, err = c.GetAccountFollowers(ctx, mastodon.ID(*req.Mode.Relation.Id.Value), pg)
+			accounts, err = c.GetAccountFollowers(ctx, mastodon.ID(*req.Mode.Relation.Id.ServiceId.Value), pg)
 			if err != nil {
 				return
 			}
 		case mql.SocialAccountRelationName.SocialAccountFollowsSocialAccounts:
-			accounts, err = c.GetAccountFollowing(ctx, mastodon.ID(*req.Mode.Relation.Id.Value), pg)
+			accounts, err = c.GetAccountFollowing(ctx, mastodon.ID(*req.Mode.Relation.Id.ServiceId.Value), pg)
 			if err != nil {
 				return
 			}
@@ -120,7 +119,7 @@ func getSocialAccountsRelation(ctx context.Context, c *mastodon.Client, req mql.
 				return
 			}
 		case mql.PostRelationName.PostFavoredBySocialAccounts:
-			accounts, err = c.GetFavouritedBy(ctx, mastodon.ID(*req.Mode.Relation.Id.Value), pg)
+			accounts, err = c.GetFavouritedBy(ctx, mastodon.ID(*req.Mode.Relation.Id.ServiceId.Value), pg)
 			if err != nil {
 				return
 			}

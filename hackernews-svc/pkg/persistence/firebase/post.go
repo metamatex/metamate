@@ -251,7 +251,7 @@ func GetSocialAccountAuthorsPosts(c *http.Client, req mql.GetPostsRequest) (ss [
 			Kind: &mql.GetModeKind.Id,
 			Id: &mql.Id{
 				Kind:      &mql.IdKind.ServiceId,
-				ServiceId: req.Mode.Relation.Id,
+				ServiceId: req.Mode.Relation.Id.ServiceId,
 			},
 		},
 	})
