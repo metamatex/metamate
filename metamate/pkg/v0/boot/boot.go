@@ -191,6 +191,10 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 		router.Use(middleware.Logger)
 	}
 
+	if c.Host.BasicAuth.User != "" && c.Host.BasicAuth.Password != "" {
+		router.Use(middleware.BasicAuth("global", map[string]string{c.Host.BasicAuth.User: c.Host.BasicAuth.Password}))
+	}
+
 	for _, r := range d.Routes {
 		for _, m := range r.Methods {
 			if r.HandlerFunc != nil {

@@ -192,6 +192,7 @@ func (c *Cluster) RoundTrip(req *http.Request) (rsp *http.Response, err error) {
 
 	rsp = &http.Response{}
 	rsp.Header = w.header
+	rsp.StatusCode = 200
 	rsp.Body = ioutil.NopCloser(&w.b)
 
 	return

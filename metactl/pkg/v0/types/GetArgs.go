@@ -7,7 +7,9 @@ import (
 )
 
 type GetArgs struct {
-	Instance   string
+	Host       string
+	Password   string
+	User       string
 	TypePlural string
 	Services   string
 	Path       string

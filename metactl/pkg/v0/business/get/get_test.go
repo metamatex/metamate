@@ -9,7 +9,7 @@ import (
 func TestGet(t *testing.T) {
 	err := func() (err error) {
 		args := types.GetArgs{
-			Instance: "https://metamate.one",
+			Host: "https://metamate.one",
 			//Search: "books",
 			//Services: "hackernews",
 			TypePlural: "socialaccounts",

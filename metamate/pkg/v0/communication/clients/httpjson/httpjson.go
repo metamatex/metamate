@@ -9,6 +9,6 @@ import (
 
 func GetRequestHandler(f generic.Factory, client *http.Client) types.RequestHandler {
 	return func(ctx context.Context, addr string, gReq generic.Generic) (generic.Generic, error) {
-		return generic.Send(f, client, addr, gReq)
+		return generic.Send(f, client, addr, "", "", gReq)
 	}
 }

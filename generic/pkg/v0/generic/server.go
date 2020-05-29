@@ -53,7 +53,7 @@ func (s Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		gRsp := s.opts.Handler(req.Context(), gReq)
 
 		w.Header().Set(ContentTypeHeader, ContentTypeJson)
-		w.Header().Set(AsgTypeHeader, gRsp.Type().Name())
+		w.Header().Set(ContentTypeHeader, ContentTypeJson)
 
 		err = json.NewEncoder(w).Encode(gRsp.ToStringInterfaceMap())
 		if err != nil {

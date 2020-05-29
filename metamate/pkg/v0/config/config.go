@@ -23,6 +23,10 @@ var DefaultConfig = types.Config{
 		AllowedOrigins:      []string{"*"},
 		ReadTimeoutSeconds:  30,
 		WriteTimeoutSeconds: 30,
+		BasicAuth: types.BasicAuthConfig{
+			User:     "user",
+			Password: "password",
+		},
 	},
 	Log: types.LogConfig{
 		Http: true,

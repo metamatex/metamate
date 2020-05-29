@@ -60,9 +60,15 @@ type DebugEndpointConfig struct {
 }
 
 type HostConfig struct {
-	AllowedOrigins      []string `yaml:"allowedOrigins,omitempty"`
-	ReadTimeoutSeconds  int
-	WriteTimeoutSeconds int
+	AllowedOrigins      []string        `yaml:"allowedOrigins,omitempty"`
+	ReadTimeoutSeconds  int             `yaml:"readTimeoutSeconds,omitempty"`
+	WriteTimeoutSeconds int             `yaml:"writeTimeoutSeconds,omitempty"`
+	BasicAuth           BasicAuthConfig `yaml:"basicAuth,omitempty"`
+}
+
+type BasicAuthConfig struct {
+	User     string `yaml:"user,omitempty"`
+	Password string `yaml:"password,omitempty"`
 }
 
 type GraphiqlExplorerEndpointConfig struct {

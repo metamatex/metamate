@@ -40,7 +40,9 @@ func addGet(parentCmd *cobra.Command) {
 	getCmd.PersistentFlags().StringVarP(&getArgs.Name, "name", "", "", "name id")
 	getCmd.PersistentFlags().StringVarP(&getArgs.Username, "username", "", "", "username id")
 	getCmd.PersistentFlags().StringVarP(&getArgs.Services, "services", "", "", "serviceFilter in the format of serviceName,serviceName")
-	getCmd.PersistentFlags().StringVarP(&getArgs.Instance, "instance", "", "", "host of MetaMate instance")
+	getCmd.PersistentFlags().StringVarP(&getArgs.Host, "host", "", "", "host of MetaMate instance")
+	getCmd.PersistentFlags().StringVarP(&getArgs.Password, "password", "", "", "basic auth password")
+	getCmd.PersistentFlags().StringVarP(&getArgs.User, "user", "", "", "basic auth user")
 	getCmd.PersistentFlags().StringVarP(&getArgs.Path, "path", "", "", "relations path")
 	getCmd.PersistentFlags().StringVarP(&getArgs.Search, "search", "", "", "search term")
 

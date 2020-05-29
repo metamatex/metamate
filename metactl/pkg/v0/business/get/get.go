@@ -101,19 +101,14 @@ func Get(report *types.MessageReport, verbosity int, rn *graph.RootNode, f gener
 		gReq.Print()
 	}
 
-	gRsp, err := generic.Send(f, &http.Client{}, args.Instance+"/httpjson", gReq)
+	gRsp, err := generic.Send(f, &http.Client{}, args.Host+"/httpjson", args.User, args.Password, gReq)
 	if err != nil {
 		return
 	}
 
 	gErrors, ok := gRsp.GenericSlice(fieldnames.Errors)
 	if ok {
-		var errs []mql.Error
-		gErrors.MustToStructs(&errs)
-
-		for _, e := range errs {
-			report.AddError(fmt.Sprintf("%v: %v", *e.Service.Id.Value, *e.Message))
-		}
+		addGErrorsToReport(report, gErrors)
 	}
 
 	gEntities, ok := gRsp.GenericSlice(forTn.PluralFieldName())
@@ -130,12 +125,7 @@ func Get(report *types.MessageReport, verbosity int, rn *graph.RootNode, f gener
 			gCollection, ok := g.Generic(mql.FieldNames.Relations, relationsFn.Name())
 			gErrors, ok := gCollection.GenericSlice(fieldnames.Errors)
 			if ok {
-				var errs []mql.Error
-				gErrors.MustToStructs(&errs)
-
-				for _, e := range errs {
-					report.AddError(fmt.Sprintf("%v: %v", *e.Service.Id.Value, *e.Message))
-				}
+				addGErrorsToReport(report, gErrors)
 			}
 
 			gSlice, ok := gCollection.GenericSlice(printTn.PluralFieldName())
@@ -187,4 +177,30 @@ func Get(report *types.MessageReport, verbosity int, rn *graph.RootNode, f gener
 	o.Text = utils.GetTableString([]string{}, rows, []int{})
 
 	return
+}
+
+func addGErrorsToReport(r *types.MessageReport, gErrs generic.Slice) {
+	var errs []mql.Error
+	gErrs.MustToStructs(&errs)
+
+	for _, e := range errs {
+		var name string
+		var value string
+		if e.Service != nil && e.Service.Id != nil {
+			if e.Service.Id.ServiceName != nil {
+				name = *e.Service.Id.ServiceName
+			}
+
+			if e.Service.Id.Value != nil {
+				value = *e.Service.Id.Value
+			}
+		}
+
+		var message string
+		if e.Message != nil {
+			message = *e.Message
+		}
+
+		r.AddError(fmt.Sprintf("%v/%v: %v", name, value, message))
+	}
 }

@@ -6,8 +6,9 @@ import (
 )
 
 type responseWriter struct {
-	header http.Header
-	b      bytes.Buffer
+	header     http.Header
+	b          bytes.Buffer
+	statusCode int
 }
 
 func newResponseWriter() *responseWriter {
@@ -25,4 +26,5 @@ func (w *responseWriter) Write(b []byte) (int, error) {
 }
 
 func (w *responseWriter) WriteHeader(statusCode int) {
+	w.statusCode = statusCode
 }

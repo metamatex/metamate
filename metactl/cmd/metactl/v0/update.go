@@ -27,7 +27,7 @@ var updateCmd = &cobra.Command{
 			}
 
 			if strings.Contains(latest.AssetURL, "metamate") {
-				latest.AssetURL = strings.Replace(latest.AssetURL, "metamate", "metactl", -1)
+				latest.AssetURL = strings.Replace(latest.AssetURL, "/metamate_", "/metactl_", -1)
 			}
 
 			vString := version.Version
