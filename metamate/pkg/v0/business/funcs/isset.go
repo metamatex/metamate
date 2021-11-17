@@ -13,9 +13,9 @@ func Isset(subject string, path []string, b bool) func(ctx types.ReqCtx) bool {
 			return func(ctx types.ReqCtx) bool {
 				return (ctx.GSvcRsp != nil) == b
 			}
-		case types.GCliRsp:
+		case types.GBusRsp:
 			return func(ctx types.ReqCtx) bool {
-				return (ctx.GCliRsp != nil) == b
+				return (ctx.GBusRsp != nil) == b
 			}
 		}
 
@@ -28,9 +28,9 @@ func Isset(subject string, path []string, b bool) func(ctx types.ReqCtx) bool {
 			_, ok := ctx.GSvcRsp.Generic(path...)
 			return ok == b
 		}
-	case types.GCliRsp:
+	case types.GBusRsp:
 		return func(ctx types.ReqCtx) bool {
-			_, ok := ctx.GCliRsp.Generic(path...)
+			_, ok := ctx.GBusRsp.Generic(path...)
 			return ok == b
 		}
 	case types.GCliReq:

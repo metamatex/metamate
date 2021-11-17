@@ -89,7 +89,7 @@ func GetSchema(f generic.Factory, serveFunc types.ServeFunc, rn *graph.RootNode)
 
 func getEndpointField(f generic.Factory, serveFunc types.ServeFunc, en *graph.EndpointNode, sCtx SchemaContext) *graphql.Field {
 	args := graphql.FieldConfigArgument{}
-	for _, fn := range en.Edges.Type.Request().Edges.Fields.Holds() {
+	for _, fn := range en.Edges.Type.ClientRequest().Edges.Fields.Holds() {
 		switch fn.Name() {
 		case fieldnames.Relations:
 		case fieldnames.Select:
@@ -107,7 +107,7 @@ func getEndpointField(f generic.Factory, serveFunc types.ServeFunc, en *graph.En
 	}
 
 	return &graphql.Field{
-		Type:        sCtx.MustGetObject(en.Edges.Type.Response().Name()),
+		Type:        sCtx.MustGetObject(en.Edges.Type.BusResponse().Name()),
 		Description: "",
 		Args:        args,
 		Resolve:     composeResolve(f, serveFunc, en),
@@ -140,7 +140,7 @@ func getMutationObject(f generic.Factory, serveFunc types.ServeFunc, sCtx Schema
 
 	enm := rn.Endpoints.Filter(graph.Filter{
 		Flags: &graph.FlagsSubset{
-			Or: []string{endpointflags.IsDeleteEndpoint, endpointflags.IsPutEndpoint, endpointflags.IsPostEndpoint, endpointflags.IsActionEndpoint},
+			Or: []string{endpointflags.IsActionEndpoint},
 		},
 	})
 

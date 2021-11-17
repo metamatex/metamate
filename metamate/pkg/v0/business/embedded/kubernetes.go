@@ -1,4 +1,4 @@
-package virtual
+package embedded
 
 import (
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
@@ -10,7 +10,7 @@ import (
 )
 
 func init() {
-	handler[Kubernetes] = func(f generic.Factory, rn *graph.RootNode, c *http.Client, vSvc types.VirtualSvc) (h http.Handler, err error) {
+	handler[Kubernetes] = func(f generic.Factory, rn *graph.RootNode, c *http.Client, vSvc types.EmbeddedSvc) (h http.Handler, err error) {
 		svc, err := pkg.NewService()
 		if err != nil {
 			return

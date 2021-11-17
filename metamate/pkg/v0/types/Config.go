@@ -5,16 +5,22 @@ import (
 )
 
 type Config struct {
-	DiscoverySvc mql.Service     `yaml:"discoverySvc,omitempty"`
-	Endpoints    EndpointsConfig `yaml:"endpoints,omitempty"`
-	Host         HostConfig      `yaml:"host,omitempty"`
-	Log          LogConfig       `yaml:"log,omitempty"`
-	Virtual      VirtualConfig   `yaml:"virtual,omitempty"`
-	Internal     InternalConfig  `yaml:"internal,omitempty"`
+	DiscoverySvc    mql.Service                `yaml:"discoverySvc,omitempty"`
+	Endpoints       EndpointsConfig            `yaml:"endpoints,omitempty"`
+	Host            HostConfig                 `yaml:"host,omitempty"`
+	Log             LogConfig                  `yaml:"log,omitempty"`
+	Embedded        EmbeddedConfig             `yaml:"virtual,omitempty"`
+	Internal        InternalConfig             `yaml:"internal,omitempty"`
+	ServiceAccounts []ServiceAccountAssignment `yaml:"serviceAccounts,omitempty"`
 }
 
-type VirtualConfig struct {
-	Services []VirtualSvc
+type ServiceAccountAssignment struct {
+	ServiceId      mql.ServiceId
+	ServiceAccount mql.ServiceAccount
+}
+
+type EmbeddedConfig struct {
+	Services []EmbeddedSvc
 }
 
 type GetConfig struct {

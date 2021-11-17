@@ -8,8 +8,8 @@ import (
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/fieldnames"
 	"github.com/metamatex/metamate/gen/v0/mql"
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
+	"github.com/metamatex/metamate/metamate/pkg/v0/business/embedded"
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/pipeline"
-	"github.com/metamatex/metamate/metamate/pkg/v0/business/virtual"
 	httpjsonHandler "github.com/metamatex/metamate/metamate/pkg/v0/communication/clients/httpjson"
 	configServer "github.com/metamatex/metamate/metamate/pkg/v0/communication/servers/config"
 	"github.com/metamatex/metamate/metamate/pkg/v0/communication/servers/explorer"
@@ -34,7 +34,7 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 	}
 
 	if c.DiscoverySvc.Endpoints == nil {
-		c.DiscoverySvc.Endpoints = &mql.Endpoints{}
+		c.DiscoverySvc.Endpoints = &mql.ServiceEndpoints{}
 	}
 
 	if c.DiscoverySvc.Endpoints.GetServices == nil {
@@ -49,11 +49,11 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 
 	d.InternalLogTemplates = toInternalLogTemplates(c.Log.Internal)
 
-	c0 := virtual.NewCluster(d.RootNode, d.Factory, func(err error) {
+	c0 := embedded.NewCluster(d.RootNode, d.Factory, func(err error) {
 		panic(err)
 	})
 
-	err = virtual.Deploy(c0, c.Virtual.Services)
+	err = embedded.Deploy(c0, c.Embedded.Services)
 	if err != nil {
 		return
 	}
@@ -68,11 +68,11 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 		return
 	}
 
-	cacheHandlerF := func(h func(ctx context.Context, addr string, gSvcReq generic.Generic) (gSvcRsp generic.Generic, err error)) func(ctx context.Context, addr string, gSvcReq generic.Generic) (gSvcRsp generic.Generic, err error) {
-		return func(ctx context.Context, addr string, gSvcReq generic.Generic) (gSvcRsp generic.Generic, err error) {
-			gSvcReq0 := gSvcReq.Copy()
-			gSvcReq0.Delete(fieldnames.Select)
-			key := addr + gSvcReq0.GetHash()
+	cacheHandlerF := func(h func(ctx context.Context, addr string, gBusReq generic.Generic) (gSvcRsp generic.Generic, err error)) func(ctx context.Context, addr string, gBusReq generic.Generic) (gSvcRsp generic.Generic, err error) {
+		return func(ctx context.Context, addr string, gBusReq generic.Generic) (gSvcRsp generic.Generic, err error) {
+			gBusReq0 := gBusReq.Copy()
+			gBusReq0.Delete(fieldnames.Select)
+			key := addr + gBusReq0.GetHash()
 
 			v, ok := cache.Get(key)
 			switch ok {
@@ -83,7 +83,7 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 				}
 				gSvcRsp = gCachedSvcRsp.Copy()
 			case false:
-				gSvcRsp, err = h(ctx, addr, gSvcReq)
+				gSvcRsp, err = h(ctx, addr, gBusReq)
 				if err != nil {
 					return
 				}
@@ -105,7 +105,7 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 		false: cacheHandlerF(httpjsonHandler.GetRequestHandler(d.Factory, client)),
 	}
 
-	d.ResolveLine = pipeline.NewResolveLine(d.RootNode, d.Factory, c.DiscoverySvc, reqHs, cachedReqHs, d.InternalLogTemplates, c.Internal.Get)
+	d.ResolveLine = pipeline.NewResolveLine(d.RootNode, d.Factory, c, d.InternalLogTemplates, reqHs, cachedReqHs)
 
 	d.ServeFunc = func(ctx context.Context, gCliReq generic.Generic) generic.Generic {
 		gCliReq = gCliReq.Copy()
@@ -120,7 +120,7 @@ func NewDependencies(c types.Config, v types.Version) (d types.Dependencies, err
 
 		ctx0 = d.ResolveLine.Transform(ctx0)
 
-		return ctx0.GCliRsp
+		return ctx0.GBusRsp
 	}
 
 	err = c0.HostBus("metamate", d.ServeFunc)

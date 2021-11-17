@@ -15,12 +15,11 @@ const (
 	Stage              = "Stage"
 	Ctx                = "Ctx"
 	GCliReq            = "GCliReq"
-	GCliRsp            = "GCliRsp"
+	GBusRsp            = "GBusRsp"
 	GCliRsps           = "GCliRsps"
 	ForTypeNode        = "ForTypeNode"
-	GSvcReq            = "GSvcReq"
+	GBusReq            = "GBusReq"
 	GSvcRsp            = "GSvcRsp"
-	GSvcRsps           = "GSvcRsps"
 	SvcFilter          = "SvcFilter"
 	GRspSelect         = "GRspSelect"
 	EndpointNode       = "EndpointNode"
@@ -37,28 +36,28 @@ const (
 )
 
 type ReqCtx struct {
-	Id                 string
-	Stage              string
-	Method             string
-	Mode               string
-	Ctx                context.Context
-	GCliReq            generic.Generic
-	GCliRsp            generic.Generic
-	GCliRsps           []generic.Generic
-	ForTypeNode        *graph.TypeNode
-	GSvcReq            generic.Generic
-	GSvcRsp            generic.Generic
-	GSvcRsps           []generic.Generic
-	SvcFilter          *mql.ServiceFilter
-	GRspSelect         generic.Generic
-	EndpointNode       *graph.EndpointNode
-	Svcs               []mql.Service
-	Svc                *mql.Service
-	Errs               []mql.Error
-	GEntity            generic.Generic
-	GEntities          generic.Slice
-	SvcId              *mql.ServiceId
-	SvcIds             []mql.ServiceId
+	Id           string
+	Stage        string
+	Method       string
+	Mode         string
+	Ctx          context.Context
+	GCliReq      generic.Generic
+	GBusRsp      generic.Generic
+	GCliRsps     []generic.Generic
+	ForTypeNode  *graph.TypeNode
+	GBusReq      generic.Generic
+	GSvcRsp      generic.Generic
+	SvcFilter    *mql.ServiceFilter
+	GRspSelect   generic.Generic
+	EndpointNode *graph.EndpointNode
+	Svcs         []mql.Service
+	Svc          *mql.Service
+	Errs         []mql.Error
+	GEntity      generic.Generic
+	GEntities    generic.Slice
+	SvcId        *mql.ServiceId
+	SvcIds       []mql.ServiceId
+	BusReqCtxs   []ReqCtx
 	DoCliReqValidation bool
 	DoCliReqProcessing bool
 	DoSetClientAccount bool
@@ -73,7 +72,6 @@ func (c ReqCtx) Copy() (ctx ReqCtx, err error) {
 		Ctx:                c.Ctx,
 		ForTypeNode:        c.ForTypeNode,
 		GCliRsps:           c.GCliRsps, // todo
-		GSvcRsps:           c.GSvcRsps, // todo
 		EndpointNode:       c.EndpointNode,
 		Errs:               c.Errs, // todo
 		DoCliReqValidation: c.DoCliReqValidation,
@@ -85,12 +83,12 @@ func (c ReqCtx) Copy() (ctx ReqCtx, err error) {
 		ctx.GCliReq = c.GCliReq.Copy()
 	}
 
-	if c.GCliRsp != nil {
-		ctx.GCliRsp = c.GCliRsp.Copy()
+	if c.GBusRsp != nil {
+		ctx.GBusRsp = c.GBusRsp.Copy()
 	}
 
-	if c.GSvcReq != nil {
-		ctx.GSvcReq = c.GSvcReq.Copy()
+	if c.GBusReq != nil {
+		ctx.GBusReq = c.GBusReq.Copy()
 	}
 
 	if c.GSvcRsp != nil {
@@ -181,7 +179,7 @@ func getCtxInspect(ctx ReqCtx) (i ContextInspect) {
 		i.GCliReq = "x"
 	}
 
-	if ctx.GSvcReq != nil {
+	if ctx.GBusReq != nil {
 		i.GSvcReq = "x"
 	}
 
@@ -189,7 +187,7 @@ func getCtxInspect(ctx ReqCtx) (i ContextInspect) {
 		i.GSvcRsp = "x"
 	}
 
-	if ctx.GCliRsp != nil {
+	if ctx.GBusRsp != nil {
 		i.GCliRsp = "x"
 	}
 

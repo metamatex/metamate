@@ -10,6 +10,9 @@ import (
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/typenames"
 	"github.com/metamatex/metamate/gen/v0/mql"
 	"github.com/metamatex/metamate/metamate/pkg/v0/config"
+	"github.com/metamatex/metamate/metamate/pkg/v0/utils"
+	"sync"
+	"time"
 
 	"github.com/metamatex/metamate/generic/pkg/v0/generic"
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/line"
@@ -35,53 +38,47 @@ const (
 	SetSvcFilterToGetModeRelationSvcIdName = "set service filter to get mode relation service id"
 )
 
-func ReduceSvcRspsToCliRsp(f generic.Factory) types.FuncTransformer {
+func ReduceBusReqCtxsToBusRsp(f generic.Factory) types.FuncTransformer {
 	return types.FuncTransformer{
 		Name0: FuncName,
 		Func: func(ctx types.ReqCtx) types.ReqCtx {
-			ctx.GCliRsp = ReduceSvcRspsToCliRspFunc(f, ctx.ForTypeNode, ctx.GSvcRsps, ctx.GCliRsp)
+			gSlice := f.NewSlice(ctx.ForTypeNode)
+			for _, brCtx := range ctx.BusReqCtxs {
+				gSlice0, ok := brCtx.GSvcRsp.GenericSlice(ctx.ForTypeNode.PluralFieldName())
+				if !ok {
+					continue
+				}
+
+				gSlice.Append(gSlice0.Get()...)
+			}
+
+			ctx.GBusRsp.MustSetGenericSlice([]string{ctx.ForTypeNode.PluralFieldName()}, gSlice)
 
 			return ctx
 		},
 	}
 }
 
-func ReduceSvcRspsToCliRspFunc(f generic.Factory, forTn *graph.TypeNode, gSvcRsps []generic.Generic, gCliRsp generic.Generic) generic.Generic {
-	gSlice := f.NewSlice(forTn)
-	for _, gSvcRsp := range gSvcRsps {
-		gSlice0, ok := gSvcRsp.GenericSlice(forTn.PluralFieldName())
-		if !ok {
-			continue
-		}
-
-		gSlice.Append(gSlice0.Get()...)
-	}
-
-	gCliRsp.MustSetGenericSlice([]string{forTn.PluralFieldName()}, gSlice)
-
-	return gCliRsp
-}
-
-func ReduceSvcRspErrsToCliRspErrs(f generic.Factory) types.FuncTransformer {
+func ReduceBusReqCtxsErrsToBusRspErrs(f generic.Factory) types.FuncTransformer {
 	return types.FuncTransformer{
 		Name0: FuncName,
 		Func: func(ctx types.ReqCtx) types.ReqCtx {
 			gErrs := f.MustFromStructs([]mql.Error{})
 
-			gCliRspErrs, ok := ctx.GCliRsp.GenericSlice(fieldnames.Errors)
+			gCliRspErrs, ok := ctx.GBusRsp.GenericSlice(fieldnames.Errors)
 			if ok {
 				gErrs.Append(gCliRspErrs.Get()...)
 			}
 
-			for _, gSvcRsp := range ctx.GSvcRsps {
-				gSvcRspErrs, ok := gSvcRsp.GenericSlice(fieldnames.Errors)
+			for _, brCtx := range ctx.BusReqCtxs {
+				gSvcRspErrs, ok := brCtx.GSvcRsp.GenericSlice(fieldnames.Errors)
 				if ok {
 					gErrs.Append(gSvcRspErrs.Get()...)
 				}
 			}
 
 			if len(gErrs.Get()) != 0 {
-				ctx.GCliRsp.MustSetGenericSlice([]string{fieldnames.Errors}, gErrs)
+				ctx.GBusRsp.MustSetGenericSlice([]string{fieldnames.Errors}, gErrs)
 			}
 
 			return ctx
@@ -93,23 +90,40 @@ func ReduceSvcRspPaginationsToCliRspPagination(f generic.Factory) types.FuncTran
 	return types.FuncTransformer{
 		Name0: FuncName,
 		Func: func(ctx types.ReqCtx) types.ReqCtx {
-			p := mql.Pagination{}
+			busPagi := mql.BusPagination{}
 
-			for _, gSvcRsp := range ctx.GSvcRsps {
-				gPagination, ok := gSvcRsp.Generic(fieldnames.Pagination)
+			for _, brCtx := range ctx.BusReqCtxs {
+				gPagination, ok := brCtx.GSvcRsp.Generic(fieldnames.Pagination)
 				if !ok {
 					continue
 				}
 
-				var p0 mql.Pagination
-				gPagination.MustToStruct(&p0)
+				var svcPagi mql.ServicePagination
+				gPagination.MustToStruct(&svcPagi)
 
-				p.Previous = append(p.Previous, p0.Previous...)
-				p.Current = append(p.Current, p0.Current...)
-				p.Next = append(p.Next, p0.Next...)
+				if svcPagi.Previous != nil {
+					busPagi.Previous = append(busPagi.Previous, mql.ServicePage{
+						Id:   brCtx.Svc.Id,
+						Page: svcPagi.Previous,
+					})
+				}
+
+				if svcPagi.Current != nil {
+					busPagi.Current = append(busPagi.Current, mql.ServicePage{
+						Id:   brCtx.Svc.Id,
+						Page: svcPagi.Current,
+					})
+				}
+
+				if svcPagi.Next != nil {
+					busPagi.Next = append(busPagi.Next, mql.ServicePage{
+						Id:   brCtx.Svc.Id,
+						Page: svcPagi.Next,
+					})
+				}
 			}
 
-			ctx.GCliRsp.MustSetGeneric([]string{fieldnames.Pagination}, f.MustFromStruct(p))
+			ctx.GBusRsp.MustSetGeneric([]string{fieldnames.Pagination}, f.MustFromStruct(busPagi))
 
 			return ctx
 		},
@@ -127,14 +141,14 @@ func HardFilterGCliRsp() types.FuncTransformer {
 
 			fieldname := ctx.ForTypeNode.PluralFieldName()
 
-			gEntities, ok := ctx.GCliRsp.GenericSlice(fieldname)
+			gEntities, ok := ctx.GBusRsp.GenericSlice(fieldname)
 			if !ok {
 				return ctx
 			}
 
 			gEntities = gEntities.Filter(false, gFilter)
 
-			ctx.GCliRsp.MustSetGenericSlice([]string{fieldname}, gEntities)
+			ctx.GBusRsp.MustSetGenericSlice([]string{fieldname}, gEntities)
 
 			return ctx
 		},
@@ -159,7 +173,7 @@ func ApplySvcEndpointReqFilters(f generic.Factory) types.FuncTransformer {
 			for i, _ := range ctx.Svcs {
 				gSvc := f.MustFromStruct(ctx.Svcs[i])
 
-				gEndpoint := gSvc.MustGeneric(fieldnames.Endpoints, ctx.GCliReq.Type().Edges.Endpoint.BelongsTo().FieldName())
+				gEndpoint := gSvc.MustGeneric(fieldnames.Endpoints, ctx.GCliReq.Type().Edges.Endpoint.For().FieldName())
 
 				gReqFilter, ok := gEndpoint.Generic(fieldnames.Filter)
 				if ok {
@@ -250,7 +264,7 @@ func ProcessCliRsp(f generic.Factory) types.FuncTransformer {
 	return types.FuncTransformer{
 		Name0: ProcessCliRspName,
 		Func: func(ctx types.ReqCtx) types.ReqCtx {
-			//ctx.GCliRsp = process.Process(ctx, f, ctx.GCliRsp)
+			//ctx.GBusRsp = process.Process(ctx, f, ctx.GBusRsp)
 
 			return ctx
 		},
@@ -261,7 +275,7 @@ func ValidateCliRsp() types.FuncTransformer {
 	return types.FuncTransformer{
 		Name0: ValidateCliRspName,
 		Func: func(ctx types.ReqCtx) types.ReqCtx {
-			//ctx.Errs = validation.Validate(ctx.Ctx, ctx.GCliRsp)
+			//ctx.Errs = validation.Validate(ctx.Ctx, ctx.GBusRsp)
 
 			return ctx
 		},
@@ -306,16 +320,16 @@ func New(f generic.Factory, subject string) types.FuncTransformer {
 		return types.FuncTransformer{
 			Name0: name,
 			Func: func(ctx types.ReqCtx) types.ReqCtx {
-				ctx.GSvcRsp = f.New(ctx.GSvcReq.Type().Edges.Type.Response())
+				ctx.GSvcRsp = f.New(ctx.GBusReq.Type().Edges.Type.Response())
 
 				return ctx
 			},
 		}
-	case types.GCliRsp:
+	case types.GBusRsp:
 		return types.FuncTransformer{
 			Name0: name,
 			Func: func(ctx types.ReqCtx) types.ReqCtx {
-				ctx.GCliRsp = f.New(ctx.GCliReq.Type().Edges.Type.Response())
+				ctx.GBusRsp = f.New(ctx.GCliReq.Type().Edges.Type.Response())
 
 				return ctx
 			},
@@ -329,7 +343,7 @@ func Set(f generic.Factory, subject string, any interface{}) types.FuncTransform
 	name := fmt.Sprintf("set %v to %v", subject, any)
 
 	switch subject {
-	case types.GSvcReq:
+	case types.GBusReq:
 		t := reflect.TypeOf(any)
 		switch t.Kind() {
 		case reflect.Struct:
@@ -338,7 +352,7 @@ func Set(f generic.Factory, subject string, any interface{}) types.FuncTransform
 			return types.FuncTransformer{
 				Name0: name,
 				Func: func(ctx types.ReqCtx) types.ReqCtx {
-					ctx.GSvcReq = g
+					ctx.GBusReq = g
 
 					return ctx
 				},
@@ -410,20 +424,11 @@ func Copy(from, to string) types.FuncTransformer {
 					return ctx
 				},
 			}
-		case types.GSvcReq:
-			return types.FuncTransformer{
-				Name0: name,
-				Func: func(ctx types.ReqCtx) types.ReqCtx {
-					ctx.GSvcReq = ctx.GCliReq.Copy()
-
-					return ctx
-				},
-			}
 		case types.Method:
 			return types.FuncTransformer{
 				Name0: name,
 				Func: func(ctx types.ReqCtx) types.ReqCtx {
-					ctx.Method = ctx.GCliReq.Type().Edges.Endpoint.BelongsTo().Data.Method
+					ctx.Method = ctx.GCliReq.Type().Edges.Endpoint.For().Data.Method
 
 					return ctx
 				},
@@ -441,7 +446,7 @@ func Copy(from, to string) types.FuncTransformer {
 			return types.FuncTransformer{
 				Name0: name,
 				Func: func(ctx types.ReqCtx) types.ReqCtx {
-					ctx.EndpointNode = ctx.GCliReq.Type().Edges.Endpoint.BelongsTo()
+					ctx.EndpointNode = ctx.GCliReq.Type().Edges.Endpoint.For()
 
 					return ctx
 				},
@@ -487,7 +492,7 @@ func Move(f generic.Factory, from, to string) types.FuncTransformer {
 					return ctx
 				},
 			}
-		case types.GCliRsp:
+		case types.GBusRsp:
 			return types.FuncTransformer{
 				Name0: name,
 				Func: func(ctx types.ReqCtx) types.ReqCtx {
@@ -495,7 +500,7 @@ func Move(f generic.Factory, from, to string) types.FuncTransformer {
 						return ctx
 					}
 
-					ctx.GCliRsp.MustSetGenericSlice([]string{fieldnames.Errors}, f.MustFromStructs(ctx.Errs))
+					ctx.GBusRsp.MustSetGenericSlice([]string{fieldnames.Errors}, f.MustFromStructs(ctx.Errs))
 
 					ctx.Errs = nil
 
@@ -506,6 +511,129 @@ func Move(f generic.Factory, from, to string) types.FuncTransformer {
 	}
 
 	panic(fmt.Sprintf("move %v to %v not supported", from, to))
+}
+
+func CreateGBusReqFromGCliReq(f generic.Factory) types.FuncTransformer {
+	return types.FuncTransformer{
+		Name0: "CreateGBusReqFromGCliReq",
+		Func: func(ctx types.ReqCtx) types.ReqCtx {
+			ctx.GBusReq = f.New(ctx.GCliReq.Type().Edges.Type.BusRequest())
+
+			gMode, ok := ctx.GCliReq.Generic(mql.FieldNames.Mode)
+			if ok {
+				ctx.GBusReq.MustSetGeneric([]string{mql.FieldNames.Mode}, gMode)
+			}
+
+			return ctx
+		},
+	}
+}
+
+func SetServiceAccount(f generic.Factory, l *sync.Mutex, ass []types.ServiceAccountAssignment, hs map[bool]types.RequestHandler) types.FuncTransformer {
+	return types.FuncTransformer{
+		Name0: "SetServiceAccount",
+		Func: func(ctx types.ReqCtx) types.ReqCtx {
+			l.Lock()
+			defer l.Unlock()
+
+			if ctx.Svc.Endpoints.AuthenticateServiceAccount == nil {
+				return ctx
+			}
+
+			var acc *mql.ServiceAccount
+			var accI int
+			for i, as := range ass {
+				if *as.ServiceId.ServiceName != *ctx.Svc.Id.ServiceName ||
+					*as.ServiceId.Value != *ctx.Svc.Id.Value  {
+					continue
+				}
+
+				acc = &as.ServiceAccount
+				accI = i
+				break
+			}
+
+			if acc == nil {
+				ctx.Errs = append(ctx.Errs, mql.Error{
+					Kind: &mql.ErrorKind.Internal,
+					Message: mql.String("no service account found"),
+					Service: ctx.Svc,
+				})
+
+				return ctx
+			}
+
+			isExpired := false
+			if acc.Token != nil && acc.Token.ExpiresAt != nil {
+				t, err := utils.FromUnixTimeStamp(*acc.Token.ExpiresAt)
+				if err != nil {
+					ctx.Errs = append(ctx.Errs, mql.Error{
+						Kind: &mql.ErrorKind.Internal,
+						Message: mql.String(err.Error()),
+						Service: ctx.Svc,
+					})
+
+				    return ctx
+				}
+
+				isExpired = t.After(time.Now())
+			}
+
+			if acc.Token != nil &&
+				acc.Token.Value != nil &&
+				!isExpired {
+				ctx.GBusReq.MustSetGeneric([]string{mql.FieldNames.Account}, f.MustFromStruct(*acc))
+
+				return ctx
+			}
+
+			req := mql.AuthenticateServiceAccountBusRequest{
+				Input: &mql.AuthenticateServiceAccountInput{
+					Account: acc,
+				},
+			}
+
+			h, ok := hs[ctx.Svc.IsEmbedded != nil && *ctx.Svc.IsEmbedded]
+			if !ok {
+				panic("expected handler for embedded and http")
+
+				return ctx
+			}
+
+			var err error
+			gSvcRsp, err := h(ctx.Ctx, *ctx.Svc.Url.Value, f.MustFromStruct(req))
+			if err != nil {
+				ctx.Errs = append(ctx.Errs, NewError(ctx.Svc, mql.ErrorKind.Service, err.Error()))
+
+				return ctx
+			}
+
+			var rsp mql.AuthenticateServiceAccountServiceResponse
+			gSvcRsp.MustToStruct(&rsp)
+
+			if len(rsp.Errors) != 0 {
+				ctx.Errs = append(ctx.Errs, rsp.Errors...)
+
+				return ctx
+			}
+
+			if rsp.Output == nil ||
+				rsp.Output.Token == nil {
+				ctx.Errs = append(ctx.Errs, NewError(ctx.Svc, mql.ErrorKind.Internal, "authenticateServiceAccountServiceResponse didn't contain a token"))
+
+				return ctx
+			}
+
+			acc.Token = rsp.Output.Token
+			as := ass[accI]
+			as.ServiceAccount = *acc
+			ass[accI] = as
+
+			ctx.GBusReq.MustSetGeneric([]string{mql.FieldNames.Account}, f.MustFromStruct(*acc))
+
+			return ctx
+		},
+	}
 }
 
 func HandleSvcReq(hs map[bool]types.RequestHandler) types.FuncTransformer {
@@ -519,15 +647,15 @@ func HandleSvcReq(hs map[bool]types.RequestHandler) types.FuncTransformer {
 					return ctx
 				}
 
-				h, ok := hs[ctx.Svc.IsVirtual != nil && *ctx.Svc.IsVirtual]
+				h, ok := hs[ctx.Svc.IsEmbedded != nil && *ctx.Svc.IsEmbedded]
 				if !ok {
-					panic("there should be a handler for virtual and http")
+					panic("expected handler for embedded and http")
 
 					return ctx
 				}
 
 				var err error
-				ctx.GSvcRsp, err = h(ctx.Ctx, *ctx.Svc.Url.Value, ctx.GSvcReq)
+				ctx.GSvcRsp, err = h(ctx.Ctx, *ctx.Svc.Url.Value, ctx.GBusReq)
 				if err != nil {
 					ctx.Errs = append(ctx.Errs, NewError(ctx.Svc, mql.ErrorKind.Service, err.Error()))
 
@@ -567,11 +695,11 @@ func Log(stage string, stages types.InternalLogTemplates) types.FuncTransformer 
 			case config.CliReq:
 				s = ctx.GCliReq
 			case config.SvcReq:
-				s = ctx.GSvcReq
+				s = ctx.GBusReq
 			case config.SvcRsp:
 				s = ctx.GSvcRsp
 			case config.CliRsp:
-				s = ctx.GCliRsp
+				s = ctx.GBusRsp
 			default:
 				panic(fmt.Sprintf("no case for stage: %v", stage))
 			}
@@ -612,7 +740,7 @@ func ResolveRelations(resolvePl *line.Line, f generic.Factory) types.FuncTransfo
 			}
 
 			gRelations.EachGeneric(func(fn *graph.FieldNode, gGetCollection generic.Generic) {
-				gGetReq := f.New(fn.Edges.Path.BelongsTo().Edges.Type.To().Edges.Type.GetRequest())
+				gGetReq := f.New(fn.Edges.Path.BelongsTo().Edges.Type.To().Edges.Type.GetClientRequest())
 
 				id := mql.ServiceId{}
 				ctx.GEntity.MustGeneric(fieldnames.Id).MustToStruct(&id)
@@ -656,17 +784,17 @@ func ResolveRelations(resolvePl *line.Line, f generic.Factory) types.FuncTransfo
 
 				gCollection := f.New(gGetCollection.Type().Edges.Type.For().Edges.Type.Collection())
 
-				gSlice, ok := ctx0.GCliRsp.GenericSlice(gCollection.Type().Edges.Type.For().PluralFieldName())
+				gSlice, ok := ctx0.GBusRsp.GenericSlice(gCollection.Type().Edges.Type.For().PluralFieldName())
 				if ok {
 					gCollection.MustSetGenericSlice([]string{gCollection.Type().Edges.Type.For().PluralFieldName()}, gSlice)
 				}
 
-				gErrors, ok := ctx0.GCliRsp.GenericSlice(fieldnames.Errors)
+				gErrors, ok := ctx0.GBusRsp.GenericSlice(fieldnames.Errors)
 				if ok {
 					gCollection.MustSetGenericSlice([]string{fieldnames.Errors}, gErrors)
 				}
 
-				gWarnings, ok := ctx0.GCliRsp.GenericSlice(fieldnames.Warnings)
+				gWarnings, ok := ctx0.GBusRsp.GenericSlice(fieldnames.Warnings)
 				if ok {
 					gCollection.MustSetGenericSlice([]string{fieldnames.Warnings}, gWarnings)
 				}
@@ -685,7 +813,7 @@ func GetEntityById(f generic.Factory, resolvePl *line.Line) types.FuncTransforme
 	return types.FuncTransformer{
 		Name0: HandleReqName,
 		Func: func(ctx types.ReqCtx) types.ReqCtx {
-			gGetReq := f.New(ctx.GEntity.Type().Edges.Type.GetRequest())
+			gGetReq := f.New(ctx.GEntity.Type().Edges.Type.GetClientRequest())
 
 			id := mql.ServiceId{}
 			ctx.GEntity.MustGeneric(fieldnames.Id).MustToStruct(&id)
@@ -704,7 +832,7 @@ func GetEntityById(f generic.Factory, resolvePl *line.Line) types.FuncTransforme
 				GCliReq: gGetReq,
 			})
 
-			gSlice, ok := ctx0.GCliRsp.GenericSlice(ctx.GEntity.Type().PluralFieldName())
+			gSlice, ok := ctx0.GBusRsp.GenericSlice(ctx.GEntity.Type().PluralFieldName())
 			if ok {
 				for _, g := range gSlice.Get() {
 					serviceName, ok := g.String(fieldnames.Id, fieldnames.ServiceName)
@@ -788,42 +916,11 @@ func AddSvcToSvcIds() types.FuncTransformer {
 	}
 }
 
-func AddSvcIdToSvcPages(f generic.Factory) types.FuncTransformer {
-	return types.FuncTransformer{
-		Name0: AddSvcToEntitiesName,
-		Func: func(ctx types.ReqCtx) types.ReqCtx {
-			gPagination, ok := ctx.GSvcRsp.Generic(fieldnames.Pagination)
-			if !ok {
-				return ctx
-			}
-
-			var p mql.Pagination
-			gPagination.MustToStruct(&p)
-
-			for i, _ := range p.Previous {
-				p.Previous[i].Id = ctx.Svc.Id
-			}
-
-			for i, _ := range p.Current {
-				p.Current[i].Id = ctx.Svc.Id
-			}
-
-			for i, _ := range p.Next {
-				p.Next[i].Id = ctx.Svc.Id
-			}
-
-			ctx.GSvcRsp.MustSetGeneric([]string{fieldnames.Pagination}, f.MustFromStruct(p))
-
-			return ctx
-		},
-	}
-}
-
 func FilterSvcPages(f generic.Factory) types.FuncTransformer {
 	return types.FuncTransformer{
 		Name0: AddSvcToEntitiesName,
 		Func: func(ctx types.ReqCtx) types.ReqCtx {
-			gPages, ok := ctx.GSvcReq.GenericSlice(fieldnames.Pages)
+			gPages, ok := ctx.GCliReq.GenericSlice(fieldnames.Pages)
 			if !ok {
 				return ctx
 			}
@@ -839,9 +936,18 @@ func FilterSvcPages(f generic.Factory) types.FuncTransformer {
 				},
 			}
 
-			gPages = gPages.Filter(false, f.MustFromStruct(filter))
+			var svcPages []mql.ServicePage
+			gPages.Filter(false, f.MustFromStruct(filter)).MustToStructs(&svcPages)
 
-			ctx.GSvcReq.MustSetGenericSlice([]string{fieldnames.Pages}, gPages)
+			if len(svcPages) > 1 {
+				ctx.Errs = append(ctx.Errs, NewError(nil, mql.ErrorKind.Internal, "more than one page for service"))
+
+				return ctx
+			}
+
+			if len(svcPages) == 1 {
+				ctx.GBusReq.MustSetGeneric([]string{fieldnames.Page}, f.MustFromStruct(svcPages[0].Page))
+			}
 
 			return ctx
 		},
@@ -865,13 +971,13 @@ func GetSvcs(resolve *line.Line, f generic.Factory, discoverySvc mql.Service) ty
 				MustSetBool([]string{fieldnames.Endpoints, ctx.EndpointNode.FieldName(), fieldnames.Set}, true).
 				MustToStruct(ctx.SvcFilter)
 
-			req := mql.GetServicesRequest{
+			req := mql.GetServicesClientRequest{
 				Mode: &mql.GetMode{
 					Kind:       &mql.GetModeKind.Collection,
 					Collection: &mql.CollectionGetMode{},
 				},
 				Filter: ctx.SvcFilter,
-				Select: &mql.GetServicesResponseSelect{
+				Select: &mql.GetServicesBusResponseSelect{
 					All: mql.Bool(true),
 					Services: &mql.ServiceSelect{
 						All: mql.Bool(true),
@@ -883,14 +989,14 @@ func GetSvcs(resolve *line.Line, f generic.Factory, discoverySvc mql.Service) ty
 				GCliReq: f.MustFromStruct(req),
 			})
 
-			gSvcErrs, ok := ctx0.GCliRsp.GenericSlice(fieldnames.Errors)
+			gSvcErrs, ok := ctx0.GBusRsp.GenericSlice(fieldnames.Errors)
 			if ok {
 				var errs []mql.Error
 				gSvcErrs.MustToStructs(&errs)
 				ctx.Errs = append(ctx.Errs, errs...)
 			}
 
-			gSvcs, ok := ctx0.GCliRsp.GenericSlice(ctx0.ForTypeNode.PluralFieldName())
+			gSvcs, ok := ctx0.GBusRsp.GenericSlice(ctx0.ForTypeNode.PluralFieldName())
 			if ok {
 				gSvcs.MustToStructs(&ctx.Svcs)
 			}
@@ -936,7 +1042,7 @@ func GSvcRspToGCliRsp() types.FuncTransformer {
 	return types.FuncTransformer{
 		Name0: GSvcRspToGCliRspName,
 		Func: func(ctx types.ReqCtx) types.ReqCtx {
-			ctx.GCliRsp = ctx.GSvcRsp
+			ctx.GBusRsp = ctx.GSvcRsp
 
 			return ctx
 		},

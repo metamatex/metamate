@@ -2,7 +2,7 @@ package config
 
 import (
 	"github.com/metamatex/metamate/gen/v0/mql"
-	"github.com/metamatex/metamate/metamate/pkg/v0/business/virtual"
+	"github.com/metamatex/metamate/metamate/pkg/v0/business/embedded"
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 )
 
@@ -41,14 +41,14 @@ var DefaultConfig = types.Config{
 	},
 	DiscoverySvc: mql.Service{
 		Id: &mql.ServiceId{
-			Value:       mql.String("discovery"),
+			Value:       mql.String("embedded"),
 			ServiceName: mql.String("metamate"),
 		},
-		IsVirtual: mql.Bool(true),
+		IsEmbedded: mql.Bool(true),
 		Url: &mql.Url{
 			Value: mql.String("http://discovery"),
 		},
-		Endpoints: &mql.Endpoints{
+		Endpoints: &mql.ServiceEndpoints{
 			LookupService: &mql.LookupServiceEndpoint{},
 			GetServices:   &mql.GetServicesEndpoint{},
 		},
@@ -73,35 +73,33 @@ var DefaultConfig = types.Config{
 			On: true,
 		},
 	},
-	Virtual: types.VirtualConfig{
-		Services: []types.VirtualSvc{
+	Embedded: types.EmbeddedConfig{
+		Services: []types.EmbeddedSvc{
 			{
 				Id:   "mastodon",
-				Name: virtual.Mastodon,
-				Opts: &types.VirtualSvcOpts{
-					Mastodon: &types.MastodonOpts{
-						Host:         "https://mastodon.social",
-						ClientId:     "tac-RigLyTKxOJoadxRhkKz2qN4kkUal61G-UoFCGHg",
-						ClientSecret: "hyx3PLEuTvy-NKFBPGcWutQlphOjAbZOfx6cWPlbBn4",
-					},
-				},
+				Name: embedded.Mastodon,
 			},
 			{
 				Id:   "hackernews",
-				Name: virtual.Hackernews,
+				Name: embedded.Hackernews,
 			},
 			{
 				Id:   "reddit",
-				Name: virtual.Reddit,
-				Opts: &types.VirtualSvcOpts{
-					Reddit: &types.RedditOpts{
-						ClientId:     "5Spu4UHEEVbvsQ",
-						ClientSecret: "OzXCIrbPZVbTlgy37YeZDfCiYWQ",
-						Username:     "metamatex",
-						Password:     "vJ6g3ouQbZ4ztiA",
-						UserAgent:    "abc",
-					},
-				},
+				Name: embedded.Reddit,
+			},
+		},
+	},
+	ServiceAccounts: []types.ServiceAccountAssignment{
+		{
+			ServiceId: mql.ServiceId{
+				ServiceName: mql.String("embedded"),
+				Value: mql.String("reddit"),
+			},
+			ServiceAccount: mql.ServiceAccount{
+				ClientId: mql.String("w46bvIsqpm1ZrA"),
+				ClientSecret: mql.String("k68l2YepSu-eJA3IjVVJivycbaU"),
+				Username: mql.String("metamatex"),
+				Password: mql.String("p3VhubNQEbc9A7P"),
 			},
 		},
 	},

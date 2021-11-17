@@ -10,12 +10,15 @@ import (
 	"github.com/metamatex/metamate/metamate/pkg/v0/business/line"
 	"github.com/metamatex/metamate/metamate/pkg/v0/config"
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
+	"sync"
 )
 
-func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc mql.Service, reqHs map[bool]types.RequestHandler, cachedReqHs map[bool]types.RequestHandler, logTemplates types.InternalLogTemplates, getConfig types.GetConfig) *line.Line {
+func NewResolveLine(rn *graph.RootNode, f generic.Factory, c types.Config, logTemplates types.InternalLogTemplates, reqHs map[bool]types.RequestHandler, cachedReqHs map[bool]types.RequestHandler) *line.Line {
+	setServiceAccountLock := sync.Mutex{}
+
 	resolveLine := line.Do()
 
-	cliReqErrL := getErrLine(f, types.GCliRsp)
+	cliReqErrL := getErrLine(f, types.GBusRsp)
 
 	svcReqErrL := getErrLine(f, types.GSvcRsp)
 
@@ -28,7 +31,7 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc mql.Serv
 			funcs.Copy(types.GCliReq, types.Method),
 			funcs.Copy(types.GCliReq, types.SvcFilter),
 			funcs.Copy(types.GCliReq, types.EndpointNode),
-			funcs.New(f, types.GCliRsp),
+			funcs.New(f, types.GBusRsp),
 		).
 		Add(SetDefaults(f)).
 		Do(funcs.ValidateCliReq(f)).
@@ -40,7 +43,7 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc mql.Serv
 		).
 		Add(NarrowSvcFilterToModeId).
 		Do(
-			funcs.GetSvcs(resolveLine, f, discoverySvc),
+			funcs.GetSvcs(resolveLine, f, c.DiscoverySvc),
 			funcs.ApplySvcEndpointReqFilters(f),
 		).
 		If(
@@ -64,8 +67,7 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc mql.Serv
 					Do(
 						funcs.RequireOneGSvc(),
 						funcs.SetFirstGSvc(),
-						funcs.Copy(types.GCliReq, types.GSvcReq),
-						funcs.Func(func(ctx types.ReqCtx) types.ReqCtx { ctx.GSvcReq.MustDelete(fieldnames.ServiceFilter); return ctx }),
+						funcs.CreateGBusReqFromGCliReq(f),
 						funcs.Log(config.SvcReq, logTemplates),
 						funcs.HandleSvcReq(reqHs),
 						funcs.Log(config.SvcRsp, logTemplates),
@@ -86,19 +88,18 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc mql.Serv
 												line.
 													Error(svcReqErrL, true).
 													Do(
-														funcs.Copy(types.GCliReq, types.GSvcReq),
-														funcs.Func(func(ctx types.ReqCtx) types.ReqCtx { ctx.GSvcReq.MustDelete(fieldnames.ServiceFilter); return ctx }),
+														funcs.CreateGBusReqFromGCliReq(f),
+														funcs.SetServiceAccount(f, &setServiceAccountLock, c.ServiceAccounts, reqHs),
 														funcs.Log(config.SvcReq, logTemplates),
 														funcs.HandleSvcReq(cachedReqHs),
 														funcs.AddSvcToSvcIds(),
-														funcs.AddSvcIdToSvcPages(f),
 														funcs.Log(config.SvcRsp, logTemplates),
 													),
-												funcs.CollectSvcRsps,
+												funcs.CollectBusReqCtxs,
 											).
 											Do(
-												funcs.ReduceSvcRspsToCliRsp(f),
-												funcs.ReduceSvcRspErrsToCliRspErrs(f),
+												funcs.ReduceBusReqCtxsToBusRsp(f),
+												funcs.ReduceBusReqCtxsErrsToBusRspErrs(f),
 												funcs.ReduceSvcRspPaginationsToCliRspPagination(f),
 											),
 										mql.GetModeKind.Search: line.
@@ -108,20 +109,19 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc mql.Serv
 												line.
 													Error(svcReqErrL, true).
 													Do(
-														funcs.Copy(types.GCliReq, types.GSvcReq),
+														funcs.CreateGBusReqFromGCliReq(f),
 														funcs.FilterSvcPages(f),
-														funcs.Func(func(ctx types.ReqCtx) types.ReqCtx { ctx.GSvcReq.MustDelete(fieldnames.ServiceFilter); return ctx }),
+														funcs.SetServiceAccount(f, &setServiceAccountLock, c.ServiceAccounts, reqHs),
 														funcs.Log(config.SvcReq, logTemplates),
 														funcs.HandleSvcReq(cachedReqHs),
 														funcs.AddSvcToSvcIds(),
-														funcs.AddSvcIdToSvcPages(f),
 														funcs.Log(config.SvcRsp, logTemplates),
 													),
-												funcs.CollectSvcRsps,
+												funcs.CollectBusReqCtxs,
 											).
 											Do(
-												funcs.ReduceSvcRspsToCliRsp(f),
-												funcs.ReduceSvcRspErrsToCliRspErrs(f),
+												funcs.ReduceBusReqCtxsToBusRsp(f),
+												funcs.ReduceBusReqCtxsErrsToBusRspErrs(f),
 												funcs.ReduceSvcRspPaginationsToCliRspPagination(f),
 											),
 										mql.GetModeKind.Collection: line.
@@ -131,38 +131,46 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc mql.Serv
 												line.
 													Error(svcReqErrL, true).
 													Do(
-														funcs.Copy(types.GCliReq, types.GSvcReq),
+														funcs.CreateGBusReqFromGCliReq(f),
 														funcs.FilterSvcPages(f),
-														funcs.Func(func(ctx types.ReqCtx) types.ReqCtx { ctx.GSvcReq.MustDelete(fieldnames.ServiceFilter); return ctx }),
+														funcs.SetServiceAccount(f, &setServiceAccountLock, c.ServiceAccounts, reqHs),
 														funcs.Log(config.SvcReq, logTemplates),
 														funcs.HandleSvcReq(cachedReqHs),
 														funcs.AddSvcToSvcIds(),
-														funcs.AddSvcIdToSvcPages(f),
 														funcs.Log(config.SvcRsp, logTemplates),
 													).
 													If(
-														funcs.IsType(types.GSvcRsp, mql.GetServicesResponseName, true),
-														FetchSvcDataFromSvcs(f, reqHs, logTemplates),
+														funcs.IsType(types.GSvcRsp, mql.TypeNames.GetServicesServiceResponse, true),
+														LookupServices(f, reqHs, logTemplates),
 													),
-												funcs.CollectSvcRsps,
+												funcs.CollectBusReqCtxs,
 											).
 											Do(
-												funcs.ReduceSvcRspsToCliRsp(f),
-												funcs.ReduceSvcRspErrsToCliRspErrs(f),
+												funcs.ReduceBusReqCtxsToBusRsp(f),
+												funcs.ReduceBusReqCtxsErrsToBusRspErrs(f),
 												funcs.ReduceSvcRspPaginationsToCliRspPagination(f),
 											),
 										mql.GetModeKind.Relation: line.
+											Parallel(
+												-1,
+												funcs.Map(types.Svcs, types.Svc),
+												line.
+													Error(svcReqErrL, true).
+													Do(
+														funcs.CreateGBusReqFromGCliReq(f),
+														funcs.FilterSvcPages(f),
+														funcs.Log(config.SvcReq, logTemplates),
+														funcs.SetServiceAccount(f, &setServiceAccountLock, c.ServiceAccounts, reqHs),
+														funcs.HandleSvcReq(cachedReqHs),
+														funcs.AddSvcToSvcIds(),
+														funcs.Log(config.SvcRsp, logTemplates),
+													),
+												funcs.CollectBusReqCtxs,
+											).
 											Do(
-												funcs.RequireOneGSvc(),
-												funcs.SetFirstGSvc(),
-												funcs.Copy(types.GCliReq, types.GSvcReq),
-												funcs.Func(func(ctx types.ReqCtx) types.ReqCtx { ctx.GSvcReq.MustDelete(fieldnames.ServiceFilter); return ctx }),
-												funcs.Log(config.SvcReq, logTemplates),
-												funcs.HandleSvcReq(cachedReqHs),
-												funcs.AddSvcToSvcIds(),
-												funcs.AddSvcIdToSvcPages(f),
-												funcs.Log(config.SvcRsp, logTemplates),
-												funcs.GSvcRspToGCliRsp(),
+												funcs.ReduceBusReqCtxsToBusRsp(f),
+												funcs.ReduceBusReqCtxsErrsToBusRspErrs(f),
+												funcs.ReduceSvcRspPaginationsToCliRspPagination(f),
 											),
 									},
 								),
@@ -170,24 +178,24 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc mql.Serv
 					).
 					If(
 						func(ctx types.ReqCtx) bool {
-							gSlice, ok := ctx.GCliRsp.GenericSlice(ctx.ForTypeNode.PluralFieldName())
+							gSlice, ok := ctx.GBusRsp.GenericSlice(ctx.ForTypeNode.PluralFieldName())
 							if !ok {
 								return false
 							}
 
-							return len(gSlice.Get()) > getConfig.MaxResults
+							return len(gSlice.Get()) > c.Internal.Get.MaxResults
 						},
 						line.Do(
 							funcs.Func(func(ctx types.ReqCtx) types.ReqCtx {
-								gSlice := ctx.GCliRsp.MustGenericSlice(ctx.ForTypeNode.PluralFieldName())
+								gSlice := ctx.GBusRsp.MustGenericSlice(ctx.ForTypeNode.PluralFieldName())
 
 								preLen := len(gSlice.Get())
 
-								gSlice.Set(gSlice.Get()[:getConfig.MaxResults])
+								gSlice.Set(gSlice.Get()[:c.Internal.Get.MaxResults])
 
 								postLen := len(gSlice.Get())
 
-								ctx.GCliRsp.MustSetGenericSlice([]string{ctx.ForTypeNode.PluralFieldName()}, gSlice)
+								ctx.GBusRsp.MustSetGenericSlice([]string{ctx.ForTypeNode.PluralFieldName()}, gSlice)
 
 								gWarnings := f.MustFromStructs([]mql.Warning{
 									{
@@ -195,22 +203,22 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc mql.Serv
 									},
 								})
 
-								gCliRspWarnings, ok := ctx.GCliRsp.GenericSlice(fieldnames.Warnings)
+								gCliRspWarnings, ok := ctx.GBusRsp.GenericSlice(fieldnames.Warnings)
 								if ok {
 									gWarnings.Append(gCliRspWarnings.Get()...)
 								}
 
-								ctx.GCliRsp.MustSetGenericSlice([]string{fieldnames.Warnings}, gWarnings)
+								ctx.GBusRsp.MustSetGenericSlice([]string{fieldnames.Warnings}, gWarnings)
 
 								return ctx
 							}),
 						),
 					).
 					Parallel(
-						getConfig.ResolveById.Concurrency,
-						funcs.Map(types.GCliRsp, types.GEntity),
+						c.Internal.Get.ResolveById.Concurrency,
+						funcs.Map(types.GBusRsp, types.GEntity),
 						line.If(funcs.EntityOnlyContainsServiceId, line.Do(funcs.GetEntityById(f, resolveLine))),
-						funcs.Collect(types.GEntity, types.GCliRsp),
+						funcs.Collect(types.GEntity, types.GBusRsp),
 					).
 					Do(
 						funcs.HardFilterGCliRsp(),
@@ -220,9 +228,9 @@ func NewResolveLine(rn *graph.RootNode, f generic.Factory, discoverySvc mql.Serv
 						line.
 							Parallel(
 								-1,
-								funcs.Map(types.GCliRsp, types.GEntity),
+								funcs.Map(types.GBusRsp, types.GEntity),
 								line.Do(funcs.ResolveRelations(resolveLine, f)),
-								funcs.Collect(types.GEntity, types.GCliRsp),
+								funcs.Collect(types.GEntity, types.GBusRsp),
 							),
 					),
 			},
@@ -295,13 +303,13 @@ func SetDefaults(f generic.Factory) func(l *line.Line) *line.Line {
 	}
 }
 
-func FetchSvcDataFromSvcs(f generic.Factory, hs map[bool]types.RequestHandler, logTemplates types.InternalLogTemplates) (l *line.Line) {
+func LookupServices(f generic.Factory, hs map[bool]types.RequestHandler, logTemplates types.InternalLogTemplates) (l *line.Line) {
 	return line.Parallel(
 		-1,
 		funcs.Map(types.GSvcRsp, types.GEntity),
 		line.
 			Do(
-				funcs.Set(f, types.GSvcReq, mql.LookupServiceRequest{}),
+				funcs.Set(f, types.GBusReq, mql.LookupServiceBusRequest{}),
 				funcs.Copy(types.GEntity, types.Svc),
 				funcs.Log(config.SvcReq, logTemplates),
 				funcs.HandleSvcReq(hs),

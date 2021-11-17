@@ -5,10 +5,8 @@ import (
 	"github.com/metamatex/metamate/metamate/pkg/v0/types"
 )
 
-func CollectSvcRsps(ctx types.ReqCtx, ctxs []types.ReqCtx) types.ReqCtx {
-	for _, ctx0 := range ctxs {
-		ctx.GSvcRsps = append(ctx.GSvcRsps, ctx0.GSvcRsp)
-	}
+func CollectBusReqCtxs(ctx types.ReqCtx, ctxs []types.ReqCtx) types.ReqCtx {
+	ctx.BusReqCtxs = ctxs
 
 	return ctx
 }
@@ -17,7 +15,7 @@ func Collect(from, to string) func(ctx types.ReqCtx, ctxs []types.ReqCtx) types.
 	switch from {
 	case types.GEntity:
 		switch to {
-		case types.GCliRsp:
+		case types.GBusRsp:
 			return func(ctx types.ReqCtx, ctxs []types.ReqCtx) types.ReqCtx {
 				gs := []generic.Generic{}
 				for _, ctx0 := range ctxs {
@@ -25,10 +23,10 @@ func Collect(from, to string) func(ctx types.ReqCtx, ctxs []types.ReqCtx) types.
 					ctx.Errs = append(ctx.Errs, ctx0.Errs...)
 				}
 
-				gSlice, ok := ctx.GCliRsp.GenericSlice(ctx.ForTypeNode.PluralFieldName())
+				gSlice, ok := ctx.GBusRsp.GenericSlice(ctx.ForTypeNode.PluralFieldName())
 				if ok {
 					gSlice.Set(gs)
-					ctx.GCliRsp.MustSetGenericSlice([]string{ctx.ForTypeNode.PluralFieldName()}, gSlice)
+					ctx.GBusRsp.MustSetGenericSlice([]string{ctx.ForTypeNode.PluralFieldName()}, gSlice)
 				}
 
 				return ctx
@@ -62,11 +60,11 @@ func Collect(from, to string) func(ctx types.ReqCtx, ctxs []types.ReqCtx) types.
 
 func Map(from, to string) func(ctx types.ReqCtx) (ctxs []types.ReqCtx) {
 	switch from {
-	case types.GCliRsp:
+	case types.GBusRsp:
 		switch to {
 		case types.GEntity:
 			return func(ctx types.ReqCtx) (ctxs []types.ReqCtx) {
-				gSlice, ok := ctx.GCliRsp.GenericSlice(ctx.ForTypeNode.PluralFieldName())
+				gSlice, ok := ctx.GBusRsp.GenericSlice(ctx.ForTypeNode.PluralFieldName())
 				if !ok {
 					return
 				}
@@ -95,9 +93,9 @@ func Map(from, to string) func(ctx types.ReqCtx) (ctxs []types.ReqCtx) {
 				gs := gSlice.Get()
 				for i, _ := range gs {
 					ctxs = append(ctxs, types.ReqCtx{
-						GSvcReq:       ctx.GSvcReq.Copy(),
-						GEntity:       gs[i].Copy(),
-						ForTypeNode:   ctx.ForTypeNode,
+						GBusReq:     ctx.GBusReq.Copy(),
+						GEntity:     gs[i].Copy(),
+						ForTypeNode: ctx.ForTypeNode,
 					})
 				}
 

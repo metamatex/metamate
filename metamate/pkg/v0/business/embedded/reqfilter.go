@@ -1,4 +1,4 @@
-package virtual
+package embedded
 
 import (
 	"context"
@@ -11,28 +11,28 @@ import (
 )
 
 func init() {
-	handler[ReqFilter] = func(f generic.Factory, rn *graph.RootNode, c *http.Client, vSvc types.VirtualSvc) (h http.Handler, err error) {
+	handler[ReqFilter] = func(f generic.Factory, rn *graph.RootNode, c *http.Client, vSvc types.EmbeddedSvc) (h http.Handler, err error) {
 		h = generic.NewServer(generic.ServerOpts{
 			Root:    rn,
 			Factory: f,
 			Handler: func(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic) {
 				switch gReq.Type().Name() {
-				case mql.LookupServiceRequestName:
-					return f.MustFromStruct(mql.LookupServiceResponse{
+				case mql.LookupServiceBusRequestName:
+					return f.MustFromStruct(mql.LookupServiceServiceResponse{
 						Output: &mql.LookupServiceOutput{
 							Service: &mql.Service{
-								Endpoints: &mql.Endpoints{
+								Endpoints: &mql.ServiceEndpoints{
 									GetDummies: &mql.GetDummiesEndpoint{
-										Filter: &mql.GetDummiesRequestFilter{},
+										Filter: &mql.GetDummiesBusRequestFilter{},
 									},
 								},
 							},
 						},
 					})
-				case mql.GetDummiesRequestName:
+				case mql.GetDummiesBusRequestName:
 					println("RequestFilterService.GetDummies called")
 
-					return f.MustFromStruct(mql.GetDummiesResponse{})
+					return f.MustFromStruct(mql.GetDummiesServiceResponse{})
 				}
 
 				return

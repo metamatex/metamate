@@ -1,4 +1,4 @@
-package virtual
+package embedded
 
 import (
 	"context"
@@ -21,9 +21,9 @@ type Cluster struct {
 	logErr   func(error)
 }
 
-func Deploy(c *Cluster, svcs []types.VirtualSvc) (err error) {
+func Deploy(c *Cluster, svcs []types.EmbeddedSvc) (err error) {
 	for _, svc := range svcs {
-		err = validateVirtualSvc(svc)
+		err = validateEmbeddedSvc(svc)
 		if err != nil {
 			return
 		}
@@ -39,7 +39,7 @@ func Deploy(c *Cluster, svcs []types.VirtualSvc) (err error) {
 	return
 }
 
-func validateVirtualSvc(svc types.VirtualSvc) (err error) {
+func validateEmbeddedSvc(svc types.EmbeddedSvc) (err error) {
 	if svc.Id == "" {
 		err = errors.New("must set id")
 
@@ -48,30 +48,6 @@ func validateVirtualSvc(svc types.VirtualSvc) (err error) {
 
 	if svc.Name == "" {
 		err = errors.New("must set name")
-
-		return
-	}
-
-	if svc.Opts != nil {
-		return validateVirtualSvcOpts(*svc.Opts)
-	}
-
-	return
-}
-
-func validateVirtualSvcOpts(opts types.VirtualSvcOpts) (err error) {
-	c := 0
-
-	if opts.Mastodon != nil {
-		c++
-	}
-
-	if opts.Reddit != nil {
-		c++
-	}
-
-	if c != 1 {
-		err = errors.New("must exactly one opts")
 
 		return
 	}
@@ -96,7 +72,7 @@ func NewCluster(rn *graph.RootNode, f generic.Factory, logErr func(err error)) (
 	return
 }
 
-func (c *Cluster) HostSvc(svc types.VirtualSvc) (err error) {
+func (c *Cluster) HostSvc(svc types.EmbeddedSvc) (err error) {
 	f, err := handler[svc.Name](c.f, c.rn, &http.Client{Transport: c}, svc)
 	if err != nil {
 		return
@@ -115,8 +91,8 @@ func (c *Cluster) HostSvc(svc types.VirtualSvc) (err error) {
 		Id: &mql.ServiceId{
 			Value: mql.String(svc.Id),
 		},
-		IsVirtual: mql.Bool(true),
-		Port:      mql.Int32(80),
+		IsEmbedded: mql.Bool(true),
+		Port:       mql.Int32(80),
 		Url: &mql.Url{
 			Value: mql.String("http://" + svc.Id),
 		},
@@ -139,8 +115,8 @@ func (c *Cluster) Host(id string, h http.Handler) (err error) {
 		Id: &mql.ServiceId{
 			Value: mql.String(id),
 		},
-		IsVirtual: mql.Bool(true),
-		Port:      mql.Int32(80),
+		IsEmbedded: mql.Bool(true),
+		Port:       mql.Int32(80),
 		Url: &mql.Url{
 			Value: mql.String("http://" + id),
 		},
@@ -200,13 +176,13 @@ func (c *Cluster) RoundTrip(req *http.Request) (rsp *http.Response, err error) {
 
 func (c *Cluster) serveDiscovery(ctx context.Context, gReq generic.Generic) (gRsp generic.Generic) {
 	switch gReq.Type().Name() {
-	case mql.LookupServiceRequestName:
-		return c.f.MustFromStruct(mql.LookupServiceResponse{
+	case mql.LookupServiceBusRequestName:
+		return c.f.MustFromStruct(mql.LookupServiceServiceResponse{
 			Output: &mql.LookupServiceOutput{
 				Service: &mql.Service{
-					Endpoints: &mql.Endpoints{
+					Endpoints: &mql.ServiceEndpoints{
 						LookupService: &mql.LookupServiceEndpoint{},
-						GetServices:   &mql.GetServicesEndpoint{
+						GetServices: &mql.GetServicesEndpoint{
 							//Filter: &mql.GetServicesRequestFilter{
 							//	Mode: &mql.GetModeFilter{
 							//		Kind: &mql.EnumFilter{
@@ -219,11 +195,11 @@ func (c *Cluster) serveDiscovery(ctx context.Context, gReq generic.Generic) (gRs
 				},
 			},
 		})
-	case mql.GetServicesRequestName:
+	case mql.TypeNames.GetServicesBusRequest:
 		var errs []mql.Error
 		var svcs []mql.Service
 
-		var req mql.GetServicesRequest
+		var req mql.GetServicesBusRequest
 		gReq.MustToStruct(&req)
 
 		switch *req.Mode.Kind {
@@ -244,10 +220,12 @@ func (c *Cluster) serveDiscovery(ctx context.Context, gReq generic.Generic) (gRs
 			}
 		}
 
-		return c.f.MustFromStruct(mql.GetServicesResponse{
+		return c.f.MustFromStruct(mql.GetServicesServiceResponse{
 			Errors:   errs,
 			Services: svcs,
 		})
+	default:
+		panic("can't handle " + gReq.Type().Name())
 	}
 
 	return

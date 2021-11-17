@@ -132,7 +132,7 @@ func composeResolve(f generic.Factory, serveFunc types.ServeFunc, en *graph.Endp
 			}
 		}()
 
-		gCliReq := f.New(en.Edges.Type.Request())
+		gCliReq := f.New(en.Edges.Type.ClientRequest())
 
 		gCliReq, err = fillGetNode(f, params, gCliReq, params.Info.FieldASTs[0])
 		if err != nil {

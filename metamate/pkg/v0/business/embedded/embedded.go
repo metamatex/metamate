@@ -1,4 +1,4 @@
-package virtual
+package embedded
 
 import (
 	"github.com/metamatex/metamate/asg/pkg/v0/asg/graph"
@@ -18,4 +18,4 @@ const (
 	Kubernetes = "kubernetes"
 )
 
-var handler = map[string]func(f generic.Factory, rn *graph.RootNode, c *http.Client, svc types.VirtualSvc) (http.Handler, error){}
+var handler = map[string]func(f generic.Factory, rn *graph.RootNode, c *http.Client, svc types.EmbeddedSvc) (http.Handler, error){}
